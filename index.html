@@ -1,0 +1,970 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#eaf5ff">
+<title>AERIALIS — BOARDING</title>
+<style>
+:root{
+  --navy:#102d52;
+  --blue:#3978b8;
+  --light:#eaf5ff;
+  --white:#ffffff;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  overscroll-behavior:none;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  position:fixed;
+  inset:0;
+  color:var(--navy);
+  background:var(--light);
+  font-family:Arial,Helvetica,sans-serif;
+  -webkit-tap-highlight-color:transparent;
+}
+button{
+  font:inherit;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+button:focus-visible{
+  outline:2px solid #72b9ff;
+  outline-offset:4px;
+}
+#app{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100dvh;
+  overflow:hidden;
+  isolation:isolate;
+}
+.screen{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  visibility:hidden;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .65s ease,visibility .65s;
+}
+.screen.active{
+  visibility:visible;
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* OPENING */
+#opening{
+  background:linear-gradient(
+    180deg,
+    #3d80c0 0%,
+    #8bc2ef 48%,
+    #e9f5ff 100%
+  );
+  color:white;
+}
+.sky-glow{
+  position:absolute;
+  width:85vw;
+  height:85vw;
+  left:30%;
+  top:14%;
+  border-radius:50%;
+  background:radial-gradient(
+    circle,
+    rgba(255,255,255,.52),
+    transparent 68%
+  );
+  filter:blur(35px);
+}
+.clouds{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.cloud{
+  position:absolute;
+  width:260px;
+  height:65px;
+  background:rgba(255,255,255,.55);
+  border-radius:50%;
+  filter:blur(22px);
+  animation:cloudDrift 16s ease-in-out infinite alternate;
+}
+.cloud::before{
+  content:"";
+  position:absolute;
+  width:110px;
+  height:100px;
+  border-radius:50%;
+  background:inherit;
+  left:55px;
+  bottom:8px;
+}
+.cloud.one{
+  top:37%;
+  left:-15%;
+}
+.cloud.two{
+  top:58%;
+  right:-25%;
+  transform:scale(1.5);
+  animation-delay:-7s;
+}
+.cloud.three{
+  bottom:14%;
+  left:15%;
+  opacity:.6;
+  animation-delay:-4s;
+}
+@keyframes cloudDrift{
+  from{translate:-20px 0}
+  to{translate:35px 0}
+}
+.open-header{
+  position:absolute;
+  top:max(32px,env(safe-area-inset-top));
+  left:24px;
+  right:24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:3;
+}
+.logo{
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:.17em;
+}
+.header-right{
+  font-size:9px;
+  letter-spacing:.2em;
+  border-bottom:1px solid rgba(255,255,255,.7);
+  padding-bottom:6px;
+}
+.hero-copy{
+  position:absolute;
+  left:26px;
+  right:26px;
+  top:17%;
+  z-index:3;
+}
+.hero-copy .eyebrow{
+  font-size:10px;
+  letter-spacing:.35em;
+  opacity:.85;
+}
+.hero-copy h1{
+  font-size:clamp(52px,13vw,100px);
+  font-weight:300;
+  letter-spacing:-.065em;
+  line-height:1;
+  margin:18px 0;
+}
+.hero-copy p{
+  font-size:12px;
+  line-height:1.9;
+  letter-spacing:.09em;
+  opacity:.9;
+}
+.plane-stage{
+  position:absolute;
+  width:140%;
+  height:47%;
+  top:34%;
+  left:-20%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:planeFloat 6s ease-in-out infinite;
+  filter:drop-shadow(0 30px 24px rgba(18,58,103,.2));
+}
+.plane-stage svg{
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+@keyframes planeFloat{
+  0%,100%{transform:translateY(0) rotate(-1deg)}
+  50%{transform:translateY(-13px) rotate(1deg)}
+}
+.flight-data{
+  position:absolute;
+  bottom:25%;
+  right:25px;
+  z-index:3;
+  text-align:right;
+  font-size:9px;
+  line-height:2.3;
+  letter-spacing:.2em;
+}
+.flight-data strong{
+  font-weight:400;
+  font-size:13px;
+}
+.board-button{
+  position:absolute;
+  bottom:max(62px,calc(env(safe-area-inset-bottom) + 35px));
+  left:25px;
+  right:25px;
+  z-index:5;
+  height:66px;
+  background:rgba(255,255,255,.92);
+  border:1px solid white;
+  color:var(--navy);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 25px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.32em;
+  box-shadow:0 12px 35px rgba(24,71,115,.12);
+  transition:transform .2s,background .2s;
+}
+.board-button:active{
+  transform:scale(.97);
+  background:#fff;
+}
+.board-button .arrow{
+  font-size:27px;
+  font-weight:300;
+}
+.open-footer{
+  position:absolute;
+  bottom:20px;
+  left:25px;
+  font-size:8px;
+  letter-spacing:.2em;
+  opacity:.7;
+}
+
+/* BOARDING TRANSITION */
+#boarding{
+  background:radial-gradient(
+    circle at 50% 40%,
+    #214f85,
+    #071a35 75%
+  );
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:35px;
+}
+.boarding-symbol{
+  width:110px;
+  height:110px;
+  animation:symbolFloat 2s ease-in-out infinite alternate;
+}
+@keyframes symbolFloat{
+  to{transform:translateY(-10px)}
+}
+.boarding-title{
+  font-size:12px;
+  letter-spacing:.55em;
+}
+.progress-track{
+  width:min(75vw,360px);
+  height:2px;
+  background:rgba(255,255,255,.25);
+  overflow:hidden;
+}
+.progress-fill{
+  width:0%;
+  height:100%;
+  background:#a4dcff;
+  box-shadow:0 0 15px #a4dcff;
+}
+#boarding.active .progress-fill{
+  animation:fillProgress 2.2s ease-in-out forwards;
+}
+@keyframes fillProgress{
+  to{width:100%}
+}
+.boarding-status{
+  font-size:9px;
+  letter-spacing:.24em;
+  color:#a8c9e9;
+}
+
+/* CABIN */
+#cabin{
+  background:#c9dcf3;
+}
+.cabin-shell{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(17,48,91,.35),
+      transparent 15%,
+      transparent 85%,
+      rgba(17,48,91,.35)
+    ),
+    linear-gradient(
+      180deg,
+      #f3f8ff,
+      #d8e7fa 38%,
+      #91b4dd 100%
+    );
+}
+.cabin-ceiling{
+  position:absolute;
+  top:-10%;
+  left:-35%;
+  width:170%;
+  height:57%;
+  border-radius:0 0 50% 50%;
+  background:linear-gradient(
+    180deg,
+    #b7cde8,
+    #f5f9ff 42%,
+    #e4efff 70%,
+    #9ec8f6
+  );
+  box-shadow:
+    inset 0 -10px 30px rgba(45,124,212,.22),
+    0 15px 40px rgba(34,83,146,.13);
+}
+.ceiling-light{
+  position:absolute;
+  top:0;
+  width:5px;
+  height:65%;
+  background:#8dd5ff;
+  box-shadow:0 0 24px 8px rgba(65,168,255,.6);
+}
+.ceiling-light.left{
+  left:20%;
+  transform:rotate(-22deg);
+}
+.ceiling-light.right{
+  right:20%;
+  transform:rotate(22deg);
+}
+.cabin-aisle{
+  position:absolute;
+  bottom:0;
+  left:35%;
+  width:30%;
+  height:57%;
+  background:linear-gradient(
+    180deg,
+    rgba(226,238,251,.3),
+    #6c92c3
+  );
+  clip-path:polygon(35% 0,65% 0,100% 100%,0 100%);
+}
+.cabin-heading{
+  position:absolute;
+  top:max(48px,env(safe-area-inset-top));
+  left:0;
+  right:0;
+  text-align:center;
+  z-index:4;
+  color:#1e497d;
+}
+.cabin-heading small{
+  font-size:9px;
+  letter-spacing:.38em;
+}
+.cabin-heading h2{
+  font-size:30px;
+  font-weight:300;
+  letter-spacing:.15em;
+  margin:14px 0;
+}
+.cabin-heading p{
+  font-size:10px;
+  letter-spacing:.13em;
+}
+.cabin-window{
+  position:absolute;
+  top:27%;
+  width:70px;
+  height:140px;
+  border:9px solid #e8f3ff;
+  border-radius:45%;
+  background:linear-gradient(
+    #4086c6,
+    #b6e3ff 60%,
+    #fff
+  );
+  box-shadow:
+    0 0 0 3px #a7bed9,
+    inset 0 0 18px rgba(13,69,131,.25);
+}
+.cabin-window.left{left:-28px}
+.cabin-window.right{right:-28px}
+.seat-grid{
+  position:absolute;
+  bottom:14%;
+  left:0;
+  right:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  padding:0 25px;
+  z-index:5;
+}
+.seat{
+  position:relative;
+  height:170px;
+  border-radius:24px 24px 13px 13px;
+  background:linear-gradient(
+    145deg,
+    #173e70,
+    #092b56
+  );
+  border:6px solid #a6bfdc;
+  box-shadow:
+    inset 0 8px 15px rgba(255,255,255,.12),
+    0 15px 22px rgba(22,58,100,.2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+}
+.seat::before{
+  content:"";
+  position:absolute;
+  top:10px;
+  left:18px;
+  right:18px;
+  height:14px;
+  border-radius:12px;
+  background:rgba(255,255,255,.09);
+}
+.seat button{
+  width:100%;
+  height:104px;
+  border:1px solid rgba(170,214,255,.5);
+  background:linear-gradient(
+    155deg,
+    #265e99,
+    #0a294e
+  );
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:13px;
+  transition:background .2s,transform .2s;
+}
+.seat button:active{
+  background:#397dbb;
+  transform:scale(.96);
+}
+.seat .seat-icon{
+  font-size:24px;
+  font-weight:300;
+}
+.seat .seat-name{
+  font-size:11px;
+  letter-spacing:.18em;
+}
+.seat .seat-index{
+  font-size:8px;
+  opacity:.55;
+}
+.cabin-bottom{
+  position:absolute;
+  bottom:max(35px,env(safe-area-inset-bottom));
+  left:25px;
+  right:25px;
+  z-index:5;
+  display:flex;
+  justify-content:space-between;
+  color:#fff;
+  font-size:9px;
+  letter-spacing:.15em;
+}
+.cabin-back{
+  background:transparent;
+  border:0;
+  color:inherit;
+  font-size:9px;
+  letter-spacing:.15em;
+  padding:5px;
+}
+
+/* DETAIL */
+#detail{
+  background:linear-gradient(
+    145deg,
+    #f7fbff,
+    #c8e1fa
+  );
+  padding:
+    max(45px,env(safe-area-inset-top))
+    28px
+    max(30px,env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+}
+.detail-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:10px;
+  letter-spacing:.2em;
+}
+.detail-close{
+  width:43px;
+  height:43px;
+  border:1px solid #8fb1d1;
+  border-radius:50%;
+  background:transparent;
+  color:var(--navy);
+  font-size:23px;
+}
+.detail-content{
+  margin:auto 0;
+}
+.detail-number{
+  font-size:10px;
+  letter-spacing:.3em;
+  color:#5083b3;
+}
+.detail-content h2{
+  font-size:clamp(44px,13vw,76px);
+  font-weight:300;
+  letter-spacing:-.05em;
+  margin:20px 0;
+}
+.detail-rule{
+  height:1px;
+  width:100%;
+  background:#9ab9d6;
+  margin:25px 0;
+}
+.detail-content p{
+  font-size:13px;
+  line-height:2.3;
+  color:#42678e;
+}
+.detail-note{
+  font-size:9px;
+  letter-spacing:.2em;
+  color:#6793ba;
+  margin-top:35px;
+}
+.detail-footer{
+  border-top:1px solid #9ab9d6;
+  padding-top:18px;
+  font-size:9px;
+  letter-spacing:.16em;
+  display:flex;
+  justify-content:space-between;
+}
+
+@media(max-height:650px){
+  .hero-copy{top:13%}
+  .plane-stage{top:29%}
+  .seat-grid{bottom:12%}
+  .seat{height:145px}
+  .seat button{height:85px}
+  .cabin-heading{top:30px}
+}
+@media(min-width:700px){
+  .hero-copy{left:8%;top:20%}
+  .plane-stage{width:90%;left:10%}
+  .board-button{left:8%;right:auto;width:340px}
+  .seat-grid{
+    max-width:650px;
+    left:50%;
+    transform:translateX(-50%);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- OPENING -->
+<section id="opening" class="screen active">
+  <div class="sky-glow"></div>
+
+  <div class="clouds">
+    <div class="cloud one"></div>
+    <div class="cloud two"></div>
+    <div class="cloud three"></div>
+  </div>
+
+  <header class="open-header">
+    <div class="logo">AERIALIS</div>
+    <div class="header-right">FLIGHT 001</div>
+  </header>
+
+  <div class="hero-copy">
+    <div class="eyebrow">WELCOME ABOARD</div>
+    <h1>Above<br>the ordinary.</h1>
+    <p>
+      YOUR JOURNEY BEGINS HERE.<br>
+      A NEW PERSPECTIVE AWAITS.
+    </p>
+  </div>
+
+  <div class="plane-stage" aria-hidden="true">
+    <svg viewBox="0 0 900 460"
+      xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="fuselage" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff"/>
+          <stop offset=".5" stop-color="#e6f1fc"/>
+          <stop offset="1" stop-color="#86a9ce"/>
+        </linearGradient>
+        <linearGradient id="wing" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#f9fcff"/>
+          <stop offset="1" stop-color="#6b94c1"/>
+        </linearGradient>
+        <linearGradient id="engine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#c5ddf4"/>
+          <stop offset="1" stop-color="#365b83"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Rear wing and tail -->
+      <path d="M210 215 L75 135 L38 142 L135 254 Z"
+        fill="url(#wing)" stroke="#6c93bc" stroke-width="2"/>
+      <path d="M252 210 L220 65 L185 58 L180 228 Z"
+        fill="#f0f7ff" stroke="#7fa3c7" stroke-width="2"/>
+
+      <!-- Main wings -->
+      <path d="M400 250 L90 360 L38 350 L290 225 Z"
+        fill="url(#wing)" stroke="#7298c0" stroke-width="3"/>
+      <path d="M455 242 L725 348 L795 336 L555 213 Z"
+        fill="url(#wing)" stroke="#7298c0" stroke-width="3"/>
+
+      <!-- Engines -->
+      <g transform="translate(205 278)">
+        <ellipse cx="0" cy="0" rx="43" ry="51"
+          fill="url(#engine)" stroke="#eaf5ff" stroke-width="5"/>
+        <ellipse cx="0" cy="0" rx="30" ry="39" fill="#183d65"/>
+        <ellipse cx="0" cy="0" rx="10" ry="13" fill="#789dbd"/>
+        <g stroke="#527ca2" stroke-width="2">
+          <path d="M0 -37V37M-28 0H28M-20 -26L20 26M20 -26L-20 26"/>
+        </g>
+      </g>
+      <g transform="translate(642 273)">
+        <ellipse cx="0" cy="0" rx="38" ry="47"
+          fill="url(#engine)" stroke="#eaf5ff" stroke-width="5"/>
+        <ellipse cx="0" cy="0" rx="26" ry="35" fill="#183d65"/>
+        <ellipse cx="0" cy="0" rx="9" ry="11" fill="#789dbd"/>
+      </g>
+
+      <!-- Fuselage -->
+      <path d="
+        M108 203
+        Q250 175 410 178
+        L620 175
+        Q746 175 815 218
+        Q845 239 815 260
+        Q745 297 616 290
+        L403 275
+        Q220 265 108 228
+        Q80 216 108 203Z"
+        fill="url(#fuselage)"
+        stroke="#a4bed8"
+        stroke-width="3"/>
+
+      <!-- Nose -->
+      <path d="M705 186 Q785 196 815 218 Q844 239 815 260
+        Q775 283 705 287"
+        fill="none" stroke="#8ba8c7" stroke-width="2"/>
+
+      <!-- Cockpit -->
+      <path d="M730 196 L766 204 L785 221
+        L741 220Z" fill="#244e7a"/>
+      <path d="M793 225 L809 235 L787 242
+        L751 239Z" fill="#244e7a"/>
+
+      <!-- Windows -->
+      <g fill="#3c719f">
+        <ellipse cx="230" cy="208" rx="7" ry="4"/>
+        <ellipse cx="252" cy="206" rx="7" ry="4"/>
+        <ellipse cx="274" cy="204" rx="7" ry="4"/>
+        <ellipse cx="296" cy="202" rx="7" ry="4"/>
+        <ellipse cx="318" cy="201" rx="7" ry="4"/>
+        <ellipse cx="340" cy="200" rx="7" ry="4"/>
+        <ellipse cx="362" cy="199" rx="7" ry="4"/>
+        <ellipse cx="384" cy="198" rx="7" ry="4"/>
+        <ellipse cx="406" cy="197" rx="7" ry="4"/>
+        <ellipse cx="428" cy="196" rx="7" ry="4"/>
+        <ellipse cx="450" cy="195" rx="7" ry="4"/>
+        <ellipse cx="472" cy="194" rx="7" ry="4"/>
+        <ellipse cx="494" cy="193" rx="7" ry="4"/>
+        <ellipse cx="516" cy="192" rx="7" ry="4"/>
+        <ellipse cx="538" cy="191" rx="7" ry="4"/>
+        <ellipse cx="560" cy="190" rx="7" ry="4"/>
+        <ellipse cx="582" cy="189" rx="7" ry="4"/>
+        <ellipse cx="604" cy="189" rx="7" ry="4"/>
+        <ellipse cx="626" cy="189" rx="7" ry="4"/>
+        <ellipse cx="648" cy="190" rx="7" ry="4"/>
+      </g>
+
+      <path d="M145 235 Q400 278 705 279"
+        fill="none" stroke="#4e8ec6" stroke-width="5" opacity=".7"/>
+      <text x="485" y="255"
+        fill="#306da5"
+        font-size="24"
+        font-family="Arial"
+        font-weight="bold"
+        letter-spacing="3">AERIALIS</text>
+    </svg>
+  </div>
+
+  <div class="flight-data">
+    FLIGHT NO. <strong>AR-001</strong><br>
+    DESTINATION <strong>UNKNOWN</strong><br>
+    STATUS <strong>READY</strong>
+  </div>
+
+  <button id="boardButton" class="board-button">
+    <span>BOARDING</span>
+    <span class="arrow">→</span>
+  </button>
+
+  <div class="open-footer">AERIALIS / EST. 2026</div>
+</section>
+
+<!-- BOARDING -->
+<section id="boarding" class="screen">
+  <svg class="boarding-symbol" viewBox="0 0 100 100"
+    fill="none" stroke="#b5dcff" stroke-width="1.3"
+    aria-hidden="true">
+    <path d="M50 5 L57 42 L88 61 L88 68
+      L55 57 L55 81 L65 89 L65 94
+      L50 89 L35 94 L35 89 L45 81
+      L45 57 L12 68 L12 61 L43 42 Z"/>
+    <path d="M50 5V89"/>
+  </svg>
+
+  <div class="boarding-title">BOARDING...</div>
+  <div class="progress-track">
+    <div class="progress-fill"></div>
+  </div>
+  <div class="boarding-status">PREPARING CABIN</div>
+</section>
+
+<!-- CABIN -->
+<section id="cabin" class="screen">
+  <div class="cabin-shell"></div>
+  <div class="cabin-ceiling"></div>
+  <div class="ceiling-light left"></div>
+  <div class="ceiling-light right"></div>
+  <div class="cabin-aisle"></div>
+
+  <div class="cabin-window left"></div>
+  <div class="cabin-window right"></div>
+
+  <header class="cabin-heading">
+    <small>AERIALIS / IN-FLIGHT</small>
+    <h2>WELCOME ABOARD</h2>
+    <p>PLEASE SELECT YOUR DESTINATION</p>
+  </header>
+
+  <div class="seat-grid">
+    <div class="seat">
+      <button data-page="0">
+        <span class="seat-icon">✈</span>
+        <span class="seat-name">ABOUT</span>
+        <span class="seat-index">01 / INFORMATION</span>
+      </button>
+    </div>
+
+    <div class="seat">
+      <button data-page="1">
+        <span class="seat-icon">◇</span>
+        <span class="seat-name">CHARACTERS</span>
+        <span class="seat-index">02 / PASSENGERS</span>
+      </button>
+    </div>
+
+    <div class="seat">
+      <button data-page="2">
+        <span class="seat-icon">▤</span>
+        <span class="seat-name">STORIES</span>
+        <span class="seat-index">03 / RECORDS</span>
+      </button>
+    </div>
+
+    <div class="seat">
+      <button data-page="3">
+        <span class="seat-icon">▧</span>
+        <span class="seat-name">GALLERY</span>
+        <span class="seat-index">04 / COLLECTION</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="cabin-bottom">
+    <button id="returnOpening" class="cabin-back">
+      ← EXIT AIRCRAFT
+    </button>
+    <span>FLIGHT AR-001</span>
+  </div>
+</section>
+
+<!-- DETAIL -->
+<section id="detail" class="screen">
+  <header class="detail-top">
+    <span>AERIALIS / IN-FLIGHT SYSTEM</span>
+    <button id="closeDetail" class="detail-close"
+      aria-label="Close">×</button>
+  </header>
+
+  <div class="detail-content">
+    <div id="detailNumber" class="detail-number">
+      SECTION / 01
+    </div>
+    <h2 id="detailTitle">ABOUT</h2>
+    <div class="detail-rule"></div>
+    <p id="detailText"></p>
+    <div class="detail-note">
+      THIS SECTION IS UNDER CONSTRUCTION.
+    </div>
+  </div>
+
+  <footer class="detail-footer">
+    <span>AERIALIS AIRLINES</span>
+    <span>© 2026</span>
+  </footer>
+</section>
+
+</div>
+
+<script>
+/* MOBILE GESTURE CONTROL */
+["gesturestart","gesturechange","gestureend"].forEach(type=>{
+  document.addEventListener(type,e=>{
+    e.preventDefault();
+  },{passive:false});
+});
+
+document.addEventListener("touchmove",e=>{
+  if(e.touches.length>1){
+    e.preventDefault();
+  }
+},{passive:false});
+
+/* SCREEN MANAGER */
+const screens={
+  opening:document.getElementById("opening"),
+  boarding:document.getElementById("boarding"),
+  cabin:document.getElementById("cabin"),
+  detail:document.getElementById("detail")
+};
+
+let currentScreen="opening";
+let boardingTimer=null;
+
+function showScreen(name){
+  Object.entries(screens).forEach(([key,screen])=>{
+    screen.classList.toggle("active",key===name);
+    screen.setAttribute("aria-hidden",String(key!==name));
+  });
+  currentScreen=name;
+}
+
+/* BOARDING */
+const boardButton=document.getElementById("boardButton");
+
+boardButton.addEventListener("click",()=>{
+  if(currentScreen!=="opening")return;
+
+  showScreen("boarding");
+
+  clearTimeout(boardingTimer);
+
+  const progress=document.querySelector(".progress-fill");
+  progress.style.animation="none";
+  void progress.offsetWidth;
+  progress.style.animation="";
+
+  boardingTimer=setTimeout(()=>{
+    showScreen("cabin");
+  },2400);
+});
+
+/* CABIN NAVIGATION */
+const pages=[
+  {
+    title:"ABOUT",
+    description:
+      "AERIALISへようこそ。\n\nここは、このサイトについての情報を掲載する場所です。"
+  },
+  {
+    title:"CHARACTERS",
+    description:
+      "乗客名簿。\n\nキャラクターのプロフィールや関係性を記録するセクションです。"
+  },
+  {
+    title:"STORIES",
+    description:
+      "FLIGHT RECORDS.\n\n物語や出来事を記録するセクションです。"
+  },
+  {
+    title:"GALLERY",
+    description:
+      "VISUAL COLLECTION.\n\nイラストや画像を展示するセクションです。"
+  }
+];
+
+const detailNumber=document.getElementById("detailNumber");
+const detailTitle=document.getElementById("detailTitle");
+const detailText=document.getElementById("detailText");
+
+detailText.style.whiteSpace="pre-line";
+
+document.querySelectorAll("[data-page]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const index=Number(button.dataset.page);
+    const page=pages[index];
+
+    if(!page)return;
+
+    detailNumber.textContent=
+      "SECTION / "+String(index+1).padStart(2,"0");
+
+    detailTitle.textContent=page.title;
+    detailText.textContent=page.description;
+
+    showScreen("detail");
+  });
+});
+
+document.getElementById("closeDetail").addEventListener("click",()=>{
+  showScreen("cabin");
+});
+
+document.getElementById("returnOpening").addEventListener("click",()=>{
+  clearTimeout(boardingTimer);
+  showScreen("opening");
+});
+
+/* INITIAL STATE */
+showScreen("opening");
+</script>
+</body>
+</html>
