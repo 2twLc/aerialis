@@ -229,6 +229,9 @@ button:focus-visible{
   font-weight:300;
   transition:transform .3s;
 }
+.board-button:active{
+  transform:scale(.97);
+}
 .board-button:active .board-arrow{
   transform:translateX(8px);
 }
@@ -244,88 +247,144 @@ button:focus-visible{
   opacity:.75;
 }
 
-/* BOARDING TRANSITION */
+/* BOARDING — REBUILT */
 #boarding{
   background:
     radial-gradient(
-      ellipse at 50% 40%,
-      rgba(65,116,178,.3),
+      ellipse at 45% 45%,
+      rgba(44,94,155,.22),
       transparent 65%
     ),
     linear-gradient(
-      145deg,
-      #173b6c,
-      #0a1d3c 80%
+      120deg,
+      #142e53,
+      #091a35 85%
     );
   display:flex;
   align-items:center;
   justify-content:center;
-  flex-direction:column;
-  gap:34px;
 }
-.board-plane{
-  width:105px;
-  height:105px;
-  color:#c2e5ff;
-  animation:planeLift 2.5s ease-in-out infinite;
+.boarding-layout{
+  width:min(94vw,1000px);
+  display:grid;
+  grid-template-columns:31% 69%;
+  align-items:center;
+  gap:0;
+  padding:0 8px;
 }
-@keyframes planeLift{
-  0%,100%{
-    transform:translateY(7px);
-  }
-  50%{
-    transform:translateY(-9px);
-  }
+.boarding-aircraft{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:.9;
+  filter:drop-shadow(0 0 7px rgba(166,213,255,.18));
 }
-.board-title{
-  font-size:13px;
-  letter-spacing:.48em;
-  text-align:center;
+.aircraft-outline{
+  width:100%;
+  max-width:210px;
+  height:auto;
+  overflow:visible;
+}
+.aircraft-outline .outline{
+  fill:none;
+  stroke:#a9cfee;
+  stroke-width:1.7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.aircraft-outline .detail{
+  fill:none;
+  stroke:#7199c5;
+  stroke-width:1;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  opacity:.75;
+}
+.aircraft-outline .highlight{
+  fill:none;
+  stroke:#d4ebff;
+  stroke-width:.9;
+  stroke-linecap:round;
+  opacity:.7;
+}
+#boarding.active .aircraft-outline{
+  animation:aircraftFloat 5s ease-in-out infinite;
+}
+@keyframes aircraftFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+#boarding.active .aircraft-outline .outline{
+  stroke-dasharray:900;
+  stroke-dashoffset:900;
+  animation:drawAircraft 2.4s ease forwards;
+}
+#boarding.active .aircraft-outline .detail,
+#boarding.active .aircraft-outline .highlight{
+  animation:fadeAircraft 1.6s .7s both;
+}
+@keyframes drawAircraft{
+  to{stroke-dashoffset:0}
+}
+@keyframes fadeAircraft{
+  from{opacity:0}
+  to{opacity:.8}
+}
+.boarding-right{
+  padding-left:16px;
+  min-width:0;
+}
+.boarding-title{
+  font-size:clamp(10px,2.5vw,17px);
+  font-weight:400;
+  letter-spacing:.4em;
+  margin-bottom:27px;
+  white-space:nowrap;
 }
 .board-progress{
-  width:min(84vw,470px);
+  width:100%;
   position:relative;
-  padding:18px 0 0;
 }
 .board-track{
   position:absolute;
-  top:26px;
+  top:9px;
   left:12.5%;
   right:12.5%;
   height:2px;
-  background:rgba(173,200,231,.3);
+  background:rgba(165,195,231,.32);
 }
 .board-track-fill{
   width:0%;
   height:100%;
-  background:#c4ecff;
-  box-shadow:0 0 12px rgba(164,224,255,.9);
-  transition:width .7s ease-in-out;
+  background:#c5eaff;
+  box-shadow:0 0 11px rgba(178,224,255,.75);
+  will-change:width;
 }
 .board-steps{
-  position:relative;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  position:relative;
 }
 .board-step{
+  min-width:0;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:17px;
-  min-width:0;
+  gap:14px;
 }
 .board-circle{
   position:relative;
-  width:18px;
-  height:18px;
-  border:2px solid #7896b9;
-  background:#173a65;
+  width:19px;
+  height:19px;
   border-radius:50%;
+  border:2px solid #7895b9;
+  background:#17355c;
   transition:
-    background .45s,
-    border-color .45s,
-    box-shadow .45s,
-    transform .45s;
+    background .35s,
+    border-color .35s,
+    box-shadow .35s,
+    transform .35s;
 }
 .board-circle::after{
   content:"";
@@ -333,64 +392,76 @@ button:focus-visible{
   inset:4px;
   border-radius:50%;
   background:transparent;
-  transition:background .45s;
+  transition:background .35s;
 }
 .board-step.done .board-circle{
-  border-color:#c7edff;
-  background:#c7edff;
-  box-shadow:0 0 13px rgba(175,226,255,.5);
+  background:#c6eaff;
+  border-color:#c6eaff;
+  box-shadow:0 0 10px rgba(180,224,255,.5);
 }
 .board-step.current .board-circle{
-  border-color:#e6f8ff;
-  background:#c7edff;
-  transform:scale(1.16);
+  background:#c6eaff;
+  border-color:#e9f7ff;
+  transform:scale(1.12);
   box-shadow:
-    0 0 0 5px rgba(175,226,255,.16),
-    0 0 18px rgba(175,226,255,.9);
+    0 0 0 5px rgba(180,224,255,.12),
+    0 0 16px rgba(180,224,255,.75);
 }
 .board-step.current .board-circle::after{
   background:white;
 }
 .board-label{
-  font-size:clamp(7px,1.9vw,9px);
-  letter-spacing:.06em;
-  color:#8da7c7;
-  text-align:center;
+  font-size:clamp(6px,1.5vw,9px);
+  letter-spacing:.02em;
+  color:#8098b7;
   white-space:nowrap;
-  transition:color .45s;
+  text-align:center;
+  transition:color .35s;
 }
 .board-step.done .board-label,
 .board-step.current .board-label{
-  color:#f5fbff;
+  color:#f1f8ff;
 }
-.board-caption{
+.boarding-caption{
+  margin-top:30px;
   font:9px monospace;
-  letter-spacing:.2em;
-  color:#a6c8e8;
-  text-align:center;
+  letter-spacing:.18em;
+  color:#93b5d8;
+  min-height:12px;
 }
-.board-dots{
-  display:flex;
-  gap:12px;
-  margin-top:8px;
+.boarding-caption span{
+  display:inline-block;
+  animation:captionPulse 1.4s ease-in-out infinite alternate;
 }
-.board-dots span{
-  width:5px;
-  height:5px;
-  border-radius:50%;
-  background:#b5e3ff;
-  animation:dotPulse 1.2s infinite alternate;
+@keyframes captionPulse{
+  to{opacity:.45}
 }
-.board-dots span:nth-child(2){
-  animation-delay:.3s;
-}
-.board-dots span:nth-child(3){
-  animation-delay:.6s;
-}
-@keyframes dotPulse{
-  to{
-    opacity:.2;
-    transform:scale(.5);
+@media(max-width:400px){
+  .boarding-layout{
+    width:98vw;
+    grid-template-columns:29% 71%;
+    padding:0 5px;
+  }
+  .boarding-right{
+    padding-left:8px;
+  }
+  .boarding-title{
+    letter-spacing:.25em;
+    margin-bottom:22px;
+  }
+  .board-label{
+    font-size:6px;
+    letter-spacing:0;
+  }
+  .board-circle{
+    width:15px;
+    height:15px;
+  }
+  .board-track{
+    top:7px;
+  }
+  .board-step{
+    gap:12px;
   }
 }
 
@@ -771,68 +842,148 @@ button:focus-visible{
 
 <!-- BOARDING -->
 <section id="boarding" class="screen">
-  <svg class="board-plane"
-    viewBox="0 0 100 100"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.4"
-    aria-hidden="true">
-    <path d="
-      M50 5
-      L57 42
-      L88 61
-      L88 68
-      L55 57
-      L55 81
-      L65 89
-      L65 94
-      L50 89
-      L35 94
-      L35 89
-      L45 81
-      L45 57
-      L12 68
-      L12 61
-      L43 42 Z"/>
-    <path d="M50 5V89"/>
-  </svg>
+  <div class="boarding-layout">
 
-  <div class="board-title">BOARDING...</div>
+    <!-- TOP VIEW AIRCRAFT -->
+    <div class="boarding-aircraft">
+      <svg class="aircraft-outline"
+        viewBox="0 0 200 360"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true">
 
-  <div class="board-progress">
-    <div class="board-track">
-      <div id="boardTrackFill" class="board-track-fill"></div>
+        <g class="outline">
+          <!-- Fuselage -->
+          <path d="
+            M100 14
+            C88 25 85 48 85 72
+            L85 257
+            C85 281 89 305 100 333
+            C111 305 115 281 115 257
+            L115 72
+            C115 48 112 25 100 14 Z"/>
+
+          <!-- Left wing -->
+          <path d="
+            M85 125
+            L10 204
+            Q7 208 7 215
+            L7 229
+            L85 188"/>
+
+          <!-- Right wing -->
+          <path d="
+            M115 125
+            L190 204
+            Q193 208 193 215
+            L193 229
+            L115 188"/>
+
+          <!-- Left stabilizer -->
+          <path d="
+            M92 279
+            L65 314
+            L65 337
+            L100 323"/>
+
+          <!-- Right stabilizer -->
+          <path d="
+            M108 279
+            L135 314
+            L135 337
+            L100 323"/>
+
+          <!-- Left engines -->
+          <path d="
+            M48 165
+            L48 144
+            Q48 137 54 137
+            Q60 137 60 144
+            L60 154"/>
+          <path d="
+            M24 191
+            L24 171
+            Q24 164 30 164
+            Q36 164 36 171
+            L36 179"/>
+
+          <!-- Right engines -->
+          <path d="
+            M140 154
+            L140 144
+            Q140 137 146 137
+            Q152 137 152 144
+            L152 165"/>
+          <path d="
+            M164 179
+            L164 171
+            Q164 164 170 164
+            Q176 164 176 171
+            L176 191"/>
+        </g>
+
+        <g class="detail">
+          <path d="M100 18 L100 331"/>
+          <path d="M88 49 Q100 36 112 49"/>
+          <path d="M86 71 Q100 59 114 71"/>
+          <path d="M85 86 Q100 76 115 86"/>
+
+          <path d="M85 142 L12 216"/>
+          <path d="M115 142 L188 216"/>
+
+          <path d="M85 180 L15 225"/>
+          <path d="M115 180 L185 225"/>
+
+          <path d="M91 286 L70 329"/>
+          <path d="M109 286 L130 329"/>
+        </g>
+
+        <g class="highlight">
+          <path d="M90 26 Q100 18 110 26"/>
+          <path d="M90 42 Q100 33 110 42"/>
+          <path d="M91 101 L91 265"/>
+          <path d="M109 101 L109 265"/>
+        </g>
+      </svg>
     </div>
 
-    <div class="board-steps">
-      <div class="board-step" data-step="0">
-        <span class="board-circle"></span>
-        <span class="board-label">CHECK-IN</span>
+    <!-- PROGRESS -->
+    <div class="boarding-right">
+      <div class="boarding-title">BOARDING...</div>
+
+      <div class="board-progress">
+        <div class="board-track">
+          <div id="boardTrackFill"
+            class="board-track-fill"></div>
+        </div>
+
+        <div class="board-steps">
+          <div class="board-step" data-step="0">
+            <span class="board-circle"></span>
+            <span class="board-label">CHECK-IN</span>
+          </div>
+
+          <div class="board-step" data-step="1">
+            <span class="board-circle"></span>
+            <span class="board-label">BOARDING</span>
+          </div>
+
+          <div class="board-step" data-step="2">
+            <span class="board-circle"></span>
+            <span class="board-label">ON BOARD</span>
+          </div>
+
+          <div class="board-step" data-step="3">
+            <span class="board-circle"></span>
+            <span class="board-label">DEPARTURE</span>
+          </div>
+        </div>
       </div>
 
-      <div class="board-step" data-step="1">
-        <span class="board-circle"></span>
-        <span class="board-label">BOARDING</span>
-      </div>
-
-      <div class="board-step" data-step="2">
-        <span class="board-circle"></span>
-        <span class="board-label">ON BOARD</span>
-      </div>
-
-      <div class="board-step" data-step="3">
-        <span class="board-circle"></span>
-        <span class="board-label">DEPARTURE</span>
+      <div class="boarding-caption">
+        <span id="boardCaption">CHECKING IN</span>
       </div>
     </div>
-  </div>
 
-  <div id="boardCaption" class="board-caption">
-    CHECKING IN
-  </div>
-
-  <div class="board-dots">
-    <span></span><span></span><span></span>
   </div>
 </section>
 
@@ -954,8 +1105,9 @@ const reducedMotion=window.matchMedia(
 );
 
 let currentScreen="opening";
+let boardingFrame=null;
 let boardingTimer=null;
-let boardingIntervals=[];
+let boardingStartTime=0;
 
 function showScreen(name){
   Object.entries(screens).forEach(([key,screen])=>{
@@ -967,27 +1119,23 @@ function showScreen(name){
       screen.inert=!active;
     }
   });
-
   currentScreen=name;
 }
 
 function playFlash(){
   if(reducedMotion.matches)return;
-
   flash.classList.remove("play");
   void flash.offsetWidth;
   flash.classList.add("play");
 }
 
-/* BOARDING PROGRESS */
+/* SMOOTH BOARDING PROGRESS */
 const boardSteps=[
   ...document.querySelectorAll(".board-step")
 ];
-
 const boardTrackFill=document.getElementById(
   "boardTrackFill"
 );
-
 const boardCaption=document.getElementById(
   "boardCaption"
 );
@@ -999,70 +1147,77 @@ const boardingCaptions=[
   "READY FOR DEPARTURE"
 ];
 
-function clearBoardingTimers(){
+function stopBoarding(){
+  if(boardingFrame!==null){
+    cancelAnimationFrame(boardingFrame);
+    boardingFrame=null;
+  }
   clearTimeout(boardingTimer);
-
-  boardingIntervals.forEach(timer=>{
-    clearTimeout(timer);
-  });
-
-  boardingIntervals=[];
 }
 
-function setBoardingStep(step){
+function updateBoarding(progress){
+  const p=Math.max(0,Math.min(1,progress));
+
+  boardTrackFill.style.width=(p*100)+"%";
+
+  const currentStep=Math.min(
+    3,
+    Math.floor(p*3)
+  );
+
   boardSteps.forEach((element,index)=>{
     element.classList.toggle(
       "done",
-      index<step
+      index<currentStep
     );
-
     element.classList.toggle(
       "current",
-      index===step
+      index===currentStep
     );
   });
 
-  boardTrackFill.style.width=
-    (step/3*100)+"%";
-
   boardCaption.textContent=
-    boardingCaptions[step];
+    boardingCaptions[currentStep];
+}
+
+function boardingTick(timestamp){
+  if(currentScreen!=="boarding")return;
+
+  const duration=5000;
+  const elapsed=timestamp-boardingStartTime;
+  const progress=Math.min(elapsed/duration,1);
+
+  updateBoarding(progress);
+
+  if(progress<1){
+    boardingFrame=requestAnimationFrame(boardingTick);
+  }else{
+    boardingFrame=null;
+    boardingTimer=setTimeout(()=>{
+      if(currentScreen!=="boarding")return;
+      playFlash();
+      showScreen("cabin");
+    },450);
+  }
 }
 
 function startBoarding(){
-  clearBoardingTimers();
+  stopBoarding();
   showScreen("boarding");
+  updateBoarding(0);
 
-  /* Reset previous progress */
-  boardTrackFill.style.transition="none";
-  boardTrackFill.style.width="0%";
-
-  boardSteps.forEach(step=>{
-    step.classList.remove("done","current");
-  });
-
-  void boardTrackFill.offsetWidth;
-  boardTrackFill.style.transition="";
-
-  setBoardingStep(0);
-
-  const delay=reducedMotion.matches?80:950;
-
-  for(let step=1;step<4;step++){
-    const timer=setTimeout(()=>{
-      if(currentScreen!=="boarding")return;
-      setBoardingStep(step);
-    },delay*step);
-
-    boardingIntervals.push(timer);
+  if(reducedMotion.matches){
+    updateBoarding(1);
+    boardingTimer=setTimeout(()=>{
+      showScreen("cabin");
+    },100);
+    return;
   }
 
-  boardingTimer=setTimeout(()=>{
-    if(currentScreen!=="boarding")return;
-
-    playFlash();
-    showScreen("cabin");
-  },delay*4);
+  boardingFrame=requestAnimationFrame(timestamp=>{
+    boardingStartTime=timestamp;
+    boardingTick(timestamp);
+  });
 }
 
 document.getElementById("boardButton")
@@ -1098,11 +1253,9 @@ const pages=[
 const detailNumber=document.getElementById(
   "detailNumber"
 );
-
 const detailTitle=document.getElementById(
   "detailTitle"
 );
-
 const detailText=document.getElementById(
   "detailText"
 );
@@ -1113,12 +1266,10 @@ document.querySelectorAll("[data-page]").forEach(button=>{
 
     const index=Number(button.dataset.page);
     const page=pages[index];
-
     if(!page)return;
 
     detailNumber.textContent=
       "SECTION / "+String(index+1).padStart(2,"0");
-
     detailTitle.textContent=page.title;
     detailText.textContent=page.description;
 
@@ -1133,13 +1284,13 @@ document.getElementById("closeDetail")
 
 document.getElementById("returnOpening")
   .addEventListener("click",()=>{
-    clearBoardingTimers();
+    stopBoarding();
     showScreen("opening");
   });
 
 document.addEventListener("visibilitychange",()=>{
   if(document.hidden && currentScreen==="boarding"){
-    clearBoardingTimers();
+    stopBoarding();
     showScreen("cabin");
   }
 });
