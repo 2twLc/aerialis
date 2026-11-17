@@ -4,22 +4,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#b6d5eb">
-<title>AERIALIS — Beyond the ordinary.</title>
+<meta name="theme-color" content="#d8f1ff">
+<title>AERIALIS — FLIGHT SYSTEM</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700;800&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --ink:#12314f;
-  --light:#f4faff;
-  --silver:#a4c9e3;
-  --night:#081b35;
+  --paper:#f4fbff;
+  --ice:#d9f2ff;
+  --sky:#87cdef;
+  --cyan:#4aaddc;
+  --blue:#2875ac;
+  --navy:#102d50;
+  --deep:#06172d;
+  --line:rgba(22,79,125,.24);
+  --font:"Kaisei Tokumin",serif;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
   margin:0;
@@ -33,11 +40,9 @@ html,body{
 body{
   position:fixed;
   inset:0;
-  color:var(--light);
-  background:#a8cde9;
-  font-family:'DM Sans',Arial,sans-serif;
+  background:var(--deep);
+  font-family:var(--font);
   -webkit-tap-highlight-color:transparent;
-  touch-action:manipulation;
 }
 
 button{
@@ -45,9 +50,8 @@ button{
   cursor:pointer;
 }
 
-button:focus-visible,
-a:focus-visible{
-  outline:2px solid #fff;
+button:focus-visible{
+  outline:2px solid currentColor;
   outline-offset:4px;
 }
 
@@ -57,118 +61,16 @@ a:focus-visible{
   height:100dvh;
   overflow:hidden;
   isolation:isolate;
-  background:linear-gradient(
-    155deg,
-    #91c0e5 0%,
-    #d6ebf8 46%,
-    #a4cbdf 100%
-  );
 }
-
-/* ATMOSPHERE */
-
-#night{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-  opacity:0;
-  background:radial-gradient(
-    circle at 27% 40%,
-    #234774 0%,
-    #102a4e 38%,
-    #06152d 90%
-  );
-  transition:opacity 1.1s ease;
-}
-
-#app.is-boarding #night,
-#app.is-departing #night{
-  opacity:1;
-}
-
-/* IMAGE FALLBACK */
-
-#stageFallback{
-  position:absolute;
-  inset:-2%;
-  z-index:0;
-  background:
-    url("airplane.jpg") 60% center/cover no-repeat;
-  filter:brightness(1.28) saturate(.88);
-  opacity:1;
-  transform:scale(1.04);
-  transition:
-    opacity 1.1s ease,
-    transform 1.5s ease;
-}
-
-#app.model-loaded #stageFallback{
-  opacity:0;
-}
-
-#app.is-departing #stageFallback{
-  transform:scale(1.27);
-}
-
-#app.is-boarding #stageFallback{
-  opacity:0;
-}
-
-/* 3D STAGE */
-
-#stage3d{
-  position:absolute;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
-  opacity:0;
-  transition:opacity 1s ease;
-  overflow:hidden;
-}
-
-#app.model-loaded #stage3d{
-  opacity:1;
-}
-
-/*
-  Keep the boarding aircraft within
-  the left-hand area.
-*/
-#app.is-boarding #stage3d{
-  clip-path:inset(0 59% 0 0);
-}
-
-#stage3d canvas{
-  display:block;
-  width:100%;
-  height:100%;
-}
-
-/* FILM GRAIN */
-
-#grain{
-  position:absolute;
-  inset:0;
-  z-index:3;
-  pointer-events:none;
-  opacity:.09;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
-}
-
-/* SCREENS */
 
 .screen{
   position:absolute;
   inset:0;
-  z-index:2;
   overflow:hidden;
   opacity:0;
   visibility:hidden;
   pointer-events:none;
-  transition:
-    opacity .85s ease,
-    visibility .85s;
+  transition:opacity .85s ease,visibility .85s;
 }
 
 .screen.active{
@@ -177,1007 +79,1104 @@ a:focus-visible{
   pointer-events:auto;
 }
 
-/* OPENING */
-
-#opening{
-  touch-action:none;
-  background:linear-gradient(
-    180deg,
-    rgba(4,33,63,.25) 0%,
-    rgba(17,50,80,0) 36%,
-    rgba(8,32,57,.06) 58%,
-    rgba(3,20,40,.53) 100%
-  );
+#grain{
+  position:absolute;
+  inset:0;
+  z-index:30;
+  pointer-events:none;
+  opacity:.11;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
 }
 
-#opening::after{
-  content:"";
+#flash{
   position:absolute;
-  z-index:-1;
-  right:-15%;
-  top:-25%;
-  width:70%;
-  height:66%;
-  background:radial-gradient(
-    ellipse,
-    rgba(255,255,255,.36),
-    transparent 68%
-  );
+  inset:0;
+  z-index:40;
+  background:#e7f8ff;
+  opacity:0;
   pointer-events:none;
 }
 
-.hero-header{
+#flash.play{
+  animation:flash .7s ease-out both;
+}
+
+@keyframes flash{
+  0%{opacity:0}
+  35%{opacity:.85}
+  100%{opacity:0}
+}
+
+/* GLOBAL GRAPHICS */
+
+.corner{
   position:absolute;
-  top:max(27px,env(safe-area-inset-top));
-  left:6.2%;
-  right:6.2%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  z-index:5;
-  border-bottom:1px solid rgba(255,255,255,.34);
-  padding-bottom:17px;
-}
-
-.brand{
-  font-family:Manrope,Arial,sans-serif;
-  font-size:16px;
-  font-weight:800;
-  letter-spacing:.23em;
-  line-height:1;
-}
-
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:16px;
-  font-size:9px;
-  letter-spacing:.2em;
-  font-weight:600;
-}
-
-.header-right i{
-  display:inline-block;
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#e3f9ff;
-  box-shadow:0 0 14px #fff;
-  animation:statusBlink 2.5s ease-in-out infinite;
-}
-
-@keyframes statusBlink{
-  50%{opacity:.35}
-}
-
-.hero-index{
-  position:absolute;
-  left:6.2%;
-  top:14.5%;
-  font:600 9px/1.8 Manrope,Arial,sans-serif;
-  letter-spacing:.25em;
-  color:#f2f8ff;
-  opacity:.9;
-  animation:rise .9s .2s both;
-}
-
-.hero-title{
-  position:absolute;
-  left:5.7%;
-  top:19%;
-  z-index:4;
+  width:21px;
+  height:21px;
+  border-color:currentColor;
+  opacity:.48;
   pointer-events:none;
-  animation:rise 1.2s .12s both;
 }
 
-.hero-title h1{
-  margin:0;
-  font-family:'Playfair Display',Georgia,serif;
-  font-weight:400;
-  font-size:clamp(51px,11.4vw,130px);
-  line-height:1.02;
-  letter-spacing:-.055em;
-  text-shadow:0 4px 30px rgba(19,48,73,.1);
+.corner.tl{
+  top:23px;
+  left:22px;
+  border-top:1px solid;
+  border-left:1px solid;
 }
 
-.hero-title em{
-  font-weight:400;
-  color:#f8fcff;
+.corner.tr{
+  top:23px;
+  right:22px;
+  border-top:1px solid;
+  border-right:1px solid;
 }
 
-.hero-title p{
-  margin:23px 0 0;
-  font:600 10px/2 Manrope,Arial,sans-serif;
+.corner.bl{
+  bottom:23px;
+  left:22px;
+  border-bottom:1px solid;
+  border-left:1px solid;
+}
+
+.corner.br{
+  bottom:23px;
+  right:22px;
+  border-bottom:1px solid;
+  border-right:1px solid;
+}
+
+.micro{
+  font-size:8px;
   letter-spacing:.19em;
+  font-weight:700;
+  line-height:1.7;
 }
 
-@keyframes rise{
+.mono{
+  font-variant-numeric:tabular-nums;
+}
+
+.enter{
+  animation:enter .85s both;
+}
+
+@keyframes enter{
   from{
     opacity:0;
-    transform:translate3d(0,23px,0);
+    transform:translateY(24px);
   }
   to{
     opacity:1;
-    transform:translate3d(0,0,0);
+    transform:translateY(0);
   }
 }
 
-.hero-side{
-  position:absolute;
-  right:6.2%;
-  top:28%;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  gap:6px;
-  font:600 9px/1.8 Manrope,Arial,sans-serif;
-  letter-spacing:.15em;
-  text-align:right;
-  opacity:.88;
-  animation:rise 1.1s .5s both;
+/* OPENING */
+
+#opening{
+  color:var(--navy);
+  background:
+    radial-gradient(
+      circle at 77% 28%,
+      #ffffff 0%,
+      #e5f6ff 23%,
+      transparent 57%
+    ),
+    linear-gradient(
+      145deg,
+      #e9f8ff,
+      #a8d9f2 64%,
+      #6aaed9
+    );
+  touch-action:none;
 }
 
-.hero-side strong{
-  font-size:12px;
-  letter-spacing:.1em;
-}
-
-.hero-marquee{
-  position:absolute;
-  left:-2%;
-  right:-2%;
-  bottom:20.2%;
-  font:800 clamp(70px,17vw,230px)/1 Manrope,sans-serif;
-  white-space:nowrap;
-  letter-spacing:-.09em;
-  opacity:.09;
-  pointer-events:none;
-  text-align:center;
-  transform:translateX(-1%);
-}
-
-.hero-action{
-  position:absolute;
-  z-index:5;
-  left:6.2%;
-  right:6.2%;
-  bottom:max(
-    70px,
-    calc(env(safe-area-inset-bottom) + 55px)
-  );
-  display:flex;
-  gap:15px;
-  align-items:flex-end;
-}
-
-.board-button{
-  position:relative;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.7);
-  background:rgba(246,251,255,.92);
-  color:#113659;
-  backdrop-filter:blur(15px);
-  -webkit-backdrop-filter:blur(15px);
-  min-height:70px;
-  padding:0 25px;
-  min-width:min(310px,72vw);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:25px;
-  font:800 12px Manrope,Arial,sans-serif;
-  letter-spacing:.19em;
-  box-shadow:0 15px 50px rgba(9,42,71,.18);
-  transition:
-    transform .3s,
-    background .3s;
-}
-
-.board-button::before{
-  content:"";
+.open-grid{
   position:absolute;
   inset:0;
-  background:linear-gradient(
-    105deg,
-    transparent 20%,
-    rgba(255,255,255,.95) 50%,
-    transparent 80%
+  opacity:.38;
+  background-image:
+    linear-gradient(
+      rgba(20,88,137,.17) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(20,88,137,.17) 1px,
+      transparent 1px
+    );
+  background-size:35px 35px;
+  mask-image:linear-gradient(
+    to bottom,
+    #000,
+    transparent 94%
   );
-  transform:translateX(-150%);
-  animation:buttonShine 5.5s 1.6s infinite;
 }
 
-@keyframes buttonShine{
-  0%,55%{
-    transform:translateX(-150%);
-  }
-  90%,100%{
-    transform:translateX(150%);
-  }
-}
-
-.board-button:active{
-  transform:scale(.97);
-}
-
-.board-arrow{
-  font-size:24px;
-  line-height:1;
-  font-weight:400;
-}
-
-.action-caption{
-  max-width:210px;
-  font:500 9px/1.8 Manrope,Arial,sans-serif;
-  letter-spacing:.14em;
-  opacity:.87;
-  padding-bottom:12px;
-}
-
-.hero-hint{
+.open-orb{
   position:absolute;
-  right:6.2%;
-  bottom:35%;
-  font:600 8px Manrope,sans-serif;
-  letter-spacing:.18em;
-  opacity:.85;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  transition:opacity .4s;
+  width:85vw;
+  height:85vw;
+  max-width:620px;
+  max-height:620px;
+  top:22%;
+  left:50%;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle at 32% 28%,
+      rgba(255,255,255,.95),
+      rgba(143,212,247,.55) 42%,
+      rgba(35,120,180,.22) 65%,
+      transparent 71%
+    );
+  filter:blur(3px);
+  animation:orbFloat 8s ease-in-out infinite alternate;
 }
 
-.hero-hint::before{
+@keyframes orbFloat{
+  to{
+    transform:translate(-50%,-18px) scale(1.05);
+  }
+}
+
+.open-orbit{
+  position:absolute;
+  width:115vw;
+  height:115vw;
+  max-width:800px;
+  max-height:800px;
+  border:1px solid rgba(20,85,130,.22);
+  border-radius:50%;
+  top:17%;
+  left:50%;
+  transform:translateX(-50%) rotate(-22deg);
+}
+
+.open-orbit::after{
   content:"";
-  width:38px;
-  height:1px;
-  background:rgba(255,255,255,.7);
-}
-
-.hero-hint.dragging{
-  opacity:1;
-}
-
-.hero-footer{
   position:absolute;
-  left:6.2%;
-  right:6.2%;
-  bottom:max(20px,env(safe-area-inset-bottom));
-  padding-top:14px;
-  border-top:1px solid rgba(255,255,255,.35);
+  inset:12%;
+  border:1px dashed rgba(22,97,147,.26);
+  border-radius:50%;
+}
+
+.open-orbit.second{
+  width:80vw;
+  height:80vw;
+  top:26%;
+  border-style:dashed;
+  animation:orbitSpin 40s linear infinite;
+}
+
+@keyframes orbitSpin{
+  from{
+    transform:translateX(-50%) rotate(0deg);
+  }
+  to{
+    transform:translateX(-50%) rotate(360deg);
+  }
+}
+
+#openCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+
+.open-header{
+  position:absolute;
+  top:max(38px,env(safe-area-inset-top));
+  left:7%;
+  right:7%;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  z-index:4;
+}
+
+.open-logo{
+  font-size:17px;
+  font-weight:800;
+  letter-spacing:.24em;
+}
+
+.open-status{
+  text-align:right;
+  font-size:8px;
+  line-height:2;
+  letter-spacing:.16em;
+}
+
+.open-status span{
+  display:inline-block;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#2e9cc9;
+  margin-right:6px;
+  box-shadow:0 0 8px #2e9cc9;
+  animation:statusPulse 2s infinite;
+}
+
+@keyframes statusPulse{
+  50%{opacity:.25}
+}
+
+.open-label{
+  position:absolute;
+  z-index:4;
+  top:16%;
+  left:7%;
+  font-size:9px;
+  letter-spacing:.23em;
+  line-height:2;
+  font-weight:700;
+}
+
+.open-title{
+  position:absolute;
+  z-index:5;
+  top:23%;
+  left:6%;
+  right:6%;
+  pointer-events:none;
+}
+
+.open-title .tiny{
+  font-size:9px;
+  letter-spacing:.32em;
+  font-weight:700;
+}
+
+.open-title h1{
+  margin:9px 0 0;
+  font-size:clamp(48px,13.2vw,112px);
+  line-height:1.03;
+  font-weight:800;
+  letter-spacing:-.075em;
+  color:#12395e;
+  text-shadow:
+    2px 2px 0 rgba(255,255,255,.55),
+    0 12px 28px rgba(19,85,135,.13);
+}
+
+.open-title h1 span{
+  color:#fff;
+  -webkit-text-stroke:1px #2777ac;
+}
+
+.open-title p{
+  margin-top:17px;
+  font-size:9px;
+  letter-spacing:.17em;
+  line-height:2.1;
+}
+
+.open-large-text{
+  position:absolute;
+  left:-4%;
+  bottom:23%;
+  font-size:clamp(95px,29vw,330px);
+  line-height:1;
+  font-weight:800;
+  letter-spacing:-.11em;
+  color:rgba(255,255,255,.24);
+  pointer-events:none;
+  white-space:nowrap;
+}
+
+.open-ticket{
+  position:absolute;
+  z-index:5;
+  left:7%;
+  right:7%;
+  bottom:max(
+    93px,
+    calc(env(safe-area-inset-bottom) + 79px)
+  );
+  height:112px;
+  display:grid;
+  grid-template-columns:1fr 100px;
+  background:rgba(250,254,255,.89);
+  border:1px solid rgba(255,255,255,.92);
+  box-shadow:
+    0 22px 60px rgba(19,75,115,.19),
+    inset 0 0 0 1px rgba(36,113,167,.1);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  animation:enter 1s .4s both;
+}
+
+.ticket-left{
+  padding:17px 20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-width:0;
+}
+
+.ticket-head{
   display:flex;
   justify-content:space-between;
   gap:10px;
-  font:600 8px/1.5 Manrope,Arial,sans-serif;
-  letter-spacing:.17em;
-  opacity:.95;
+  font-size:8px;
+  letter-spacing:.15em;
+  font-weight:700;
 }
 
-.hero-footer a{
-  color:inherit;
-  text-decoration:underline;
-  text-underline-offset:3px;
+.ticket-main{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
 }
 
-#app.is-departing .hero-title,
-#app.is-departing .hero-index,
-#app.is-departing .hero-side,
-#app.is-departing .hero-hint{
-  opacity:0!important;
-  transform:translateY(-25px);
-  transition:
-    opacity .55s,
-    transform .65s;
+.ticket-main strong{
+  font-size:26px;
+  letter-spacing:-.04em;
 }
 
-#app.is-departing .hero-action{
-  opacity:0;
-  transform:translateY(20px);
-  transition:
-    opacity .45s,
-    transform .6s;
+.ticket-main small{
+  font-size:8px;
+  letter-spacing:.12em;
+}
+
+.ticket-button{
+  border:0;
+  border-left:1px dashed rgba(29,98,148,.35);
+  color:white;
+  background:var(--navy);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:9px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.13em;
+  transition:background .25s;
+}
+
+.ticket-button:active{
+  background:var(--blue);
+}
+
+.ticket-button .arrow{
+  font-size:29px;
+  line-height:1;
+  animation:arrowMove 2s ease-in-out infinite;
+}
+
+@keyframes arrowMove{
+  50%{transform:translateX(5px)}
+}
+
+.open-bottom{
+  position:absolute;
+  left:7%;
+  right:7%;
+  bottom:max(29px,env(safe-area-inset-bottom));
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  border-top:1px solid rgba(20,75,117,.4);
+  padding-top:12px;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.15em;
+  line-height:1.7;
 }
 
 /* BOARDING */
 
 #boarding{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  touch-action:none;
-  background:linear-gradient(
-    90deg,
-    rgba(5,19,40,.05),
-    rgba(3,12,30,.19)
-  );
-}
-
-.boarding-inner{
-  width:min(92vw,980px);
-  display:grid;
-  grid-template-columns:40% 60%;
-  align-items:center;
-  gap:0;
-  transform:translateY(-3%);
-}
-
-.boarding-visual{
-  min-height:240px;
-  pointer-events:none;
-}
-
-.boarding-ui{
-  min-width:0;
-  padding-left:12px;
-  position:relative;
-}
-
-.boarding-kicker{
-  font:600 9px Manrope,sans-serif;
-  letter-spacing:.25em;
-  opacity:.62;
-  margin-bottom:15px;
-}
-
-.boarding-title{
-  font:500 clamp(18px,3.2vw,34px) Manrope,Arial,sans-serif;
-  letter-spacing:.23em;
-  margin-bottom:38px;
-  white-space:nowrap;
-}
-
-.board-progress{
-  width:100%;
-  position:relative;
-}
-
-.board-track{
-  position:absolute;
-  top:8px;
-  left:12.5%;
-  width:75%;
-  height:2px;
-  background:rgba(155,193,230,.28);
-}
-
-.board-track-fill{
-  width:100%;
-  height:100%;
-  background:#c7ebff;
-  box-shadow:0 0 15px #75c6ff;
-  transform:scaleX(0);
-  transform-origin:left;
-  will-change:transform;
-}
-
-.board-steps{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  position:relative;
-}
-
-.board-step{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:16px;
-  min-width:0;
-}
-
-.board-circle{
-  width:18px;
-  height:18px;
-  border:1.5px solid #7c9ec2;
-  background:#102e54;
-  border-radius:50%;
-  box-shadow:inset 0 0 7px rgba(114,173,229,.2);
-  transition:
-    background .25s,
-    border .25s,
-    box-shadow .25s,
-    transform .25s;
-}
-
-.board-step.done .board-circle{
-  background:#b7e6ff;
-  border-color:#d7efff;
-  box-shadow:0 0 12px #69b6e8;
-}
-
-.board-step.current .board-circle{
-  transform:scale(1.2);
-  background:#e2f6ff;
-  border-color:#fff;
-  box-shadow:
-    0 0 0 5px rgba(166,218,255,.13),
-    0 0 22px #88d7ff;
-}
-
-.board-label{
-  font:500 clamp(6px,1.35vw,9px) Manrope,Arial,sans-serif;
-  letter-spacing:.04em;
-  color:#85a3c3;
-  text-align:center;
-  white-space:nowrap;
-  transition:color .3s;
-}
-
-.board-step.done .board-label,
-.board-step.current .board-label{
-  color:#eefaff;
-}
-
-.board-caption{
-  margin-top:38px;
-  color:#a9c7e3;
-  font:600 9px Manrope,sans-serif;
-  letter-spacing:.18em;
-  min-height:18px;
-}
-
-.boarding-foot{
-  position:absolute;
-  left:6%;
-  right:6%;
-  bottom:max(33px,env(safe-area-inset-bottom));
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font:600 8px Manrope,sans-serif;
-  letter-spacing:.18em;
-  opacity:.55;
-  border-top:1px solid rgba(207,231,255,.26);
-  padding-top:14px;
-}
-
-/* CABIN */
-
-#cabin{
-  background:linear-gradient(
-    180deg,
-    #dceaff,
-    #89b1db
-  );
-}
-
-.cabin-structure{
-  position:absolute;
-  inset:0;
+  color:#e9f8ff;
   background:
-    linear-gradient(
-      90deg,
-      rgba(12,45,87,.34),
-      transparent 18%,
-      transparent 82%,
-      rgba(12,45,87,.34)
-    ),
-    linear-gradient(
-      180deg,
-      #f7fbff,
-      #c3d9f3 55%,
-      #7098c5
+    radial-gradient(
+      ellipse at 50% 47%,
+      #164e79 0%,
+      #0a294c 43%,
+      #06162c 100%
     );
 }
 
-.cabin-ceiling{
+#radarCanvas{
   position:absolute;
-  top:-15%;
-  left:-40%;
-  width:180%;
-  height:66%;
-  border-radius:0 0 50% 50%;
-  background:linear-gradient(
-    #b1c9e5,
-    #fff 43%,
-    #e0edff 73%,
-    #86b4e7
-  );
-  box-shadow:0 20px 50px rgba(21,64,115,.2);
-}
-
-.cabin-light{
-  position:absolute;
-  top:0;
-  height:63%;
-  width:5px;
-  background:#b7e7ff;
-  box-shadow:0 0 22px 7px rgba(69,161,255,.65);
-  animation:lightPulse 5s ease-in-out infinite alternate;
-}
-
-.cabin-light.left{
-  left:18%;
-  transform:rotate(-20deg);
-}
-
-.cabin-light.right{
-  right:18%;
-  transform:rotate(20deg);
-}
-
-@keyframes lightPulse{
-  to{opacity:.55}
-}
-
-.cabin-aisle{
-  position:absolute;
-  left:35%;
-  bottom:0;
-  width:30%;
-  height:62%;
-  background:linear-gradient(
-    #dbe8f7,
-    #537eb3
-  );
-  clip-path:polygon(
-    40% 0,
-    60% 0,
-    100% 100%,
-    0 100%
-  );
-}
-
-.cabin-window{
-  position:absolute;
-  top:30%;
-  width:75px;
-  height:145px;
-  border:10px solid #f3f8ff;
-  border-radius:46%;
-  background:linear-gradient(
-    #4c94d5,
-    #bce4ff 65%,
-    #fff
-  );
-  box-shadow:
-    0 0 0 3px #99b7d6,
-    inset 0 0 20px #5289bd;
-}
-
-.cabin-window.left{
-  left:-35px;
-}
-
-.cabin-window.right{
-  right:-35px;
-}
-
-.cabin-heading{
-  position:absolute;
-  z-index:3;
-  top:max(52px,env(safe-area-inset-top));
-  left:15px;
-  right:15px;
-  text-align:center;
-  color:#214b7d;
-  animation:rise 1s both;
-}
-
-.cabin-heading small{
-  font-size:9px;
-  letter-spacing:.3em;
-}
-
-.cabin-heading h2{
-  margin:15px 0;
-  font-size:clamp(24px,6vw,38px);
-  font-weight:300;
-  letter-spacing:.13em;
-}
-
-.cabin-heading p{
-  font-size:9px;
-  letter-spacing:.18em;
-}
-
-.seat-grid{
-  position:absolute;
-  z-index:4;
-  bottom:14%;
-  left:0;
-  right:0;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
-  padding:0 24px;
-}
-
-.seat{
-  height:170px;
-  border:6px solid #a4bfdd;
-  border-radius:24px 24px 12px 12px;
-  background:linear-gradient(
-    135deg,
-    #1e4a80,
-    #0a284e
-  );
-  padding:17px 11px 11px;
-  box-shadow:
-    inset 0 7px 15px rgba(255,255,255,.1),
-    0 15px 24px rgba(13,47,89,.25);
-}
-
-.seat button{
+  inset:0;
   width:100%;
   height:100%;
-  border:1px solid rgba(164,216,255,.55);
-  background:linear-gradient(
-    145deg,
-    #255e99,
-    #0b2a50
+  opacity:.95;
+}
+
+.board-grid{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(
+      rgba(156,219,255,.07) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(156,219,255,.07) 1px,
+      transparent 1px
+    );
+  background-size:35px 35px;
+  mask-image:radial-gradient(
+    ellipse at center,
+    #000,
+    transparent 80%
   );
-  color:white;
+}
+
+.board-head{
+  position:absolute;
+  top:max(40px,env(safe-area-inset-top));
+  left:7%;
+  right:7%;
   display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:13px;
-  transition:
-    transform .25s,
-    background .25s;
+  justify-content:space-between;
+  align-items:start;
 }
 
-.seat button:active{
-  transform:scale(.94);
-  background:#4387c3;
+.board-head strong{
+  font-size:15px;
+  letter-spacing:.25em;
 }
 
-.seat-icon{
-  font-size:23px;
-  font-weight:300;
-}
-
-.seat-name{
-  font-size:11px;
-  letter-spacing:.15em;
-}
-
-.seat-sub{
+.board-head small{
+  display:block;
+  margin-top:9px;
   font-size:8px;
+  letter-spacing:.18em;
   opacity:.65;
 }
 
-#cabin.active .seat{
-  animation:seatEnter .7s both;
-}
-
-#cabin.active .seat:nth-child(2){
-  animation-delay:.12s;
-}
-
-#cabin.active .seat:nth-child(3){
-  animation-delay:.24s;
-}
-
-#cabin.active .seat:nth-child(4){
-  animation-delay:.36s;
-}
-
-@keyframes seatEnter{
-  from{
-    opacity:0;
-    transform:translateY(35px) scale(.94);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0) scale(1);
-  }
-}
-
-.cabin-footer{
-  position:absolute;
-  bottom:max(32px,env(safe-area-inset-bottom));
-  left:25px;
-  right:25px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  color:white;
-  font:9px monospace;
+.board-time{
+  font-size:9px;
   letter-spacing:.12em;
 }
 
-.cabin-footer button{
+.radar-core{
+  position:absolute;
+  width:min(85vw,390px);
+  aspect-ratio:1;
+  top:42%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+
+.radar-ring{
+  position:absolute;
+  inset:0;
+  border:1px solid rgba(173,231,255,.36);
+  border-radius:50%;
+}
+
+.radar-ring.r1{
+  inset:7%;
+  border-width:3px;
+  border-style:dashed;
+  animation:ringSpin 18s linear infinite;
+}
+
+.radar-ring.r2{
+  inset:18%;
+  border:8px solid transparent;
+  border-top-color:#b5e9ff;
+  border-bottom-color:#3b98cb;
+  border-left-color:rgba(160,222,255,.18);
+  border-radius:50%;
+  animation:ringSpin 9s linear infinite reverse;
+}
+
+.radar-ring.r3{
+  inset:31%;
+  border:2px dashed rgba(214,246,255,.7);
+  animation:ringSpin 12s linear infinite;
+}
+
+.radar-ring.r4{
+  inset:40%;
+  border:2px solid rgba(199,239,255,.55);
+  box-shadow:
+    0 0 28px rgba(85,190,247,.25),
+    inset 0 0 22px rgba(85,190,247,.17);
+}
+
+@keyframes ringSpin{
+  to{transform:rotate(360deg)}
+}
+
+.radar-cross{
+  position:absolute;
+  inset:0;
+}
+
+.radar-cross::before,
+.radar-cross::after{
+  content:"";
+  position:absolute;
+  background:rgba(178,228,255,.22);
+}
+
+.radar-cross::before{
+  width:1px;
+  height:100%;
+  left:50%;
+}
+
+.radar-cross::after{
+  height:1px;
+  width:100%;
+  top:50%;
+}
+
+.radar-center{
+  position:absolute;
+  inset:43%;
+  border-radius:50%;
+  background:radial-gradient(
+    circle at 32% 27%,
+    #fff,
+    #a5e2ff 25%,
+    #3179a8 68%,
+    #0b2d50
+  );
+  box-shadow:
+    0 0 0 8px rgba(124,211,255,.13),
+    0 0 35px rgba(95,195,255,.6);
+  animation:centerPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes centerPulse{
+  50%{
+    transform:scale(1.15);
+    box-shadow:
+      0 0 0 16px rgba(124,211,255,.04),
+      0 0 45px rgba(95,195,255,.7);
+  }
+}
+
+.radar-sweep{
+  position:absolute;
+  inset:5%;
+  border-radius:50%;
+  background:conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 270deg,
+    rgba(111,214,255,.17) 340deg,
+    rgba(191,241,255,.45) 359deg,
+    transparent 360deg
+  );
+  animation:ringSpin 5s linear infinite;
+}
+
+.board-data{
+  position:absolute;
+  top:23%;
+  left:7%;
+  font-size:8px;
+  letter-spacing:.17em;
+  line-height:2.2;
+  opacity:.78;
+}
+
+.board-data.right{
+  left:auto;
+  right:7%;
+  text-align:right;
+}
+
+.board-loading{
+  position:absolute;
+  left:7%;
+  right:7%;
+  bottom:15%;
+}
+
+.board-loading h2{
+  font-size:clamp(23px,6vw,36px);
+  letter-spacing:.22em;
+  font-weight:500;
+  margin:0 0 12px;
+}
+
+.board-loading p{
+  font-size:9px;
+  letter-spacing:.19em;
+  opacity:.7;
+  margin:0 0 26px;
+}
+
+.progress-track{
+  height:2px;
+  background:rgba(180,228,255,.25);
+  position:relative;
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:#d6f4ff;
+  box-shadow:0 0 15px #85d8ff;
+}
+
+.progress-fill::after{
+  content:"";
+  position:absolute;
+  right:0;
+  top:-4px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 20px #a3e6ff;
+}
+
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  margin-top:14px;
+  font-size:8px;
+  letter-spacing:.12em;
+}
+
+.progress-percent{
+  font-size:12px;
+  font-weight:700;
+}
+
+.board-footer{
+  position:absolute;
+  bottom:max(28px,env(safe-area-inset-bottom));
+  left:7%;
+  right:7%;
+  display:flex;
+  justify-content:space-between;
+  border-top:1px solid rgba(173,222,255,.22);
+  padding-top:13px;
+  font-size:8px;
+  letter-spacing:.16em;
+  opacity:.65;
+}
+
+/* MAIN MENU */
+
+#menu{
+  color:var(--navy);
+  background:
+    radial-gradient(
+      circle at 85% 8%,
+      #fff,
+      transparent 37%
+    ),
+    linear-gradient(
+      160deg,
+      #eaf8ff,
+      #b9e2f7 64%,
+      #8cc6e8
+    );
+}
+
+.menu-grid-bg{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(
+      rgba(23,89,140,.12) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(23,89,140,.12) 1px,
+      transparent 1px
+    );
+  background-size:29px 29px;
+  opacity:.48;
+}
+
+.menu-decoration{
+  position:absolute;
+  width:270px;
+  height:270px;
+  border-radius:50%;
+  border:18px solid rgba(255,255,255,.33);
+  right:-105px;
+  top:15%;
+  animation:ringSpin 25s linear infinite;
+}
+
+.menu-decoration::after{
+  content:"";
+  position:absolute;
+  inset:22px;
+  border:2px dashed rgba(31,115,168,.27);
+  border-radius:50%;
+}
+
+.menu-head{
+  position:absolute;
+  top:max(38px,env(safe-area-inset-top));
+  left:7%;
+  right:7%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid rgba(24,89,139,.28);
+  padding-bottom:16px;
+}
+
+.menu-head strong{
+  font-size:16px;
+  letter-spacing:.23em;
+}
+
+.menu-head small{
+  font-size:8px;
+  letter-spacing:.13em;
+}
+
+.menu-title{
+  position:absolute;
+  top:15%;
+  left:7%;
+  right:7%;
+}
+
+.menu-title .eyebrow{
+  font-size:9px;
+  letter-spacing:.22em;
+  font-weight:700;
+}
+
+.menu-title h2{
+  font-size:clamp(40px,10vw,76px);
+  font-weight:800;
+  letter-spacing:-.07em;
+  line-height:1.12;
+  margin:13px 0 10px;
+}
+
+.menu-title h2 span{
+  color:#fff;
+  -webkit-text-stroke:1px #347cae;
+}
+
+.menu-title p{
+  font-size:9px;
+  letter-spacing:.13em;
+  line-height:2;
+}
+
+.menu-cards{
+  position:absolute;
+  top:37%;
+  bottom:13%;
+  left:7%;
+  right:7%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:12px;
+}
+
+.menu-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.95);
+  background:rgba(255,255,255,.79);
+  box-shadow:0 12px 30px rgba(18,77,120,.13);
+  text-align:left;
+  padding:16px;
+  color:var(--navy);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:
+    transform .3s,
+    background .3s;
+}
+
+.menu-card:active{
+  transform:scale(.95);
+  background:#fff;
+}
+
+.menu-card::after{
+  content:"";
+  position:absolute;
+  width:110px;
+  height:110px;
+  border:1px solid rgba(32,116,174,.18);
+  border-radius:50%;
+  right:-45px;
+  top:-48px;
+}
+
+.card-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:start;
+  font-size:8px;
+  letter-spacing:.1em;
+  font-weight:700;
+}
+
+.card-symbol{
+  position:absolute;
+  right:13px;
+  top:43%;
+  transform:translateY(-50%);
+  font-size:47px;
+  font-weight:400;
+  line-height:1;
+  opacity:.18;
+}
+
+.card-title{
+  font-size:clamp(15px,4.2vw,24px);
+  font-weight:800;
+  letter-spacing:.02em;
+}
+
+.card-sub{
+  font-size:7px;
+  letter-spacing:.11em;
+  opacity:.65;
+  margin-top:6px;
+}
+
+.card-arrow{
+  position:absolute;
+  right:15px;
+  bottom:15px;
+  font-size:19px;
+}
+
+.menu-bottom{
+  position:absolute;
+  bottom:max(30px,env(safe-area-inset-bottom));
+  left:7%;
+  right:7%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-top:1px solid rgba(22,84,130,.32);
+  padding-top:13px;
+  font-size:8px;
+  letter-spacing:.12em;
+}
+
+.menu-bottom button{
   border:0;
-  background:transparent;
+  background:none;
   color:inherit;
-  padding:10px 0;
-  font:inherit;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.1em;
+  padding:8px 0;
 }
 
 /* DETAIL */
 
 #detail{
+  color:var(--navy);
   background:linear-gradient(
     145deg,
-    #f5faff,
-    #c2dff9
+    #f6fcff,
+    #c4e5f7
   );
-  color:#173c68;
-  padding:
-    max(40px,env(safe-area-inset-top))
-    27px
-    max(28px,env(safe-area-inset-bottom));
-  display:flex;
-  flex-direction:column;
+}
+
+.detail-grid{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(
+      rgba(24,100,155,.09) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(24,100,155,.09) 1px,
+      transparent 1px
+    );
+  background-size:35px 35px;
 }
 
 .detail-head{
+  position:absolute;
+  top:max(40px,env(safe-area-inset-top));
+  left:7%;
+  right:7%;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  font:9px monospace;
-  letter-spacing:.15em;
+}
+
+.detail-head span{
+  font-size:9px;
+  letter-spacing:.18em;
 }
 
 .detail-close{
-  width:46px;
-  height:46px;
-  border:1px solid #8db4d8;
+  width:43px;
+  height:43px;
+  border:1px solid #8bb8d7;
   border-radius:50%;
-  background:transparent;
-  color:inherit;
-  font-size:22px;
+  background:rgba(255,255,255,.5);
+  color:var(--navy);
+  font-size:24px;
 }
 
-.detail-body{
-  margin:auto 0;
-  max-height:72%;
+.detail-content{
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:23%;
+  bottom:14%;
   overflow-y:auto;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
   touch-action:pan-y;
 }
 
-.detail-number{
-  color:#558bbb;
-  font:10px monospace;
-  letter-spacing:.2em;
+.detail-index{
+  font-size:10px;
+  letter-spacing:.25em;
+  color:#4389b6;
 }
 
-.detail-body h2{
-  font-size:clamp(42px,12vw,76px);
-  font-weight:300;
-  letter-spacing:-.05em;
-  margin:20px 0;
+.detail-content h2{
+  font-size:clamp(44px,12vw,85px);
+  line-height:1.1;
+  letter-spacing:-.065em;
+  margin:22px 0 26px;
+  font-weight:800;
 }
 
-.detail-line{
-  height:1px;
-  background:#a0bed9;
-  margin:25px 0;
+.detail-rule{
+  height:2px;
+  background:var(--navy);
+  margin-bottom:29px;
 }
 
-.detail-body p{
+.detail-content p{
   font-size:13px;
-  line-height:2.3;
+  line-height:2.4;
   white-space:pre-line;
-  color:#426a92;
 }
 
-.detail-note{
-  margin-top:35px;
-  font:9px monospace;
-  letter-spacing:.15em;
-  color:#6996bd;
+.detail-stamp{
+  display:inline-block;
+  border:1px solid var(--blue);
+  padding:12px 17px;
+  font-size:9px;
+  letter-spacing:.2em;
+  margin-top:40px;
+  transform:rotate(-5deg);
 }
 
-.detail-footer{
-  border-top:1px solid #a0bed9;
-  padding-top:16px;
+.detail-foot{
+  position:absolute;
+  bottom:max(30px,env(safe-area-inset-bottom));
+  left:7%;
+  right:7%;
+  border-top:1px solid var(--line);
+  padding-top:14px;
   display:flex;
   justify-content:space-between;
-  font:9px monospace;
-  letter-spacing:.12em;
+  font-size:8px;
+  letter-spacing:.15em;
 }
 
-#detail.active .detail-body{
-  animation:rise .7s both;
-}
+/* TRANSITION */
 
-/* SCREEN FLASH */
-
-#flash{
+#transition{
   position:absolute;
-  z-index:10;
   inset:0;
-  background:#e9f6ff;
-  opacity:0;
+  z-index:25;
+  background:var(--deep);
   pointer-events:none;
+  opacity:0;
 }
 
-#flash.play{
-  animation:screenFlash .7s ease-out both;
+#transition.play{
+  animation:transitionWipe .9s ease-in-out both;
 }
 
-@keyframes screenFlash{
-  0%{opacity:0}
-  30%{opacity:.6}
-  100%{opacity:0}
+@keyframes transitionWipe{
+  0%{
+    opacity:0;
+    clip-path:inset(100% 0 0 0);
+  }
+  35%{
+    opacity:1;
+    clip-path:inset(0 0 0 0);
+  }
+  65%{
+    opacity:1;
+    clip-path:inset(0 0 0 0);
+  }
+  100%{
+    opacity:0;
+    clip-path:inset(0 0 100% 0);
+  }
 }
 
 /* RESPONSIVE */
 
-@media(max-width:480px){
-
-  .hero-header{
-    top:max(25px,env(safe-area-inset-top));
+@media(max-height:700px){
+  .open-title{top:19%}
+  .open-title h1{font-size:10vw}
+  .open-orb{top:15%}
+  .open-ticket{height:95px}
+  .menu-title{top:13%}
+  .menu-cards{top:34%;bottom:13%}
+  .radar-core{
+    width:min(66vw,320px);
+    top:40%;
   }
-
-  .hero-index{
-    top:15.5%;
-  }
-
-  .hero-title{
-    top:22%;
-    left:6.2%;
-  }
-
-  .hero-title h1{
-    font-size:clamp(48px,13vw,77px);
-  }
-
-  .hero-title p{
-    font-size:8px;
-    margin-top:18px;
-  }
-
-  .hero-side{
-    top:54%;
-    right:6%;
-  }
-
-  .hero-hint{
-    bottom:33%;
-  }
-
-  .hero-marquee{
-    bottom:22%;
-    font-size:24vw;
-  }
-
-  .hero-action{
-    display:block;
-    bottom:max(
-      72px,
-      calc(env(safe-area-inset-bottom) + 60px)
-    );
-  }
-
-  .board-button{
-    width:100%;
-    min-width:0;
-    height:67px;
-  }
-
-  .action-caption{
-    display:none;
-  }
-
-  .boarding-inner{
-    width:96vw;
-    grid-template-columns:36% 64%;
-    transform:translateY(-3%);
-  }
-
-  .boarding-ui{
-    padding-left:0;
-  }
-
-  .boarding-title{
-    font-size:clamp(13px,4vw,20px);
-    letter-spacing:.13em;
-    margin-bottom:29px;
-  }
-
-  .boarding-kicker{
-    font-size:7px;
-    letter-spacing:.1em;
-    margin-bottom:12px;
-  }
-
-  .board-circle{
-    width:14px;
-    height:14px;
-  }
-
-  .board-track{
-    top:6px;
-  }
-
-  .board-step{
-    gap:11px;
-  }
-
-  .board-label{
-    font-size:6px;
-    letter-spacing:0;
-  }
-
-  .board-caption{
-    font-size:7px;
-    margin-top:23px;
-  }
-
-  .boarding-visual{
-    min-height:180px;
-  }
-
-  .seat-grid{
-    padding:0 21px;
-    gap:12px;
-  }
+  .board-loading{bottom:13%}
 }
 
-@media(max-height:690px){
-
-  .hero-index{
-    top:16%;
+@media(min-width:700px){
+  .open-title{
+    left:12%;
+    top:23%;
   }
-
-  .hero-title{
-    top:21%;
+  .open-header,
+  .open-bottom,
+  .menu-head,
+  .menu-title,
+  .menu-bottom,
+  .detail-head,
+  .detail-content,
+  .detail-foot{
+    left:12%;
+    right:12%;
   }
-
-  .hero-title h1{
-    font-size:clamp(44px,9vh,78px);
-  }
-
-  .hero-title p{
-    margin-top:10px;
-  }
-
-  .hero-action{
-    bottom:max(
-      55px,
-      calc(env(safe-area-inset-bottom) + 50px)
-    );
-  }
-
-  .board-button{
-    min-height:57px;
-    height:57px;
-  }
-
-  .hero-side{
-    top:44%;
-  }
-
-  .hero-hint{
-    display:none;
-  }
-
-  .seat-grid{
-    bottom:12%;
-  }
-
-  .seat{
-    height:140px;
-  }
-
-  .cabin-heading{
-    top:28px;
-  }
-}
-
-@media(min-width:750px){
-
-  .hero-title{
-    top:22%;
-  }
-
-  .hero-action{
-    bottom:max(
-      74px,
-      calc(env(safe-area-inset-bottom) + 55px)
-    );
-  }
-
-  .seat-grid{
-    left:50%;
+  .open-ticket{
+    left:12%;
     right:auto;
-    width:650px;
-    transform:translateX(-50%);
+    width:540px;
+  }
+  .menu-cards{
+    left:12%;
+    right:12%;
+    max-width:900px;
+  }
+  .board-loading{
+    left:20%;
+    right:20%;
   }
 }
 
@@ -1188,274 +1187,274 @@ a:focus-visible{
   }
 }
 </style>
-
-<script type="importmap">
-{
-  "imports":{
-    "three":"https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
-    "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"
-  }
-}
-</script>
 </head>
 
 <body>
 <div id="app">
 
-<div id="night"></div>
-<div id="stageFallback" aria-hidden="true"></div>
-<div id="stage3d" aria-hidden="true"></div>
-
 <!-- OPENING -->
 
 <section id="opening" class="screen active">
+  <div class="open-grid"></div>
+  <div class="open-orb"></div>
+  <div class="open-orbit"></div>
+  <div class="open-orbit second"></div>
+  <canvas id="openCanvas"></canvas>
 
-  <header class="hero-header">
-    <span class="brand">AERIALIS</span>
-    <span class="header-right">
-      <i aria-hidden="true"></i>
-      FLIGHT AR—001
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <header class="open-header">
+    <span class="open-logo">AERIALIS</span>
+    <span class="open-status">
+      <span></span> SYSTEM ONLINE<br>
+      <b class="clock">00:00:00</b>
     </span>
   </header>
 
-  <div class="hero-index">
-    A DIGITAL AVIATION EXPERIENCE<br>
-    ESTABLISHED / 2026
+  <div class="open-label enter">
+    AVIATION ARCHIVE / VOL.001<br>
+    DESIGNATED FLIGHT AR—001
   </div>
 
-  <div class="hero-title">
+  <div class="open-title enter">
+    <div class="tiny">WELCOME TO THE SKY</div>
     <h1>
-      Beyond the<br>
-      <em>ordinary.</em>
+      AER<span>IALIS</span>
     </h1>
     <p>
-      YOUR JOURNEY STARTS ABOVE THE CLOUDS.<br>
-      WELCOME TO AERIALIS.
+      BEYOND THE ORDINARY.<br>
+      AN EXPERIMENTAL FLIGHT EXPERIENCE.
     </p>
   </div>
 
-  <div class="hero-side">
-    DEPARTURE STATUS
-    <strong>READY FOR BOARDING</strong>
-    GATE 01 / TERMINAL A
+  <div class="open-large-text" aria-hidden="true">
+    SKY
   </div>
 
-  <div class="hero-marquee" aria-hidden="true">
-    AERIALIS
-  </div>
-
-  <span id="heroHint" class="hero-hint">
-    DRAG TO ROTATE / 3D VIEW
-  </span>
-
-  <div class="hero-action">
-    <button id="boardButton" class="board-button">
-      <span>BEGIN BOARDING</span>
-      <span class="board-arrow">↗</span>
+  <div class="open-ticket">
+    <div class="ticket-left">
+      <div class="ticket-head">
+        <span>BOARDING PASS / 001</span>
+        <span>GATE 01</span>
+      </div>
+      <div class="ticket-main">
+        <div>
+          <strong>AR—001</strong><br>
+          <small>DESTINATION / UNKNOWN</small>
+        </div>
+        <small>ADMIT ONE</small>
+      </div>
+    </div>
+    <button id="startButton" class="ticket-button">
+      BOARD
+      <span class="arrow">→</span>
     </button>
-
-    <span class="action-caption">
-      EXPLORE THE SKY.<br>
-      ENTER THE AIRCRAFT EXPERIENCE.
-    </span>
   </div>
 
-  <footer class="hero-footer">
-    <span>WELCOME ABOARD / VOL. 001</span>
-    <span>
-      3D:
-      <a
-        href="https://github.com/amvlab/aircraft-models"
-        target="_blank"
-        rel="noopener">AMVLAB</a>
-      /
-      <a
-        href="https://creativecommons.org/licenses/by/4.0/"
-        target="_blank"
-        rel="noopener">CC BY 4.0</a>
-    </span>
+  <footer class="open-bottom">
+    <span>AERIALIS AIRLINES<br>EST. 2026</span>
+    <span>SCROLL LOCKED<br>INTERACTIVE EXPERIENCE</span>
   </footer>
 </section>
 
 <!-- BOARDING -->
 
 <section id="boarding" class="screen">
+  <canvas id="radarCanvas"></canvas>
+  <div class="board-grid"></div>
 
-  <div class="boarding-inner">
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
 
-    <div
-      class="boarding-visual"
-      aria-hidden="true">
+  <header class="board-head">
+    <div>
+      <strong>AERIALIS</strong>
+      <small>FLIGHT CONTROL SYSTEM</small>
+    </div>
+    <span class="board-time clock">00:00:00</span>
+  </header>
+
+  <div class="board-data">
+    SYS / 001<br>
+    NAV / ACTIVE<br>
+    RADAR / ONLINE
+  </div>
+
+  <div class="board-data right">
+    CAM 001<br>
+    ALT 35000 FT<br>
+    HDG 027°
+  </div>
+
+  <div class="radar-core">
+    <div class="radar-cross"></div>
+    <div class="radar-sweep"></div>
+    <div class="radar-ring"></div>
+    <div class="radar-ring r1"></div>
+    <div class="radar-ring r2"></div>
+    <div class="radar-ring r3"></div>
+    <div class="radar-ring r4"></div>
+    <div class="radar-center"></div>
+  </div>
+
+  <div class="board-loading">
+    <h2>BOARDING...</h2>
+    <p id="loadingCaption">
+      INITIALIZING FLIGHT SYSTEM
+    </p>
+
+    <div class="progress-track">
+      <div id="progressFill" class="progress-fill"></div>
     </div>
 
-    <div class="boarding-ui">
-
-      <div class="boarding-kicker">
-        AERIALIS / SYSTEM 001
-      </div>
-
-      <div class="boarding-title">
-        BOARDING...
-      </div>
-
-      <div class="board-progress">
-
-        <div class="board-track">
-          <div
-            id="boardTrackFill"
-            class="board-track-fill">
-          </div>
-        </div>
-
-        <div class="board-steps">
-
-          <div class="board-step">
-            <span class="board-circle"></span>
-            <span class="board-label">CHECK-IN</span>
-          </div>
-
-          <div class="board-step">
-            <span class="board-circle"></span>
-            <span class="board-label">BOARDING</span>
-          </div>
-
-          <div class="board-step">
-            <span class="board-circle"></span>
-            <span class="board-label">ON BOARD</span>
-          </div>
-
-          <div class="board-step">
-            <span class="board-circle"></span>
-            <span class="board-label">DEPARTURE</span>
-          </div>
-
-        </div>
-      </div>
-
-      <div
-        class="board-caption"
-        id="boardCaption"
-        role="status"
-        aria-live="off">
-        CHECKING IN
-      </div>
-
+    <div class="progress-row">
+      <span id="loadingStep">CHECK-IN / 01</span>
+      <span class="progress-percent" id="progressPercent">
+        000%
+      </span>
     </div>
   </div>
 
-  <footer class="boarding-foot">
+  <footer class="board-footer">
     <span>FLIGHT AR—001</span>
     <span>PLEASE STAND BY</span>
   </footer>
-
 </section>
 
-<!-- CABIN -->
+<!-- MENU -->
 
-<section id="cabin" class="screen">
+<section id="menu" class="screen">
+  <div class="menu-grid-bg"></div>
+  <div class="menu-decoration"></div>
 
-  <div class="cabin-structure"></div>
-  <div class="cabin-ceiling"></div>
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
 
-  <div class="cabin-light left"></div>
-  <div class="cabin-light right"></div>
-
-  <div class="cabin-aisle"></div>
-  <div class="cabin-window left"></div>
-  <div class="cabin-window right"></div>
-
-  <header class="cabin-heading">
-    <small>AERIALIS / IN-FLIGHT</small>
-    <h2>WELCOME ABOARD</h2>
-    <p>PLEASE SELECT YOUR DESTINATION</p>
+  <header class="menu-head">
+    <strong>AERIALIS</strong>
+    <small class="clock">00:00:00</small>
   </header>
 
-  <div class="seat-grid">
+  <div class="menu-title">
+    <span class="eyebrow">
+      FLIGHT DIRECTORY / 001
+    </span>
+    <h2>
+      WELCOME<br>
+      <span>ABOARD.</span>
+    </h2>
+    <p>
+      SELECT YOUR DESTINATION.<br>
+      FOUR SECTIONS ARE AVAILABLE.
+    </p>
+  </div>
 
-    <div class="seat">
-      <button data-page="0">
-        <span class="seat-icon">01</span>
-        <span class="seat-name">ABOUT</span>
-        <span class="seat-sub">INFORMATION</span>
-      </button>
-    </div>
+  <div class="menu-cards">
 
-    <div class="seat">
-      <button data-page="1">
-        <span class="seat-icon">02</span>
-        <span class="seat-name">CHARACTERS</span>
-        <span class="seat-sub">PASSENGERS</span>
-      </button>
-    </div>
+    <button class="menu-card" data-page="0">
+      <span class="card-top">
+        <span>01 / INFORMATION</span>
+        <span>AR—01</span>
+      </span>
+      <span class="card-symbol">◎</span>
+      <span>
+        <span class="card-title">ABOUT</span>
+        <span class="card-sub">FLIGHT INFORMATION</span>
+      </span>
+      <span class="card-arrow">↗</span>
+    </button>
 
-    <div class="seat">
-      <button data-page="2">
-        <span class="seat-icon">03</span>
-        <span class="seat-name">STORIES</span>
-        <span class="seat-sub">FLIGHT RECORDS</span>
-      </button>
-    </div>
+    <button class="menu-card" data-page="1">
+      <span class="card-top">
+        <span>02 / PASSENGERS</span>
+        <span>AR—02</span>
+      </span>
+      <span class="card-symbol">◇</span>
+      <span>
+        <span class="card-title">CHARACTERS</span>
+        <span class="card-sub">PASSENGER DIRECTORY</span>
+      </span>
+      <span class="card-arrow">↗</span>
+    </button>
 
-    <div class="seat">
-      <button data-page="3">
-        <span class="seat-icon">04</span>
-        <span class="seat-name">GALLERY</span>
-        <span class="seat-sub">COLLECTION</span>
-      </button>
-    </div>
+    <button class="menu-card" data-page="2">
+      <span class="card-top">
+        <span>03 / RECORDS</span>
+        <span>AR—03</span>
+      </span>
+      <span class="card-symbol">≋</span>
+      <span>
+        <span class="card-title">STORIES</span>
+        <span class="card-sub">FLIGHT RECORDS</span>
+      </span>
+      <span class="card-arrow">↗</span>
+    </button>
+
+    <button class="menu-card" data-page="3">
+      <span class="card-top">
+        <span>04 / COLLECTION</span>
+        <span>AR—04</span>
+      </span>
+      <span class="card-symbol">✧</span>
+      <span>
+        <span class="card-title">GALLERY</span>
+        <span class="card-sub">VISUAL COLLECTION</span>
+      </span>
+      <span class="card-arrow">↗</span>
+    </button>
 
   </div>
 
-  <footer class="cabin-footer">
-    <button id="returnOpening">
-      ← EXIT AIRCRAFT
-    </button>
-    <span>FLIGHT AR-001</span>
+  <footer class="menu-bottom">
+    <button id="exitButton">← EXIT AIRCRAFT</button>
+    <span>FLIGHT AR—001 / 2026</span>
   </footer>
-
 </section>
 
 <!-- DETAIL -->
 
 <section id="detail" class="screen">
+  <div class="detail-grid"></div>
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
 
   <header class="detail-head">
-    <span>AERIALIS / IN-FLIGHT SYSTEM</span>
-    <button
-      id="closeDetail"
-      class="detail-close"
+    <span>AERIALIS / FLIGHT ARCHIVE</span>
+    <button id="closeDetail" class="detail-close"
       aria-label="Close">×</button>
   </header>
 
-  <div class="detail-body">
-
-    <div
-      id="detailNumber"
-      class="detail-number">
+  <div class="detail-content">
+    <div class="detail-index" id="detailIndex">
       SECTION / 01
     </div>
-
     <h2 id="detailTitle">ABOUT</h2>
-
-    <div class="detail-line"></div>
-
+    <div class="detail-rule"></div>
     <p id="detailText"></p>
-
-    <div class="detail-note">
-      THIS SECTION IS UNDER CONSTRUCTION.
+    <div class="detail-stamp">
+      AERIALIS / VERIFIED
     </div>
-
   </div>
 
-  <footer class="detail-footer">
-    <span>AERIALIS AIRLINES</span>
-    <span>© 2026</span>
+  <footer class="detail-foot">
+    <span>FLIGHT AR—001</span>
+    <span>© AERIALIS 2026</span>
   </footer>
-
 </section>
 
-<div id="grain" aria-hidden="true"></div>
-<div id="flash" aria-hidden="true"></div>
+<div id="transition"></div>
+<div id="flash"></div>
+<div id="grain"></div>
 
 </div>
 
@@ -1484,915 +1483,510 @@ document.addEventListener(
   {passive:false}
 );
 
+/* CLOCK */
+
+function updateClock(){
+  const now=new Date();
+
+  const time=[
+    now.getHours(),
+    now.getMinutes(),
+    now.getSeconds()
+  ].map(n=>String(n).padStart(2,"0")).join(":");
+
+  document.querySelectorAll(".clock").forEach(el=>{
+    el.textContent=time;
+  });
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
 /* SCREENS */
 
-const app=document.getElementById("app");
-
-const screens=Object.fromEntries(
-  ["opening","boarding","cabin","detail"].map(
-    id=>[id,document.getElementById(id)]
-  )
-);
-
-const flash=document.getElementById("flash");
-
-const reduceMotion=matchMedia(
-  "(prefers-reduced-motion:reduce)"
-);
+const screens={
+  opening:document.getElementById("opening"),
+  boarding:document.getElementById("boarding"),
+  menu:document.getElementById("menu"),
+  detail:document.getElementById("detail")
+};
 
 let currentScreen="opening";
-
-let boardingFrame=0;
-let boardingTimer=0;
-let launchTimer=0;
-let boardingStartedAt=0;
+let switching=false;
 
 function showScreen(name){
-  Object.entries(screens).forEach(([key,el])=>{
+  Object.entries(screens).forEach(([key,screen])=>{
     const active=key===name;
 
-    el.classList.toggle("active",active);
-    el.setAttribute(
-      "aria-hidden",
-      String(!active)
-    );
+    screen.classList.toggle("active",active);
+    screen.setAttribute("aria-hidden",String(!active));
 
-    if("inert" in el){
-      el.inert=!active;
+    if("inert" in screen){
+      screen.inert=!active;
     }
   });
 
   currentScreen=name;
 }
 
-function clearBoarding(){
-  cancelAnimationFrame(boardingFrame);
-  clearTimeout(boardingTimer);
-  clearTimeout(launchTimer);
+const transition=document.getElementById("transition");
+
+function switchScreen(name){
+  if(switching)return;
+
+  switching=true;
+
+  transition.classList.remove("play");
+  void transition.offsetWidth;
+  transition.classList.add("play");
+
+  setTimeout(()=>{
+    showScreen(name);
+  },360);
+
+  setTimeout(()=>{
+    switching=false;
+    transition.classList.remove("play");
+  },900);
 }
 
-/* PROGRESS */
+/* CANVAS HELPERS */
 
-const steps=[
-  ...document.querySelectorAll(".board-step")
-];
+function setupCanvas(canvas){
+  const ctx=canvas.getContext("2d");
+  let w=0,h=0,dpr=1;
 
-const fill=document.getElementById(
-  "boardTrackFill"
+  function resize(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    w=window.innerWidth;
+    h=window.innerHeight;
+
+    canvas.width=Math.round(w*dpr);
+    canvas.height=Math.round(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  resize();
+  window.addEventListener("resize",resize);
+
+  return {
+    ctx,
+    get width(){return w},
+    get height(){return h}
+  };
+}
+
+/* OPENING PARTICLES & FLIGHT PATHS */
+
+const open=setupCanvas(
+  document.getElementById("openCanvas")
 );
 
-const caption=document.getElementById(
-  "boardCaption"
-);
+const particles=Array.from({length:75},(_,i)=>({
+  x:Math.random(),
+  y:Math.random(),
+  r:Math.random()*1.5+.3,
+  speed:Math.random()*.00004+.00001,
+  alpha:Math.random()*.4+.1
+}));
 
-const captions=[
-  "CHECKING IN",
-  "BOARDING IN PROGRESS",
-  "WELCOME ON BOARD",
-  "READY FOR DEPARTURE"
-];
+let pointerX=.5;
+let pointerY=.5;
 
-function updateProgress(value){
-  const p=Math.max(0,Math.min(1,value));
+screens.opening.addEventListener("pointermove",e=>{
+  pointerX=e.clientX/window.innerWidth;
+  pointerY=e.clientY/window.innerHeight;
+});
 
-  fill.style.transform="scaleX("+p+")";
+function drawOpening(t){
+  const {ctx,width:w,height:h}=open;
 
-  const i=Math.min(3,Math.floor(p*3));
+  ctx.clearRect(0,0,w,h);
 
-  steps.forEach((step,j)=>{
-    step.classList.toggle("done",j<i);
-    step.classList.toggle("current",j===i);
-  });
+  const dx=(pointerX-.5)*20;
+  const dy=(pointerY-.5)*20;
 
-  if(caption.textContent!==captions[i]){
-    caption.textContent=captions[i];
+  /* Moving orbital lines */
+
+  const cx=w*.55+dx;
+  const cy=h*.49+dy;
+
+  for(let i=0;i<4;i++){
+    const r=w*(.24+i*.075);
+
+    ctx.beginPath();
+    ctx.arc(
+      cx,cy,r,
+      t*.00008+i,
+      t*.00008+i+Math.PI*(.6+i*.12)
+    );
+    ctx.strokeStyle=
+      `rgba(30,117,173,${.22-i*.03})`;
+    ctx.lineWidth=i===0?2:1;
+    ctx.stroke();
+  }
+
+  /* Flight path */
+
+  ctx.save();
+  ctx.translate(dx*.4,dy*.4);
+
+  ctx.beginPath();
+  ctx.moveTo(-20,h*.61);
+  ctx.bezierCurveTo(
+    w*.35,h*.42,
+    w*.57,h*.77,
+    w+40,h*.38
+  );
+  ctx.strokeStyle="rgba(20,91,149,.36)";
+  ctx.lineWidth=1.5;
+  ctx.setLineDash([5,9]);
+  ctx.lineDashOffset=-t*.016;
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* Moving aircraft marker */
+
+  const p=(t*.000045)%1;
+  const u=1-p;
+
+  const x=
+    u*u*u*(-20)+
+    3*u*u*p*(w*.35)+
+    3*u*p*p*(w*.57)+
+    p*p*p*(w+40);
+
+  const y=
+    u*u*u*(h*.61)+
+    3*u*u*p*(h*.42)+
+    3*u*p*p*(h*.77)+
+    p*p*p*(h*.38);
+
+  ctx.translate(x,y);
+  ctx.rotate(-.4);
+
+  ctx.fillStyle="#1c6da3";
+  ctx.beginPath();
+  ctx.moveTo(13,0);
+  ctx.lineTo(-9,-5);
+  ctx.lineTo(-5,0);
+  ctx.lineTo(-9,5);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+
+  /* Particles */
+
+  for(const part of particles){
+    const px=part.x*w;
+    const py=((part.y+t*part.speed)%1)*h;
+
+    ctx.beginPath();
+    ctx.arc(px,py,part.r,0,Math.PI*2);
+    ctx.fillStyle=
+      `rgba(255,255,255,${part.alpha})`;
+    ctx.fill();
   }
 }
 
-function playFlash(){
-  if(reduceMotion.matches)return;
+/* BOARDING RADAR CANVAS */
 
-  flash.classList.remove("play");
-  void flash.offsetWidth;
-  flash.classList.add("play");
+const radar=setupCanvas(
+  document.getElementById("radarCanvas")
+);
+
+const radarParticles=Array.from({length:90},()=>({
+  a:Math.random()*Math.PI*2,
+  r:Math.random(),
+  size:Math.random()*1.8+.3,
+  phase:Math.random()*6
+}));
+
+function drawRadar(t){
+  const {ctx,width:w,height:h}=radar;
+
+  ctx.clearRect(0,0,w,h);
+
+  const cx=w*.5;
+  const cy=h*.42;
+  const radius=Math.min(w*.48,h*.31);
+
+  /* Outer rotating ticks */
+
+  ctx.save();
+  ctx.translate(cx,cy);
+  ctx.rotate(t*.00007);
+
+  for(let i=0;i<120;i++){
+    const a=i*Math.PI*2/120;
+    const major=i%10===0;
+    const r1=radius*1.13;
+    const r2=r1+(major?13:5);
+
+    ctx.beginPath();
+    ctx.moveTo(
+      Math.cos(a)*r1,
+      Math.sin(a)*r1
+    );
+    ctx.lineTo(
+      Math.cos(a)*r2,
+      Math.sin(a)*r2
+    );
+    ctx.strokeStyle=major?
+      "rgba(195,237,255,.5)":
+      "rgba(195,237,255,.17)";
+    ctx.lineWidth=major?1.5:1;
+    ctx.stroke();
+  }
+
+  ctx.restore();
+
+  /* Orbit ellipses */
+
+  for(let i=0;i<5;i++){
+    ctx.beginPath();
+    ctx.ellipse(
+      cx,cy,
+      radius*(.65+i*.14),
+      radius*(.2+i*.07),
+      -.25+t*.000035*(i%2?1:-1),
+      0,Math.PI*2
+    );
+    ctx.strokeStyle=
+      `rgba(113,202,247,${.15+i*.035})`;
+    ctx.lineWidth=1;
+    ctx.stroke();
+  }
+
+  /* Floating objects */
+
+  radarParticles.forEach((p,i)=>{
+    const a=p.a+t*.00005*(i%2?1:-1);
+    const r=radius*(.25+p.r*1.1);
+
+    const x=cx+Math.cos(a)*r;
+    const y=cy+Math.sin(a)*r*.85;
+
+    const alpha=
+      .25+.25*Math.sin(t*.001+p.phase);
+
+    ctx.beginPath();
+    ctx.arc(x,y,p.size,0,Math.PI*2);
+    ctx.fillStyle=
+      `rgba(164,228,255,${alpha})`;
+    ctx.fill();
+  });
+
+  /* Scanning rays */
+
+  const angle=t*.0005;
+
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.lineTo(
+    cx+Math.cos(angle)*radius*1.1,
+    cy+Math.sin(angle)*radius*1.1
+  );
+  ctx.strokeStyle="rgba(201,243,255,.55)";
+  ctx.lineWidth=1;
+  ctx.stroke();
+
+  /* Rotating rectangular markers */
+
+  for(let i=0;i<8;i++){
+    const a=i*Math.PI/4+t*.00015;
+    const r=radius*(.7+(i%3)*.16);
+    const x=cx+Math.cos(a)*r;
+    const y=cy+Math.sin(a)*r;
+
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(a);
+
+    ctx.strokeStyle=
+      "rgba(159,226,255,.5)";
+    ctx.lineWidth=1;
+    ctx.strokeRect(-4,-4,8,8);
+    ctx.restore();
+  }
 }
 
-function progressFrame(timestamp){
+/* ANIMATION LOOP */
+
+let animationFrame=0;
+
+function animate(t){
+  animationFrame=requestAnimationFrame(animate);
+
+  if(document.hidden)return;
+
+  if(currentScreen==="opening"){
+    drawOpening(t);
+  }
+
+  if(currentScreen==="boarding"){
+    drawRadar(t);
+  }
+}
+
+requestAnimationFrame(animate);
+
+/* BOARDING SEQUENCE */
+
+const progressFill=document.getElementById("progressFill");
+const progressPercent=document.getElementById("progressPercent");
+const loadingCaption=document.getElementById("loadingCaption");
+const loadingStep=document.getElementById("loadingStep");
+
+const boardingStages=[
+  ["CHECK-IN / 01","VERIFYING PASSENGER"],
+  ["BOARDING / 02","PREPARING AIRCRAFT"],
+  ["ON BOARD / 03","INITIALIZING FLIGHT SYSTEM"],
+  ["DEPARTURE / 04","READY FOR DEPARTURE"]
+];
+
+let boardingStart=0;
+let boardingRAF=0;
+let boardingFinishTimer=0;
+
+function stopBoarding(){
+  cancelAnimationFrame(boardingRAF);
+  clearTimeout(boardingFinishTimer);
+}
+
+function boardingTick(t){
   if(currentScreen!=="boarding")return;
 
-  const progress=Math.min(
-    1,
-    (timestamp-boardingStartedAt)/5200
-  );
+  const elapsed=t-boardingStart;
+  const progress=Math.min(1,elapsed/6200);
 
-  updateProgress(progress);
+  const eased=
+    progress<.5?
+    2*progress*progress:
+    1-Math.pow(-2*progress+2,2)/2;
+
+  const percent=Math.round(eased*100);
+
+  progressFill.style.width=(eased*100)+"%";
+  progressPercent.textContent=
+    String(percent).padStart(3,"0")+"%";
+
+  const stage=Math.min(3,Math.floor(eased*4));
+
+  loadingStep.textContent=boardingStages[stage][0];
+  loadingCaption.textContent=boardingStages[stage][1];
 
   if(progress<1){
-    boardingFrame=requestAnimationFrame(
-      progressFrame
-    );
+    boardingRAF=requestAnimationFrame(boardingTick);
   }else{
-    boardingTimer=setTimeout(()=>{
+    boardingFinishTimer=setTimeout(()=>{
       if(currentScreen!=="boarding")return;
 
-      playFlash();
-      showScreen("cabin");
+      document.getElementById("flash").classList.remove("play");
+      void document.getElementById("flash").offsetWidth;
+      document.getElementById("flash").classList.add("play");
 
-      window.AERIALIS_VIEW?.setMode("hidden");
-    },380);
+      showScreen("menu");
+    },400);
   }
 }
 
-function startProgress(){
-  updateProgress(0);
+function startBoarding(){
+  stopBoarding();
 
-  if(reduceMotion.matches){
-    updateProgress(1);
+  progressFill.style.width="0%";
+  progressPercent.textContent="000%";
 
-    boardingTimer=setTimeout(()=>{
-      showScreen("cabin");
-      window.AERIALIS_VIEW?.setMode("hidden");
-    },120);
+  loadingStep.textContent="CHECK-IN / 01";
+  loadingCaption.textContent="VERIFYING PASSENGER";
 
-    return;
-  }
+  switchScreen("boarding");
 
-  boardingFrame=requestAnimationFrame(ts=>{
-    boardingStartedAt=ts;
-    progressFrame(ts);
+  setTimeout(()=>{
+    if(currentScreen!=="boarding")return;
+
+    boardingRAF=requestAnimationFrame(t=>{
+      boardingStart=t;
+      boardingTick(t);
+    });
+  },400);
+}
+
+document.getElementById("startButton")
+  .addEventListener("click",()=>{
+    if(currentScreen!=="opening")return;
+    startBoarding();
   });
-}
 
-/* LAUNCH */
-
-function launch(){
-  if(
-    currentScreen!=="opening" ||
-    app.classList.contains("is-departing")
-  ){
-    return;
-  }
-
-  clearBoarding();
-
-  app.classList.add("is-departing");
-  window.AERIALIS_VIEW?.setMode("transition");
-
-  launchTimer=setTimeout(()=>{
-    app.classList.remove("is-departing");
-    app.classList.add("is-boarding");
-
-    window.AERIALIS_VIEW?.setMode("boarding");
-
-    showScreen("boarding");
-    startProgress();
-
-  },reduceMotion.matches?30:1100);
-}
-
-document.getElementById("boardButton")
-  .addEventListener("click",launch);
-
-/* PAGES */
+/* MENU NAVIGATION */
 
 const pages=[
   {
     title:"ABOUT",
-    description:
-      "AERIALISへようこそ。\n\nこのサイトについての情報を掲載する場所です。"
+    text:
+      "AERIALISへようこそ。\n\nここは、空の旅をテーマにした個人アーカイブサイトです。\n\nサイトの紹介や各種情報を掲載する場所です。"
   },
   {
     title:"CHARACTERS",
-    description:
-      "PASSENGER DIRECTORY.\n\nキャラクターのプロフィールや関係性を記録する場所です。"
+    text:
+      "PASSENGER DIRECTORY.\n\nキャラクターのプロフィール、設定、関係性を記録する場所です。\n\n今後、個別のキャラクターカードや一覧を追加できます。"
   },
   {
     title:"STORIES",
-    description:
-      "FLIGHT RECORDS.\n\n物語や出来事を記録する場所です。"
+    text:
+      "FLIGHT RECORDS.\n\n物語や世界観、出来事を記録する場所です。\n\nそれぞれの物語をフライトログとして管理する予定です。"
   },
   {
     title:"GALLERY",
-    description:
-      "VISUAL COLLECTION.\n\nイラストや画像を展示する場所です。"
+    text:
+      "VISUAL COLLECTION.\n\nイラストや画像を展示する場所です。\n\n作品ごとのギャラリーを追加できます。"
   }
 ];
 
-document.querySelectorAll("[data-page]")
-  .forEach(button=>{
-    button.addEventListener("click",()=>{
-      if(currentScreen!=="cabin")return;
+document.querySelectorAll("[data-page]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    if(currentScreen!=="menu")return;
 
-      const i=Number(button.dataset.page);
-      const page=pages[i];
-      if(!page)return;
+    const index=Number(button.dataset.page);
+    const page=pages[index];
 
-      document.getElementById(
-        "detailNumber"
-      ).textContent=
-        "SECTION / "+
-        String(i+1).padStart(2,"0");
+    if(!page)return;
 
-      document.getElementById(
-        "detailTitle"
-      ).textContent=page.title;
+    document.getElementById("detailIndex").textContent=
+      "SECTION / "+String(index+1).padStart(2,"0");
 
-      document.getElementById(
-        "detailText"
-      ).textContent=page.description;
+    document.getElementById("detailTitle").textContent=
+      page.title;
 
-      showScreen("detail");
-    });
+    document.getElementById("detailText").textContent=
+      page.text;
+
+    switchScreen("detail");
   });
+});
 
 document.getElementById("closeDetail")
   .addEventListener("click",()=>{
-    showScreen("cabin");
+    switchScreen("menu");
   });
 
-document.getElementById("returnOpening")
+document.getElementById("exitButton")
   .addEventListener("click",()=>{
-    clearBoarding();
-
-    app.classList.remove(
-      "is-boarding",
-      "is-departing"
-    );
-
-    window.AERIALIS_VIEW?.setMode("opening");
-
-    showScreen("opening");
+    stopBoarding();
+    switchScreen("opening");
   });
 
-document.addEventListener(
-  "visibilitychange",
-  ()=>{
-    if(
-      document.hidden &&
-      currentScreen==="boarding"
-    ){
-      clearBoarding();
-      showScreen("cabin");
+/* VISIBILITY */
 
-      window.AERIALIS_VIEW?.setMode("hidden");
-    }
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden&&currentScreen==="boarding"){
+    stopBoarding();
+    showScreen("menu");
   }
-);
+});
 
 showScreen("opening");
 </script>
-
-<script type="module">
-
-import * as THREE from "three";
-
-import {
-  GLTFLoader
-} from "three/addons/loaders/GLTFLoader.js";
-
-import {
-  RoomEnvironment
-} from "three/addons/environments/RoomEnvironment.js";
-
-const root=document.getElementById("stage3d");
-const app=document.getElementById("app");
-const opening=document.getElementById("opening");
-const hint=document.getElementById("heroHint");
-
-let renderer;
-
-try{
-  renderer=new THREE.WebGLRenderer({
-    alpha:true,
-    antialias:true,
-    powerPreference:"high-performance"
-  });
-}catch(error){
-  console.warn(
-    "WebGL unavailable. Using image fallback.",
-    error
-  );
-}
-
-if(renderer){
-
-  renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio||1,2.25)
-  );
-
-  renderer.setSize(
-    window.innerWidth,
-    window.innerHeight,
-    false
-  );
-
-  renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1.38;
-
-  root.appendChild(renderer.domElement);
-
-  const scene=new THREE.Scene();
-
-  const camera=new THREE.PerspectiveCamera(
-    40,
-    window.innerWidth/window.innerHeight,
-    .1,
-    130
-  );
-
-  const envGenerator=
-    new THREE.PMREMGenerator(renderer);
-
-  const env=envGenerator.fromScene(
-    new RoomEnvironment(),
-    .04
-  );
-
-  scene.environment=env.texture;
-  envGenerator.dispose();
-
-  /* LIGHTS */
-
-  scene.add(
-    new THREE.HemisphereLight(
-      0xe8f4ff,
-      0x4e7798,
-      2.4
-    )
-  );
-
-  const sun=new THREE.DirectionalLight(
-    0xfff3da,
-    4.5
-  );
-
-  sun.position.set(-9,11,8);
-  scene.add(sun);
-
-  const rim=new THREE.DirectionalLight(
-    0xb3deff,
-    3.2
-  );
-
-  rim.position.set(7,2,-9);
-  scene.add(rim);
-
-  /* AIRCRAFT */
-
-  const planeRig=new THREE.Group();
-  scene.add(planeRig);
-
-  const planeBase=new THREE.Group();
-  planeRig.add(planeBase);
-
-  let planeReady=false;
-  let mode="opening";
-
-  /* 3D ROTATION TARGETS */
-
-  let targetYaw=-.23;
-  let targetPitch=0;
-
-  let currentYaw=-.23;
-  let currentPitch=0;
-
-  /* POINTER DRAG */
-
-  const drag={
-    active:false,
-    pointerId:null,
-    x:0,
-    y:0
-  };
-
-  function stopDrag(e){
-    if(
-      drag.pointerId!==null &&
-      e?.pointerId!==undefined &&
-      e.pointerId!==drag.pointerId
-    ){
-      return;
-    }
-
-    drag.active=false;
-    drag.pointerId=null;
-
-    hint.classList.remove("dragging");
-    if(planeReady){
-      hint.textContent="DRAG TO ROTATE / 3D VIEW";
-    }
-  }
-
-  opening.addEventListener("pointerdown",e=>{
-    if(mode!=="opening"||!planeReady)return;
-
-    if(e.target.closest("button,a"))return;
-
-    if(!e.isPrimary)return;
-
-    drag.active=true;
-    drag.pointerId=e.pointerId;
-
-    drag.x=e.clientX;
-    drag.y=e.clientY;
-
-    try{
-      opening.setPointerCapture(e.pointerId);
-    }catch(error){}
-
-    hint.classList.add("dragging");
-    hint.textContent="ROTATING AIRCRAFT";
-
-    e.preventDefault();
-  });
-
-  opening.addEventListener("pointermove",e=>{
-    if(
-      !drag.active ||
-      e.pointerId!==drag.pointerId ||
-      mode!=="opening"
-    ){
-      return;
-    }
-
-    const dx=e.clientX-drag.x;
-    const dy=e.clientY-drag.y;
-
-    drag.x=e.clientX;
-    drag.y=e.clientY;
-
-    /*
-      Directly rotate the actual 3D model.
-      This is more noticeable than the
-      previous tiny camera offset.
-    */
-
-    targetYaw=THREE.MathUtils.clamp(
-      targetYaw+dx*.014,
-      -3.1,
-      3.1
-    );
-
-    targetPitch=THREE.MathUtils.clamp(
-      targetPitch+dy*.009,
-      -.75,
-      .75
-    );
-
-    e.preventDefault();
-  });
-
-  opening.addEventListener(
-    "pointerup",
-    stopDrag
-  );
-
-  opening.addEventListener(
-    "pointercancel",
-    stopDrag
-  );
-
-  window.addEventListener(
-    "blur",
-    ()=>stopDrag()
-  );
-
-  /* CLOUD TEXTURE */
-
-  const cloudCanvas=
-    document.createElement("canvas");
-
-  cloudCanvas.width=256;
-  cloudCanvas.height=256;
-
-  const ctx=cloudCanvas.getContext("2d");
-
-  if(ctx){
-    const grad=ctx.createRadialGradient(
-      128,128,4,
-      128,128,126
-    );
-
-    grad.addColorStop(
-      0,
-      "rgba(255,255,255,.36)"
-    );
-
-    grad.addColorStop(
-      .35,
-      "rgba(247,253,255,.24)"
-    );
-
-    grad.addColorStop(
-      .72,
-      "rgba(236,250,255,.08)"
-    );
-
-    grad.addColorStop(
-      1,
-      "rgba(255,255,255,0)"
-    );
-
-    ctx.fillStyle=grad;
-    ctx.fillRect(0,0,256,256);
-  }
-
-  const cloudTexture=
-    new THREE.CanvasTexture(cloudCanvas);
-
-  const clouds=new THREE.Group();
-
-  for(let i=0;i<22;i++){
-    const mat=new THREE.SpriteMaterial({
-      map:cloudTexture,
-      transparent:true,
-      opacity:.36,
-      depthWrite:false
-    });
-
-    const sprite=new THREE.Sprite(mat);
-
-    const angle=i*2.39996;
-    const r=8+(i%5)*2.6;
-
-    sprite.position.set(
-      Math.cos(angle)*r,
-      -3.8+(i%6)*1.25,
-      -12+(i%7)*4
-    );
-
-    sprite.scale.set(
-      6+(i%5)*2.8,
-      2.1+(i%3)*1.5,
-      1
-    );
-
-    clouds.add(sprite);
-  }
-
-  scene.add(clouds);
-
-  /* MODEL LOADING */
-
-  const loader=new GLTFLoader();
-
-  const sources=[
-    "A350_nologo.glb",
-    "https://cdn.jsdelivr.net/gh/amvlab/aircraft-models@main/models/A350_nologo.glb",
-    "https://raw.githubusercontent.com/amvlab/aircraft-models/main/models/A350_nologo.glb"
-  ];
-
-  function loadModel(n){
-    if(n>=sources.length){
-      console.warn(
-        "3D model could not load."
-      );
-      hint.textContent="AIRCRAFT PREVIEW";
-      return;
-    }
-
-    loader.load(
-      sources[n],
-
-      gltf=>{
-        const model=gltf.scene;
-
-        const box=new THREE.Box3()
-          .setFromObject(model);
-
-        const size=box.getSize(
-          new THREE.Vector3()
-        );
-
-        const center=box.getCenter(
-          new THREE.Vector3()
-        );
-
-        model.position.sub(center);
-        planeBase.add(model);
-
-        const length=Math.max(
-          size.x,
-          size.y,
-          size.z
-        )||1;
-
-        planeBase.scale.setScalar(
-          9.5/length
-        );
-
-        if(
-          size.x>size.z*1.15 &&
-          size.x>size.y
-        ){
-          planeBase.rotation.y=Math.PI/2;
-        }else if(
-          size.y>size.z*1.15 &&
-          size.y>size.x
-        ){
-          planeBase.rotation.x=Math.PI/2;
-        }
-
-        model.traverse(obj=>{
-          if(!obj.isMesh)return;
-
-          const materials=Array.isArray(
-            obj.material
-          )?obj.material:[obj.material];
-
-          materials.forEach(mat=>{
-            if(!mat)return;
-
-            if(
-              typeof mat.roughness==="number"
-            ){
-              mat.roughness=Math.min(
-                mat.roughness,
-                .49
-              );
-            }
-
-            if(
-              typeof mat.metalness==="number"
-            ){
-              mat.metalness=Math.max(
-                mat.metalness,
-                .06
-              );
-            }
-
-            mat.needsUpdate=true;
-          });
-        });
-
-        planeReady=true;
-        app.classList.add("model-loaded");
-      },
-
-      undefined,
-
-      error=>{
-        console.warn(
-          "3D model retry:",
-          sources[n],
-          error
-        );
-
-        loadModel(n+1);
-      }
-    );
-  }
-
-  loadModel(0);
-
-  /* CAMERA TARGETS */
-
-  const tempPos=new THREE.Vector3();
-  const tempUp=new THREE.Vector3();
-  const lookTarget=new THREE.Vector3();
-
-  function boardPosition(){
-    const landscape=
-      window.innerWidth>window.innerHeight;
-
-    return {
-      x:landscape?-8.2:-3.15,
-      scale:landscape?.78:.33
-    };
-  }
-
-  /*
-    Instantly establish the boarding
-    top view BEFORE the screen fades in.
-    The aircraft then remains stationary.
-  */
-
-  function snapBoardingView(){
-    const board=boardPosition();
-
-    camera.position.set(0,24,.015);
-    camera.up.set(0,0,-1);
-    camera.lookAt(0,0,0);
-
-    planeRig.position.set(
-      board.x,
-      0,
-      0
-    );
-
-    planeRig.scale.setScalar(
-      board.scale
-    );
-
-    planeRig.rotation.set(0,0,0);
-
-    clouds.visible=false;
-  }
-
-  window.AERIALIS_VIEW={
-    setMode(next){
-      mode=next;
-
-      if(next==="boarding"){
-        stopDrag();
-        snapBoardingView();
-      }
-
-      if(next==="opening"){
-        targetYaw=-.23;
-        targetPitch=0;
-        stopDrag();
-      }
-    }
-  };
-
-  /* RESIZE */
-
-  function resize(){
-    const w=window.innerWidth;
-    const h=window.innerHeight;
-
-    camera.aspect=w/h;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(w,h,false);
-
-    if(mode==="boarding"){
-      snapBoardingView();
-    }
-  }
-
-  window.addEventListener(
-    "resize",
-    resize,
-    {passive:true}
-  );
-
-  /* RENDER LOOP */
-
-  let last=performance.now();
-
-  const openingPos=new THREE.Vector3(
-    1,
-    -.85,
-    0
-  );
-
-  const transitionPos=new THREE.Vector3(
-    .7,
-    -.3,
-    0
-  );
-
-  const openingScale=new THREE.Vector3(1,1,1);
-
-  const transitionScale=new THREE.Vector3(
-    1.3,
-    1.3,
-    1.3
-  );
-
-  function frame(now){
-    requestAnimationFrame(frame);
-
-    if(document.hidden||mode==="hidden"){
-      last=now;
-      return;
-    }
-
-    const dt=Math.min(
-      (now-last)/1000,
-      .05
-    );
-
-    last=now;
-
-    const landscape=
-      window.innerWidth>window.innerHeight;
-
-    if(mode==="opening"){
-
-      /*
-        The actual aircraft rotates
-        in response to finger movement.
-      */
-
-      currentYaw=THREE.MathUtils.damp(
-        currentYaw,
-        targetYaw,
-        9,
-        dt
-      );
-
-      currentPitch=THREE.MathUtils.damp(
-        currentPitch,
-        targetPitch,
-        9,
-        dt
-      );
-
-      planeRig.rotation.y=currentYaw;
-      planeRig.rotation.x=currentPitch;
-
-      openingPos.set(
-        landscape?2:1,
-        -.85,
-        0
-      );
-
-      planeRig.position.lerp(
-        openingPos,
-        .055
-      );
-
-      planeRig.scale.lerp(
-        openingScale,
-        .055
-      );
-
-      tempPos.set(
-        8.2,
-        4.3,
-        landscape?13.7:16.7
-      );
-
-      tempUp.set(0,1,0);
-
-      lookTarget.set(
-        landscape?.7:.45,
-        -.15,
-        0
-      );
-
-      camera.position.lerp(tempPos,.075);
-      camera.up.lerp(tempUp,.09).normalize();
-      camera.lookAt(lookTarget);
-
-      clouds.visible=true;
-
-    }else if(mode==="transition"){
-
-      stopDrag();
-
-      planeRig.position.lerp(
-        transitionPos,
-        .09
-      );
-
-      planeRig.scale.lerp(
-        transitionScale,
-        .08
-      );
-
-      planeRig.rotation.y=
-        THREE.MathUtils.damp(
-          planeRig.rotation.y,
-          0,
-          3,
-          dt
-        );
-
-      planeRig.rotation.x=
-        THREE.MathUtils.damp(
-          planeRig.rotation.x,
-          0,
-          3,
-          dt
-        );
-
-      tempPos.set(4.4,2.4,8.5);
-      tempUp.set(0,1,0);
-      lookTarget.set(.7,0,0);
-
-      camera.position.lerp(tempPos,.075);
-      camera.up.lerp(tempUp,.09).normalize();
-      camera.lookAt(lookTarget);
-
-      clouds.visible=true;
-
-    }else if(mode==="boarding"){
-
-      /*
-        No floating, spinning, or drifting
-        while the loading bar progresses.
-      */
-
-      snapBoardingView();
-    }
-
-    renderer.render(scene,camera);
-  }
-
-  camera.position.set(
-    8.2,
-    4.3,
-    15
-  );
-
-  frame(performance.now());
-}
-</script>
-
 </body>
 </html>
