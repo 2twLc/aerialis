@@ -25,9 +25,7 @@
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -71,9 +69,7 @@ button:focus-visible{
   visibility:hidden;
   opacity:0;
   pointer-events:none;
-  transition:
-    opacity .58s ease,
-    visibility .58s;
+  transition:opacity .58s ease,visibility .58s;
 }
 
 .screen.active{
@@ -161,18 +157,12 @@ canvas.scene-canvas{
 }
 
 @keyframes shimmer{
-  0%,56%{
-    transform:translateX(-160%);
-  }
-  84%,100%{
-    transform:translateX(160%);
-  }
+  0%,56%{transform:translateX(-160%)}
+  84%,100%{transform:translateX(160%)}
 }
 
 @keyframes streaming{
-  to{
-    transform:translateX(-50%);
-  }
+  to{transform:translateX(-50%)}
 }
 
 @keyframes breathe{
@@ -180,9 +170,7 @@ canvas.scene-canvas{
 }
 
 @keyframes scan{
-  to{
-    transform:translateY(100vh);
-  }
+  to{transform:translateY(100vh)}
 }
 
 @keyframes pulse{
@@ -203,9 +191,9 @@ canvas.scene-canvas{
   }
 }
 
-/* =================================
+/* ========================
    OPENING
-================================= */
+======================== */
 
 #opening{
   color:var(--ink);
@@ -435,11 +423,9 @@ canvas.scene-canvas{
   pointer-events:none;
 }
 
-/* =================================
+/* ========================
    BOARDING PASS
-   LEFT: FIXED
-   RIGHT: DRAGGABLE
-================================= */
+======================== */
 
 .ticket-area{
   position:absolute;
@@ -558,8 +544,6 @@ canvas.scene-canvas{
   pointer-events:none;
 }
 
-/* Perforation stays attached to the blue stub */
-
 .ticket-stub::after{
   content:"";
   position:absolute;
@@ -647,9 +631,9 @@ canvas.scene-canvas{
   text-align:right;
 }
 
-/* =================================
-   BOARDING
-================================= */
+/* ========================
+   BOARDING SYSTEM
+======================== */
 
 #boarding{
   color:#eaf8ff;
@@ -869,9 +853,9 @@ canvas.scene-canvas{
   opacity:.65;
 }
 
-/* =================================
+/* ========================
    MAIN MENU
-================================= */
+======================== */
 
 #menu{
   color:var(--ink);
@@ -1090,9 +1074,182 @@ canvas.scene-canvas{
   font:700 12px var(--rajdhani);
 }
 
-/* =================================
-   DETAIL PAGES
-================================= */
+/* ========================
+   CHARACTER / MASCOT
+======================== */
+
+.mascot-button{
+  position:absolute;
+  z-index:5;
+  right:5.5%;
+  top:17%;
+  width:clamp(112px,31vw,225px);
+  height:auto;
+  aspect-ratio:631/700;
+  display:block;
+  border:0;
+  padding:0;
+  margin:0;
+  background:transparent;
+  cursor:pointer;
+  overflow:visible;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.mascot-float{
+  position:absolute;
+  inset:0;
+  display:block;
+  transform-origin:50% 80%;
+  animation:mascotFloat 4.5s ease-in-out infinite;
+  filter:drop-shadow(
+    0 9px 11px rgba(40,95,138,.12)
+  );
+  pointer-events:none;
+}
+
+.mascot-image{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  pointer-events:none;
+  -webkit-user-drag:none;
+}
+
+@keyframes mascotFloat{
+  0%,100%{
+    transform:translate3d(0,0,0) rotate(-1deg);
+  }
+  50%{
+    transform:translate3d(0,-7px,0) rotate(1deg);
+  }
+}
+
+.mascot-button.pop .mascot-float{
+  animation:mascotBoing .85s both;
+}
+
+@keyframes mascotBoing{
+  0%{
+    transform:translateY(0) scale(1,1) rotate(0);
+  }
+  13%{
+    transform:translateY(8px) scale(1.13,.86) rotate(-3deg);
+  }
+  29%{
+    transform:translateY(-24px) scale(.9,1.14) rotate(3deg);
+  }
+  47%{
+    transform:translateY(-8px) scale(1.06,.95) rotate(-2deg);
+  }
+  64%{
+    transform:translateY(4px) scale(.97,1.05) rotate(1deg);
+  }
+  80%{
+    transform:translateY(-4px) scale(1.02,.99) rotate(0);
+  }
+  100%{
+    transform:translateY(0) scale(1,1) rotate(0);
+  }
+}
+
+.mascot-glow{
+  position:absolute;
+  inset:9%;
+  z-index:-1;
+  border-radius:50%;
+  pointer-events:none;
+  opacity:0;
+  background:radial-gradient(
+    circle,
+    rgba(255,255,255,.64),
+    rgba(156,213,249,.2) 45%,
+    transparent 73%
+  );
+}
+
+.mascot-button.pop .mascot-glow{
+  animation:mascotGlow .75s ease-out both;
+}
+
+@keyframes mascotGlow{
+  0%{
+    opacity:0;
+    transform:scale(.65);
+  }
+  28%{
+    opacity:1;
+    transform:scale(1.12);
+  }
+  100%{
+    opacity:0;
+    transform:scale(1.52);
+  }
+}
+
+.sparkle-field{
+  position:absolute;
+  inset:0;
+  z-index:6;
+  pointer-events:none;
+  overflow:visible;
+}
+
+.mascot-star{
+  position:absolute;
+  width:var(--size);
+  height:var(--size);
+  background:var(--color);
+  opacity:0;
+  filter:drop-shadow(
+    0 0 4px rgba(255,255,255,.9)
+  );
+  clip-path:polygon(
+    50% 0%,
+    61% 37%,
+    100% 50%,
+    61% 63%,
+    50% 100%,
+    39% 63%,
+    0% 50%,
+    39% 37%
+  );
+  animation:
+    mascotSparkle var(--duration)
+    ease-out var(--delay) forwards;
+}
+
+@keyframes mascotSparkle{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.1) rotate(0);
+  }
+  22%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.15) rotate(20deg);
+  }
+  55%{
+    opacity:1;
+  }
+  100%{
+    opacity:0;
+    transform:
+      translate(
+        calc(-50% + var(--dx)),
+        calc(-50% + var(--dy))
+      )
+      scale(.15)
+      rotate(var(--rot));
+  }
+}
+
+/* ========================
+   DETAIL
+======================== */
 
 #detail{
   color:var(--ink);
@@ -1204,9 +1361,9 @@ canvas.scene-canvas{
   letter-spacing:.1em;
 }
 
-/* =================================
+/* ========================
    RESPONSIVE
-================================= */
+======================== */
 
 @media(max-height:720px){
   .open-intro{
@@ -1255,6 +1412,12 @@ canvas.scene-canvas{
     top:36%;
     bottom:12%;
   }
+
+  .mascot-button{
+    top:16%;
+    width:clamp(94px,26vw,195px);
+    right:5%;
+  }
 }
 
 @media(min-width:750px){
@@ -1296,7 +1459,8 @@ canvas.scene-canvas{
   .glass-slice,
   .ticket-stub::before,
   .menu-card::before,
-  .system-scan{
+  .system-scan,
+  .mascot-float{
     animation:none!important;
   }
 }
@@ -1306,7 +1470,9 @@ canvas.scene-canvas{
 <body>
 <div id="app">
 
-<!-- OPENING -->
+<!-- ========================
+     OPENING
+========================= -->
 
 <section class="screen active" id="opening" aria-hidden="false">
 
@@ -1318,9 +1484,9 @@ canvas.scene-canvas{
 
   <header class="open-top">
     <strong class="brand">AERIALIS</strong>
+
     <div class="micro-data">
-      <span class="signal"></span>
-      ATMOSPHERIC LINK<br>
+      <span class="signal"></span> ATMOSPHERIC LINK<br>
       <span class="clock">00:00:00</span>
     </div>
   </header>
@@ -1381,15 +1547,11 @@ canvas.scene-canvas{
     AERIALIS AVIATION ARCHIVE
   </div>
 
-  <!-- FIXED TICKET BODY / DRAGGABLE STUB -->
-
   <div class="ticket-area" id="ticketArea">
     <div class="ticket-shadow"></div>
 
     <div class="open-ticket">
-
       <div class="ticket-body">
-
         <div class="ticket-top">
           <span>BOARDING PASS / 001</span>
           <span>GATE 01</span>
@@ -1401,9 +1563,7 @@ canvas.scene-canvas{
             <small>DESTINATION / UNKNOWN</small>
           </div>
 
-          <span class="admit">
-            ADMIT<br>ONE
-          </span>
+          <span class="admit">ADMIT<br>ONE</span>
         </div>
       </div>
 
@@ -1417,7 +1577,6 @@ canvas.scene-canvas{
         <span class="stub-arrow">→</span>
         <span class="stub-instruction">DRAG TO TEAR</span>
       </button>
-
     </div>
 
     <div class="ticket-status" id="ticketStatus">
@@ -1439,7 +1598,9 @@ canvas.scene-canvas{
 
 </section>
 
-<!-- BOARDING -->
+<!-- ========================
+     BOARDING
+========================= -->
 
 <section class="screen" id="boarding" aria-hidden="true">
 
@@ -1478,7 +1639,6 @@ canvas.scene-canvas{
   </div>
 
   <div class="system-progress">
-
     <h2 id="boardingTitle">BOARDING...</h2>
 
     <p id="boardingCaption">
@@ -1500,7 +1660,6 @@ canvas.scene-canvas{
       <span class="system-step">ON BOARD</span>
       <span class="system-step">DEPARTURE</span>
     </div>
-
   </div>
 
   <footer class="system-footer">
@@ -1510,11 +1669,14 @@ canvas.scene-canvas{
 
 </section>
 
-<!-- MAIN MENU -->
+<!-- ========================
+     MAIN MENU
+========================= -->
 
 <section class="screen" id="menu" aria-hidden="true">
 
   <canvas class="scene-canvas" id="menuCanvas"></canvas>
+
   <div class="menu-veil"></div>
 
   <header class="menu-header">
@@ -1523,9 +1685,7 @@ canvas.scene-canvas{
   </header>
 
   <div class="menu-heading">
-    <div class="eyebrow">
-      FLIGHT DIRECTORY / 001
-    </div>
+    <div class="eyebrow">FLIGHT DIRECTORY / 001</div>
 
     <h2>
       WELCOME<br>
@@ -1537,6 +1697,38 @@ canvas.scene-canvas{
       FOUR SECTIONS ARE AVAILABLE.
     </p>
   </div>
+
+  <!-- ========================
+       CHARACTER
+  ========================= -->
+
+  <button
+    id="mascotButton"
+    class="mascot-button"
+    type="button"
+    aria-label="キャラクターをぽよんと跳ねさせる"
+  >
+    <span class="mascot-glow" aria-hidden="true"></span>
+
+    <span class="mascot-float">
+      <img
+        class="mascot-image"
+        src="./無題299_20261117135551.png"
+        alt="ピンクの髪の羽のあるキャラクター"
+        draggable="false"
+      >
+    </span>
+
+    <span
+      class="sparkle-field"
+      id="sparkleField"
+      aria-hidden="true"
+    ></span>
+  </button>
+
+  <!-- ========================
+       MENU CARDS
+  ========================= -->
 
   <div class="menu-list">
 
@@ -1613,11 +1805,14 @@ canvas.scene-canvas{
 
 </section>
 
-<!-- DETAIL -->
+<!-- ========================
+     DETAIL
+========================= -->
 
 <section class="screen" id="detail" aria-hidden="true">
 
   <canvas class="scene-canvas" id="detailCanvas"></canvas>
+
   <div class="detail-veil"></div>
 
   <header class="detail-header">
@@ -1631,7 +1826,6 @@ canvas.scene-canvas{
   </header>
 
   <div class="detail-scroll" id="detailScroll">
-
     <div class="detail-index" id="detailIndex">
       SECTION / 01
     </div>
@@ -1645,7 +1839,6 @@ canvas.scene-canvas{
     <div class="detail-stamp">
       AERIALIS / VERIFIED
     </div>
-
   </div>
 
   <footer class="detail-footer">
@@ -1664,9 +1857,9 @@ canvas.scene-canvas{
 <script>
 "use strict";
 
-/* =================================
+/* ========================
    MOBILE VIEWPORT
-================================= */
+======================== */
 
 for(const eventName of [
   "gesturestart",
@@ -1690,38 +1883,37 @@ document.addEventListener("dblclick",e=>{
   e.preventDefault();
 });
 
-/* =================================
+/* ========================
    CLOCK
-================================= */
+======================== */
 
 function updateClock(){
   const d=new Date();
 
-  const s=[
+  const value=[
     d.getHours(),
     d.getMinutes(),
     d.getSeconds()
-  ].map(v=>
-    String(v).padStart(2,"0")
-  ).join(":");
+  ].map(v=>String(v).padStart(2,"0")).join(":");
 
-  document.querySelectorAll(".clock").forEach(n=>{
-    n.textContent=s;
+  document.querySelectorAll(".clock").forEach(el=>{
+    el.textContent=value;
   });
 }
 
 updateClock();
 setInterval(updateClock,1000);
 
-/* =================================
+/* ========================
    SCREEN MANAGEMENT
-================================= */
+======================== */
 
-const screens=Object.fromEntries(
-  ["opening","boarding","menu","detail"].map(
-    k=>[k,document.getElementById(k)]
-  )
-);
+const screens={
+  opening:document.getElementById("opening"),
+  boarding:document.getElementById("boarding"),
+  menu:document.getElementById("menu"),
+  detail:document.getElementById("detail")
+};
 
 let currentScreen="opening";
 let switching=false;
@@ -1756,10 +1948,7 @@ function switchScreen(name,onChange){
 
   switchTimer=setTimeout(()=>{
     showScreen(name);
-
-    if(onChange){
-      onChange();
-    }
+    if(onChange)onChange();
   },425);
 
   unlockTimer=setTimeout(()=>{
@@ -1778,9 +1967,9 @@ function flash(){
   el.classList.add("play");
 }
 
-/* =================================
-   PROCEDURAL CLOUD ENGINE
-================================= */
+/* ========================
+   CLOUD GENERATOR
+======================== */
 
 const TAU=Math.PI*2;
 
@@ -1801,24 +1990,17 @@ function rng(seed){
   };
 }
 
-/*
-  Generate cloud textures from layered noise.
-  The cloud textures are created once.
-  No external image files are required.
-*/
-
 function cloudTexture(seed,shade){
-
   const W=420;
   const H=250;
 
-  const c=document.createElement("canvas");
-  c.width=W;
-  c.height=H;
+  const canvas=document.createElement("canvas");
+  canvas.width=W;
+  canvas.height=H;
 
-  const x=c.getContext("2d");
-  const im=x.createImageData(W,H);
-  const data=im.data;
+  const ctx=canvas.getContext("2d");
+  const image=ctx.createImageData(W,H);
+  const data=image.data;
   const random=rng(seed);
 
   const scales=[
@@ -1851,8 +2033,8 @@ function cloudTexture(seed,shade){
     tx=tx*tx*(3-2*tx);
     ty=ty*ty*(3-2*ty);
 
-    const s=g.gw+1;
-    const index=iy*s+ix;
+    const stride=g.gw+1;
+    const index=iy*stride+ix;
 
     const top=mix(
       g.d[index],
@@ -1861,8 +2043,8 @@ function cloudTexture(seed,shade){
     );
 
     const bottom=mix(
-      g.d[index+s],
-      g.d[index+s+1],
+      g.d[index+stride],
+      g.d[index+stride+1],
       tx
     );
 
@@ -1870,17 +2052,16 @@ function cloudTexture(seed,shade){
   }
 
   for(let py=0;py<H;py++){
-
     const v=py/(H-1);
+
     const envelope=Math.pow(
       Math.sin(Math.PI*v),
       1.15
     );
 
     for(let px=0;px<W;px++){
-
       const u=px/(W-1);
-      const i=(py*W+px)*4;
+      const index=(py*W+px)*4;
 
       let n=0;
 
@@ -1920,27 +2101,27 @@ function cloudTexture(seed,shade){
         0,1
       );
 
-      data[i]=mix(
+      data[index]=mix(
         shade[0],255,highlight*.39
       );
 
-      data[i+1]=mix(
+      data[index+1]=mix(
         shade[1],255,highlight*.37
       );
 
-      data[i+2]=mix(
+      data[index+2]=mix(
         shade[2],255,highlight*.34
       );
 
-      data[i+3]=Math.round(
+      data[index+3]=Math.round(
         alpha*shade[3]
       );
     }
   }
 
-  x.putImageData(im,0,0);
+  ctx.putImageData(image,0,0);
 
-  return c;
+  return canvas;
 }
 
 const clouds=[
@@ -1950,17 +2131,13 @@ const clouds=[
   cloudTexture(6019,[246,253,255,195])
 ];
 
-/* =================================
+/* ========================
    CANVAS SETUP
-================================= */
+======================== */
 
 function canvasSurface(id){
-
   const el=document.getElementById(id);
-
-  const ctx=el.getContext("2d",{
-    alpha:true
-  });
+  const ctx=el.getContext("2d",{alpha:true});
 
   let w=0;
   let h=0;
@@ -1978,9 +2155,7 @@ function canvasSurface(id){
     el.width=Math.round(w*dpr);
     el.height=Math.round(h*dpr);
 
-    ctx.setTransform(
-      dpr,0,0,dpr,0,0
-    );
+    ctx.setTransform(dpr,0,0,dpr,0,0);
   }
 
   resize();
@@ -2013,12 +2188,11 @@ const dust=Array.from({length:94},()=>({
   speed:.001+random()*.006
 }));
 
-/* =================================
-   CINEMATIC ATMOSPHERE
-================================= */
+/* ========================
+   ATMOSPHERIC ANIMATION
+======================== */
 
 function atmosphere(surface,t,variant){
-
   const {ctx,w,h}=surface;
 
   const s=t*.001;
@@ -2026,10 +2200,6 @@ function atmosphere(surface,t,variant){
 
   ctx.clearRect(0,0,w,h);
   ctx.save();
-
-  /*
-    Moving atmospheric backlight
-  */
 
   const sunX=
     w*(menuMode?.76:.7)
@@ -2044,133 +2214,97 @@ function atmosphere(surface,t,variant){
   );
 
   glow.addColorStop(
-    0,
-    "rgba(255,255,255,.43)"
+    0,"rgba(255,255,255,.43)"
   );
 
   glow.addColorStop(
-    .4,
-    "rgba(228,249,255,.13)"
+    .4,"rgba(228,249,255,.13)"
   );
 
   glow.addColorStop(
-    1,
-    "rgba(255,255,255,0)"
+    1,"rgba(255,255,255,0)"
   );
 
   ctx.fillStyle=glow;
   ctx.fillRect(0,0,w,h);
 
-  /*
-    Light shafts
-  */
+  /* Animated light shafts */
 
   ctx.globalCompositeOperation="screen";
 
   for(let i=0;i<7;i++){
-
     const theta=
-      -.66
-      +i*.21
+      -.66+i*.21
       +Math.sin(s*.09+i)*.04;
 
     const reach=h*1.25;
     const width=w*(.075+i*.009);
 
-    const ex=
-      sunX+Math.sin(theta)*reach;
-
-    const ey=
-      sunY+Math.cos(theta)*reach;
+    const ex=sunX+Math.sin(theta)*reach;
+    const ey=sunY+Math.cos(theta)*reach;
 
     const g=ctx.createLinearGradient(
       sunX,sunY,ex,ey
     );
 
     g.addColorStop(
-      0,
-      "rgba(255,255,255,.135)"
+      0,"rgba(255,255,255,.135)"
     );
 
     g.addColorStop(
-      .8,
-      "rgba(255,255,255,.015)"
+      .8,"rgba(255,255,255,.015)"
     );
 
     g.addColorStop(
-      1,
-      "rgba(255,255,255,0)"
+      1,"rgba(255,255,255,0)"
     );
 
     ctx.fillStyle=g;
     ctx.beginPath();
-
     ctx.moveTo(sunX,sunY);
     ctx.lineTo(ex-width,ey);
     ctx.lineTo(ex+width,ey);
-
     ctx.closePath();
     ctx.fill();
   }
 
-  /*
-    Four atmospheric cloud layers.
-    Each layer drifts independently.
-  */
+  /* Multiple moving cloud layers */
 
   const layers=[
     {
       tex:clouds[0],
-      y:.055,
-      hh:.49,
-      ww:1.6,
-      x:-.24,
-      dx:.023,
-      speed:.16,
+      y:.055,hh:.49,ww:1.6,
+      x:-.24,dx:.023,speed:.16,
       alpha:menuMode?.5:.63
     },
     {
       tex:clouds[1],
-      y:.23,
-      hh:.47,
-      ww:1.62,
-      x:-.3,
-      dx:.039,
-      speed:.11,
+      y:.23,hh:.47,ww:1.62,
+      x:-.3,dx:.039,speed:.11,
       alpha:menuMode?.7:.84
     },
     {
       tex:clouds[2],
-      y:.43,
-      hh:.49,
-      ww:1.55,
-      x:-.23,
-      dx:.027,
-      speed:-.13,
+      y:.43,hh:.49,ww:1.55,
+      x:-.23,dx:.027,speed:-.13,
       alpha:menuMode?.48:.56
     },
     {
       tex:clouds[3],
-      y:.61,
-      hh:.46,
-      ww:1.66,
-      x:-.31,
-      dx:.052,
-      speed:.1,
+      y:.61,hh:.46,ww:1.66,
+      x:-.31,dx:.052,speed:.1,
       alpha:menuMode?.65:.73
     }
   ];
 
   for(let i=0;i<layers.length;i++){
-
     const p=layers[i];
 
-    const xx=w*(
-      p.x+
-      Math.sin(s*p.speed+i)*p.dx
+    const x=w*(
+      p.x+Math.sin(s*p.speed+i)*p.dx
     );
 
-    const yy=h*(
+    const y=h*(
       p.y+
       Math.cos(s*p.speed*.7+i)*.01
     );
@@ -2178,41 +2312,27 @@ function atmosphere(surface,t,variant){
     ctx.globalAlpha=p.alpha;
 
     ctx.drawImage(
-      p.tex,
-      xx,
-      yy,
-      w*p.ww,
-      h*p.hh
+      p.tex,x,y,w*p.ww,h*p.hh
     );
   }
 
   ctx.globalAlpha=1;
   ctx.globalCompositeOperation="source-over";
-
-  /*
-    Flowing air currents.
-    Continuous curves, not dashed lines.
-  */
-
   ctx.lineCap="round";
+
+  /* Flowing air currents */
 
   const count=menuMode?13:18;
 
   for(let i=0;i<count;i++){
-
     const p=i/(count-1);
-
     const base=h*(.17+p*.7);
 
     const offset=
       Math.sin(s*.19+i*.4)*h*.014;
 
     ctx.beginPath();
-
-    ctx.moveTo(
-      -w*.24,
-      base+offset
-    );
+    ctx.moveTo(-w*.24,base+offset);
 
     ctx.bezierCurveTo(
       w*.18,
@@ -2227,88 +2347,62 @@ function atmosphere(surface,t,variant){
       ?"58,126,175"
       :"255,255,255";
 
-    const alpha=.018+(i%4)*.008;
-
     ctx.strokeStyle=
-      `rgba(${color},${alpha})`;
+      `rgba(${color},${.018+(i%4)*.008})`;
 
-    ctx.lineWidth=
-      i%5===0?2:.65;
-
+    ctx.lineWidth=i%5===0?2:.65;
     ctx.stroke();
   }
 
-  /*
-    Optical refraction arcs
-  */
+  /* Optical arcs */
 
   const arcX=w*(menuMode?.94:1.03);
   const arcY=h*(menuMode?.08:.24);
 
   for(let i=0;i<5;i++){
-
     ctx.beginPath();
 
     const r=w*(.35+i*.17);
-
-    const a=
-      -2.64+
-      s*(i%2?-.006:.008);
+    const a=-2.64+s*(i%2?-.006:.008);
 
     ctx.arc(
-      arcX,
-      arcY,
-      r,
-      a,
-      a+1.45+i*.035
+      arcX,arcY,r,
+      a,a+1.45+i*.035
     );
 
     ctx.strokeStyle=
       `rgba(31,105,156,${.04+i*.014})`;
 
     ctx.lineWidth=i===0?1.8:.85;
-
     ctx.stroke();
   }
 
-  /*
-    Suspended atmospheric particles
-  */
+  /* Suspended particles */
 
   for(const p of dust){
-
     const x=(
-      p.x+
-      .008*Math.sin(s*.17+p.phase)
+      p.x+.008*Math.sin(s*.17+p.phase)
     )*w;
 
     const y=(
       (p.y+s*p.speed)%1
     )*h;
 
-    const a=
-      .09+
-      .17*(.5+.5*Math.sin(s*.5+p.phase));
+    const alpha=
+      .09+.17*(.5+.5*Math.sin(s*.5+p.phase));
 
     ctx.fillStyle=
-      `rgba(255,255,255,${a})`;
+      `rgba(255,255,255,${alpha})`;
 
     ctx.beginPath();
-
-    ctx.arc(
-      x,y,p.size,0,TAU
-    );
-
+    ctx.arc(x,y,p.size,0,TAU);
     ctx.fill();
   }
 
-  /*
-    Subtle shifting optical glint
-  */
+  /* Moving optical highlight */
 
   const fx=w*(
-    .19+
-    (.5+.5*Math.sin(s*.09))*.7
+    .19+(.5+.5*Math.sin(s*.09))*.7
   );
 
   const fy=h*.45;
@@ -2319,13 +2413,11 @@ function atmosphere(surface,t,variant){
   );
 
   glow.addColorStop(
-    0,
-    "rgba(235,251,255,.13)"
+    0,"rgba(235,251,255,.13)"
   );
 
   glow.addColorStop(
-    1,
-    "rgba(235,251,255,0)"
+    1,"rgba(235,251,255,0)"
   );
 
   ctx.fillStyle=glow;
@@ -2334,9 +2426,9 @@ function atmosphere(surface,t,variant){
   ctx.restore();
 }
 
-/* =================================
-   BOARDING CONTROL ANIMATION
-================================= */
+/* ========================
+   BOARDING ANIMATION
+======================== */
 
 const nodes=Array.from({length:140},()=>({
   x:random()*2-1,
@@ -2346,25 +2438,15 @@ const nodes=Array.from({length:140},()=>({
 }));
 
 function drawBoarding(t){
-
   const {ctx,w,h}=boarding;
 
   const s=t*.001;
-
   const cx=w*.5;
   const cy=h*.41;
-
-  const R=Math.min(
-    w*.41,
-    h*.285
-  );
+  const R=Math.min(w*.41,h*.285);
 
   ctx.clearRect(0,0,w,h);
   ctx.save();
-
-  /*
-    Moving depth bloom
-  */
 
   let halo=ctx.createRadialGradient(
     cx,cy,0,
@@ -2372,74 +2454,40 @@ function drawBoarding(t){
   );
 
   halo.addColorStop(
-    0,
-    "rgba(83,179,228,.1)"
+    0,"rgba(83,179,228,.1)"
   );
 
   halo.addColorStop(
-    .5,
-    "rgba(57,129,190,.06)"
+    .5,"rgba(57,129,190,.06)"
   );
 
   halo.addColorStop(
-    1,
-    "rgba(1,18,35,0)"
+    1,"rgba(1,18,35,0)"
   );
 
   ctx.fillStyle=halo;
   ctx.fillRect(0,0,w,h);
 
-  /*
-    Perspective flight corridor
-  */
+  /* Perspective corridor */
 
-  ctx.strokeStyle=
-    "rgba(125,196,235,.085)";
-
+  ctx.strokeStyle="rgba(125,196,235,.085)";
   ctx.lineWidth=.7;
 
   for(let i=-9;i<=9;i++){
-
     ctx.beginPath();
-
-    ctx.moveTo(
-      cx+i*8,
-      cy
-    );
-
-    ctx.lineTo(
-      cx+i*w*.23,
-      cy+h*.8
-    );
-
+    ctx.moveTo(cx+i*8,cy);
+    ctx.lineTo(cx+i*w*.23,cy+h*.8);
     ctx.stroke();
   }
 
-  /*
-    Advancing perspective lines
-  */
-
   for(let i=0;i<19;i++){
-
-    const depth=
-      ((i/19+s*.115)%1);
-
+    const depth=(i/19+s*.115)%1;
     const spread=depth*depth;
-
-    const yy=
-      cy+spread*h*.72;
+    const y=cy+spread*h*.72;
 
     ctx.beginPath();
-
-    ctx.moveTo(
-      cx-w*spread*3,
-      yy
-    );
-
-    ctx.lineTo(
-      cx+w*spread*3,
-      yy
-    );
+    ctx.moveTo(cx-w*spread*3,y);
+    ctx.lineTo(cx+w*spread*3,y);
 
     ctx.strokeStyle=
       `rgba(161,215,251,${.018+depth*.09})`;
@@ -2447,23 +2495,16 @@ function drawBoarding(t){
     ctx.stroke();
   }
 
-  /*
-    Rotating orbital data topology
-  */
+  /* Orbital layers */
 
   for(let i=0;i<9;i++){
-
-    const a=
-      s*(i%2?-.03:.045)
-      +i*.74;
-
+    const a=s*(i%2?-.03:.045)+i*.74;
     const r=R*(.38+i*.115);
 
     ctx.beginPath();
 
     ctx.ellipse(
-      cx,
-      cy,
+      cx,cy,
       r,
       r*(.31+(i%4)*.12),
       a,
@@ -2474,25 +2515,18 @@ function drawBoarding(t){
     ctx.strokeStyle=
       `rgba(165,224,255,${.08+(i%4)*.034})`;
 
-    ctx.lineWidth=
-      i%3===0?1.4:.7;
-
+    ctx.lineWidth=i%3===0?1.4:.7;
     ctx.stroke();
   }
 
-  /*
-    Circular instrument measurements
-  */
+  /* Circular instrument ticks */
 
   ctx.save();
-
   ctx.translate(cx,cy);
   ctx.rotate(s*.018);
 
   for(let i=0;i<160;i++){
-
     const a=i*TAU/160;
-
     const r1=R*1.08;
     const r2=r1+(i%10===0?11:3.2);
 
@@ -2508,36 +2542,26 @@ function drawBoarding(t){
       Math.sin(a)*r2
     );
 
-    ctx.strokeStyle=
-      i%10===0
+    ctx.strokeStyle=i%10===0
       ?"rgba(192,238,255,.49)"
       :"rgba(192,238,255,.16)";
 
     ctx.lineWidth=.8;
-
     ctx.stroke();
   }
 
   ctx.restore();
 
-  /*
-    Moving radar sweep
-  */
+  /* Moving radar beam */
 
-  const a=s*.42;
+  const angle=s*.42;
 
   ctx.beginPath();
-
   ctx.moveTo(cx,cy);
-
   ctx.arc(
-    cx,
-    cy,
-    R*.99,
-    a-.33,
-    a
+    cx,cy,R*.99,
+    angle-.33,angle
   );
-
   ctx.closePath();
 
   const beam=ctx.createRadialGradient(
@@ -2546,56 +2570,41 @@ function drawBoarding(t){
   );
 
   beam.addColorStop(
-    0,
-    "rgba(160,226,255,.015)"
+    0,"rgba(160,226,255,.015)"
   );
 
   beam.addColorStop(
-    1,
-    "rgba(160,226,255,.11)"
+    1,"rgba(160,226,255,.11)"
   );
 
   ctx.fillStyle=beam;
   ctx.fill();
 
   ctx.beginPath();
-
   ctx.moveTo(cx,cy);
 
   ctx.lineTo(
-    cx+Math.cos(a)*R,
-    cy+Math.sin(a)*R
+    cx+Math.cos(angle)*R,
+    cy+Math.sin(angle)*R
   );
 
-  ctx.strokeStyle=
-    "rgba(216,248,255,.43)";
-
+  ctx.strokeStyle="rgba(216,248,255,.43)";
   ctx.lineWidth=1;
   ctx.stroke();
 
-  /*
-    Particles move through 3D-like depth
-  */
+  /* Perspective particles */
 
   for(const p of nodes){
-
     const z=(p.z+s*.038)%1;
     const depth=1-z;
 
     const px=
-      cx+
-      p.x*(.06+depth*depth)*w*.75;
+      cx+p.x*(.06+depth*depth)*w*.75;
 
     const py=
-      cy+
-      p.y*(.06+depth*depth)*h*.47;
+      cy+p.y*(.06+depth*depth)*h*.47;
 
-    if(
-      px<0||
-      px>w||
-      py<0||
-      py>h
-    ){
+    if(px<0||px>w||py<0||py>h){
       continue;
     }
 
@@ -2605,88 +2614,64 @@ function drawBoarding(t){
     ctx.beginPath();
 
     ctx.arc(
-      px,
-      py,
+      px,py,
       Math.max(.35,depth*p.scale),
-      0,
-      TAU
+      0,TAU
     );
 
     ctx.fill();
   }
 
-  /*
-    Travelling side signals
-  */
+  /* Side telemetry */
 
-  for(let side of [-1,1]){
-
+  for(const side of [-1,1]){
     for(let i=0;i<13;i++){
-
       const px=
-        cx+
-        side*(R*1.38+i%3*5);
+        cx+side*(R*1.38+i%3*5);
 
       const py=
         cy-R*.83+i*R*.14;
 
       const alpha=
-        .08+
-        .27*(.5+.5*Math.sin(
-          s*1.5+i*.69+side
-        ));
+        .08+.27*(.5+.5*Math.sin(s*1.5+i*.69+side));
 
       ctx.fillStyle=
         `rgba(175,231,255,${alpha})`;
 
-      ctx.fillRect(
-        px,py,side*11,1
-      );
+      ctx.fillRect(px,py,side*11,1);
     }
   }
 
-  /*
-    Instrument degree labels
-  */
+  /* Degree labels */
 
-  ctx.fillStyle=
-    "rgba(199,240,255,.4)";
-
-  ctx.font=
-    "600 10px Rajdhani, sans-serif";
-
+  ctx.fillStyle="rgba(199,240,255,.4)";
+  ctx.font="600 10px Rajdhani, sans-serif";
   ctx.textAlign="center";
 
   for(let i=0;i<8;i++){
-
     const a=i*TAU/8-Math.PI/2;
-
-    const rr=R*1.32;
+    const r=R*1.32;
 
     ctx.fillText(
       String(i*45).padStart(3,"0"),
-      cx+Math.cos(a)*rr,
-      cy+Math.sin(a)*rr
+      cx+Math.cos(a)*r,
+      cy+Math.sin(a)*r
     );
   }
 
   ctx.restore();
 }
 
-/* =================================
+/* ========================
    ANIMATION LOOP
-================================= */
+======================== */
 
 let lastFrame=-100;
 
 function animate(time){
-
   requestAnimationFrame(animate);
 
-  if(
-    document.hidden||
-    time-lastFrame<25
-  ){
+  if(document.hidden||time-lastFrame<25){
     return;
   }
 
@@ -2711,23 +2696,21 @@ function animate(time){
 
 requestAnimationFrame(animate);
 
-/* =================================
-   TEAR-OFF BOARDING PASS
-================================= */
+/* ========================
+   BOARDING PASS INTERACTION
+======================== */
 
 const stub=document.getElementById("startButton");
-const status=document.getElementById("ticketStatus");
+const ticketStatus=document.getElementById("ticketStatus");
 
 let dragging=false;
 let torn=false;
 let pointerId=null;
-
 let startX=0;
 let distance=0;
 let tearTimer=0;
 
 function resetTicket(){
-
   clearTimeout(tearTimer);
 
   dragging=false;
@@ -2744,16 +2727,12 @@ function resetTicket(){
   stub.style.transform="";
   stub.disabled=false;
 
-  status.textContent=
+  ticketStatus.textContent=
     "SLIDE RIGHT TO BOARD";
 }
 
 function finishTear(){
-
-  if(
-    torn||
-    currentScreen!=="opening"
-  ){
+  if(torn||currentScreen!=="opening"){
     return;
   }
 
@@ -2769,7 +2748,7 @@ function finishTear(){
   stub.classList.add("torn");
   stub.disabled=true;
 
-  status.textContent=
+  ticketStatus.textContent=
     "BOARDING PASS ACCEPTED";
 
   tearTimer=setTimeout(
@@ -2779,7 +2758,6 @@ function finishTear(){
 }
 
 stub.addEventListener("pointerdown",e=>{
-
   if(
     torn||
     switching||
@@ -2803,17 +2781,12 @@ stub.addEventListener("pointerdown",e=>{
 });
 
 stub.addEventListener("pointermove",e=>{
-
-  if(
-    !dragging||
-    e.pointerId!==pointerId
-  ){
+  if(!dragging||e.pointerId!==pointerId){
     return;
   }
 
   distance=Math.max(
-    0,
-    e.clientX-startX
+    0,e.clientX-startX
   );
 
   const x=distance<30
@@ -2823,10 +2796,13 @@ stub.addEventListener("pointermove",e=>{
   const angle=
     Math.min(distance/88,1)*2.3;
 
-  stub.style.transform=
-    `translate3d(${x}px,${Math.min(distance/90,1)*-2}px,0) rotate(${angle}deg)`;
+  const lift=
+    Math.min(distance/90,1)*-2;
 
-  status.textContent=distance>60
+  stub.style.transform=
+    `translate3d(${x}px,${lift}px,0) rotate(${angle}deg)`;
+
+  ticketStatus.textContent=distance>60
     ?"RELEASE TO BOARD"
     :"SLIDE RIGHT TO BOARD";
 
@@ -2836,11 +2812,7 @@ stub.addEventListener("pointermove",e=>{
 });
 
 function endDrag(e){
-
-  if(
-    !dragging||
-    e.pointerId!==pointerId
-  ){
+  if(!dragging||e.pointerId!==pointerId){
     return;
   }
 
@@ -2857,7 +2829,7 @@ function endDrag(e){
   stub.classList.add("snap-back");
   stub.style.transform="";
 
-  status.textContent=
+  ticketStatus.textContent=
     "SLIDE RIGHT TO BOARD";
 }
 
@@ -2865,11 +2837,7 @@ stub.addEventListener("pointerup",endDrag);
 stub.addEventListener("pointercancel",endDrag);
 
 stub.addEventListener("lostpointercapture",()=>{
-
-  if(
-    torn||
-    !dragging
-  ){
+  if(torn||!dragging){
     return;
   }
 
@@ -2881,20 +2849,15 @@ stub.addEventListener("lostpointercapture",()=>{
   stub.style.transform="";
 });
 
-/*
-  Keyboard accessibility.
-  Touch interaction still requires dragging.
-*/
-
 stub.addEventListener("click",e=>{
   if(e.detail===0&&!torn){
     finishTear();
   }
 });
 
-/* =================================
+/* ========================
    BOARDING PROGRESS
-================================= */
+======================== */
 
 const progressFill=
   document.getElementById("progressFill");
@@ -2940,30 +2903,26 @@ let boardingPending=0;
 let boardingStart=0;
 
 function stopBoarding(){
-
   cancelAnimationFrame(boardingRAF);
   clearTimeout(boardingTimer);
   clearTimeout(boardingPending);
 }
 
 function boardingTick(t){
-
   if(currentScreen!=="boarding"){
     return;
   }
 
   const p=clamp(
     (t-boardingStart)/6200,
-    0,
-    1
+    0,1
   );
 
   const smooth=
     p*p*(3-2*p);
 
   const stage=Math.min(
-    3,
-    Math.floor(smooth*4)
+    3,Math.floor(smooth*4)
   );
 
   progressFill.style.width=
@@ -2981,9 +2940,7 @@ function boardingTick(t){
     stages[stage][1];
 
   boardingTitle.textContent=
-    p>=1
-    ?"CLEARED."
-    :"BOARDING...";
+    p>=1?"CLEARED.":"BOARDING...";
 
   stepEls.forEach((el,i)=>{
     el.classList.toggle(
@@ -2997,26 +2954,19 @@ function boardingTick(t){
       boardingTick
     );
   }else{
-
     boardingTimer=setTimeout(()=>{
-
       if(currentScreen!=="boarding"){
         return;
       }
 
       flash();
       showScreen("menu");
-
     },450);
   }
 }
 
 function startBoarding(){
-
-  if(
-    currentScreen!=="opening"||
-    switching
-  ){
+  if(currentScreen!=="opening"||switching){
     return;
   }
 
@@ -3034,9 +2984,7 @@ function startBoarding(){
   });
 
   switchScreen("boarding",()=>{
-
     boardingPending=setTimeout(()=>{
-
       if(currentScreen!=="boarding"){
         return;
       }
@@ -3045,14 +2993,118 @@ function startBoarding(){
         boardingStart=t;
         boardingTick(t);
       });
-
     },100);
   });
 }
 
-/* =================================
-   FOUR CONTENT PAGES
-================================= */
+/* ========================
+   CHARACTER BOUNCE & SPARKLES
+======================== */
+
+const mascotButton=
+  document.getElementById("mascotButton");
+
+const sparkleField=
+  document.getElementById("sparkleField");
+
+let mascotResetTimer=0;
+
+mascotButton.addEventListener("click",()=>{
+  if(currentScreen!=="menu"||switching){
+    return;
+  }
+
+  clearTimeout(mascotResetTimer);
+
+  mascotButton.classList.remove("pop");
+  void mascotButton.offsetWidth;
+  mascotButton.classList.add("pop");
+
+  sparkleField.replaceChildren();
+
+  const colors=[
+    "#ffffff",
+    "#d6f5ff",
+    "#9cd8fc",
+    "#ffe6f1",
+    "#f9fbff"
+  ];
+
+  for(let i=0;i<17;i++){
+    const star=document.createElement("span");
+    star.className="mascot-star";
+
+    const angle=
+      (i/17)*Math.PI*2+
+      (Math.random()-.5)*.42;
+
+    const length=
+      32+Math.random()*47;
+
+    const dx=
+      Math.cos(angle)*length;
+
+    const dy=
+      Math.sin(angle)*length;
+
+    const size=
+      6+Math.random()*9;
+
+    star.style.left=
+      (35+Math.random()*30)+"%";
+
+    star.style.top=
+      (28+Math.random()*48)+"%";
+
+    star.style.setProperty(
+      "--dx",dx.toFixed(1)+"px"
+    );
+
+    star.style.setProperty(
+      "--dy",dy.toFixed(1)+"px"
+    );
+
+    star.style.setProperty(
+      "--size",size.toFixed(1)+"px"
+    );
+
+    star.style.setProperty(
+      "--rot",
+      (65+Math.random()*135).toFixed(1)+"deg"
+    );
+
+    star.style.setProperty(
+      "--color",
+      colors[i%colors.length]
+    );
+
+    star.style.setProperty(
+      "--duration",
+      (.55+Math.random()*.35).toFixed(2)+"s"
+    );
+
+    star.style.setProperty(
+      "--delay",
+      (Math.random()*.12).toFixed(2)+"s"
+    );
+
+    sparkleField.appendChild(star);
+
+    star.addEventListener(
+      "animationend",
+      ()=>star.remove(),
+      {once:true}
+    );
+  }
+
+  mascotResetTimer=setTimeout(()=>{
+    mascotButton.classList.remove("pop");
+  },860);
+});
+
+/* ========================
+   DETAIL PAGES
+======================== */
 
 const pages=[
   {
@@ -3086,25 +3138,15 @@ const pages=[
 ];
 
 document.querySelectorAll("[data-page]").forEach(button=>{
-
   button.addEventListener("click",()=>{
-
-    if(
-      currentScreen!=="menu"||
-      switching
-    ){
+    if(currentScreen!=="menu"||switching){
       return;
     }
 
-    const index=Number(
-      button.dataset.page
-    );
-
+    const index=Number(button.dataset.page);
     const page=pages[index];
 
-    if(!page){
-      return;
-    }
+    if(!page)return;
 
     document.getElementById(
       "detailIndex"
@@ -3131,7 +3173,6 @@ document.querySelectorAll("[data-page]").forEach(button=>{
 document.getElementById(
   "closeDetail"
 ).addEventListener("click",()=>{
-
   if(currentScreen==="detail"){
     switchScreen("menu");
   }
@@ -3140,22 +3181,15 @@ document.getElementById(
 document.getElementById(
   "exitButton"
 ).addEventListener("click",()=>{
-
   if(currentScreen==="menu"){
-    switchScreen(
-      "opening",
-      resetTicket
-    );
+    switchScreen("opening",resetTicket);
   }
 });
 
 document.addEventListener(
   "visibilitychange",
   ()=>{
-    if(
-      document.hidden&&
-      currentScreen==="boarding"
-    ){
+    if(document.hidden&&currentScreen==="boarding"){
       stopBoarding();
       showScreen("menu");
     }
