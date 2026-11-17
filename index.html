@@ -19,9 +19,7 @@
   --night:#081b35;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -59,7 +57,6 @@ a:focus-visible{
   height:100dvh;
   overflow:hidden;
   isolation:isolate;
-  touch-action:none;
   background:linear-gradient(
     155deg,
     #91c0e5 0%,
@@ -90,7 +87,7 @@ a:focus-visible{
   opacity:1;
 }
 
-/* PHOTO FALLBACK */
+/* IMAGE FALLBACK */
 
 #stageFallback{
   position:absolute;
@@ -115,16 +112,10 @@ a:focus-visible{
 }
 
 #app.is-boarding #stageFallback{
-  background-position:72% center;
-  opacity:.26;
-  filter:grayscale(1) brightness(.85);
-}
-
-#app.model-loaded.is-boarding #stageFallback{
   opacity:0;
 }
 
-/* THREE.JS STAGE */
+/* 3D STAGE */
 
 #stage3d{
   position:absolute;
@@ -140,13 +131,21 @@ a:focus-visible{
   opacity:1;
 }
 
+/*
+  Keep the boarding aircraft within
+  the left-hand area.
+*/
+#app.is-boarding #stage3d{
+  clip-path:inset(0 59% 0 0);
+}
+
 #stage3d canvas{
   display:block;
   width:100%;
   height:100%;
 }
 
-/* SUBTLE FILM GRAIN */
+/* FILM GRAIN */
 
 #grain{
   position:absolute;
@@ -178,11 +177,10 @@ a:focus-visible{
   pointer-events:auto;
 }
 
-/* =========================
-   OPENING
-========================= */
+/* OPENING */
 
 #opening{
+  touch-action:none;
   background:linear-gradient(
     180deg,
     rgba(4,33,63,.25) 0%,
@@ -207,8 +205,6 @@ a:focus-visible{
   );
   pointer-events:none;
 }
-
-/* HEADER */
 
 .hero-header{
   position:absolute;
@@ -253,8 +249,6 @@ a:focus-visible{
 @keyframes statusBlink{
   50%{opacity:.35}
 }
-
-/* HERO TYPOGRAPHY */
 
 .hero-index{
   position:absolute;
@@ -308,8 +302,6 @@ a:focus-visible{
   }
 }
 
-/* FLIGHT INFORMATION */
-
 .hero-side{
   position:absolute;
   right:6.2%;
@@ -330,8 +322,6 @@ a:focus-visible{
   letter-spacing:.1em;
 }
 
-/* BACKGROUND LETTERING */
-
 .hero-marquee{
   position:absolute;
   left:-2%;
@@ -345,8 +335,6 @@ a:focus-visible{
   text-align:center;
   transform:translateX(-1%);
 }
-
-/* BOARDING BUTTON */
 
 .hero-action{
   position:absolute;
@@ -436,6 +424,7 @@ a:focus-visible{
   display:flex;
   align-items:center;
   gap:10px;
+  transition:opacity .4s;
 }
 
 .hero-hint::before{
@@ -445,12 +434,8 @@ a:focus-visible{
   background:rgba(255,255,255,.7);
 }
 
-/* FOOTER */
-
-.hero-footer a{
-  color:inherit;
-  text-decoration:underline;
-  text-underline-offset:3px;
+.hero-hint.dragging{
+  opacity:1;
 }
 
 .hero-footer{
@@ -468,7 +453,11 @@ a:focus-visible{
   opacity:.95;
 }
 
-/* DEPARTURE ANIMATION */
+.hero-footer a{
+  color:inherit;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
 
 #app.is-departing .hero-title,
 #app.is-departing .hero-index,
@@ -489,14 +478,13 @@ a:focus-visible{
     transform .6s;
 }
 
-/* =========================
-   BOARDING
-========================= */
+/* BOARDING */
 
 #boarding{
   display:flex;
   align-items:center;
   justify-content:center;
+  touch-action:none;
   background:linear-gradient(
     90deg,
     rgba(5,19,40,.05),
@@ -515,11 +503,13 @@ a:focus-visible{
 
 .boarding-visual{
   min-height:240px;
+  pointer-events:none;
 }
 
 .boarding-ui{
   min-width:0;
   padding-left:12px;
+  position:relative;
 }
 
 .boarding-kicker{
@@ -535,8 +525,6 @@ a:focus-visible{
   margin-bottom:38px;
   white-space:nowrap;
 }
-
-/* PROGRESS */
 
 .board-progress{
   width:100%;
@@ -642,9 +630,7 @@ a:focus-visible{
   padding-top:14px;
 }
 
-/* =========================
-   CABIN
-========================= */
+/* CABIN */
 
 #cabin{
   background:linear-gradient(
@@ -899,9 +885,7 @@ a:focus-visible{
   font:inherit;
 }
 
-/* =========================
-   DETAIL
-========================= */
+/* DETAIL */
 
 #detail{
   background:linear-gradient(
@@ -1012,9 +996,7 @@ a:focus-visible{
   100%{opacity:0}
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* RESPONSIVE */
 
 @media(max-width:480px){
 
@@ -1220,369 +1202,350 @@ a:focus-visible{
 <body>
 <div id="app">
 
-  <div id="night"></div>
-  <div id="stageFallback" aria-hidden="true"></div>
-  <div id="stage3d" aria-hidden="true"></div>
+<div id="night"></div>
+<div id="stageFallback" aria-hidden="true"></div>
+<div id="stage3d" aria-hidden="true"></div>
 
-  <!-- OPENING -->
+<!-- OPENING -->
 
-  <section
-    id="opening"
-    class="screen active"
-    aria-label="AERIALIS opening">
+<section id="opening" class="screen active">
 
-    <header class="hero-header">
-      <span class="brand">AERIALIS</span>
-      <span class="header-right">
-        <i aria-hidden="true"></i>
-        FLIGHT AR—001
-      </span>
-    </header>
-
-    <div class="hero-index">
-      A DIGITAL AVIATION EXPERIENCE<br>
-      ESTABLISHED / 2026
-    </div>
-
-    <div class="hero-title">
-      <h1>
-        Beyond the<br>
-        <em>ordinary.</em>
-      </h1>
-      <p>
-        YOUR JOURNEY STARTS ABOVE THE CLOUDS.<br>
-        WELCOME TO AERIALIS.
-      </p>
-    </div>
-
-    <div class="hero-side">
-      DEPARTURE STATUS
-      <strong>READY FOR BOARDING</strong>
-      GATE 01 / TERMINAL A
-    </div>
-
-    <div class="hero-marquee" aria-hidden="true">
-      AERIALIS
-    </div>
-
-    <span class="hero-hint">
-      DRAG TO EXPLORE
+  <header class="hero-header">
+    <span class="brand">AERIALIS</span>
+    <span class="header-right">
+      <i aria-hidden="true"></i>
+      FLIGHT AR—001
     </span>
+  </header>
 
-    <div class="hero-action">
-      <button id="boardButton" class="board-button">
-        <span>BEGIN BOARDING</span>
-        <span class="board-arrow">↗</span>
-      </button>
+  <div class="hero-index">
+    A DIGITAL AVIATION EXPERIENCE<br>
+    ESTABLISHED / 2026
+  </div>
 
-      <span class="action-caption">
-        EXPLORE THE SKY.<br>
-        ENTER THE AIRCRAFT EXPERIENCE.
-      </span>
+  <div class="hero-title">
+    <h1>
+      Beyond the<br>
+      <em>ordinary.</em>
+    </h1>
+    <p>
+      YOUR JOURNEY STARTS ABOVE THE CLOUDS.<br>
+      WELCOME TO AERIALIS.
+    </p>
+  </div>
+
+  <div class="hero-side">
+    DEPARTURE STATUS
+    <strong>READY FOR BOARDING</strong>
+    GATE 01 / TERMINAL A
+  </div>
+
+  <div class="hero-marquee" aria-hidden="true">
+    AERIALIS
+  </div>
+
+  <span id="heroHint" class="hero-hint">
+    DRAG TO ROTATE / 3D VIEW
+  </span>
+
+  <div class="hero-action">
+    <button id="boardButton" class="board-button">
+      <span>BEGIN BOARDING</span>
+      <span class="board-arrow">↗</span>
+    </button>
+
+    <span class="action-caption">
+      EXPLORE THE SKY.<br>
+      ENTER THE AIRCRAFT EXPERIENCE.
+    </span>
+  </div>
+
+  <footer class="hero-footer">
+    <span>WELCOME ABOARD / VOL. 001</span>
+    <span>
+      3D:
+      <a
+        href="https://github.com/amvlab/aircraft-models"
+        target="_blank"
+        rel="noopener">AMVLAB</a>
+      /
+      <a
+        href="https://creativecommons.org/licenses/by/4.0/"
+        target="_blank"
+        rel="noopener">CC BY 4.0</a>
+    </span>
+  </footer>
+</section>
+
+<!-- BOARDING -->
+
+<section id="boarding" class="screen">
+
+  <div class="boarding-inner">
+
+    <div
+      class="boarding-visual"
+      aria-hidden="true">
     </div>
 
-    <footer class="hero-footer">
-      <span>WELCOME ABOARD / VOL. 001</span>
-      <span>
-        3D:
-        <a
-          href="https://github.com/amvlab/aircraft-models"
-          target="_blank"
-          rel="noopener">AMVLAB</a>
-        /
-        <a
-          href="https://creativecommons.org/licenses/by/4.0/"
-          target="_blank"
-          rel="noopener">CC BY 4.0</a>
-      </span>
-    </footer>
-  </section>
+    <div class="boarding-ui">
 
-  <!-- BOARDING -->
-
-  <section
-    id="boarding"
-    class="screen"
-    aria-label="Boarding progress">
-
-    <div class="boarding-inner">
-
-      <div
-        class="boarding-visual"
-        aria-hidden="true">
+      <div class="boarding-kicker">
+        AERIALIS / SYSTEM 001
       </div>
 
-      <div class="boarding-ui">
+      <div class="boarding-title">
+        BOARDING...
+      </div>
 
-        <div class="boarding-kicker">
-          AERIALIS / SYSTEM 001
+      <div class="board-progress">
+
+        <div class="board-track">
+          <div
+            id="boardTrackFill"
+            class="board-track-fill">
+          </div>
         </div>
 
-        <div class="boarding-title">
-          BOARDING...
-        </div>
+        <div class="board-steps">
 
-        <div class="board-progress">
-
-          <div class="board-track">
-            <div
-              id="boardTrackFill"
-              class="board-track-fill">
-            </div>
+          <div class="board-step">
+            <span class="board-circle"></span>
+            <span class="board-label">CHECK-IN</span>
           </div>
 
-          <div class="board-steps">
-
-            <div class="board-step">
-              <span class="board-circle"></span>
-              <span class="board-label">CHECK-IN</span>
-            </div>
-
-            <div class="board-step">
-              <span class="board-circle"></span>
-              <span class="board-label">BOARDING</span>
-            </div>
-
-            <div class="board-step">
-              <span class="board-circle"></span>
-              <span class="board-label">ON BOARD</span>
-            </div>
-
-            <div class="board-step">
-              <span class="board-circle"></span>
-              <span class="board-label">DEPARTURE</span>
-            </div>
-
+          <div class="board-step">
+            <span class="board-circle"></span>
+            <span class="board-label">BOARDING</span>
           </div>
+
+          <div class="board-step">
+            <span class="board-circle"></span>
+            <span class="board-label">ON BOARD</span>
+          </div>
+
+          <div class="board-step">
+            <span class="board-circle"></span>
+            <span class="board-label">DEPARTURE</span>
+          </div>
+
         </div>
-
-        <div
-          class="board-caption"
-          id="boardCaption"
-          role="status"
-          aria-live="off">
-          CHECKING IN
-        </div>
-
       </div>
-    </div>
-
-    <footer class="boarding-foot">
-      <span>FLIGHT AR—001</span>
-      <span>PLEASE STAND BY</span>
-    </footer>
-  </section>
-
-  <!-- CABIN -->
-
-  <section id="cabin" class="screen">
-
-    <div class="cabin-structure"></div>
-    <div class="cabin-ceiling"></div>
-
-    <div class="cabin-light left"></div>
-    <div class="cabin-light right"></div>
-
-    <div class="cabin-aisle"></div>
-    <div class="cabin-window left"></div>
-    <div class="cabin-window right"></div>
-
-    <header class="cabin-heading">
-      <small>AERIALIS / IN-FLIGHT</small>
-      <h2>WELCOME ABOARD</h2>
-      <p>PLEASE SELECT YOUR DESTINATION</p>
-    </header>
-
-    <div class="seat-grid">
-
-      <div class="seat">
-        <button data-page="0">
-          <span class="seat-icon">01</span>
-          <span class="seat-name">ABOUT</span>
-          <span class="seat-sub">INFORMATION</span>
-        </button>
-      </div>
-
-      <div class="seat">
-        <button data-page="1">
-          <span class="seat-icon">02</span>
-          <span class="seat-name">CHARACTERS</span>
-          <span class="seat-sub">PASSENGERS</span>
-        </button>
-      </div>
-
-      <div class="seat">
-        <button data-page="2">
-          <span class="seat-icon">03</span>
-          <span class="seat-name">STORIES</span>
-          <span class="seat-sub">FLIGHT RECORDS</span>
-        </button>
-      </div>
-
-      <div class="seat">
-        <button data-page="3">
-          <span class="seat-icon">04</span>
-          <span class="seat-name">GALLERY</span>
-          <span class="seat-sub">COLLECTION</span>
-        </button>
-      </div>
-
-    </div>
-
-    <footer class="cabin-footer">
-      <button id="returnOpening">
-        ← EXIT AIRCRAFT
-      </button>
-      <span>FLIGHT AR-001</span>
-    </footer>
-
-  </section>
-
-  <!-- DETAIL -->
-
-  <section id="detail" class="screen">
-
-    <header class="detail-head">
-      <span>AERIALIS / IN-FLIGHT SYSTEM</span>
-      <button
-        id="closeDetail"
-        class="detail-close"
-        aria-label="Close">×</button>
-    </header>
-
-    <div class="detail-body">
 
       <div
-        id="detailNumber"
-        class="detail-number">
-        SECTION / 01
-      </div>
-
-      <h2 id="detailTitle">ABOUT</h2>
-
-      <div class="detail-line"></div>
-
-      <p id="detailText"></p>
-
-      <div class="detail-note">
-        THIS SECTION IS UNDER CONSTRUCTION.
+        class="board-caption"
+        id="boardCaption"
+        role="status"
+        aria-live="off">
+        CHECKING IN
       </div>
 
     </div>
+  </div>
 
-    <footer class="detail-footer">
-      <span>AERIALIS AIRLINES</span>
-      <span>© 2026</span>
-    </footer>
+  <footer class="boarding-foot">
+    <span>FLIGHT AR—001</span>
+    <span>PLEASE STAND BY</span>
+  </footer>
 
-  </section>
+</section>
 
-  <div id="grain" aria-hidden="true"></div>
-  <div id="flash" aria-hidden="true"></div>
+<!-- CABIN -->
+
+<section id="cabin" class="screen">
+
+  <div class="cabin-structure"></div>
+  <div class="cabin-ceiling"></div>
+
+  <div class="cabin-light left"></div>
+  <div class="cabin-light right"></div>
+
+  <div class="cabin-aisle"></div>
+  <div class="cabin-window left"></div>
+  <div class="cabin-window right"></div>
+
+  <header class="cabin-heading">
+    <small>AERIALIS / IN-FLIGHT</small>
+    <h2>WELCOME ABOARD</h2>
+    <p>PLEASE SELECT YOUR DESTINATION</p>
+  </header>
+
+  <div class="seat-grid">
+
+    <div class="seat">
+      <button data-page="0">
+        <span class="seat-icon">01</span>
+        <span class="seat-name">ABOUT</span>
+        <span class="seat-sub">INFORMATION</span>
+      </button>
+    </div>
+
+    <div class="seat">
+      <button data-page="1">
+        <span class="seat-icon">02</span>
+        <span class="seat-name">CHARACTERS</span>
+        <span class="seat-sub">PASSENGERS</span>
+      </button>
+    </div>
+
+    <div class="seat">
+      <button data-page="2">
+        <span class="seat-icon">03</span>
+        <span class="seat-name">STORIES</span>
+        <span class="seat-sub">FLIGHT RECORDS</span>
+      </button>
+    </div>
+
+    <div class="seat">
+      <button data-page="3">
+        <span class="seat-icon">04</span>
+        <span class="seat-name">GALLERY</span>
+        <span class="seat-sub">COLLECTION</span>
+      </button>
+    </div>
+
+  </div>
+
+  <footer class="cabin-footer">
+    <button id="returnOpening">
+      ← EXIT AIRCRAFT
+    </button>
+    <span>FLIGHT AR-001</span>
+  </footer>
+
+</section>
+
+<!-- DETAIL -->
+
+<section id="detail" class="screen">
+
+  <header class="detail-head">
+    <span>AERIALIS / IN-FLIGHT SYSTEM</span>
+    <button
+      id="closeDetail"
+      class="detail-close"
+      aria-label="Close">×</button>
+  </header>
+
+  <div class="detail-body">
+
+    <div
+      id="detailNumber"
+      class="detail-number">
+      SECTION / 01
+    </div>
+
+    <h2 id="detailTitle">ABOUT</h2>
+
+    <div class="detail-line"></div>
+
+    <p id="detailText"></p>
+
+    <div class="detail-note">
+      THIS SECTION IS UNDER CONSTRUCTION.
+    </div>
+
+  </div>
+
+  <footer class="detail-footer">
+    <span>AERIALIS AIRLINES</span>
+    <span>© 2026</span>
+  </footer>
+
+</section>
+
+<div id="grain" aria-hidden="true"></div>
+<div id="flash" aria-hidden="true"></div>
 
 </div>
 
 <script>
-/* =========================
-   MOBILE AND NAVIGATION
-========================= */
-
-const app = document.getElementById("app");
-
-const screens = Object.fromEntries(
-  ["opening","boarding","cabin","detail"].map(
-    id => [id, document.getElementById(id)]
-  )
-);
-
-const flash = document.getElementById("flash");
-
-const reduceMotion = matchMedia(
-  "(prefers-reduced-motion:reduce)"
-);
-
-let currentScreen = "opening";
-
-let boardingFrame = 0;
-let boardingTimer = 0;
-let launchTimer = 0;
-let boardingStartedAt = 0;
-
-/* PREVENT ZOOM */
+/* MOBILE PROTECTION */
 
 [
   "gesturestart",
   "gesturechange",
   "gestureend"
-].forEach(type => {
+].forEach(type=>{
   document.addEventListener(
     type,
-    e => e.preventDefault(),
+    e=>e.preventDefault(),
     {passive:false}
   );
 });
 
 document.addEventListener(
   "touchmove",
-  e => {
-    if(e.touches.length > 1){
+  e=>{
+    if(e.touches.length>1){
       e.preventDefault();
     }
   },
   {passive:false}
 );
 
-/* SCREEN SWITCHING */
+/* SCREENS */
+
+const app=document.getElementById("app");
+
+const screens=Object.fromEntries(
+  ["opening","boarding","cabin","detail"].map(
+    id=>[id,document.getElementById(id)]
+  )
+);
+
+const flash=document.getElementById("flash");
+
+const reduceMotion=matchMedia(
+  "(prefers-reduced-motion:reduce)"
+);
+
+let currentScreen="opening";
+
+let boardingFrame=0;
+let boardingTimer=0;
+let launchTimer=0;
+let boardingStartedAt=0;
 
 function showScreen(name){
+  Object.entries(screens).forEach(([key,el])=>{
+    const active=key===name;
 
-  Object.entries(screens).forEach(
-    ([key,el]) => {
+    el.classList.toggle("active",active);
+    el.setAttribute(
+      "aria-hidden",
+      String(!active)
+    );
 
-      const active = key === name;
-
-      el.classList.toggle("active",active);
-
-      el.setAttribute(
-        "aria-hidden",
-        String(!active)
-      );
-
-      if("inert" in el){
-        el.inert = !active;
-      }
+    if("inert" in el){
+      el.inert=!active;
     }
-  );
+  });
 
-  currentScreen = name;
+  currentScreen=name;
 }
 
-/* BOARDING TIMERS */
-
 function clearBoarding(){
-
   cancelAnimationFrame(boardingFrame);
-
   clearTimeout(boardingTimer);
-
   clearTimeout(launchTimer);
 }
 
-/* BOARDING PROGRESS */
+/* PROGRESS */
 
-const steps = [
+const steps=[
   ...document.querySelectorAll(".board-step")
 ];
 
-const fill = document.getElementById(
+const fill=document.getElementById(
   "boardTrackFill"
 );
 
-const caption = document.getElementById(
+const caption=document.getElementById(
   "boardCaption"
 );
 
-const captions = [
+const captions=[
   "CHECKING IN",
   "BOARDING IN PROGRESS",
   "WELCOME ON BOARD",
@@ -1590,127 +1553,81 @@ const captions = [
 ];
 
 function updateProgress(value){
+  const p=Math.max(0,Math.min(1,value));
 
-  const p = Math.max(
-    0,
-    Math.min(1,value)
-  );
+  fill.style.transform="scaleX("+p+")";
 
-  fill.style.transform =
-    "scaleX(" + p + ")";
+  const i=Math.min(3,Math.floor(p*3));
 
-  const i = Math.min(
-    3,
-    Math.floor(p * 3)
-  );
-
-  steps.forEach((step,j) => {
-
-    step.classList.toggle(
-      "done",
-      j < i
-    );
-
-    step.classList.toggle(
-      "current",
-      j === i
-    );
+  steps.forEach((step,j)=>{
+    step.classList.toggle("done",j<i);
+    step.classList.toggle("current",j===i);
   });
 
-  if(caption.textContent !== captions[i]){
-    caption.textContent = captions[i];
+  if(caption.textContent!==captions[i]){
+    caption.textContent=captions[i];
   }
 }
 
-/* FLASH */
-
 function playFlash(){
-
-  if(reduceMotion.matches){
-    return;
-  }
+  if(reduceMotion.matches)return;
 
   flash.classList.remove("play");
-
   void flash.offsetWidth;
-
   flash.classList.add("play");
 }
 
-/* CONTINUOUS PROGRESS */
-
 function progressFrame(timestamp){
+  if(currentScreen!=="boarding")return;
 
-  if(currentScreen !== "boarding"){
-    return;
-  }
-
-  const progress = Math.min(
+  const progress=Math.min(
     1,
-    (timestamp - boardingStartedAt) / 5200
+    (timestamp-boardingStartedAt)/5200
   );
 
   updateProgress(progress);
 
-  if(progress < 1){
-
-    boardingFrame = requestAnimationFrame(
+  if(progress<1){
+    boardingFrame=requestAnimationFrame(
       progressFrame
     );
-
   }else{
-
-    boardingTimer = setTimeout(() => {
-
-      if(currentScreen !== "boarding"){
-        return;
-      }
+    boardingTimer=setTimeout(()=>{
+      if(currentScreen!=="boarding")return;
 
       playFlash();
-
       showScreen("cabin");
 
       window.AERIALIS_VIEW?.setMode("hidden");
-
     },380);
   }
 }
 
 function startProgress(){
-
   updateProgress(0);
 
   if(reduceMotion.matches){
-
     updateProgress(1);
 
-    boardingTimer = setTimeout(() => {
-
+    boardingTimer=setTimeout(()=>{
       showScreen("cabin");
-
       window.AERIALIS_VIEW?.setMode("hidden");
-
     },120);
 
-  }else{
-
-    boardingFrame = requestAnimationFrame(
-      ts => {
-
-        boardingStartedAt = ts;
-
-        progressFrame(ts);
-      }
-    );
+    return;
   }
+
+  boardingFrame=requestAnimationFrame(ts=>{
+    boardingStartedAt=ts;
+    progressFrame(ts);
+  });
 }
 
-/* CINEMATIC LAUNCH */
+/* LAUNCH */
 
 function launch(){
-
   if(
-    currentScreen !== "opening" ||
+    currentScreen!=="opening" ||
     app.classList.contains("is-departing")
   ){
     return;
@@ -1719,36 +1636,26 @@ function launch(){
   clearBoarding();
 
   app.classList.add("is-departing");
+  window.AERIALIS_VIEW?.setMode("transition");
 
-  window.AERIALIS_VIEW?.setMode(
-    "transition"
-  );
-
-  launchTimer = setTimeout(() => {
-
+  launchTimer=setTimeout(()=>{
     app.classList.remove("is-departing");
-
     app.classList.add("is-boarding");
 
-    window.AERIALIS_VIEW?.setMode(
-      "boarding"
-    );
+    window.AERIALIS_VIEW?.setMode("boarding");
 
     showScreen("boarding");
-
     startProgress();
 
-  },reduceMotion.matches ? 30 : 1100);
+  },reduceMotion.matches?30:1100);
 }
 
 document.getElementById("boardButton")
   .addEventListener("click",launch);
 
-/* =========================
-   INTERNAL CONTENT
-========================= */
+/* PAGES */
 
-const pages = [
+const pages=[
   {
     title:"ABOUT",
     description:
@@ -1771,55 +1678,40 @@ const pages = [
   }
 ];
 
-document.querySelectorAll(
-  "[data-page]"
-).forEach(button => {
+document.querySelectorAll("[data-page]")
+  .forEach(button=>{
+    button.addEventListener("click",()=>{
+      if(currentScreen!=="cabin")return;
 
-  button.addEventListener("click",() => {
+      const i=Number(button.dataset.page);
+      const page=pages[i];
+      if(!page)return;
 
-    if(currentScreen !== "cabin"){
-      return;
-    }
+      document.getElementById(
+        "detailNumber"
+      ).textContent=
+        "SECTION / "+
+        String(i+1).padStart(2,"0");
 
-    const i = Number(button.dataset.page);
+      document.getElementById(
+        "detailTitle"
+      ).textContent=page.title;
 
-    const page = pages[i];
+      document.getElementById(
+        "detailText"
+      ).textContent=page.description;
 
-    if(!page){
-      return;
-    }
-
-    document.getElementById(
-      "detailNumber"
-    ).textContent =
-      "SECTION / " +
-      String(i + 1).padStart(2,"0");
-
-    document.getElementById(
-      "detailTitle"
-    ).textContent = page.title;
-
-    document.getElementById(
-      "detailText"
-    ).textContent = page.description;
-
-    showScreen("detail");
+      showScreen("detail");
+    });
   });
-});
-
-/* BACK TO CABIN */
 
 document.getElementById("closeDetail")
-  .addEventListener("click",() => {
-
+  .addEventListener("click",()=>{
     showScreen("cabin");
   });
 
-/* BACK TO OPENING */
-
 document.getElementById("returnOpening")
-  .addEventListener("click",() => {
-
+  .addEventListener("click",()=>{
     clearBoarding();
 
     app.classList.remove(
@@ -1827,44 +1719,30 @@ document.getElementById("returnOpening")
       "is-departing"
     );
 
-    window.AERIALIS_VIEW?.setMode(
-      "opening"
-    );
+    window.AERIALIS_VIEW?.setMode("opening");
 
     showScreen("opening");
   });
 
-/* TAB VISIBILITY */
-
 document.addEventListener(
   "visibilitychange",
-  () => {
-
+  ()=>{
     if(
       document.hidden &&
-      currentScreen === "boarding"
+      currentScreen==="boarding"
     ){
-
       clearBoarding();
-
       showScreen("cabin");
 
-      window.AERIALIS_VIEW?.setMode(
-        "hidden"
-      );
+      window.AERIALIS_VIEW?.setMode("hidden");
     }
   }
 );
 
 showScreen("opening");
-
 </script>
 
 <script type="module">
-
-/* =========================
-   THREE.JS AVIATION STAGE
-========================= */
 
 import * as THREE from "three";
 
@@ -1876,30 +1754,22 @@ import {
   RoomEnvironment
 } from "three/addons/environments/RoomEnvironment.js";
 
-const root = document.getElementById(
-  "stage3d"
-);
-
-const app = document.getElementById(
-  "app"
-);
+const root=document.getElementById("stage3d");
+const app=document.getElementById("app");
+const opening=document.getElementById("opening");
+const hint=document.getElementById("heroHint");
 
 let renderer;
 
-/* CREATE WEBGL RENDERER */
-
 try{
-
-  renderer = new THREE.WebGLRenderer({
+  renderer=new THREE.WebGLRenderer({
     alpha:true,
     antialias:true,
     powerPreference:"high-performance"
   });
-
 }catch(error){
-
   console.warn(
-    "WebGL unavailable; using photograph fallback.",
+    "WebGL unavailable. Using image fallback.",
     error
   );
 }
@@ -1907,7 +1777,7 @@ try{
 if(renderer){
 
   renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio || 1,2.25)
+    Math.min(window.devicePixelRatio||1,2.25)
   );
 
   renderer.setSize(
@@ -1916,44 +1786,33 @@ if(renderer){
     false
   );
 
-  renderer.outputColorSpace =
-    THREE.SRGBColorSpace;
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.38;
 
-  renderer.toneMapping =
-    THREE.ACESFilmicToneMapping;
+  root.appendChild(renderer.domElement);
 
-  renderer.toneMappingExposure = 1.38;
+  const scene=new THREE.Scene();
 
-  root.appendChild(
-    renderer.domElement
-  );
-
-  /* SCENE */
-
-  const scene = new THREE.Scene();
-
-  const camera = new THREE.PerspectiveCamera(
+  const camera=new THREE.PerspectiveCamera(
     40,
-    window.innerWidth / window.innerHeight,
+    window.innerWidth/window.innerHeight,
     .1,
     130
   );
 
-  /* ENVIRONMENT REFLECTIONS */
-
-  const envGenerator =
+  const envGenerator=
     new THREE.PMREMGenerator(renderer);
 
-  const env = envGenerator.fromScene(
+  const env=envGenerator.fromScene(
     new RoomEnvironment(),
     .04
   );
 
-  scene.environment = env.texture;
-
+  scene.environment=env.texture;
   envGenerator.dispose();
 
-  /* LIGHTING */
+  /* LIGHTS */
 
   scene.add(
     new THREE.HemisphereLight(
@@ -1963,127 +1822,209 @@ if(renderer){
     )
   );
 
-  const sun = new THREE.DirectionalLight(
+  const sun=new THREE.DirectionalLight(
     0xfff3da,
     4.5
   );
 
   sun.position.set(-9,11,8);
-
   scene.add(sun);
 
-  const rim = new THREE.DirectionalLight(
+  const rim=new THREE.DirectionalLight(
     0xb3deff,
     3.2
   );
 
   rim.position.set(7,2,-9);
-
   scene.add(rim);
 
-  /* AIRCRAFT ROOT */
+  /* AIRCRAFT */
 
-  const planeRig = new THREE.Group();
-
+  const planeRig=new THREE.Group();
   scene.add(planeRig);
 
-  const planeBase = new THREE.Group();
-
+  const planeBase=new THREE.Group();
   planeRig.add(planeBase);
 
-  let planeReady = false;
-  let mode = "opening";
+  let planeReady=false;
+  let mode="opening";
 
-  /* CAMERA CONTROL */
+  /* 3D ROTATION TARGETS */
 
-  const orbit = {
+  let targetYaw=-.23;
+  let targetPitch=0;
+
+  let currentYaw=-.23;
+  let currentPitch=0;
+
+  /* POINTER DRAG */
+
+  const drag={
+    active:false,
+    pointerId:null,
     x:0,
     y:0
   };
 
-  const orbitTarget = {
-    x:0,
-    y:0
-  };
+  function stopDrag(e){
+    if(
+      drag.pointerId!==null &&
+      e?.pointerId!==undefined &&
+      e.pointerId!==drag.pointerId
+    ){
+      return;
+    }
 
-  const camTarget = new THREE.Vector3();
+    drag.active=false;
+    drag.pointerId=null;
 
-  const tempPos = new THREE.Vector3();
+    hint.classList.remove("dragging");
+    if(planeReady){
+      hint.textContent="DRAG TO ROTATE / 3D VIEW";
+    }
+  }
 
-  const tempUp = new THREE.Vector3();
+  opening.addEventListener("pointerdown",e=>{
+    if(mode!=="opening"||!planeReady)return;
 
-  /* =========================
-     ATMOSPHERIC CLOUDS
-  ========================= */
+    if(e.target.closest("button,a"))return;
 
-  const cloudCanvas =
+    if(!e.isPrimary)return;
+
+    drag.active=true;
+    drag.pointerId=e.pointerId;
+
+    drag.x=e.clientX;
+    drag.y=e.clientY;
+
+    try{
+      opening.setPointerCapture(e.pointerId);
+    }catch(error){}
+
+    hint.classList.add("dragging");
+    hint.textContent="ROTATING AIRCRAFT";
+
+    e.preventDefault();
+  });
+
+  opening.addEventListener("pointermove",e=>{
+    if(
+      !drag.active ||
+      e.pointerId!==drag.pointerId ||
+      mode!=="opening"
+    ){
+      return;
+    }
+
+    const dx=e.clientX-drag.x;
+    const dy=e.clientY-drag.y;
+
+    drag.x=e.clientX;
+    drag.y=e.clientY;
+
+    /*
+      Directly rotate the actual 3D model.
+      This is more noticeable than the
+      previous tiny camera offset.
+    */
+
+    targetYaw=THREE.MathUtils.clamp(
+      targetYaw+dx*.014,
+      -3.1,
+      3.1
+    );
+
+    targetPitch=THREE.MathUtils.clamp(
+      targetPitch+dy*.009,
+      -.75,
+      .75
+    );
+
+    e.preventDefault();
+  });
+
+  opening.addEventListener(
+    "pointerup",
+    stopDrag
+  );
+
+  opening.addEventListener(
+    "pointercancel",
+    stopDrag
+  );
+
+  window.addEventListener(
+    "blur",
+    ()=>stopDrag()
+  );
+
+  /* CLOUD TEXTURE */
+
+  const cloudCanvas=
     document.createElement("canvas");
 
-  cloudCanvas.width = 256;
-  cloudCanvas.height = 256;
+  cloudCanvas.width=256;
+  cloudCanvas.height=256;
 
-  const ctx = cloudCanvas.getContext("2d");
+  const ctx=cloudCanvas.getContext("2d");
 
-  const grad = ctx.createRadialGradient(
-    128,128,4,
-    128,128,126
-  );
+  if(ctx){
+    const grad=ctx.createRadialGradient(
+      128,128,4,
+      128,128,126
+    );
 
-  grad.addColorStop(
-    0,
-    "rgba(255,255,255,.36)"
-  );
+    grad.addColorStop(
+      0,
+      "rgba(255,255,255,.36)"
+    );
 
-  grad.addColorStop(
-    .35,
-    "rgba(247,253,255,.24)"
-  );
+    grad.addColorStop(
+      .35,
+      "rgba(247,253,255,.24)"
+    );
 
-  grad.addColorStop(
-    .72,
-    "rgba(236,250,255,.08)"
-  );
+    grad.addColorStop(
+      .72,
+      "rgba(236,250,255,.08)"
+    );
 
-  grad.addColorStop(
-    1,
-    "rgba(255,255,255,0)"
-  );
+    grad.addColorStop(
+      1,
+      "rgba(255,255,255,0)"
+    );
 
-  ctx.fillStyle = grad;
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,256,256);
+  }
 
-  ctx.fillRect(
-    0,0,256,256
-  );
-
-  const cloudTexture =
+  const cloudTexture=
     new THREE.CanvasTexture(cloudCanvas);
 
-  const clouds = new THREE.Group();
+  const clouds=new THREE.Group();
 
-  for(let i = 0; i < 22; i++){
-
-    const mat = new THREE.SpriteMaterial({
+  for(let i=0;i<22;i++){
+    const mat=new THREE.SpriteMaterial({
       map:cloudTexture,
       transparent:true,
       opacity:.36,
       depthWrite:false
     });
 
-    const sprite = new THREE.Sprite(mat);
+    const sprite=new THREE.Sprite(mat);
 
-    const angle = i * 2.39996;
-
-    const r = 8 + (i % 5) * 2.6;
+    const angle=i*2.39996;
+    const r=8+(i%5)*2.6;
 
     sprite.position.set(
-      Math.cos(angle) * r,
-      -3.8 + (i % 6) * 1.25,
-      -12 + (i % 7) * 4
+      Math.cos(angle)*r,
+      -3.8+(i%6)*1.25,
+      -12+(i%7)*4
     );
 
     sprite.scale.set(
-      6 + (i % 5) * 2.8,
-      2.1 + (i % 3) * 1.5,
+      6+(i%5)*2.8,
+      2.1+(i%3)*1.5,
       1
     );
 
@@ -2092,248 +2033,194 @@ if(renderer){
 
   scene.add(clouds);
 
-  /* =========================
-     3D AIRCRAFT LOADING
-  ========================= */
+  /* MODEL LOADING */
 
-  const loader = new GLTFLoader();
+  const loader=new GLTFLoader();
 
-  const sources = [
+  const sources=[
     "A350_nologo.glb",
-
     "https://cdn.jsdelivr.net/gh/amvlab/aircraft-models@main/models/A350_nologo.glb",
-
     "https://raw.githubusercontent.com/amvlab/aircraft-models/main/models/A350_nologo.glb"
   ];
 
   function loadModel(n){
-
-    if(n >= sources.length){
-
+    if(n>=sources.length){
       console.warn(
-        "3D model could not load; photo fallback remains."
+        "3D model could not load."
       );
-
+      hint.textContent="AIRCRAFT PREVIEW";
       return;
     }
 
     loader.load(
-
       sources[n],
 
-      gltf => {
+      gltf=>{
+        const model=gltf.scene;
 
-        const model = gltf.scene;
-
-        const box = new THREE.Box3()
+        const box=new THREE.Box3()
           .setFromObject(model);
 
-        const size = box.getSize(
+        const size=box.getSize(
           new THREE.Vector3()
         );
 
-        const center = box.getCenter(
+        const center=box.getCenter(
           new THREE.Vector3()
         );
 
         model.position.sub(center);
-
         planeBase.add(model);
 
-        /* NORMALIZE MODEL SIZE */
-
-        const length = Math.max(
+        const length=Math.max(
           size.x,
           size.y,
           size.z
-        ) || 1;
+        )||1;
 
         planeBase.scale.setScalar(
-          9.5 / length
+          9.5/length
         );
 
-        /* ALIGN AIRCRAFT AXIS */
-
         if(
-          size.x > size.z * 1.15 &&
-          size.x > size.y
+          size.x>size.z*1.15 &&
+          size.x>size.y
         ){
-
-          planeBase.rotation.y = Math.PI / 2;
-
+          planeBase.rotation.y=Math.PI/2;
         }else if(
-          size.y > size.z * 1.15 &&
-          size.y > size.x
+          size.y>size.z*1.15 &&
+          size.y>size.x
         ){
-
-          planeBase.rotation.x = Math.PI / 2;
+          planeBase.rotation.x=Math.PI/2;
         }
 
-        /* MATERIAL FINISH */
+        model.traverse(obj=>{
+          if(!obj.isMesh)return;
 
-        model.traverse(obj => {
+          const materials=Array.isArray(
+            obj.material
+          )?obj.material:[obj.material];
 
-          if(!obj.isMesh){
-            return;
-          }
-
-          const materials =
-            Array.isArray(obj.material)
-              ? obj.material
-              : [obj.material];
-
-          materials.forEach(mat => {
-
-            if(!mat){
-              return;
-            }
+          materials.forEach(mat=>{
+            if(!mat)return;
 
             if(
-              typeof mat.roughness === "number"
+              typeof mat.roughness==="number"
             ){
-
-              mat.roughness = Math.min(
+              mat.roughness=Math.min(
                 mat.roughness,
                 .49
               );
             }
 
             if(
-              typeof mat.metalness === "number"
+              typeof mat.metalness==="number"
             ){
-
-              mat.metalness = Math.max(
+              mat.metalness=Math.max(
                 mat.metalness,
                 .06
               );
             }
 
-            mat.needsUpdate = true;
+            mat.needsUpdate=true;
           });
         });
 
-        planeReady = true;
-
-        app.classList.add(
-          "model-loaded"
-        );
+        planeReady=true;
+        app.classList.add("model-loaded");
       },
 
       undefined,
 
-      error => {
-
+      error=>{
         console.warn(
-          "3D asset load retry:",
+          "3D model retry:",
           sources[n],
           error
         );
 
-        loadModel(n + 1);
+        loadModel(n+1);
       }
     );
   }
 
   loadModel(0);
 
-  /* INTERFACE TO OTHER SCREENS */
+  /* CAMERA TARGETS */
 
-  window.AERIALIS_VIEW = {
+  const tempPos=new THREE.Vector3();
+  const tempUp=new THREE.Vector3();
+  const lookTarget=new THREE.Vector3();
 
+  function boardPosition(){
+    const landscape=
+      window.innerWidth>window.innerHeight;
+
+    return {
+      x:landscape?-8.2:-3.15,
+      scale:landscape?.78:.33
+    };
+  }
+
+  /*
+    Instantly establish the boarding
+    top view BEFORE the screen fades in.
+    The aircraft then remains stationary.
+  */
+
+  function snapBoardingView(){
+    const board=boardPosition();
+
+    camera.position.set(0,24,.015);
+    camera.up.set(0,0,-1);
+    camera.lookAt(0,0,0);
+
+    planeRig.position.set(
+      board.x,
+      0,
+      0
+    );
+
+    planeRig.scale.setScalar(
+      board.scale
+    );
+
+    planeRig.rotation.set(0,0,0);
+
+    clouds.visible=false;
+  }
+
+  window.AERIALIS_VIEW={
     setMode(next){
-      mode = next;
-    }
+      mode=next;
 
+      if(next==="boarding"){
+        stopDrag();
+        snapBoardingView();
+      }
+
+      if(next==="opening"){
+        targetYaw=-.23;
+        targetPitch=0;
+        stopDrag();
+      }
+    }
   };
 
-  /* =========================
-     TOUCH CAMERA CONTROLS
-  ========================= */
-
-  const opening = document.getElementById(
-    "opening"
-  );
-
-  let dragging = false;
-
-  let startingX = 0;
-  let startingY = 0;
-
-  opening.addEventListener(
-    "pointerdown",
-    e => {
-
-      if(e.target.closest("button")){
-        return;
-      }
-
-      dragging = true;
-
-      startingX = e.clientX;
-      startingY = e.clientY;
-    }
-  );
-
-  window.addEventListener(
-    "pointerup",
-    () => {
-      dragging = false;
-    }
-  );
-
-  opening.addEventListener(
-    "pointermove",
-    e => {
-
-      if(mode !== "opening"){
-        return;
-      }
-
-      if(dragging){
-
-        orbitTarget.x = THREE.MathUtils.clamp(
-          (e.clientX - startingX) /
-          window.innerWidth,
-          -.8,
-          .8
-        );
-
-        orbitTarget.y = THREE.MathUtils.clamp(
-          (e.clientY - startingY) /
-          window.innerHeight,
-          -.6,
-          .6
-        );
-
-      }else if(e.pointerType === "mouse"){
-
-        orbitTarget.x =
-          (e.clientX / window.innerWidth - .5) *
-          .45;
-
-        orbitTarget.y =
-          (e.clientY / window.innerHeight - .5) *
-          .3;
-      }
-    }
-  );
-
-  /* =========================
-     RESIZE
-  ========================= */
+  /* RESIZE */
 
   function resize(){
+    const w=window.innerWidth;
+    const h=window.innerHeight;
 
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-
-    camera.aspect = w / h;
-
+    camera.aspect=w/h;
     camera.updateProjectionMatrix();
 
-    renderer.setSize(
-      w,h,false
-    );
+    renderer.setSize(w,h,false);
+
+    if(mode==="boarding"){
+      snapBoardingView();
+    }
   }
 
   window.addEventListener(
@@ -2342,183 +2229,159 @@ if(renderer){
     {passive:true}
   );
 
-  /* =========================
-     CINEMATIC RENDER LOOP
-  ========================= */
+  /* RENDER LOOP */
 
-  let last = performance.now();
+  let last=performance.now();
+
+  const openingPos=new THREE.Vector3(
+    1,
+    -.85,
+    0
+  );
+
+  const transitionPos=new THREE.Vector3(
+    .7,
+    -.3,
+    0
+  );
+
+  const openingScale=new THREE.Vector3(1,1,1);
+
+  const transitionScale=new THREE.Vector3(
+    1.3,
+    1.3,
+    1.3
+  );
 
   function frame(now){
-
     requestAnimationFrame(frame);
 
-    if(
-      document.hidden ||
-      mode === "hidden"
-    ){
+    if(document.hidden||mode==="hidden"){
+      last=now;
       return;
     }
 
-    const dt = Math.min(
-      (now - last) / 1000,
+    const dt=Math.min(
+      (now-last)/1000,
       .05
     );
 
-    last = now;
+    last=now;
 
-    const active = mode === "opening";
+    const landscape=
+      window.innerWidth>window.innerHeight;
 
-    const landscape =
-      window.innerWidth > window.innerHeight;
+    if(mode==="opening"){
 
-    orbit.x = THREE.MathUtils.damp(
-      orbit.x,
-      orbitTarget.x,
-      2.4,
-      dt
-    );
+      /*
+        The actual aircraft rotates
+        in response to finger movement.
+      */
 
-    orbit.y = THREE.MathUtils.damp(
-      orbit.y,
-      orbitTarget.y,
-      2.4,
-      dt
-    );
-
-    /* OPENING CAMERA */
-
-    if(active){
-
-      tempPos.set(
-        8.2 + orbit.x * 2.8,
-        4.3 - orbit.y * 1.5,
-        landscape ? 13.7 : 16.7
+      currentYaw=THREE.MathUtils.damp(
+        currentYaw,
+        targetYaw,
+        9,
+        dt
       );
 
-      camTarget.set(
-        landscape ? .7 : .45,
+      currentPitch=THREE.MathUtils.damp(
+        currentPitch,
+        targetPitch,
+        9,
+        dt
+      );
+
+      planeRig.rotation.y=currentYaw;
+      planeRig.rotation.x=currentPitch;
+
+      openingPos.set(
+        landscape?2:1,
+        -.85,
+        0
+      );
+
+      planeRig.position.lerp(
+        openingPos,
+        .055
+      );
+
+      planeRig.scale.lerp(
+        openingScale,
+        .055
+      );
+
+      tempPos.set(
+        8.2,
+        4.3,
+        landscape?13.7:16.7
+      );
+
+      tempUp.set(0,1,0);
+
+      lookTarget.set(
+        landscape?.7:.45,
         -.15,
         0
       );
 
-      tempUp.set(0,1,0);
+      camera.position.lerp(tempPos,.075);
+      camera.up.lerp(tempUp,.09).normalize();
+      camera.lookAt(lookTarget);
+
+      clouds.visible=true;
+
+    }else if(mode==="transition"){
+
+      stopDrag();
 
       planeRig.position.lerp(
-        new THREE.Vector3(
-          landscape ? 2 : 1.0,
-          -.85,
-          0
-        ),
-        .055
-      );
-
-      planeRig.scale.lerp(
-        new THREE.Vector3(1,1,1),
-        .055
-      );
-
-      planeRig.rotation.y = THREE.MathUtils.damp(
-        planeRig.rotation.y,
-        -.23 + orbit.x * .2,
-        2,
-        dt
-      );
-
-      clouds.visible = true;
-
-    /* BOARDING TRANSITION */
-
-    }else if(mode === "transition"){
-
-      tempPos.set(
-        4.4,
-        2.4,
-        8.5
-      );
-
-      camTarget.set(.7,0,0);
-
-      tempUp.set(0,1,0);
-
-      planeRig.position.lerp(
-        new THREE.Vector3(
-          .7,-.3,0
-        ),
+        transitionPos,
         .09
       );
 
       planeRig.scale.lerp(
-        new THREE.Vector3(
-          1.3,1.3,1.3
-        ),
+        transitionScale,
         .08
       );
 
-      clouds.visible = true;
-
-    /* BOARDING CAMERA */
-
-    }else{
-
-      tempPos.set(
-        0,
-        24,
-        .015
-      );
-
-      camTarget.set(0,0,0);
-
-      tempUp.set(0,0,-1);
-
-      const scale =
-        landscape ? 1.03 : .43;
-
-      planeRig.position.lerp(
-        new THREE.Vector3(
-          landscape ? -7.7 : -2.5,
+      planeRig.rotation.y=
+        THREE.MathUtils.damp(
+          planeRig.rotation.y,
           0,
-          0
-        ),
-        .09
-      );
+          3,
+          dt
+        );
 
-      planeRig.scale.lerp(
-        new THREE.Vector3(
-          scale,
-          scale,
-          scale
-        ),
-        .095
-      );
+      planeRig.rotation.x=
+        THREE.MathUtils.damp(
+          planeRig.rotation.x,
+          0,
+          3,
+          dt
+        );
 
-      planeRig.rotation.y = THREE.MathUtils.damp(
-        planeRig.rotation.y,
-        0,
-        5,
-        dt
-      );
+      tempPos.set(4.4,2.4,8.5);
+      tempUp.set(0,1,0);
+      lookTarget.set(.7,0,0);
 
-      clouds.visible = false;
+      camera.position.lerp(tempPos,.075);
+      camera.up.lerp(tempUp,.09).normalize();
+      camera.lookAt(lookTarget);
+
+      clouds.visible=true;
+
+    }else if(mode==="boarding"){
+
+      /*
+        No floating, spinning, or drifting
+        while the loading bar progresses.
+      */
+
+      snapBoardingView();
     }
 
-    /* SMOOTH CAMERA MOVEMENT */
-
-    camera.position.lerp(
-      tempPos,
-      .075
-    );
-
-    camera.up.lerp(
-      tempUp,
-      .09
-    ).normalize();
-
-    camera.lookAt(camTarget);
-
-    renderer.render(
-      scene,
-      camera
-    );
+    renderer.render(scene,camera);
   }
 
   camera.position.set(
@@ -2529,7 +2392,7 @@ if(renderer){
 
   frame(performance.now());
 }
-
 </script>
+
 </body>
 </html>
