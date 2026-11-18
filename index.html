@@ -25,9 +25,7 @@
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   width:100%;
@@ -96,6 +94,7 @@ button:focus-visible{
   position:absolute;
   inset:-25%;
   pointer-events:none;
+
   background:
     radial-gradient(
       ellipse at 20% 23%,
@@ -117,9 +116,9 @@ button:focus-visible{
   }
 }
 
-/* =============================
+/* =========================
    ANIMATED WAVE LOGO
-============================= */
+========================= */
 
 .wave-svg{
   display:block;
@@ -136,13 +135,8 @@ button:focus-visible{
   stroke-linejoin:round;
 }
 
-.wave-top{
-  stroke:var(--cyan);
-}
-
-.wave-bottom{
-  stroke:var(--pink);
-}
+.wave-top{stroke:var(--cyan)}
+.wave-bottom{stroke:var(--pink)}
 
 .wave-logo{
   position:relative;
@@ -170,17 +164,19 @@ button:focus-visible{
   position:absolute;
   inset:12% -16%;
   z-index:-1;
+
   background:radial-gradient(
     ellipse,
     rgba(255,255,255,.66),
     transparent 70%
   );
+
   pointer-events:none;
 }
 
-/* =============================
-   SCREEN TRANSITIONS
-============================= */
+/* =========================
+   TRANSITIONS
+========================= */
 
 #softWipe{
   position:absolute;
@@ -198,15 +194,9 @@ button:focus-visible{
 }
 
 @keyframes softWipe{
-  0%{
-    opacity:0;
-  }
-  43%,56%{
-    opacity:1;
-  }
-  100%{
-    opacity:0;
-  }
+  0%{opacity:0}
+  43%,56%{opacity:1}
+  100%{opacity:0}
 }
 
 @keyframes contentIn{
@@ -233,9 +223,9 @@ button:focus-visible{
   }
 }
 
-/* =============================
-   INITIAL LOADING SCREEN
-============================= */
+/* =========================
+   LOADING
+========================= */
 
 #loading{
   background-color:#e1f5ff;
@@ -255,6 +245,7 @@ button:focus-visible{
 
 .intro-title{
   margin:22px 0 0;
+
   font:800 clamp(27px,7.8vw,43px)/1.35 var(--orbit);
   letter-spacing:.16em;
   text-indent:.16em;
@@ -263,6 +254,7 @@ button:focus-visible{
 
 .intro-subtitle{
   margin-top:16px;
+
   font:500 clamp(9px,2.4vw,14px)/1.6 var(--mich);
   letter-spacing:.27em;
   text-indent:.27em;
@@ -341,9 +333,9 @@ button:focus-visible{
   color:#177fb3;
 }
 
-/* =============================
-   SHARED HEADER / FOOTER
-============================= */
+/* =========================
+   HEADER / CLOCK / WEATHER
+========================= */
 
 .site-header{
   position:absolute;
@@ -371,11 +363,48 @@ button:focus-visible{
   white-space:nowrap;
 }
 
-.header-caption{
-  font:600 11px/1.4 var(--raj);
-  letter-spacing:.1em;
-  color:#7e9aaa;
-  text-align:right;
+.header-weather-time{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:6px;
+  flex:none;
+  color:#557d93;
+  white-space:nowrap;
+}
+
+.weather-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:22px;
+  color:#4399c5;
+  flex:none;
+}
+
+.weather-icon svg{
+  display:block;
+  width:100%;
+  height:100%;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.live-clock{
+  font:700 clamp(11px,3vw,13px)/1 var(--raj);
+  letter-spacing:.045em;
+  font-variant-numeric:tabular-nums;
+}
+
+.header-actions{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:3px;
 }
 
 .site-footer{
@@ -394,9 +423,9 @@ button:focus-visible{
   color:#7d9cae;
 }
 
-/* =============================
-   MAIN DIRECTORY
-============================= */
+/* =========================
+   MAIN MENU
+========================= */
 
 #home{
   background-color:#e0f4ff;
@@ -419,6 +448,7 @@ button:focus-visible{
 
 .home-hero h2{
   margin:13px 0 12px;
+
   font:800 clamp(28px,7.8vw,44px)/1.13 var(--orbit);
   letter-spacing:-.06em;
   color:#153f56;
@@ -431,8 +461,8 @@ button:focus-visible{
 .home-hero p{
   margin:0;
   width:47%;
-  color:#66899f;
 
+  color:#66899f;
   font:600 clamp(10px,2.7vw,12px)/1.6 var(--raj);
   letter-spacing:.09em;
 }
@@ -441,14 +471,14 @@ button:focus-visible{
   animation:contentIn .75s both;
 }
 
-/* =============================
+/* =========================
    MASCOT
-============================= */
+========================= */
 
 .home-mascot{
   position:absolute;
   z-index:6;
-  right:-5%;
+  right:2.5%;
   top:14.7%;
   width:clamp(190px,53vw,275px);
   aspect-ratio:1;
@@ -467,13 +497,20 @@ button:focus-visible{
   position:absolute;
   inset:0;
   pointer-events:none;
-  transform-origin:50% 75%;
 
   animation:mascotFloat 4.7s ease-in-out infinite;
+  transform-origin:50% 75%;
 
   filter:drop-shadow(
     0 12px 9px rgba(45,128,167,.14)
   );
+}
+
+.mascot-bounce{
+  display:block;
+  width:100%;
+  height:100%;
+  transform-origin:50% 78%;
 }
 
 .mascot-img{
@@ -487,6 +524,8 @@ button:focus-visible{
   -webkit-user-drag:none;
 }
 
+/* Continuous floating movement */
+
 @keyframes mascotFloat{
   0%,100%{
     transform:translateY(0) rotate(-1deg);
@@ -496,28 +535,36 @@ button:focus-visible{
   }
 }
 
-.home-mascot.pop .mascot-float{
-  animation:boing .8s both;
+/* Bounce occurs on an independent layer */
+
+.home-mascot.pop .mascot-bounce{
+  animation:boing .94s ease-in-out both;
 }
 
 @keyframes boing{
-  0%,100%{
-    transform:translateY(0) scale(1);
+  0%{
+    transform:translateY(0) scale(1,1);
   }
-  15%{
-    transform:translateY(7px) scale(1.11,.88);
+  13%{
+    transform:translateY(7px) scale(1.10,.89);
   }
-  34%{
-    transform:translateY(-23px) scale(.9,1.12) rotate(2deg);
+  31%{
+    transform:translateY(-22px) scale(.92,1.10) rotate(2deg);
   }
-  54%{
-    transform:translateY(-5px) scale(1.05,.97);
+  51%{
+    transform:translateY(-6px) scale(1.04,.97) rotate(-1deg);
   }
-  73%{
-    transform:translateY(3px) scale(.98,1.03);
+  68%{
+    transform:translateY(3px) scale(.985,1.02);
   }
-  87%{
-    transform:translateY(-2px) scale(1.01,.99);
+  82%{
+    transform:translateY(-2px) scale(1.009,.995);
+  }
+  92%{
+    transform:translateY(.7px) scale(.998,1.003);
+  }
+  100%{
+    transform:translateY(0) scale(1,1);
   }
 }
 
@@ -536,6 +583,7 @@ button:focus-visible{
   height:var(--size);
 
   background:var(--color);
+
   clip-path:polygon(
     50% 0,
     61% 38%,
@@ -574,9 +622,9 @@ button:focus-visible{
   }
 }
 
-/* =============================
+/* =========================
    DIRECTORY CARDS
-============================= */
+========================= */
 
 .directory{
   position:absolute;
@@ -683,7 +731,6 @@ button:focus-visible{
 .entry-title small{
   display:block;
   margin-top:9px;
-
   font:600 11px/1.25 var(--raj);
   letter-spacing:.085em;
   color:#8ba7b7;
@@ -713,9 +760,9 @@ button:focus-visible{
   animation-delay:.27s;
 }
 
-/* =============================
-   CATEGORY DETAIL PAGES
-============================= */
+/* =========================
+   DETAIL PAGES
+========================= */
 
 #detail{
   background-color:#e1f5ff;
@@ -725,7 +772,6 @@ button:focus-visible{
   display:flex;
   align-items:center;
   gap:7px;
-
   padding:9px 4px;
   border:0;
   background:none;
@@ -771,7 +817,6 @@ button:focus-visible{
 
 .detail-subtitle{
   color:#7f9cab;
-
   font:500 10px/1.7 var(--mich);
   letter-spacing:.04em;
 }
@@ -848,9 +893,38 @@ button:focus-visible{
   animation:contentIn .62s both;
 }
 
-/* =============================
+/* =========================
    RESPONSIVE
-============================= */
+========================= */
+
+@media(max-width:365px){
+  .site-brand{
+    gap:5px;
+  }
+
+  .wave-logo.small{
+    width:39px;
+    height:26px;
+  }
+
+  .site-brand strong{
+    font-size:12px;
+  }
+
+  .header-weather-time{
+    gap:4px;
+  }
+
+  .weather-icon{
+    width:18px;
+    height:18px;
+  }
+
+  .live-clock{
+    font-size:11px;
+    letter-spacing:0;
+  }
+}
 
 @media(max-height:720px){
   .loading-main{
@@ -971,14 +1045,11 @@ button:focus-visible{
 <div id="app">
 
 <!-- =========================
-     LOADING SCREEN
+     LOADING
 ========================= -->
 
-<section
-  class="screen active"
-  id="loading"
-  aria-hidden="false"
->
+<section class="screen active" id="loading" aria-hidden="false">
+
   <div class="ambient"></div>
 
   <button
@@ -991,10 +1062,7 @@ button:focus-visible{
 
   <div class="loading-main">
 
-    <div
-      class="wave-logo large"
-      aria-hidden="true"
-    >
+    <div class="wave-logo large" aria-hidden="true">
       <svg
         class="wave-svg"
         viewBox="0 0 150 64"
@@ -1006,7 +1074,7 @@ button:focus-visible{
     </div>
 
     <h1 class="intro-title">
-      AERIALIS
+      NITU
     </h1>
 
     <div class="intro-subtitle">
@@ -1022,6 +1090,7 @@ button:focus-visible{
       aria-valuemax="100"
       aria-valuenow="0"
     >
+
       <div class="loader-track">
         <div
           class="loader-fill"
@@ -1031,50 +1100,53 @@ button:focus-visible{
 
       <div class="loader-info">
         <span>LOADING</span>
-
-        <strong id="loaderNumber">
-          0%
-        </strong>
+        <strong id="loaderNumber">0%</strong>
       </div>
+
     </div>
 
   </div>
+
 </section>
 
 <!-- =========================
      MAIN MENU
 ========================= -->
 
-<section
-  class="screen"
-  id="home"
-  aria-hidden="true"
->
+<section class="screen" id="home" aria-hidden="true">
+
   <div class="ambient"></div>
 
   <header class="site-header">
+
     <div class="site-brand">
 
-      <span
-        class="wave-logo small"
-        aria-hidden="true"
-      >
-        <svg
-          class="wave-svg"
-          viewBox="0 0 150 64"
-        >
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
           <path class="wave-top"></path>
           <path class="wave-bottom"></path>
         </svg>
       </span>
 
       <strong>AERIALIS</strong>
+
     </div>
 
-    <span class="header-caption">
-      PLOT ARCHIVE<br>
-      EST. 2026
-    </span>
+    <div
+      class="header-weather-time"
+      aria-label="福岡県吉富町の時刻と天気"
+    >
+      <span
+        class="weather-icon"
+        title="吉富町の天気を取得中"
+        aria-label="天気を取得中"
+      ></span>
+
+      <time class="live-clock">
+        00:00:00
+      </time>
+    </div>
+
   </header>
 
   <div class="home-hero">
@@ -1095,7 +1167,7 @@ button:focus-visible{
 
   </div>
 
-  <!-- CHARACTER -->
+  <!-- MASCOT -->
 
   <button
     class="home-mascot"
@@ -1103,13 +1175,20 @@ button:focus-visible{
     id="mascotButton"
     aria-label="キャラクターを跳ねさせる"
   >
+
     <span class="mascot-float">
-      <img
-        class="mascot-img"
-        src="./無題299_20261117135551.png"
-        alt="ピンクの髪と白い羽のキャラクター"
-        draggable="false"
-      >
+
+      <span class="mascot-bounce">
+
+        <img
+          class="mascot-img"
+          src="./無題299_20261117135551.png"
+          alt="ピンクの髪と白い羽のキャラクター"
+          draggable="false"
+        >
+
+      </span>
+
     </span>
 
     <span
@@ -1117,38 +1196,28 @@ button:focus-visible{
       id="sparkleField"
       aria-hidden="true"
     ></span>
+
   </button>
 
   <!-- DIRECTORY -->
 
-  <nav
-    class="directory"
-    aria-label="アーカイブのメニュー"
-  >
+  <nav class="directory" aria-label="アーカイブのメニュー">
 
-    <button
-      class="entry"
-      type="button"
-      data-page="0"
-    >
+    <button class="entry" type="button" data-page="0">
+
       <span class="entry-top">
 
         <span class="entry-index">
           01 / PROFILE
         </span>
 
-        <span
-          class="wave-logo card-size"
-          aria-hidden="true"
-        >
-          <svg
-            class="wave-svg"
-            viewBox="0 0 150 64"
-          >
+        <span class="wave-logo card-size" aria-hidden="true">
+          <svg class="wave-svg" viewBox="0 0 150 64">
             <path class="wave-top"></path>
             <path class="wave-bottom"></path>
           </svg>
         </span>
+
       </span>
 
       <span class="entry-title">
@@ -1157,31 +1226,24 @@ button:focus-visible{
       </span>
 
       <span class="entry-arrow">↗</span>
+
     </button>
 
-    <button
-      class="entry"
-      type="button"
-      data-page="1"
-    >
+    <button class="entry" type="button" data-page="1">
+
       <span class="entry-top">
 
         <span class="entry-index">
           02 / PEOPLE
         </span>
 
-        <span
-          class="wave-logo card-size"
-          aria-hidden="true"
-        >
-          <svg
-            class="wave-svg"
-            viewBox="0 0 150 64"
-          >
+        <span class="wave-logo card-size" aria-hidden="true">
+          <svg class="wave-svg" viewBox="0 0 150 64">
             <path class="wave-top"></path>
             <path class="wave-bottom"></path>
           </svg>
         </span>
+
       </span>
 
       <span class="entry-title">
@@ -1190,31 +1252,24 @@ button:focus-visible{
       </span>
 
       <span class="entry-arrow">↗</span>
+
     </button>
 
-    <button
-      class="entry"
-      type="button"
-      data-page="2"
-    >
+    <button class="entry" type="button" data-page="2">
+
       <span class="entry-top">
 
         <span class="entry-index">
           03 / WRITING
         </span>
 
-        <span
-          class="wave-logo card-size"
-          aria-hidden="true"
-        >
-          <svg
-            class="wave-svg"
-            viewBox="0 0 150 64"
-          >
+        <span class="wave-logo card-size" aria-hidden="true">
+          <svg class="wave-svg" viewBox="0 0 150 64">
             <path class="wave-top"></path>
             <path class="wave-bottom"></path>
           </svg>
         </span>
+
       </span>
 
       <span class="entry-title">
@@ -1223,31 +1278,24 @@ button:focus-visible{
       </span>
 
       <span class="entry-arrow">↗</span>
+
     </button>
 
-    <button
-      class="entry"
-      type="button"
-      data-page="3"
-    >
+    <button class="entry" type="button" data-page="3">
+
       <span class="entry-top">
 
         <span class="entry-index">
           04 / VISUALS
         </span>
 
-        <span
-          class="wave-logo card-size"
-          aria-hidden="true"
-        >
-          <svg
-            class="wave-svg"
-            viewBox="0 0 150 64"
-          >
+        <span class="wave-logo card-size" aria-hidden="true">
+          <svg class="wave-svg" viewBox="0 0 150 64">
             <path class="wave-top"></path>
             <path class="wave-bottom"></path>
           </svg>
         </span>
+
       </span>
 
       <span class="entry-title">
@@ -1256,15 +1304,13 @@ button:focus-visible{
       </span>
 
       <span class="entry-arrow">↗</span>
+
     </button>
 
   </nav>
 
   <footer class="site-footer">
-    <span>
-      AN ARCHIVE OF IMAGINATION
-    </span>
-
+    <span>AN ARCHIVE OF IMAGINATION</span>
     <span>© 2026</span>
   </footer>
 
@@ -1274,80 +1320,75 @@ button:focus-visible{
      DETAIL PAGES
 ========================= -->
 
-<section
-  class="screen"
-  id="detail"
-  aria-hidden="true"
->
+<section class="screen" id="detail" aria-hidden="true">
+
   <div class="ambient"></div>
 
   <header class="site-header">
 
     <div class="site-brand">
 
-      <span
-        class="wave-logo small"
-        aria-hidden="true"
-      >
-        <svg
-          class="wave-svg"
-          viewBox="0 0 150 64"
-        >
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
           <path class="wave-top"></path>
           <path class="wave-bottom"></path>
         </svg>
       </span>
 
       <strong>AERIALIS</strong>
+
     </div>
 
-    <button
-      class="back-button"
-      id="backButton"
-      type="button"
-    >
-      <span class="back-arrow">←</span>
-      BACK
-    </button>
+    <div class="header-actions">
+
+      <div
+        class="header-weather-time"
+        aria-label="福岡県吉富町の時刻と天気"
+      >
+
+        <span
+          class="weather-icon"
+          title="吉富町の天気を取得中"
+          aria-label="天気を取得中"
+        ></span>
+
+        <time class="live-clock">
+          00:00:00
+        </time>
+
+      </div>
+
+      <button
+        class="back-button"
+        id="backButton"
+        type="button"
+      >
+        <span class="back-arrow">←</span>
+        BACK
+      </button>
+
+    </div>
 
   </header>
 
-  <div
-    class="detail-scroll"
-    id="detailScroll"
-  >
+  <div class="detail-scroll" id="detailScroll">
 
-    <div
-      class="detail-kicker"
-      id="detailKicker"
-    >
+    <div class="detail-kicker" id="detailKicker">
       SECTION 01 / PROFILE
     </div>
 
-    <h2
-      class="detail-title"
-      id="detailTitle"
-    >
+    <h2 class="detail-title" id="detailTitle">
       ABOUT
     </h2>
 
-    <div
-      class="detail-subtitle"
-      id="detailSubtitle"
-    >
+    <div class="detail-subtitle" id="detailSubtitle">
       A PRIVATE PLOT ARCHIVE
     </div>
 
     <article class="detail-paper">
 
-      <div
-        class="wave-logo small"
-        aria-hidden="true"
-      >
-        <svg
-          class="wave-svg"
-          viewBox="0 0 150 64"
-        >
+      <div class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
           <path class="wave-top"></path>
           <path class="wave-bottom"></path>
         </svg>
@@ -1366,11 +1407,13 @@ button:focus-visible{
     </article>
 
     <div class="detail-bottom">
+
       <span>AERIALIS / PLOT ARCHIVE</span>
 
       <span id="detailPageNumber">
         01 / 04
       </span>
+
     </div>
 
   </div>
@@ -1430,6 +1473,306 @@ const clamp=(value,min,max)=>{
   );
 };
 
+/* =========================
+   REALTIME JAPAN CLOCK
+========================= */
+
+const jstClock=new Intl.DateTimeFormat(
+  "ja-JP",
+  {
+    timeZone:"Asia/Tokyo",
+    hour:"2-digit",
+    minute:"2-digit",
+    second:"2-digit",
+    hourCycle:"h23"
+  }
+);
+
+function updateClock(){
+
+  const value=jstClock.format(
+    new Date()
+  );
+
+  document.querySelectorAll(
+    ".live-clock"
+  ).forEach(el=>{
+    el.textContent=value;
+  });
+
+}
+
+updateClock();
+
+setInterval(
+  updateClock,
+  1000
+);
+
+/* =========================
+   YOSHITOMI WEATHER
+========================= */
+
+/*
+  Yoshitomi Town, Chikujo District,
+  Fukuoka Prefecture, Japan.
+
+  Approximate coordinates:
+  33.6 N / 131.1667 E
+
+  Open-Meteo current weather data.
+*/
+
+const weatherURL=
+  "https://api.open-meteo.com/v1/forecast"+
+  "?latitude=33.6"+
+  "&longitude=131.1667"+
+  "&current=weather_code,is_day"+
+  "&timezone=Asia%2FTokyo"+
+  "&forecast_days=1";
+
+const weatherSlots=[
+  ...document.querySelectorAll(
+    ".weather-icon"
+  )
+];
+
+function iconMarkup(code,isDay){
+
+  const sun=
+    '<circle cx="12" cy="12" r="4"/>'+
+    '<path d="M12 2v2 M12 20v2 M4.93 4.93l1.42 1.42 M17.65 17.65l1.42 1.42 M2 12h2 M20 12h2 M4.93 19.07l1.42-1.42 M17.65 6.35l1.42-1.42"/>';
+
+  const moon=
+    '<path d="M20.2 15.6A8.5 8.5 0 0 1 8.4 3.8a8.6 8.6 0 1 0 11.8 11.8Z"/>';
+
+  const cloud=
+    '<path d="M6.2 18.2h11.3a4 4 0 0 0 .2-8 5.8 5.8 0 0 0-11.1-1.2 4.7 4.7 0 0 0-.4 9.2Z"/>';
+
+  const partCloud=
+    '<path d="M7.4 7.5a4 4 0 0 1 7.8 1.4"/>'+
+    '<path d="M4 6h1 M10 1.8v1.1 M3.5 2.9l.8.8"/>'+
+    '<path d="M6.3 18.5h11.4a4.1 4.1 0 0 0-.2-8.2 5.4 5.4 0 0 0-10.4-.8 4.7 4.7 0 0 0-.8 9Z"/>';
+
+  let title="";
+  let shapes="";
+
+  if(code===0){
+
+    title=isDay?"晴れ":"快晴";
+    shapes=isDay?sun:moon;
+
+  }else if(
+    code===1||
+    code===2
+  ){
+
+    title="晴れ時々曇り";
+    shapes=isDay
+      ?partCloud
+      :moon+cloud;
+
+  }else if(code===3){
+
+    title="曇り";
+    shapes=cloud;
+
+  }else if(
+    code===45||
+    code===48
+  ){
+
+    title="霧";
+
+    shapes=cloud+
+      '<path d="M3 20.5h18 M6 23h12"/>';
+
+  }else if(
+    [51,53,55,56,57].includes(code)
+  ){
+
+    title="小雨";
+
+    shapes=cloud+
+      '<path d="M8 20.5l-1 2 M13 20.5l-1 2"/>';
+
+  }else if(
+    [61,63,65,66,67,80,81,82].includes(code)
+  ){
+
+    title="雨";
+
+    shapes=cloud+
+      '<path d="M8 20l-1 2.5 M13 20l-1 2.5 M18 20l-1 2.5"/>';
+
+  }else if(
+    [71,73,75,77,85,86].includes(code)
+  ){
+
+    title="雪";
+
+    shapes=cloud+
+      '<path d="M9 20v3 M7.5 21.5h3 M16 20v3 M14.5 21.5h3"/>';
+
+  }else if(
+    [95,96,99].includes(code)
+  ){
+
+    title="雷雨";
+
+    shapes=cloud+
+      '<path d="M13 19l-3 3h3l-1 2"/>';
+
+  }else{
+
+    title="天気情報なし";
+
+    shapes=
+      '<circle cx="12" cy="12" r="9"/>'+
+      '<path d="M12 7.5v5 M12 16.5h.01"/>';
+
+  }
+
+  const svg=
+    '<svg viewBox="0 0 24 24" aria-hidden="true">'+
+    shapes+
+    '</svg>';
+
+  return {
+    title,
+    svg
+  };
+
+}
+
+function setWeather(code,isDay,failed=false){
+
+  const info=iconMarkup(
+    code,
+    isDay
+  );
+
+  weatherSlots.forEach(slot=>{
+
+    slot.innerHTML=info.svg;
+
+    const label=failed
+      ?"吉富町の天気を取得できません"
+      :"吉富町："+info.title;
+
+    slot.setAttribute(
+      "aria-label",
+      label
+    );
+
+    slot.title=label;
+
+  });
+
+}
+
+let lastWeatherRequest=0;
+
+async function updateWeather(){
+
+  if(
+    Date.now()-lastWeatherRequest<
+    60*1000
+  ){
+    return;
+  }
+
+  lastWeatherRequest=Date.now();
+
+  const controller=new AbortController();
+
+  const timeout=setTimeout(
+    ()=>controller.abort(),
+    10000
+  );
+
+  try{
+
+    const response=await fetch(
+      weatherURL,
+      {
+        signal:controller.signal,
+        cache:"no-store"
+      }
+    );
+
+    if(!response.ok){
+      throw new Error(
+        "Weather request failed"
+      );
+    }
+
+    const data=await response.json();
+
+    const code=data?.current?.weather_code;
+
+    if(!Number.isFinite(code)){
+      throw new Error(
+        "Weather data missing"
+      );
+    }
+
+    setWeather(
+      code,
+      data.current.is_day===1
+    );
+
+  }catch(error){
+
+    setWeather(
+      -1,
+      true,
+      true
+    );
+
+  }finally{
+
+    clearTimeout(timeout);
+
+  }
+
+}
+
+/* Initial weather request */
+
+setWeather(-1,true,true);
+
+updateWeather();
+
+/* Refresh approximately every 20 minutes */
+
+setInterval(
+  updateWeather,
+  20*60*1000
+);
+
+document.addEventListener(
+  "visibilitychange",
+  ()=>{
+
+    if(
+      !document.hidden&&
+      Date.now()-lastWeatherRequest>
+      20*60*1000
+    ){
+
+      updateClock();
+      updateWeather();
+
+    }
+
+  }
+);
+
+/* =========================
+   SCREEN MANAGEMENT
+========================= */
+
 const screens={
   loading:$("loading"),
   home:$("home"),
@@ -1438,10 +1781,6 @@ const screens={
 
 let current="loading";
 let transitioning=false;
-
-/* =========================
-   SCREEN MANAGEMENT
-========================= */
 
 function setScreen(name){
 
@@ -1460,9 +1799,11 @@ function setScreen(name){
     );
 
     el.inert=!active;
+
   }
 
   current=name;
+
 }
 
 function changeScreen(name){
@@ -1479,7 +1820,9 @@ function changeScreen(name){
   const veil=$("softWipe");
 
   veil.classList.remove("play");
+
   void veil.offsetWidth;
+
   veil.classList.add("play");
 
   setTimeout(()=>{
@@ -1487,20 +1830,18 @@ function changeScreen(name){
   },430);
 
   setTimeout(()=>{
+
     transitioning=false;
+
     veil.classList.remove("play");
+
   },1040);
+
 }
 
 /* =========================
    ANIMATED WAVES
 ========================= */
-
-/*
-  The two lines continually change shape.
-  They are real sine waves drawn with SVG,
-  not an image being moved left and right.
-*/
 
 const waveGraphics=[
   ...document.querySelectorAll(
@@ -1515,8 +1856,7 @@ function sinePath(baseY,phase){
 
   for(let i=0;i<=points;i++){
 
-    const x=
-      7+i*136/points;
+    const x=7+i*136/points;
 
     const y=
       baseY+
@@ -1529,9 +1869,11 @@ function sinePath(baseY,phase){
       x.toFixed(2)+
       " "+
       y.toFixed(2);
+
   }
 
   return result;
+
 }
 
 let lastWave=0;
@@ -1569,7 +1911,9 @@ function drawWave(time){
     svg.querySelector(
       ".wave-bottom"
     ).setAttribute("d",bottom);
+
   }
+
 }
 
 function waveLoop(t){
@@ -1584,14 +1928,17 @@ function waveLoop(t){
   }
 
   lastWave=t;
+
   drawWave(t);
+
 }
 
 drawWave(0);
+
 requestAnimationFrame(waveLoop);
 
 /* =========================
-   LOADING PROGRESS
+   LOADING
 ========================= */
 
 let loadFinished=false;
@@ -1617,6 +1964,7 @@ function endLoading(){
   );
 
   changeScreen("home");
+
 }
 
 function loadFrame(time){
@@ -1664,6 +2012,7 @@ function loadFrame(time){
     );
 
   }
+
 }
 
 requestAnimationFrame(loadFrame);
@@ -1762,6 +2111,7 @@ function openCategory(index){
   $("detailScroll").scrollTop=0;
 
   changeScreen("detail");
+
 }
 
 document.querySelectorAll(
@@ -1781,7 +2131,7 @@ document.querySelectorAll(
 
 });
 
-/* RETURN TO MAIN MENU */
+/* RETURN TO MENU */
 
 $("backButton").addEventListener(
   "click",
@@ -1809,120 +2159,137 @@ document.addEventListener(
 );
 
 /* =========================
-   MASCOT INTERACTION
+   MASCOT ANIMATION
 ========================= */
 
 const mascot=$("mascotButton");
 
 const sparkleField=$("sparkleField");
 
-let mascotTimer=0;
+const bounceLayer=mascot.querySelector(
+  ".mascot-bounce"
+);
 
-mascot.addEventListener("click",()=>{
+/*
+  Remove the bounce state only after
+  the animation settles at its neutral
+  position. The floating movement runs
+  continuously on the parent layer.
+*/
 
-  if(
-    current!=="home"||
-    transitioning
-  ){
-    return;
-  }
+bounceLayer.addEventListener(
+  "animationend",
+  event=>{
 
-  clearTimeout(mascotTimer);
+    if(event.animationName==="boing"){
 
-  mascot.classList.remove("pop");
-
-  void mascot.offsetWidth;
-
-  mascot.classList.add("pop");
-
-  sparkleField.replaceChildren();
-
-  const colors=[
-    "#ffffff",
-    "#55c2f1",
-    "#f993c0",
-    "#b4e5ff"
-  ];
-
-  for(let i=0;i<18;i++){
-
-    const el=document.createElement(
-      "span"
-    );
-
-    el.className="spark";
-
-    const a=
-      i/18*TAU+
-      (Math.random()-.5)*.32;
-
-    const distance=
-      33+Math.random()*48;
-
-    const set=(key,value)=>{
-      el.style.setProperty(
-        key,
-        value
-      );
-    };
-
-    set(
-      "--x",
-      (30+Math.random()*40)+"%"
-    );
-
-    set(
-      "--y",
-      (24+Math.random()*49)+"%"
-    );
-
-    set(
-      "--size",
-      (6+Math.random()*8)+"px"
-    );
-
-    set(
-      "--dx",
-      Math.cos(a)*distance+"px"
-    );
-
-    set(
-      "--dy",
-      Math.sin(a)*distance+"px"
-    );
-
-    set(
-      "--color",
-      colors[i%colors.length]
-    );
-
-    set(
-      "--delay",
-      (Math.random()*.12)+"s"
-    );
-
-    set(
-      "--duration",
-      (.55+Math.random()*.32)+"s"
-    );
-
-    sparkleField.appendChild(el);
-
-    el.addEventListener(
-      "animationend",
-      ()=>el.remove(),
-      {once:true}
-    );
-  }
-
-  mascotTimer=setTimeout(
-    ()=>{
       mascot.classList.remove("pop");
-    },
-    830
-  );
 
-});
+    }
+
+  }
+);
+
+mascot.addEventListener(
+  "click",
+  ()=>{
+
+    if(
+      current!=="home"||
+      transitioning
+    ){
+      return;
+    }
+
+    if(
+      !mascot.classList.contains("pop")
+    ){
+      mascot.classList.add("pop");
+    }
+
+    sparkleField.replaceChildren();
+
+    const colors=[
+      "#ffffff",
+      "#55c2f1",
+      "#f993c0",
+      "#b4e5ff"
+    ];
+
+    for(let i=0;i<18;i++){
+
+      const el=document.createElement(
+        "span"
+      );
+
+      el.className="spark";
+
+      const a=
+        i/18*TAU+
+        (Math.random()-.5)*.32;
+
+      const distance=
+        33+Math.random()*48;
+
+      const set=(key,value)=>{
+        el.style.setProperty(
+          key,
+          value
+        );
+      };
+
+      set(
+        "--x",
+        (30+Math.random()*40)+"%"
+      );
+
+      set(
+        "--y",
+        (24+Math.random()*49)+"%"
+      );
+
+      set(
+        "--size",
+        (6+Math.random()*8)+"px"
+      );
+
+      set(
+        "--dx",
+        Math.cos(a)*distance+"px"
+      );
+
+      set(
+        "--dy",
+        Math.sin(a)*distance+"px"
+      );
+
+      set(
+        "--color",
+        colors[i%colors.length]
+      );
+
+      set(
+        "--delay",
+        (Math.random()*.12)+"s"
+      );
+
+      set(
+        "--duration",
+        (.55+Math.random()*.32)+"s"
+      );
+
+      sparkleField.appendChild(el);
+
+      el.addEventListener(
+        "animationend",
+        ()=>el.remove(),
+        {once:true}
+      );
+
+    }
+
+  }
+);
 
 /* =========================
    INITIAL STATE
