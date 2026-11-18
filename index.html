@@ -9,227 +9,65 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700&family=Michroma&family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root{
   --bg:#dff4ff;--ink:#183b50;--muted:#607f91;
   --cyan:#3fb7eb;--pink:#f58db6;
-  --orbit:"Orbitron",sans-serif;
-  --raj:"Rajdhani",sans-serif;
-  --mich:"Michroma",sans-serif;
-  --jp:"Kaisei Tokumin",serif;
+  --orbit:"Orbitron",sans-serif;--raj:"Rajdhani",sans-serif;
+  --mich:"Michroma",sans-serif;--jp:"Kaisei Tokumin",serif;
   --safe-top:env(safe-area-inset-top,0px);
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box}
-html,body{
-  width:100%;height:100%;margin:0;
-  overflow:hidden;overscroll-behavior:none;
-  -webkit-text-size-adjust:100%;
-}
-body{
-  position:fixed;inset:0;background:var(--bg);
-  color:var(--ink);font-family:var(--jp);
-  -webkit-tap-highlight-color:transparent;
-}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%}
+body{position:fixed;inset:0;background:var(--bg);color:var(--ink);font-family:var(--jp);-webkit-tap-highlight-color:transparent}
 button{font:inherit;cursor:pointer}
 button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
-#app{
-  position:fixed;inset:0;height:100dvh;
-  overflow:hidden;isolation:isolate;
-}
+#app{position:fixed;inset:0;height:100dvh;overflow:hidden;isolation:isolate}
 .screen{
-  position:absolute;inset:0;overflow:hidden;
-  opacity:0;visibility:hidden;pointer-events:none;
+  position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;
   background-color:var(--bg);
-  background-image:radial-gradient(
-    circle,rgba(95,170,207,.115) 1.35px,transparent 1.7px
-  );
-  background-size:34px 34px;
-  transition:opacity .63s ease,visibility .63s ease;
+  background-image:radial-gradient(circle,rgba(95,170,207,.115) 1.35px,transparent 1.7px);
+  background-size:34px 34px;transition:opacity .63s ease,visibility .63s ease;
 }
-.screen.active{
-  opacity:1;visibility:visible;pointer-events:auto;
-}
-.ambient{
-  position:absolute;inset:-25%;pointer-events:none;
-  background:
-    radial-gradient(
-      ellipse at 20% 23%,
-      rgba(255,255,255,.56),transparent 39%
-    ),
-    radial-gradient(
-      ellipse at 88% 75%,
-      rgba(162,217,246,.26),transparent 47%
-    );
-  animation:ambientDrift 16s ease-in-out infinite alternate;
-}
-@keyframes ambientDrift{
-  to{transform:translate3d(3%,-2%,0) scale(1.06)}
-}
-
-/* WAVE LOGO */
-
-.wave-svg{
-  display:block;width:100%;height:100%;overflow:visible;
-}
-.wave-top,.wave-bottom{
-  fill:none;stroke-width:9.5;
-  stroke-linecap:round;stroke-linejoin:round;
-}
+.screen.active{opacity:1;visibility:visible;pointer-events:auto}
+.ambient{position:absolute;inset:-25%;pointer-events:none;background:radial-gradient(ellipse at 20% 23%,rgba(255,255,255,.56),transparent 39%),radial-gradient(ellipse at 88% 75%,rgba(162,217,246,.26),transparent 47%);animation:ambientDrift 16s ease-in-out infinite alternate}
+@keyframes ambientDrift{to{transform:translate3d(3%,-2%,0) scale(1.06)}}
+.wave-svg{display:block;width:100%;height:100%;overflow:visible}
+.wave-top,.wave-bottom{fill:none;stroke-width:9.5;stroke-linecap:round;stroke-linejoin:round}
 .wave-top{stroke:var(--cyan)}
 .wave-bottom{stroke:var(--pink)}
 .wave-logo{position:relative;display:block;flex:none}
 .wave-logo.large{width:112px;height:65px}
 .wave-logo.small{width:48px;height:29px}
 .wave-logo.card-size{width:65px;height:39px}
-.wave-logo::after{
-  content:"";position:absolute;inset:12% -16%;
-  z-index:-1;pointer-events:none;
-  background:radial-gradient(
-    ellipse,rgba(255,255,255,.66),transparent 70%
-  );
-}
-
-/* TRANSITIONS */
-
-#softWipe{
-  position:absolute;inset:0;z-index:50;
-  opacity:0;pointer-events:none;
-  background:#f7fdff;visibility:hidden;
-}
-#softWipe.play{
-  visibility:visible;
-  animation:softWipe .78s ease-in-out both;
-}
-@keyframes softWipe{
-  0%{opacity:0}
-  43%,56%{opacity:1}
-  100%{opacity:0}
-}
-@keyframes contentIn{
-  from{
-    opacity:0;
-    transform:translateY(20px);
-    filter:blur(4px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-    filter:blur(0);
-  }
-}
-@keyframes cardIn{
-  from{
-    opacity:0;
-    transform:translateY(24px) scale(.975);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0) scale(1);
-  }
-}
-
-/* LOADING */
+.wave-logo::after{content:"";position:absolute;inset:12% -16%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse,rgba(255,255,255,.66),transparent 70%)}
+#softWipe{position:absolute;inset:0;z-index:50;opacity:0;pointer-events:none;background:#f7fdff;visibility:hidden}
+#softWipe.play{visibility:visible;animation:softWipe .78s ease-in-out both}
+@keyframes softWipe{0%{opacity:0}43%,56%{opacity:1}100%{opacity:0}}
+@keyframes contentIn{from{opacity:0;transform:translateY(20px);filter:blur(4px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.975)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 #loading{background-color:#e1f5ff}
-.loading-main{
-  position:absolute;top:37%;left:10%;right:10%;
-  display:flex;flex-direction:column;
-  align-items:center;text-align:center;
-}
-.intro-title{
-  margin:22px 0 0;
-  font:800 clamp(27px,7.8vw,43px)/1.35 var(--orbit);
-  letter-spacing:.16em;text-indent:.16em;color:#173949;
-}
-.intro-subtitle{
-  margin-top:16px;
-  font:500 clamp(9px,2.4vw,14px)/1.6 var(--mich);
-  letter-spacing:.27em;text-indent:.27em;
-  color:#698798;white-space:nowrap;
-}
-.loader{
-  margin-top:70px;width:min(100%,380px);
-  text-align:left;
-}
-.loader-track{
-  position:relative;height:13px;padding:2px;
-  overflow:hidden;border-radius:20px;
-  border:1px solid rgba(111,180,216,.37);
-  background:rgba(255,255,255,.96);
-  box-shadow:0 2px 12px rgba(84,163,201,.11);
-}
-.loader-fill{
-  height:100%;width:0%;border-radius:15px;
-  background:linear-gradient(
-    90deg,#38b9eb 0%,#90b5e9 55%,#f686b2 100%
-  );
-  box-shadow:0 0 11px rgba(242,137,193,.32);
-  transition:width .085s linear;
-}
-.loader-info{
-  display:flex;justify-content:space-between;
-  align-items:center;margin-top:17px;
-  color:#607e90;font:500 15px var(--mich);
-  letter-spacing:.17em;
-}
-.loader-info strong{
-  font-weight:500;letter-spacing:.13em;
-  font-variant-numeric:tabular-nums;
-}
-.skip-intro{
-  position:absolute;z-index:4;right:6%;
-  top:calc(25px + var(--safe-top));
-  padding:9px 8px;border:0;background:transparent;
-  color:rgba(73,119,148,.69);
-  font:700 12px var(--raj);letter-spacing:.16em;
-}
+.loading-main{position:absolute;top:37%;left:10%;right:10%;display:flex;flex-direction:column;align-items:center;text-align:center}
+.intro-title{margin:22px 0 0;font:800 clamp(27px,7.8vw,43px)/1.35 var(--orbit);letter-spacing:.16em;text-indent:.16em;color:#173949}
+.intro-subtitle{margin-top:16px;font:500 clamp(9px,2.4vw,14px)/1.6 var(--mich);letter-spacing:.27em;text-indent:.27em;color:#698798;white-space:nowrap}
+.loader{margin-top:70px;width:min(100%,380px);text-align:left}
+.loader-track{position:relative;height:13px;padding:2px;overflow:hidden;border-radius:20px;border:1px solid rgba(111,180,216,.37);background:rgba(255,255,255,.96);box-shadow:0 2px 12px rgba(84,163,201,.11)}
+.loader-fill{height:100%;width:0%;border-radius:15px;background:linear-gradient(90deg,#38b9eb 0%,#90b5e9 55%,#f686b2 100%);box-shadow:0 0 11px rgba(242,137,193,.32);transition:width .085s linear}
+.loader-info{display:flex;justify-content:space-between;align-items:center;margin-top:17px;color:#607e90;font:500 15px var(--mich);letter-spacing:.17em}
+.loader-info strong{font-weight:500;letter-spacing:.13em;font-variant-numeric:tabular-nums}
+.skip-intro{position:absolute;z-index:4;right:6%;top:calc(25px + var(--safe-top));padding:9px 8px;border:0;background:transparent;color:rgba(73,119,148,.69);font:700 12px var(--raj);letter-spacing:.16em}
 
-/* HEADER */
-
-.site-header{
-  position:absolute;z-index:10;
-  top:calc(25px + var(--safe-top));
-  left:7%;right:7%;
-  display:flex;align-items:center;
-  justify-content:space-between;gap:9px;
-}
-.site-brand{
-  display:flex;align-items:center;gap:9px;min-width:0;
-}
-.site-brand strong{
-  font:800 clamp(13px,3.5vw,17px) var(--orbit);
-  letter-spacing:.055em;white-space:nowrap;
-}
-.live-clock{
-  font:700 clamp(11px,3vw,13px)/1 var(--raj);
-  letter-spacing:.045em;
-  font-variant-numeric:tabular-nums;
-}
-.header-actions{
-  display:flex;flex-direction:column;
-  align-items:flex-end;gap:3px;
-}
-.site-footer{
-  position:absolute;z-index:9;
-  left:7%;right:7%;
-  bottom:calc(22px + var(--safe-bottom));
-  display:flex;align-items:center;
-  justify-content:space-between;
-  font:600 11px var(--raj);
-  letter-spacing:.1em;color:#7d9cae;
-}
-.back-button{
-  display:flex;align-items:center;gap:7px;
-  padding:7px 3px;border:0;background:none;
-  color:#447e9e;font:700 12px var(--raj);
-  letter-spacing:.09em;
-}
-.back-arrow{
-  font-size:20px;line-height:1;
-}
-
-/* HOME */
+.site-header{position:absolute;z-index:10;top:calc(25px + var(--safe-top));left:7%;right:7%;display:flex;align-items:center;justify-content:space-between;gap:9px}
+.site-brand{display:flex;align-items:center;gap:9px;min-width:0}
+.site-brand strong{font:800 clamp(13px,3.5vw,17px) var(--orbit);letter-spacing:.055em;white-space:nowrap}
+.live-clock{font:700 clamp(11px,3vw,13px)/1 var(--raj);letter-spacing:.045em;font-variant-numeric:tabular-nums}
+.header-actions{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.site-footer{position:absolute;z-index:9;left:7%;right:7%;bottom:calc(22px + var(--safe-bottom));display:flex;align-items:center;justify-content:space-between;font:600 11px var(--raj);letter-spacing:.1em;color:#7d9cae}
+.back-button{display:flex;align-items:center;gap:7px;padding:7px 3px;border:0;background:none;color:#447e9e;font:700 12px var(--raj);letter-spacing:.09em}
+.back-arrow{font-size:20px;line-height:1}
 
 #home{background-color:#e0f4ff}
 .notice-bar{
@@ -242,651 +80,149 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
   background:#fff;
   box-shadow:0 6px 19px rgba(59,137,171,.065);
 }
-.notice-window{
-  flex:1;min-width:0;overflow:hidden;
-  white-space:nowrap;padding-left:7vw;
-}
-.notice-track{
-  display:flex;width:max-content;
-  animation:noticeFlow 26s linear infinite;
-}
+.notice-window{flex:1;min-width:0;overflow:hidden;white-space:nowrap;padding-left:7vw}
+.notice-track{display:flex;width:max-content;animation:noticeFlow 26s linear infinite}
+.notice-loop{display:inline-flex;align-items:center;flex:none;white-space:nowrap}
 .notice-copy{
-  flex:none;padding-right:48px;
-  color:#587e96;font:600 12px var(--raj);
-  letter-spacing:.035em;white-space:nowrap;
+  flex:none;color:#587e96;
+  font:600 12px var(--raj);
+  letter-spacing:.035em;
+  white-space:nowrap;
 }
-@keyframes noticeFlow{
-  to{transform:translateX(-50%)}
+.notice-divider{
+  display:inline-flex;align-items:center;justify-content:center;
+  flex:none;width:50px;color:#eba2c5;
+  font:700 11px var(--raj);letter-spacing:0;
 }
+@keyframes noticeFlow{to{transform:translateX(-50%)}}
 
-/* UPDATE LOG */
-
-.update-panel{
-  position:absolute;z-index:7;
-  top:calc(106px + var(--safe-top));
-  left:7%;width:47%;max-width:280px;
-  height:min(240px,calc(43dvh - 130px - var(--safe-top)));
-  padding:14px;
-  border:1px solid rgba(255,255,255,.88);
-  border-radius:12px;
-  background:rgba(255,255,255,.65);
-  box-shadow:0 12px 30px rgba(71,138,172,.08);
-  overflow:hidden;
-}
-.update-heading{
-  display:flex;align-items:center;gap:8px;
-  margin-bottom:10px;
-  color:#307da7;font:700 11px var(--orbit);
-  letter-spacing:.04em;white-space:nowrap;
-}
-.update-heading::before{
-  content:"";width:6px;height:6px;flex:none;
-  border-radius:50%;background:var(--pink);
-}
-.update-list{
-  height:calc(100% - 27px);
-  overflow-y:auto;overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;
-  touch-action:pan-y;scrollbar-width:none;
-}
+.update-panel{position:absolute;z-index:7;top:calc(106px + var(--safe-top));left:7%;width:47%;max-width:280px;height:min(240px,calc(43dvh - 130px - var(--safe-top)));padding:14px;border:1px solid rgba(255,255,255,.88);border-radius:12px;background:rgba(255,255,255,.65);box-shadow:0 12px 30px rgba(71,138,172,.08);overflow:hidden}
+.update-heading{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:#307da7;font:700 11px var(--orbit);letter-spacing:.04em;white-space:nowrap}
+.update-heading::before{content:"";width:6px;height:6px;flex:none;border-radius:50%;background:var(--pink)}
+.update-list{height:calc(100% - 27px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:none}
 .update-list::-webkit-scrollbar{display:none}
-.update-item{
-  padding:9px 0 11px;
-  border-top:1px solid rgba(92,165,202,.22);
-}
-.update-date{
-  display:block;color:#6d9ab3;
-  font:700 11px var(--raj);letter-spacing:.06em;
-}
-.update-text{
-  display:block;margin-top:3px;color:#355e74;
-  font:500 12px/1.5 var(--jp);
-  overflow-wrap:anywhere;
-}
-#home.active .update-panel{
-  animation:contentIn .75s both;
-}
+.update-item{padding:9px 0 11px;border-top:1px solid rgba(92,165,202,.22)}
+.update-date{display:block;color:#6d9ab3;font:700 11px var(--raj);letter-spacing:.06em}
+.update-text{display:block;margin-top:3px;color:#355e74;font:500 12px/1.5 var(--jp);overflow-wrap:anywhere}
+#home.active .update-panel{animation:contentIn .75s both}
 
-/* MASCOT */
+.home-mascot{position:absolute;z-index:6;right:2.5%;top:17.3%;width:clamp(190px,53vw,275px);aspect-ratio:1;border:0;background:none;padding:0;overflow:visible;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.mascot-float{position:absolute;inset:0;pointer-events:none;animation:mascotFloat 4.7s ease-in-out infinite;transform-origin:50% 75%;filter:drop-shadow(0 12px 9px rgba(45,128,167,.14))}
+.mascot-bounce{display:block;width:100%;height:100%;transform-origin:50% 78%;will-change:transform}
+.mascot-img{width:100%;height:100%;display:block;object-fit:contain;image-rendering:auto;pointer-events:none;-webkit-user-drag:none}
+@keyframes mascotFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
+.sparkles{position:absolute;inset:0;overflow:visible;pointer-events:none}
+.spark{position:absolute;left:var(--x);top:var(--y);width:var(--size);height:var(--size);background:var(--color);clip-path:polygon(50% 0,61% 38%,100% 50%,61% 62%,50% 100%,39% 62%,0 50%,39% 38%);filter:drop-shadow(0 0 5px #fff);animation:sparkOut var(--duration) ease-out var(--delay) both}
+@keyframes sparkOut{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}60%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(120deg) scale(.15)}}
 
-.home-mascot{
-  position:absolute;z-index:6;
-  right:2.5%;top:17.3%;
-  width:clamp(190px,53vw,275px);
-  aspect-ratio:1;border:0;background:none;
-  padding:0;overflow:visible;
-  user-select:none;-webkit-user-select:none;
-  touch-action:manipulation;
-}
-.mascot-float{
-  position:absolute;inset:0;pointer-events:none;
-  animation:mascotFloat 4.7s ease-in-out infinite;
-  transform-origin:50% 75%;
-  filter:drop-shadow(
-    0 12px 9px rgba(45,128,167,.14)
-  );
-}
-.mascot-bounce{
-  display:block;width:100%;height:100%;
-  transform-origin:50% 78%;will-change:transform;
-}
-.mascot-img{
-  width:100%;height:100%;display:block;
-  object-fit:contain;image-rendering:auto;
-  pointer-events:none;-webkit-user-drag:none;
-}
-@keyframes mascotFloat{
-  0%,100%{transform:translateY(0) rotate(-1deg)}
-  50%{transform:translateY(-7px) rotate(1deg)}
-}
-.sparkles{
-  position:absolute;inset:0;
-  overflow:visible;pointer-events:none;
-}
-.spark{
-  position:absolute;
-  left:var(--x);top:var(--y);
-  width:var(--size);height:var(--size);
-  background:var(--color);
-  clip-path:polygon(
-    50% 0,61% 38%,100% 50%,61% 62%,
-    50% 100%,39% 62%,0 50%,39% 38%
-  );
-  filter:drop-shadow(0 0 5px #fff);
-  animation:sparkOut var(--duration)
-    ease-out var(--delay) both;
-}
-@keyframes sparkOut{
-  0%{
-    opacity:0;
-    transform:translate(-50%,-50%) scale(.1);
-  }
-  25%{
-    opacity:1;
-    transform:translate(-50%,-50%) scale(1.2);
-  }
-  60%{opacity:1}
-  100%{
-    opacity:0;
-    transform:translate(
-      calc(-50% + var(--dx)),
-      calc(-50% + var(--dy))
-    ) rotate(120deg) scale(.15);
-  }
-}
-
-/* MAIN CARDS */
-
-.directory{
-  position:absolute;z-index:8;
-  left:7%;right:7%;top:43%;bottom:11%;
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  grid-template-rows:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-.entry{
-  position:relative;min-width:0;min-height:0;
-  overflow:hidden;display:flex;flex-direction:column;
-  justify-content:space-between;padding:14px;
-  border:1px solid rgba(255,255,255,.95);
-  border-radius:14px;
-  background:rgba(255,255,255,.77);
-  box-shadow:
-    0 13px 32px rgba(58,136,176,.105),
-    0 2px 7px rgba(61,126,161,.045);
-  color:#1d455b;text-align:left;
-  -webkit-backdrop-filter:blur(10px);
-  backdrop-filter:blur(10px);
-  transition:transform .25s,box-shadow .25s,background .25s;
-}
-.entry::before{
-  content:"";position:absolute;top:0;
-  left:17px;right:17px;height:3px;
-  border-radius:0 0 8px 8px;
-  background:linear-gradient(
-    90deg,rgba(65,182,235,.77),
-    rgba(240,146,191,.75)
-  );
-}
-.entry:active{
-  transform:scale(.965);background:#fff;
-}
-.entry-top{
-  display:flex;justify-content:space-between;
-  align-items:flex-start;gap:4px;
-}
-.entry-index{
-  font:700 10px var(--raj);
-  letter-spacing:.015em;
-  color:#73a3bc;white-space:nowrap;
-}
-.entry .wave-logo{
-  opacity:.78;transform:translate(5px,-1px);
-}
-.entry-title{
-  position:relative;display:block;z-index:1;
-  margin-bottom:5px;padding-right:22px;
-}
-.entry-title strong{
-  display:block;
-  font:800 clamp(12px,3.2vw,19px)/1.25 var(--orbit);
-  letter-spacing:-.04em;overflow-wrap:anywhere;
-}
-.entry-title small{
-  display:block;margin-top:9px;
-  font:600 11px/1.25 var(--raj);
-  letter-spacing:.085em;color:#8ba7b7;
-}
-.entry-arrow{
-  position:absolute;right:13px;bottom:12px;
-  color:#68a6ca;width:21px;height:21px;display:block;
-}
-.entry-arrow svg,.vector-arrow svg{
-  display:block;width:100%;height:100%;
-  fill:none;stroke:currentColor;stroke-width:1.7;
-  stroke-linecap:round;stroke-linejoin:round;
-}
-.vector-arrow{
-  display:inline-block;width:17px;height:17px;
-  flex:none;vertical-align:middle;
-}
+.directory{position:absolute;z-index:8;left:7%;right:7%;top:43%;bottom:11%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:12px}
+.entry{position:relative;min-width:0;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:14px;border:1px solid rgba(255,255,255,.95);border-radius:14px;background:rgba(255,255,255,.77);box-shadow:0 13px 32px rgba(58,136,176,.105),0 2px 7px rgba(61,126,161,.045);color:#1d455b;text-align:left;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:transform .25s,box-shadow .25s,background .25s}
+.entry::before{content:"";position:absolute;top:0;left:17px;right:17px;height:3px;border-radius:0 0 8px 8px;background:linear-gradient(90deg,rgba(65,182,235,.77),rgba(240,146,191,.75))}
+.entry:active{transform:scale(.965);background:#fff}
+.entry-top{display:flex;justify-content:space-between;align-items:flex-start;gap:4px}
+.entry-index{font:700 10px var(--raj);letter-spacing:.015em;color:#73a3bc;white-space:nowrap}
+.entry .wave-logo{opacity:.78;transform:translate(5px,-1px)}
+.entry-title{position:relative;display:block;z-index:1;margin-bottom:5px;padding-right:22px}
+.entry-title strong{display:block;font:800 clamp(12px,3.2vw,19px)/1.25 var(--orbit);letter-spacing:-.04em;overflow-wrap:anywhere}
+.entry-title small{display:block;margin-top:9px;font:600 11px/1.25 var(--raj);letter-spacing:.085em;color:#8ba7b7}
+.entry-arrow{position:absolute;right:13px;bottom:12px;color:#68a6ca;width:21px;height:21px;display:block}
+.entry-arrow svg,.vector-arrow svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.vector-arrow{display:inline-block;width:17px;height:17px;flex:none;vertical-align:middle}
 #home.active .entry{animation:cardIn .63s both}
 #home.active .entry:nth-child(2){animation-delay:.09s}
 #home.active .entry:nth-child(3){animation-delay:.18s}
 #home.active .entry:nth-child(4){animation-delay:.27s}
 
-/* INNER PAGES */
-
-#plots,#plotView,#character,#detail,
-#admin,#editPlot,#editCharacter{
-  background-color:#e1f5ff;
-}
-.inner-scroll{
-  position:absolute;z-index:4;
-  top:calc(111px + var(--safe-top));
-  bottom:calc(18px + var(--safe-bottom));
-  left:7%;right:7%;
-  overflow-y:auto;overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;
-  touch-action:pan-y;
-  padding:2px 0 35px;scrollbar-width:none;
-}
+#plots,#plotView,#character,#detail,#admin,#editPlot,#editCharacter{background-color:#e1f5ff}
+.inner-scroll{position:absolute;z-index:4;top:calc(111px + var(--safe-top));bottom:calc(18px + var(--safe-bottom));left:7%;right:7%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:2px 0 35px;scrollbar-width:none}
 .inner-scroll::-webkit-scrollbar{display:none}
-.page-kicker{
-  font:700 11px var(--raj);
-  letter-spacing:.16em;color:#5c9dbe;
-}
-.page-title{
-  margin:11px 0 8px;
-  font:800 clamp(27px,8vw,51px)/1.15 var(--orbit);
-  letter-spacing:-.06em;overflow-wrap:anywhere;
-}
-.page-description{
-  margin:0;color:#7393a4;
-  font:500 12px/1.9 var(--jp);
-}
-.section-line{
-  height:1px;background:rgba(91,155,193,.22);
-  margin:18px 0 19px;
-}
+.page-kicker{font:700 11px var(--raj);letter-spacing:.16em;color:#5c9dbe}
+.page-title{margin:11px 0 8px;font:800 clamp(27px,8vw,51px)/1.15 var(--orbit);letter-spacing:-.06em;overflow-wrap:anywhere}
+.page-description{margin:0;color:#7393a4;font:500 12px/1.9 var(--jp)}
+.section-line{height:1px;background:rgba(91,155,193,.22);margin:18px 0 19px}
 
-/* PLOTS TWO COLUMNS */
-
-.plot-grid,.character-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:13px;align-items:start;
-}
-.plot-card,.character-card{
-  display:block;min-width:0;width:100%;padding:0;
-  border:1px solid rgba(255,255,255,.97);
-  border-radius:15px;overflow:hidden;
-  background:rgba(255,255,255,.84);
-  box-shadow:0 9px 22px rgba(58,136,176,.11);
-  color:var(--ink);text-align:left;
-  transition:transform .2s,box-shadow .2s;
-}
-.plot-card:active,.character-card:active{
-  transform:scale(.97);
-  box-shadow:0 4px 10px rgba(58,136,176,.09);
-}
-.plot-cover,.character-cover,
-.plot-hero-cover,.profile-cover{
-  position:relative;display:flex;
-  align-items:center;justify-content:center;
-  overflow:hidden;
-  background:linear-gradient(
-    146deg,#f2fcff 0%,#bfe8fb 53%,#f5cbe3 100%
-  );
-}
+.plot-grid,.character-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;align-items:start}
+.plot-card,.character-card{display:block;min-width:0;width:100%;padding:0;border:1px solid rgba(255,255,255,.97);border-radius:15px;overflow:hidden;background:rgba(255,255,255,.84);box-shadow:0 9px 22px rgba(58,136,176,.11);color:var(--ink);text-align:left;transition:transform .2s,box-shadow .2s}
+.plot-card:active,.character-card:active{transform:scale(.97);box-shadow:0 4px 10px rgba(58,136,176,.09)}
+.plot-cover,.character-cover,.plot-hero-cover,.profile-cover{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(146deg,#f2fcff 0%,#bfe8fb 53%,#f5cbe3 100%)}
 .plot-cover{aspect-ratio:1/1}
-.plot-cover::before,
-.character-cover::before,
-.plot-hero-cover::before,
-.profile-cover::before{
-  content:"";position:absolute;inset:0;
-  background:
-    radial-gradient(
-      circle at 22% 22%,
-      rgba(255,255,255,.86),transparent 47%
-    ),
-    linear-gradient(
-      160deg,transparent 45%,rgba(255,255,255,.28)
-    );
-  pointer-events:none;
-}
-.plot-cover img,.character-cover img,
-.plot-hero-cover img,.profile-cover img{
-  position:absolute;inset:0;display:block;
-  width:100%;height:100%;
-  object-fit:cover;z-index:2;
-}
-.plot-cover img[hidden],
-.character-cover img[hidden],
-.plot-hero-cover img[hidden],
-.profile-cover img[hidden]{
-  display:none;
-}
-.cover-placeholder{
-  z-index:1;position:relative;text-align:center;
-  color:rgba(41,118,164,.56);
-  font:700 10px/1.8 var(--orbit);
-  letter-spacing:.15em;white-space:pre-line;
-}
-.cover-placeholder::before{
-  content:"";display:block;width:48px;height:3px;
-  margin:0 auto 13px;border-radius:5px;
-  background:linear-gradient(
-    90deg,var(--cyan),var(--pink)
-  );
-}
-.plot-card-info{
-  padding:12px 11px 14px;min-width:0;
-}
-.plot-card-name{
-  display:block;
-  font:700 clamp(13px,3.5vw,18px)/1.5 var(--jp);
-  overflow-wrap:anywhere;color:#254f67;
-}
-.plot-card-intro{
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
-  line-clamp:2;
-  overflow:hidden;margin:6px 0 8px;
-  font:400 11px/1.65 var(--jp);
-  color:#718c9b;min-height:2.9em;
-}
-
-/* TAG MARQUEE */
-
-.tag-viewport{
-  position:relative;display:block;overflow:hidden;
-  width:100%;white-space:nowrap;
-  color:#489dc6;font:700 11px/1.7 var(--raj);
-  letter-spacing:.02em;pointer-events:none;
-}
-.tag-track{
-  display:inline-flex;align-items:center;
-  gap:28px;width:max-content;
-  max-width:none;vertical-align:top;
-}
+.plot-cover::before,.character-cover::before,.plot-hero-cover::before,.profile-cover::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 22% 22%,rgba(255,255,255,.86),transparent 47%),linear-gradient(160deg,transparent 45%,rgba(255,255,255,.28));pointer-events:none}
+.plot-cover img,.character-cover img,.plot-hero-cover img,.profile-cover img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;z-index:2}
+.plot-cover img[hidden],.character-cover img[hidden],.plot-hero-cover img[hidden],.profile-cover img[hidden]{display:none}
+.cover-placeholder{z-index:1;position:relative;text-align:center;color:rgba(41,118,164,.56);font:700 10px/1.8 var(--orbit);letter-spacing:.15em;white-space:pre-line}
+.cover-placeholder::before{content:"";display:block;width:48px;height:3px;margin:0 auto 13px;border-radius:5px;background:linear-gradient(90deg,var(--cyan),var(--pink))}
+.plot-card-info{padding:12px 11px 14px;min-width:0}
+.plot-card-name{display:block;font:700 clamp(13px,3.5vw,18px)/1.5 var(--jp);overflow-wrap:anywhere;color:#254f67}
+.plot-card-intro{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;margin:6px 0 8px;font:400 11px/1.65 var(--jp);color:#718c9b;min-height:2.9em}
+.tag-viewport{position:relative;display:block;overflow:hidden;width:100%;white-space:nowrap;color:#489dc6;font:700 11px/1.7 var(--raj);letter-spacing:.02em;pointer-events:none}
+.tag-track{display:inline-flex;align-items:center;gap:28px;width:max-content;max-width:none;vertical-align:top}
 .tag-copy{display:inline-block;white-space:nowrap}
 .tag-duplicate{display:none}
 .tag-viewport.scrolling .tag-duplicate{display:inline-block}
-.tag-viewport.scrolling .tag-track{
-  animation:tagFlow var(--tag-duration,14s) linear infinite;
-}
-@keyframes tagFlow{
-  to{transform:translateX(calc(-50% - 14px))}
-}
-.plot-card-footer{
-  display:flex;align-items:center;
-  justify-content:space-between;
-  margin-top:10px;padding-top:7px;
-  border-top:1px solid #e9f3f9;
-  color:#91adbe;
-  font:700 10px var(--raj);
-  letter-spacing:.05em;
-}
-.plot-card-footer b{
-  display:block;width:18px;height:18px;
-  color:#75b0d2;
-}
+.tag-viewport.scrolling .tag-track{animation:tagFlow var(--tag-duration,14s) linear infinite}
+@keyframes tagFlow{to{transform:translateX(calc(-50% - 14px))}}
+.plot-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:7px;border-top:1px solid #e9f3f9;color:#91adbe;font:700 10px var(--raj);letter-spacing:.05em}
+.plot-card-footer b{display:block;width:18px;height:18px;color:#75b0d2}
 
-/* PLOT DETAIL */
-
-.plot-hero-cover{
-  width:100%;aspect-ratio:1/1;
-  border:1px solid #fff;border-radius:16px;
-  margin-top:18px;
-  box-shadow:0 12px 30px rgba(58,136,176,.1);
-}
-.plot-hero-cover .cover-placeholder{
-  font-size:12px;
-}
-.plot-info-panel,.profile-panel{
-  margin-top:17px;border:1px solid #fff;
-  border-radius:15px;
-  background:rgba(255,255,255,.78);
-  padding:17px 16px 20px;
-  box-shadow:0 9px 22px rgba(58,136,176,.075);
-}
-.plot-info-panel h3,.profile-panel h3{
-  margin:0 0 10px;color:#3b90ba;
-  font:700 11px var(--orbit);
-  letter-spacing:.11em;
-}
-.plot-info-panel p,.profile-panel p{
-  margin:0;font:400 13px/2 var(--jp);
-  white-space:pre-line;color:#395e73;
-}
-.plot-tags{
-  margin-top:13px;color:#4a9cc6;
-  font:600 12px/1.8 var(--raj);
-  overflow-wrap:anywhere;
-}
-.inner-section-heading{
-  margin:27px 0 14px;
-  display:flex;justify-content:space-between;
-  align-items:baseline;gap:8px;
-  color:#2f759b;font:700 13px var(--orbit);
-  letter-spacing:.065em;
-}
-.inner-section-heading small{
-  font:700 11px var(--raj);
-  letter-spacing:.06em;color:#85aabb;
-}
+.plot-hero-cover{width:100%;aspect-ratio:1/1;border:1px solid #fff;border-radius:16px;margin-top:18px;box-shadow:0 12px 30px rgba(58,136,176,.1)}
+.plot-hero-cover .cover-placeholder{font-size:12px}
+.plot-info-panel,.profile-panel{margin-top:17px;border:1px solid #fff;border-radius:15px;background:rgba(255,255,255,.78);padding:17px 16px 20px;box-shadow:0 9px 22px rgba(58,136,176,.075)}
+.plot-info-panel h3,.profile-panel h3{margin:0 0 10px;color:#3b90ba;font:700 11px var(--orbit);letter-spacing:.11em}
+.plot-info-panel p,.profile-panel p{margin:0;font:400 13px/2 var(--jp);white-space:pre-line;color:#395e73}
+.plot-tags{margin-top:13px;color:#4a9cc6;font:600 12px/1.8 var(--raj);overflow-wrap:anywhere}
+.inner-section-heading{margin:27px 0 14px;display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:#2f759b;font:700 13px var(--orbit);letter-spacing:.065em}
+.inner-section-heading small{font:700 11px var(--raj);letter-spacing:.06em;color:#85aabb}
 .character-cover{aspect-ratio:1/1}
 .character-card-info{padding:11px}
-.character-card-info strong{
-  display:block;font:700 13px/1.5 var(--jp);
-  color:#2b5268;overflow-wrap:anywhere;
-}
-.character-card-info small{
-  display:block;margin-top:4px;
-  color:#8da9b9;font:700 11px var(--raj);
-}
-.character-card-info span{
-  display:inline-flex;align-items:center;
-  gap:4px;margin-top:5px;
-  color:#5fa3c6;font:700 11px var(--raj);
-}
+.character-card-info strong{display:block;font:700 13px/1.5 var(--jp);color:#2b5268;overflow-wrap:anywhere}
+.character-card-info small{display:block;margin-top:4px;color:#8da9b9;font:700 11px var(--raj)}
+.character-card-info span{display:inline-flex;align-items:center;gap:4px;margin-top:5px;color:#5fa3c6;font:700 11px var(--raj)}
 
-/* CHARACTER PROFILE */
-
-.profile-cover{
-  width:100%;aspect-ratio:1/1;
-  margin-top:18px;border:1px solid #fff;
-  border-radius:17px;
-}
+.profile-cover{width:100%;aspect-ratio:1/1;margin-top:18px;border:1px solid #fff;border-radius:17px}
 .profile-cover img{object-fit:cover}
 .profile-panel{margin-top:17px}
-.profile-fields{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:12px;margin:17px 0;padding-top:16px;
-  border-top:1px solid #e0eff7;
-}
+.profile-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:17px 0;padding-top:16px;border-top:1px solid #e0eff7}
 .profile-field{min-width:0}
-.profile-field dt{
-  color:#85a9bd;font:700 11px var(--raj);
-  letter-spacing:.08em;
-}
-.profile-field dd{
-  margin:5px 0 0;
-  font:600 13px/1.65 var(--jp);
-  overflow-wrap:anywhere;color:#315a71;
-}
+.profile-field dt{color:#85a9bd;font:700 11px var(--raj);letter-spacing:.08em}
+.profile-field dd{margin:5px 0 0;font:600 13px/1.65 var(--jp);overflow-wrap:anywhere;color:#315a71}
 
-/* GENERIC DETAIL */
+.detail-paper{position:relative;margin-top:30px;padding:27px 22px 30px;border:1px solid rgba(255,255,255,.95);border-radius:18px;background:rgba(255,255,255,.78);box-shadow:0 17px 36px rgba(60,130,175,.1);overflow:hidden}
+.detail-paper::before{content:"";position:absolute;top:0;left:22px;right:22px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--pink));border-radius:0 0 6px 6px}
+.detail-paper .wave-logo{margin-bottom:24px;opacity:.83}
+.detail-paper p{margin:0;white-space:pre-line;font:400 13px/2.35 var(--jp);color:#355c71}
+.archive-empty{margin-top:22px;padding:18px 15px;border:1px dashed rgba(95,161,199,.36);border-radius:10px;background:rgba(229,246,255,.55);color:#7b9bab;font:600 12px/1.7 var(--raj);letter-spacing:.09em}
+.detail-bottom{margin-top:22px;display:flex;justify-content:space-between;color:#8aa9bb;font:700 11px var(--raj);letter-spacing:.1em}
 
-.detail-paper{
-  position:relative;margin-top:30px;
-  padding:27px 22px 30px;
-  border:1px solid rgba(255,255,255,.95);
-  border-radius:18px;
-  background:rgba(255,255,255,.78);
-  box-shadow:0 17px 36px rgba(60,130,175,.1);
-  overflow:hidden;
-}
-.detail-paper::before{
-  content:"";position:absolute;top:0;
-  left:22px;right:22px;height:3px;
-  background:linear-gradient(
-    90deg,var(--cyan),var(--pink)
-  );
-  border-radius:0 0 6px 6px;
-}
-.detail-paper .wave-logo{
-  margin-bottom:24px;opacity:.83;
-}
-.detail-paper p{
-  margin:0;white-space:pre-line;
-  font:400 13px/2.35 var(--jp);
-  color:#355c71;
-}
-.archive-empty{
-  margin-top:22px;padding:18px 15px;
-  border:1px dashed rgba(95,161,199,.36);
-  border-radius:10px;
-  background:rgba(229,246,255,.55);
-  color:#7b9bab;
-  font:600 12px/1.7 var(--raj);
-  letter-spacing:.09em;
-}
-.detail-bottom{
-  margin-top:22px;
-  display:flex;justify-content:space-between;
-  color:#8aa9bb;
-  font:700 11px var(--raj);
-  letter-spacing:.1em;
-}
-
-/* ADMIN */
-
-.admin-link{
-  border:0;background:transparent;
-  color:#83a3b5;font:700 10px var(--raj);
-  letter-spacing:.13em;padding:7px 4px;
-}
-.admin-panel{
-  margin-top:20px;padding:18px 15px 20px;
-  background:rgba(255,255,255,.85);
-  border:1px solid #fff;border-radius:16px;
-  box-shadow:0 10px 25px rgba(56,126,167,.09);
-}
-.admin-panel h3{
-  margin:0 0 14px;color:#2f83ad;
-  font:700 12px var(--orbit);
-  letter-spacing:.08em;
-}
-.admin-note{
-  margin:9px 0 16px;color:#688a9e;
-  font:400 12px/1.95 var(--jp);
-  overflow-wrap:anywhere;
-}
-.admin-field{
-  display:block;margin:15px 0;color:#497d9a;
-  font:700 11px/1.5 var(--raj);
-  letter-spacing:.04em;
-}
-.admin-field input,.admin-field textarea{
-  display:block;margin-top:7px;
-  width:100%;min-width:0;
-  border:1px solid #d1e7f3;
-  border-radius:9px;background:#f8fdff;
-  padding:12px 11px;color:#25495e;
-  font:400 14px/1.7 var(--jp);
-  outline:none;
-  -webkit-appearance:none;appearance:none;
-}
-.admin-field textarea{
-  resize:vertical;min-height:88px;
-}
-.admin-field input:focus,.admin-field textarea:focus{
-  border-color:#6db9e0;
-  box-shadow:0 0 0 2px rgba(91,179,225,.14);
-}
-.admin-field input[type=file]{
-  padding:11px;font-size:12px;
-}
-.admin-field input[type=password]{
-  font-family:system-ui,sans-serif;
-  letter-spacing:.08em;
-}
-.admin-actions{
-  display:flex;align-items:center;
-  flex-wrap:wrap;gap:9px;margin-top:17px;
-}
-.admin-btn{
-  border:1px solid #78bddf;background:#5db5e2;
-  border-radius:9px;color:#fff;
-  padding:11px 14px;
-  font:700 12px var(--raj);
-  letter-spacing:.07em;min-height:40px;
-}
-.admin-btn.secondary{
-  background:#fff;color:#4189ac;
-  border-color:#d1e5f1;
-}
-.admin-btn.danger{
-  background:#fff;color:#c46178;
-  border-color:#f1cbda;
-}
+.admin-link{border:0;background:transparent;color:#83a3b5;font:700 10px var(--raj);letter-spacing:.13em;padding:7px 4px}
+.admin-panel{margin-top:20px;padding:18px 15px 20px;background:rgba(255,255,255,.85);border:1px solid #fff;border-radius:16px;box-shadow:0 10px 25px rgba(56,126,167,.09)}
+.admin-panel h3{margin:0 0 14px;color:#2f83ad;font:700 12px var(--orbit);letter-spacing:.08em}
+.admin-note{margin:9px 0 16px;color:#688a9e;font:400 12px/1.95 var(--jp);overflow-wrap:anywhere}
+.admin-field{display:block;margin:15px 0;color:#497d9a;font:700 11px/1.5 var(--raj);letter-spacing:.04em}
+.admin-field input,.admin-field textarea{display:block;margin-top:7px;width:100%;min-width:0;border:1px solid #d1e7f3;border-radius:9px;background:#f8fdff;padding:12px 11px;color:#25495e;font:400 14px/1.7 var(--jp);outline:none;-webkit-appearance:none;appearance:none}
+.admin-field textarea{resize:vertical;min-height:88px}
+.admin-field input:focus,.admin-field textarea:focus{border-color:#6db9e0;box-shadow:0 0 0 2px rgba(91,179,225,.14)}
+.admin-field input[type=file]{padding:11px;font-size:12px}
+.admin-field input[type=password]{font-family:system-ui,sans-serif;letter-spacing:.08em}
+.admin-actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-top:17px}
+.admin-btn{border:1px solid #78bddf;background:#5db5e2;border-radius:9px;color:#fff;padding:11px 14px;font:700 12px var(--raj);letter-spacing:.07em;min-height:40px}
+.admin-btn.secondary{background:#fff;color:#4189ac;border-color:#d1e5f1}
+.admin-btn.danger{background:#fff;color:#c46178;border-color:#f1cbda}
 .admin-btn:disabled{opacity:.5;cursor:default}
-.admin-status{
-  margin:13px 0 0;min-height:20px;
-  font:500 12px/1.7 var(--jp);
-  color:#467b9a;white-space:pre-line;
-}
-.admin-list-item{
-  display:flex;align-items:center;gap:11px;
-  margin:10px 0;padding:10px;
-  background:#f2faff;
-  border:1px solid #e4f1f9;
-  border-radius:11px;
-}
-.admin-list-item .admin-thumb{
-  width:55px;aspect-ratio:1;object-fit:cover;
-  border-radius:8px;
-  background:linear-gradient(
-    140deg,#c5eafa,#f3cbe0
-  );
-  flex:none;
-}
-.admin-item-body{
-  flex:1;min-width:0;color:#315e78;
-  font:700 12px/1.6 var(--jp);
-  overflow-wrap:anywhere;
-}
-.admin-item-body small{
-  display:block;color:#85a6bb;
-  font:600 10px var(--raj);
-}
-.admin-item-tools{
-  display:flex;flex-direction:column;
-  gap:5px;flex:none;
-}
-.admin-item-tools button{
-  border:1px solid #cce4f1;border-radius:7px;
-  background:white;color:#4d92b8;
-  padding:6px;font:700 11px var(--raj);
-}
-.admin-item-tools .danger{
-  color:#c16f85;
-}
-.admin-move-tools{
-  display:flex;flex-direction:column;
-  gap:5px;flex:none;
-}
-.admin-move-tools button{
-  border:1px solid #cce4f1;border-radius:7px;
-  background:#fff;color:#397fa7;
-  min-width:43px;padding:6px 4px;
-  font:700 11px var(--raj);
-}
-.admin-move-tools button:disabled{
-  opacity:.3;cursor:default;
-}
-.admin-image-preview{
-  width:100%;aspect-ratio:1/1;
-  object-fit:cover;border-radius:12px;
-  border:1px solid #d9ebf5;
-  background:linear-gradient(
-    145deg,#eaf9ff,#f7e7f4
-  );
-}
-.admin-separator{
-  margin:21px 0 15px;border:0;
-  border-top:1px solid #d9eaf5;
-}
+.admin-status{margin:13px 0 0;min-height:20px;font:500 12px/1.7 var(--jp);color:#467b9a;white-space:pre-line}
+.admin-list-item{display:flex;align-items:center;gap:11px;margin:10px 0;padding:10px;background:#f2faff;border:1px solid #e4f1f9;border-radius:11px}
+.admin-list-item .admin-thumb{width:55px;aspect-ratio:1;object-fit:cover;border-radius:8px;background:linear-gradient(140deg,#c5eafa,#f3cbe0);flex:none}
+.admin-item-body{flex:1;min-width:0;color:#315e78;font:700 12px/1.6 var(--jp);overflow-wrap:anywhere}
+.admin-item-body small{display:block;color:#85a6bb;font:600 10px var(--raj)}
+.admin-item-tools{display:flex;flex-direction:column;gap:5px;flex:none}
+.admin-item-tools button{border:1px solid #cce4f1;border-radius:7px;background:white;color:#4d92b8;padding:6px;font:700 11px var(--raj)}
+.admin-item-tools .danger{color:#c16f85}
+.admin-move-tools{display:flex;flex-direction:column;gap:5px;flex:none}
+.admin-move-tools button{border:1px solid #cce4f1;border-radius:7px;background:#fff;color:#397fa7;min-width:43px;padding:6px 4px;font:700 11px var(--raj)}
+.admin-move-tools button:disabled{opacity:.3;cursor:default}
+.admin-image-preview{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;border:1px solid #d9ebf5;background:linear-gradient(145deg,#eaf9ff,#f7e7f4)}
+.admin-separator{margin:21px 0 15px;border:0;border-top:1px solid #d9eaf5}
 .admin-hidden{display:none!important}
-.admin-count{
-  font:600 11px var(--raj);color:#82a6bc;
-}
-
-/* RESPONSIVE */
+.admin-count{font:600 11px var(--raj);color:#82a6bc}
 
 @media(max-width:365px){
   .site-brand{gap:5px}
@@ -900,33 +236,18 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 @media(max-height:720px){
   .loading-main{top:31%}
   .loader{margin-top:48px}
-  .notice-bar{
-    top:calc(62px + var(--safe-top));height:31px;
-  }
-  .update-panel{
-    top:calc(103px + var(--safe-top));
-    height:min(170px,calc(42dvh - 122px - var(--safe-top)));
-  }
-  .home-mascot{
-    top:15%;width:clamp(160px,48vw,242px);
-  }
+  .notice-bar{top:calc(62px + var(--safe-top));height:31px}
+  .update-panel{top:calc(103px + var(--safe-top));height:min(170px,calc(42dvh - 122px - var(--safe-top)))}
+  .home-mascot{top:15%;width:clamp(160px,48vw,242px)}
   .directory{top:42%;bottom:10%;gap:9px}
   .entry{padding:11px;border-radius:11px}
   .entry .wave-logo{width:50px;height:31px}
   .entry-title small{margin-top:6px}
-  .site-footer{
-    bottom:calc(12px + var(--safe-bottom));
-  }
+  .site-footer{bottom:calc(12px + var(--safe-bottom))}
 }
 @media(max-height:580px){
-  .notice-bar{
-    top:calc(58px + var(--safe-top));height:28px;
-  }
-  .update-panel{
-    top:calc(86px + var(--safe-top));
-    height:min(112px,calc(37dvh - 102px - var(--safe-top)));
-    padding:9px 11px;
-  }
+  .notice-bar{top:calc(58px + var(--safe-top));height:28px}
+  .update-panel{top:calc(86px + var(--safe-top));height:min(112px,calc(37dvh - 102px - var(--safe-top)));padding:9px 11px}
   .update-item{padding:4px 0}
   .update-heading{margin-bottom:3px}
   .home-mascot{width:39vw;top:13%}
@@ -934,28 +255,16 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
   .entry-title small{display:none}
 }
 @media(min-width:700px){
-  .site-header,.site-footer,.update-panel,
-  .directory,.inner-scroll{
-    left:12%;right:12%;
-  }
+  .site-header,.site-footer,.update-panel,.directory,.inner-scroll{left:12%;right:12%}
   .notice-bar{left:0;right:0}
-  .directory{
-    max-width:820px;margin-inline:auto;gap:18px;
-  }
-  .home-mascot{
-    right:16%;width:min(31vw,310px);
-  }
+  .directory{max-width:820px;margin-inline:auto;gap:18px}
+  .home-mascot{right:16%;width:min(31vw,310px)}
   .update-panel{width:300px;max-width:300px}
-  .inner-scroll{
-    max-width:780px;margin-inline:auto;
-  }
+  .inner-scroll{max-width:780px;margin-inline:auto}
   .plot-grid,.character-grid{gap:20px}
 }
 @media(prefers-reduced-motion:reduce){
-  .ambient,.mascot-float,
-  .notice-track,.tag-track{
-    animation:none!important;
-  }
+  .ambient,.mascot-float,.notice-track,.tag-track{animation:none!important}
   .screen{transition:none}
 }
 </style>
@@ -964,13 +273,9 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 <body>
 <div id="app">
 
-<!-- LOADING -->
-
 <section class="screen active" id="loading" aria-hidden="false">
   <div class="ambient"></div>
-  <button class="skip-intro" type="button" id="skipIntro">
-    SKIP
-  </button>
+  <button class="skip-intro" type="button" id="skipIntro">SKIP</button>
   <div class="loading-main">
     <div class="wave-logo large" aria-hidden="true">
       <svg class="wave-svg" viewBox="0 0 150 64">
@@ -980,15 +285,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
     </div>
     <h1 class="intro-title">NITU</h1>
     <div class="intro-subtitle">PLOT ARCHIVE</div>
-    <div
-      class="loader"
-      role="progressbar"
-      id="progressTrack"
-      aria-label="サイトを読み込み中"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      aria-valuenow="0"
-    >
+    <div class="loader" role="progressbar" id="progressTrack" aria-label="サイトを読み込み中" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <div class="loader-track">
         <div class="loader-fill" id="loaderFill"></div>
       </div>
@@ -999,8 +296,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
     </div>
   </div>
 </section>
-
-<!-- HOME -->
 
 <section class="screen" id="home" aria-hidden="true">
   <div class="ambient"></div>
@@ -1014,9 +309,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
       </span>
       <strong>AERIALIS</strong>
     </div>
-    <time class="live-clock" aria-label="日本時間">
-      00:00:00
-    </time>
+    <time class="live-clock" aria-label="日本時間">00:00:00</time>
   </header>
 
   <div class="notice-bar" aria-label="お知らせ">
@@ -1030,27 +323,13 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
     <div class="update-list" id="updateList"></div>
   </section>
 
-  <button
-    class="home-mascot"
-    type="button"
-    id="mascotButton"
-    aria-label="キャラクターを跳ねさせる"
-  >
+  <button class="home-mascot" type="button" id="mascotButton" aria-label="キャラクターを跳ねさせる">
     <span class="mascot-float">
       <span class="mascot-bounce">
-        <img
-          class="mascot-img"
-          src="./無題299_20261117135551.png"
-          alt="ピンクの髪と白い羽のキャラクター"
-          draggable="false"
-        >
+        <img class="mascot-img" src="./無題299_20261117135551.png" alt="ピンクの髪と白い羽のキャラクター" draggable="false">
       </span>
     </span>
-    <span
-      class="sparkles"
-      id="sparkleField"
-      aria-hidden="true"
-    ></span>
+    <span class="sparkles" id="sparkleField" aria-hidden="true"></span>
   </button>
 
   <nav class="directory" aria-label="アーカイブのメニュー">
@@ -1141,14 +420,10 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 
   <footer class="site-footer">
     <span>AN ARCHIVE OF IMAGINATION</span>
-    <button class="admin-link" type="button" id="openAdmin">
-      ADMIN
-    </button>
+    <button class="admin-link" type="button" id="openAdmin">ADMIN</button>
     <span>© 2026</span>
   </footer>
 </section>
-
-<!-- PLOTS -->
 
 <section class="screen" id="plots" aria-hidden="true">
   <div class="ambient"></div>
@@ -1169,19 +444,14 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
       </button>
     </div>
   </header>
-
   <main class="inner-scroll" id="plotsScroll">
     <div class="page-kicker">SECTION 01 / ARCHIVE</div>
     <h2 class="page-title">PLOTS</h2>
-    <p class="page-description" id="plotTotal">
-      プロット数：2件
-    </p>
+    <p class="page-description" id="plotTotal">プロット数：2件</p>
     <div class="section-line"></div>
     <div class="plot-grid" id="plotGrid"></div>
   </main>
 </section>
-
-<!-- PLOT DETAIL -->
 
 <section class="screen" id="plotView" aria-hidden="true">
   <div class="ambient"></div>
@@ -1202,11 +472,8 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
       </button>
     </div>
   </header>
-
   <main class="inner-scroll" id="plotViewScroll">
-    <div class="page-kicker" id="selectedPlotCode">
-      PLOT / 01
-    </div>
+    <div class="page-kicker" id="selectedPlotCode">PLOT / 01</div>
     <h2 class="page-title" id="selectedPlotTitle"></h2>
     <div class="plot-hero-cover" id="selectedPlotCover"></div>
     <article class="plot-info-panel">
@@ -1214,7 +481,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
       <p id="selectedPlotIntro"></p>
       <div class="plot-tags" id="selectedPlotTags"></div>
     </article>
-
     <div class="inner-section-heading">
       CHARACTERS
       <small id="characterCount">00 PEOPLE</small>
@@ -1222,8 +488,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
     <div class="character-grid" id="characterGrid"></div>
   </main>
 </section>
-
-<!-- CHARACTER DETAIL -->
 
 <section class="screen" id="character" aria-hidden="true">
   <div class="ambient"></div>
@@ -1239,20 +503,14 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button
-        class="back-button"
-        type="button"
-        data-back="plotView"
-      >
+      <button class="back-button" type="button" data-back="plotView">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
   </header>
-
   <main class="inner-scroll" id="characterScroll">
     <div class="page-kicker">
-      CHARACTER FILE /
-      <span id="characterNumber">01</span>
+      CHARACTER FILE / <span id="characterNumber">01</span>
     </div>
     <h2 class="page-title" id="characterName"></h2>
     <p class="page-description" id="characterSub"></p>
@@ -1266,8 +524,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
     </article>
   </main>
 </section>
-
-<!-- NOVELS / Q&A / GUIDELINES -->
 
 <section class="screen" id="detail" aria-hidden="true">
   <div class="ambient"></div>
@@ -1288,7 +544,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
       </button>
     </div>
   </header>
-
   <main class="inner-scroll" id="detailScroll">
     <div class="page-kicker" id="detailKicker"></div>
     <h2 class="page-title" id="detailTitle"></h2>
@@ -1312,8 +567,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
   </main>
 </section>
 
-<!-- ADMIN -->
-
 <section class="screen" id="admin" aria-hidden="true">
   <div class="ambient"></div>
   <header class="site-header">
@@ -1333,124 +586,69 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
       </button>
     </div>
   </header>
-
   <main class="inner-scroll" id="adminScroll">
-    <div class="page-kicker">
-      OWNER ACCESS / PRIVATE EDITOR
-    </div>
+    <div class="page-kicker">PRIVATE ACCESS</div>
     <h2 class="page-title">ADMIN</h2>
-    <p class="page-description">
-      プロットと登場人物の編集・公開
-    </p>
 
     <div class="admin-panel" id="adminLoginPanel">
-      <h3>MANAGER LOGIN</h3>
+      <h3>LOGIN</h3>
       <p class="admin-note">
-        このサイトはGitHub Pagesで公開されています。
-        安全に公開内容を書き換えるため、
-        GitHubが発行する管理用アクセストークンで
-        本人確認します。トークンはHTMLに埋め込まず、
-        この画面を開いている間だけ保持します。
+        Supabaseに登録した管理者アカウントでログインしてください。
       </p>
       <label class="admin-field">
-        管理キー（GitHubのfine-grainedトークン）
-        <input
-          id="adminToken"
-          type="password"
-          autocomplete="off"
-          autocapitalize="off"
-          spellcheck="false"
-          placeholder="github_pat_..."
-        >
+        EMAIL
+        <input id="adminEmail" type="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="メールアドレス">
+      </label>
+      <label class="admin-field">
+        PASSWORD
+        <input id="adminPassword" type="password" autocomplete="current-password" placeholder="パスワード">
       </label>
       <div class="admin-actions">
-        <button
-          class="admin-btn"
-          id="adminLoginBtn"
-          type="button"
-        >
+        <button class="admin-btn" id="adminLoginBtn" type="button">
           認証して編集
         </button>
       </div>
-      <p
-        class="admin-status"
-        id="loginStatus"
-        role="status"
-      ></p>
+      <p class="admin-status" id="loginStatus" role="status"></p>
     </div>
 
-    <div
-      class="admin-panel admin-hidden"
-      id="adminDashboard"
-    >
+    <div class="admin-panel admin-hidden" id="adminDashboard">
       <h3>PLOT MANAGER</h3>
       <p class="admin-note">
-        追加・編集・削除した内容は下書きです。
-        「サイトへ公開」を押すまで他の人には
-        反映されません。画像も公開時にアップロードします。
+        編集内容は下書きです。「サイトへ公開」を押すまでデータベースには保存されません。画像も公開時にアップロードされます。
       </p>
       <div class="admin-actions">
-        <button
-          class="admin-btn"
-          id="newPlotBtn"
-          type="button"
-        >
+        <button class="admin-btn" id="newPlotBtn" type="button">
           ＋ プロットを追加
         </button>
-        <button
-          class="admin-btn secondary"
-          id="adminLogoutBtn"
-          type="button"
-        >
+        <button class="admin-btn secondary" id="adminLogoutBtn" type="button">
           ログアウト
         </button>
       </div>
-
       <div id="adminPlotList"></div>
 
       <hr class="admin-separator">
       <h3>ANNOUNCEMENTS / お知らせ</h3>
       <p class="admin-note">
-        ホーム上部の白い帯に流れる文章です。
-        1行につき1件。
-        変更後は「サイトへ公開」で反映されます。
+        ホーム上部の白い帯に流れる文章です。1行につき1件。変更後は「サイトへ公開」で反映されます。
       </p>
       <label class="admin-field">
         流すお知らせ
-        <textarea
-          id="adminNotices"
-          rows="5"
-          placeholder="お知らせを1行ずつ入力"
-        ></textarea>
+        <textarea id="adminNotices" rows="5" placeholder="お知らせを1行ずつ入力"></textarea>
       </label>
 
       <hr class="admin-separator">
       <div class="admin-actions">
-        <button
-          class="admin-btn"
-          id="publishBtn"
-          type="button"
-        >
+        <button class="admin-btn" id="publishBtn" type="button">
           サイトへ公開
         </button>
-        <button
-          class="admin-btn secondary"
-          id="resetDraftBtn"
-          type="button"
-        >
+        <button class="admin-btn secondary" id="resetDraftBtn" type="button">
           下書きを破棄
         </button>
       </div>
-      <p
-        class="admin-status"
-        id="publishStatus"
-        role="status"
-      ></p>
+      <p class="admin-status" id="publishStatus" role="status"></p>
     </div>
   </main>
 </section>
-
-<!-- EDIT PLOT -->
 
 <section class="screen" id="editPlot" aria-hidden="true">
   <div class="ambient"></div>
@@ -1471,106 +669,57 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
       </button>
     </div>
   </header>
-
   <main class="inner-scroll" id="editPlotScroll">
     <div class="page-kicker">PRIVATE EDITOR / PLOT</div>
     <h2 class="page-title">EDIT PLOT</h2>
     <div class="admin-panel">
-
       <label class="admin-field">
         プロット名
-        <input
-          id="epTitle"
-          type="text"
-          placeholder="作品タイトル"
-        >
+        <input id="epTitle" type="text" placeholder="作品タイトル">
       </label>
-
       <label class="admin-field">
         一覧カード用の短い紹介
-        <textarea
-          id="epIntro"
-          rows="3"
-          placeholder="短い紹介"
-        ></textarea>
+        <textarea id="epIntro" rows="3" placeholder="短い紹介"></textarea>
       </label>
-
       <label class="admin-field">
         プロット詳細の紹介文
-        <textarea
-          id="epDescription"
-          rows="6"
-          placeholder="世界観やあらすじなど"
-        ></textarea>
+        <textarea id="epDescription" rows="6" placeholder="世界観やあらすじなど"></textarea>
       </label>
-
       <label class="admin-field">
         #タグ（1行に1つ）
-        <textarea
-          id="epTags"
-          rows="4"
-          placeholder="#ファンタジー&#10;#世界観"
-        ></textarea>
+        <textarea id="epTags" rows="4" placeholder="#ファンタジー&#10;#世界観"></textarea>
       </label>
-
       <label class="admin-field">
-        画像ファイルの既存パス
-        <input
-          id="epImage"
-          type="text"
-          placeholder="./plot01.png"
-        >
+        画像ファイルの既存パス・URL
+        <input id="epImage" type="text" placeholder="./plot01.png">
       </label>
-
-      <img
-        class="admin-image-preview"
-        id="epPreview"
-        alt="プロット画像のプレビュー"
-      >
-
+      <img class="admin-image-preview" id="epPreview" alt="プロット画像のプレビュー">
       <label class="admin-field">
         新しい画像を選択（公開時にアップロード）
-        <input id="epFile" type="file" accept="image/*">
+        <input id="epFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif">
       </label>
-
       <div class="admin-actions">
-        <button
-          class="admin-btn secondary"
-          id="epClearImage"
-          type="button"
-        >
+        <button class="admin-btn secondary" id="epClearImage" type="button">
           画像を外す
         </button>
       </div>
-
       <hr class="admin-separator">
       <h3>
         CHARACTERS
         <span class="admin-count" id="epCharCount"></span>
       </h3>
       <div id="epCharacterList"></div>
-
       <div class="admin-actions">
-        <button
-          class="admin-btn"
-          id="epNewCharacter"
-          type="button"
-        >
+        <button class="admin-btn" id="epNewCharacter" type="button">
           ＋ キャラを追加
         </button>
-        <button
-          class="admin-btn secondary"
-          type="button"
-          data-back="admin"
-        >
+        <button class="admin-btn secondary" type="button" data-back="admin">
           編集一覧へ戻る
         </button>
       </div>
     </div>
   </main>
 </section>
-
-<!-- EDIT CHARACTER -->
 
 <section class="screen" id="editCharacter" aria-hidden="true">
   <div class="ambient"></div>
@@ -1586,105 +735,53 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button
-        class="back-button"
-        type="button"
-        data-back="editPlot"
-      >
+      <button class="back-button" type="button" data-back="editPlot">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
   </header>
-
   <main class="inner-scroll" id="editCharacterScroll">
-    <div class="page-kicker">
-      PRIVATE EDITOR / CHARACTER
-    </div>
+    <div class="page-kicker">PRIVATE EDITOR / CHARACTER</div>
     <h2 class="page-title">EDIT CHARACTER</h2>
-
     <div class="admin-panel">
       <label class="admin-field">
         キャラクター名
         <input id="ecName" type="text">
       </label>
-
       <label class="admin-field">
         役割・肩書き
-        <input
-          id="ecRole"
-          type="text"
-          placeholder="MAIN CHARACTER"
-        >
+        <input id="ecRole" type="text" placeholder="MAIN CHARACTER">
       </label>
-
       <label class="admin-field">
         年齢
-        <input
-          id="ecAge"
-          type="text"
-          placeholder="未設定"
-        >
+        <input id="ecAge" type="text" placeholder="未設定">
       </label>
-
       <label class="admin-field">
         誕生日
-        <input
-          id="ecBirthday"
-          type="text"
-          placeholder="未設定"
-        >
+        <input id="ecBirthday" type="text" placeholder="未設定">
       </label>
-
       <label class="admin-field">
         プロフィール
         <textarea id="ecProfile" rows="6"></textarea>
       </label>
-
       <label class="admin-field">
         性格・設定・関係性
-        <textarea
-          id="ecPersonality"
-          rows="6"
-        ></textarea>
+        <textarea id="ecPersonality" rows="6"></textarea>
       </label>
-
       <label class="admin-field">
-        画像ファイルの既存パス
-        <input
-          id="ecImage"
-          type="text"
-          placeholder="./character01.png"
-        >
+        画像ファイルの既存パス・URL
+        <input id="ecImage" type="text" placeholder="./character01.png">
       </label>
-
-      <img
-        class="admin-image-preview"
-        id="ecPreview"
-        alt="キャラ画像のプレビュー"
-      >
-
+      <img class="admin-image-preview" id="ecPreview" alt="キャラ画像のプレビュー">
       <label class="admin-field">
         新しい画像を選択（公開時にアップロード）
-        <input
-          id="ecFile"
-          type="file"
-          accept="image/*"
-        >
+        <input id="ecFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif">
       </label>
-
       <div class="admin-actions">
-        <button
-          class="admin-btn secondary"
-          id="ecClearImage"
-          type="button"
-        >
+        <button class="admin-btn secondary" id="ecClearImage" type="button">
           画像を外す
         </button>
-        <button
-          class="admin-btn"
-          type="button"
-          data-back="editPlot"
-        >
+        <button class="admin-btn" type="button" data-back="editPlot">
           キャラ一覧へ戻る
         </button>
       </div>
@@ -1698,8 +795,33 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 <script>
 "use strict";
 
-/* MOBILE */
+/* SUPABASE CONFIG */
+const SUPABASE_URL =
+  "https://ftotadyfwblgsgosqxtg.supabase.co";
 
+const SUPABASE_KEY =
+  "sb_publishable_QsWmKeEl6s_7pvi8ksrruQ_BKcCSl8Z";
+
+const ADMIN_UID =
+  "45d97b84-962c-4c95-8e7d-ab2917d63f0a";
+
+const STORAGE_BUCKET = "aerialis-images";
+
+const db = window.supabase
+  ? window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY,
+      {
+        auth:{
+          persistSession:false,
+          autoRefreshToken:true,
+          detectSessionInUrl:false
+        }
+      }
+    )
+  : null;
+
+/* MOBILE */
 for(const name of [
   "gesturestart",
   "gesturechange",
@@ -1715,7 +837,9 @@ for(const name of [
 document.addEventListener(
   "touchmove",
   e=>{
-    if(e.touches.length>1)e.preventDefault();
+    if(e.touches.length>1){
+      e.preventDefault();
+    }
   },
   {passive:false}
 );
@@ -1725,13 +849,28 @@ document.addEventListener(
   e=>e.preventDefault()
 );
 
-const $=id=>document.getElementById(id);
-const TAU=Math.PI*2;
-const clamp=(value,min,max)=>
-  Math.min(max,Math.max(min,value));
+const $ = id=>document.getElementById(id);
+const TAU = Math.PI*2;
+const clamp = (v,min,max)=>
+  Math.min(max,Math.max(min,v));
+
+const makeID = ()=>
+  crypto.randomUUID();
+
+const deepCopy = value=>
+  JSON.parse(JSON.stringify(value));
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function validID(value){
+  return typeof value==="string" &&
+    UUID_RE.test(value)
+      ? value
+      : makeID();
+}
 
 /* CLOCK */
-
 const jstClock=new Intl.DateTimeFormat(
   "ja-JP",
   {
@@ -1745,22 +884,30 @@ const jstClock=new Intl.DateTimeFormat(
 
 function updateClock(){
   const value=jstClock.format(new Date());
-  document.querySelectorAll(".live-clock").forEach(el=>{
-    el.textContent=value;
-  });
+
+  document
+    .querySelectorAll(".live-clock")
+    .forEach(el=>{
+      el.textContent=value;
+    });
 }
 
 updateClock();
 setInterval(updateClock,1000);
 
-/* NEWS AND UPDATES */
-
-let NOTICES=[
+/* DATA */
+const INITIAL_NOTICES=[
   "NITUへようこそ。",
   "お知らせやサイトの更新情報はこちらでご案内します。"
 ];
 
+let NOTICES=[...INITIAL_NOTICES];
+
 const SITE_UPDATES=[
+  {
+    date:"2026.11.19",
+    text:"自動更新・お知らせ帯の区切り・管理画面の表示を調整しました。"
+  },
   {
     date:"2026.11.19",
     text:"管理画面のGitHub接続先を更新しました。"
@@ -1781,246 +928,7 @@ const SITE_UPDATES=[
 
 let PUBLISHED_UPDATES=[];
 
-function normalizedUpdates(items){
-  return (Array.isArray(items)?items:[])
-    .slice(0,150)
-    .map(item=>({
-      id:item.id?String(item.id):"",
-      date:String(item.date||""),
-      text:String(item.text||"")
-    }))
-    .filter(item=>item.date&&item.text);
-}
-
-function renderAnnouncements(){
-  const text=
-    NOTICES.join("　 /　 ")+
-    (NOTICES.length?"　 /　 ":"");
-
-  const track=$("noticeTrack");
-  track.replaceChildren();
-
-  for(let i=0;i<2;i++){
-    const item=document.createElement("span");
-    item.className="notice-copy";
-    item.textContent=text;
-    track.appendChild(item);
-  }
-
-  const list=$("updateList");
-  list.replaceChildren();
-
-  const used=new Set();
-
-  const records=[
-    ...PUBLISHED_UPDATES,
-    ...SITE_UPDATES
-  ].filter(item=>{
-    const key=item.id||item.date+"|"+item.text;
-    if(used.has(key))return false;
-    used.add(key);
-    return true;
-  }).sort((a,b)=>
-    b.date.localeCompare(a.date)
-  );
-
-  for(const record of records){
-    const item=document.createElement("div");
-    item.className="update-item";
-
-    const date=document.createElement("time");
-    date.className="update-date";
-    date.textContent=record.date;
-
-    const title=document.createElement("span");
-    title.className="update-text";
-    title.textContent=record.text;
-
-    item.append(date,title);
-    list.appendChild(item);
-  }
-}
-
-renderAnnouncements();
-
-/* SCREEN MANAGEMENT */
-
-const screens=Object.fromEntries(
-  [
-    "loading","home","plots","plotView",
-    "character","detail","admin",
-    "editPlot","editCharacter"
-  ].map(id=>[id,$(id)])
-);
-
-let current="loading";
-let transitioning=false;
-
-function setScreen(name){
-  for(const [key,el] of Object.entries(screens)){
-    const active=key===name;
-    el.classList.toggle("active",active);
-    el.setAttribute("aria-hidden",String(!active));
-    el.inert=!active;
-  }
-
-  current=name;
-
-  if(name==="editPlot"&&adminSecret){
-    renderEditCharacters();
-  }
-
-  if(name==="admin"&&adminSecret){
-    renderAdminList();
-  }
-}
-
-function changeScreen(name){
-  if(transitioning||current===name)return;
-
-  transitioning=true;
-  const veil=$("softWipe");
-  veil.classList.remove("play");
-  void veil.offsetWidth;
-  veil.classList.add("play");
-
-  setTimeout(()=>{
-    setScreen(name);
-  },330);
-
-  setTimeout(()=>{
-    transitioning=false;
-    veil.classList.remove("play");
-  },815);
-}
-
-document.querySelectorAll("[data-back]").forEach(button=>{
-  button.addEventListener("click",()=>{
-    changeScreen(button.dataset.back);
-  });
-});
-
-document.addEventListener("keydown",e=>{
-  if(e.key!=="Escape"||transitioning)return;
-
-  const back={
-    plots:"home",
-    plotView:"plots",
-    character:"plotView",
-    detail:"home",
-    admin:"home",
-    editPlot:"admin",
-    editCharacter:"editPlot"
-  };
-
-  if(back[current])changeScreen(back[current]);
-});
-
-/* WAVES */
-
-const waveGraphics=[
-  ...document.querySelectorAll(".wave-svg")
-];
-
-function sinePath(baseY,phase){
-  let result="";
-  const points=46;
-
-  for(let i=0;i<=points;i++){
-    const x=7+i*136/points;
-    const y=
-      baseY+
-      6.8*Math.sin(i/points*TAU*2.25+phase);
-
-    result+=
-      (i===0?"M":" L")+
-      x.toFixed(2)+" "+y.toFixed(2);
-  }
-  return result;
-}
-
-let lastWave=0;
-
-const reducedMotion=window.matchMedia(
-  "(prefers-reduced-motion: reduce)"
-).matches;
-
-function drawWave(time){
-  const phase=reducedMotion?0:time*.0022;
-  const top=sinePath(18,phase);
-  const bottom=sinePath(45,phase+.33);
-
-  for(const svg of waveGraphics){
-    if(!svg.closest(".active"))continue;
-
-    svg.querySelector(".wave-top").setAttribute(
-      "d",top
-    );
-    svg.querySelector(".wave-bottom").setAttribute(
-      "d",bottom
-    );
-  }
-}
-
-function waveLoop(t){
-  requestAnimationFrame(waveLoop);
-  if(document.hidden||t-lastWave<30)return;
-
-  lastWave=t;
-  drawWave(t);
-}
-
-drawWave(0);
-requestAnimationFrame(waveLoop);
-
-/* LOADING */
-
-let loadFinished=false;
-let loadStarted=0;
-const loadDuration=4000;
-
-function endLoading(){
-  if(loadFinished)return;
-
-  loadFinished=true;
-  $("loaderFill").style.width="100%";
-  $("loaderNumber").textContent="100%";
-  $("progressTrack").setAttribute(
-    "aria-valuenow","100"
-  );
-  changeScreen("home");
-}
-
-function loadFrame(time){
-  if(loadFinished)return;
-  if(!loadStarted)loadStarted=time;
-
-  const progress=clamp(
-    (time-loadStarted)/loadDuration,
-    0,1
-  );
-
-  const percent=Math.round(progress*100);
-
-  $("loaderFill").style.width=percent+"%";
-  $("loaderNumber").textContent=percent+"%";
-  $("progressTrack").setAttribute(
-    "aria-valuenow",String(percent)
-  );
-
-  if(progress===1){
-    setTimeout(endLoading,240);
-  }else{
-    requestAnimationFrame(loadFrame);
-  }
-}
-
-requestAnimationFrame(loadFrame);
-$("skipIntro").addEventListener("click",endLoading);
-
-/* SAMPLE PLOT DATA */
-
-let PLOT_DATA=[
+const INITIAL_PLOTS=[
   {
     title:"プロット 01",
     image:"./plot01.png",
@@ -2056,10 +964,7 @@ let PLOT_DATA=[
     title:"プロット 02",
     image:"./plot02.png",
     intro:"こちらには別のプロットの短い紹介を表示できます。",
-    tags:[
-      "#オリジナル",
-      "#物語"
-    ],
+    tags:["#オリジナル","#物語"],
     characters:[
       {
         name:"登場人物 03",
@@ -2074,8 +979,354 @@ let PLOT_DATA=[
   }
 ];
 
-/* IMAGE FALLBACK */
+/* NORMALIZATION */
+function normalizedPlots(items){
+  if(!Array.isArray(items)){
+    throw new Error(
+      "プロットデータの形式が正しくありません。"
+    );
+  }
 
+  return items.map(p=>({
+    id:validID(p.id),
+    title:String(p.title||"無題"),
+    image:String(
+      p.image||p.image_url||""
+    ),
+    intro:String(p.intro||""),
+    description:String(
+      p.description||p.intro||""
+    ),
+    tags:Array.isArray(p.tags)
+      ?p.tags.map(String)
+      :[],
+    characters:(
+      Array.isArray(p.characters)
+        ?p.characters
+        :[]
+    ).map(c=>({
+      id:validID(c.id),
+      name:String(c.name||"名前未設定"),
+      image:String(
+        c.image||c.image_url||""
+      ),
+      role:String(c.role||"CHARACTER"),
+      age:String(c.age||"未設定"),
+      birthday:String(c.birthday||"未設定"),
+      profile:String(c.profile||""),
+      personality:String(c.personality||"")
+    }))
+  }));
+}
+
+function normalizedUpdates(items){
+  return (Array.isArray(items)?items:[])
+    .slice(0,150)
+    .map(item=>({
+      id:item.id?String(item.id):"",
+      date:String(item.date||""),
+      text:String(item.text||"")
+    }))
+    .filter(item=>item.date&&item.text);
+}
+
+let PLOT_DATA=normalizedPlots(INITIAL_PLOTS);
+
+/* ANNOUNCEMENTS */
+function renderAnnouncements(){
+  const track=$("noticeTrack");
+  track.replaceChildren();
+
+  const messages=NOTICES.length
+    ?NOTICES
+    :["お知らせはありません。"];
+
+  for(let loop=0;loop<2;loop++){
+    const group=document.createElement("span");
+    group.className="notice-loop";
+    group.setAttribute("aria-hidden","true");
+
+    for(const message of messages){
+      const item=document.createElement("span");
+      item.className="notice-copy";
+      item.textContent=message;
+
+      const divider=document.createElement("span");
+      divider.className="notice-divider";
+      divider.textContent="/";
+
+      group.append(item,divider);
+    }
+
+    track.appendChild(group);
+  }
+
+  const list=$("updateList");
+  list.replaceChildren();
+
+  const used=new Set();
+
+  const records=[
+    ...PUBLISHED_UPDATES,
+    ...SITE_UPDATES
+  ].filter(item=>{
+    const key=item.id||
+      item.date+"|"+item.text;
+
+    if(used.has(key))return false;
+
+    used.add(key);
+    return true;
+  }).sort((a,b)=>
+    b.date.localeCompare(a.date)
+  );
+
+  for(const record of records){
+    const item=document.createElement("div");
+    item.className="update-item";
+
+    const date=document.createElement("time");
+    date.className="update-date";
+    date.textContent=record.date;
+
+    const title=document.createElement("span");
+    title.className="update-text";
+    title.textContent=record.text;
+
+    item.append(date,title);
+    list.appendChild(item);
+  }
+}
+
+renderAnnouncements();
+
+/* SCREEN */
+const screens=Object.fromEntries(
+  [
+    "loading",
+    "home",
+    "plots",
+    "plotView",
+    "character",
+    "detail",
+    "admin",
+    "editPlot",
+    "editCharacter"
+  ].map(id=>[id,$(id)])
+);
+
+let current="loading";
+let transitioning=false;
+let adminUser="";
+
+function setScreen(name){
+  for(const [key,el] of Object.entries(screens)){
+    const active=key===name;
+
+    el.classList.toggle(
+      "active",
+      active
+    );
+
+    el.setAttribute(
+      "aria-hidden",
+      String(!active)
+    );
+
+    el.inert=!active;
+  }
+
+  current=name;
+
+  if(name==="editPlot"&&adminUser){
+    renderEditCharacters();
+  }
+
+  if(name==="admin"&&adminUser){
+    renderAdminList();
+  }
+}
+
+function changeScreen(name){
+  if(transitioning||current===name){
+    return;
+  }
+
+  transitioning=true;
+  const veil=$("softWipe");
+
+  veil.classList.remove("play");
+  void veil.offsetWidth;
+  veil.classList.add("play");
+
+  setTimeout(()=>{
+    setScreen(name);
+  },330);
+
+  setTimeout(()=>{
+    transitioning=false;
+    veil.classList.remove("play");
+  },815);
+}
+
+document
+  .querySelectorAll("[data-back]")
+  .forEach(button=>{
+    button.addEventListener("click",()=>{
+      changeScreen(
+        button.dataset.back
+      );
+    });
+  });
+
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape"||transitioning){
+    return;
+  }
+
+  const back={
+    plots:"home",
+    plotView:"plots",
+    character:"plotView",
+    detail:"home",
+    admin:"home",
+    editPlot:"admin",
+    editCharacter:"editPlot"
+  };
+
+  if(back[current]){
+    changeScreen(back[current]);
+  }
+});
+
+/* WAVE LOGO */
+const waveGraphics=[
+  ...document.querySelectorAll(".wave-svg")
+];
+
+function sinePath(baseY,phase){
+  let result="";
+  const points=46;
+
+  for(let i=0;i<=points;i++){
+    const x=7+i*136/points;
+    const y=baseY+
+      6.8*Math.sin(
+        i/points*TAU*2.25+phase
+      );
+
+    result+=(i===0?"M":" L")+
+      x.toFixed(2)+" "+
+      y.toFixed(2);
+  }
+
+  return result;
+}
+
+let lastWave=0;
+
+const reducedMotion=window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
+function drawWave(time){
+  const phase=reducedMotion
+    ?0
+    :time*.0022;
+
+  const top=sinePath(18,phase);
+  const bottom=sinePath(45,phase+.33);
+
+  for(const svg of waveGraphics){
+    if(!svg.closest(".active")){
+      continue;
+    }
+
+    svg.querySelector(".wave-top")
+      .setAttribute("d",top);
+
+    svg.querySelector(".wave-bottom")
+      .setAttribute("d",bottom);
+  }
+}
+
+function waveLoop(t){
+  requestAnimationFrame(waveLoop);
+
+  if(document.hidden||t-lastWave<30){
+    return;
+  }
+
+  lastWave=t;
+  drawWave(t);
+}
+
+drawWave(0);
+requestAnimationFrame(waveLoop);
+
+/* LOADING */
+let loadFinished=false;
+let loadStarted=0;
+const loadDuration=4000;
+
+function endLoading(){
+  if(loadFinished)return;
+
+  loadFinished=true;
+
+  $("loaderFill").style.width="100%";
+  $("loaderNumber").textContent="100%";
+
+  $("progressTrack").setAttribute(
+    "aria-valuenow",
+    "100"
+  );
+
+  changeScreen("home");
+}
+
+function loadFrame(time){
+  if(loadFinished)return;
+
+  if(!loadStarted){
+    loadStarted=time;
+  }
+
+  const progress=clamp(
+    (time-loadStarted)/loadDuration,
+    0,1
+  );
+
+  const percent=Math.round(
+    progress*100
+  );
+
+  $("loaderFill").style.width=
+    percent+"%";
+
+  $("loaderNumber").textContent=
+    percent+"%";
+
+  $("progressTrack").setAttribute(
+    "aria-valuenow",
+    String(percent)
+  );
+
+  if(progress===1){
+    setTimeout(endLoading,240);
+  }else{
+    requestAnimationFrame(loadFrame);
+  }
+}
+
+requestAnimationFrame(loadFrame);
+
+$("skipIntro").addEventListener(
+  "click",
+  endLoading
+);
+
+/* IMAGE */
 function coverElement(cls,imagePath,label){
   const root=document.createElement("div");
   root.className=cls;
@@ -2083,6 +1334,7 @@ function coverElement(cls,imagePath,label){
   const placeholder=document.createElement("span");
   placeholder.className="cover-placeholder";
   placeholder.textContent=label;
+
   root.appendChild(placeholder);
 
   if(imagePath){
@@ -2093,7 +1345,9 @@ function coverElement(cls,imagePath,label){
 
     img.addEventListener(
       "error",
-      ()=>{img.hidden=true;},
+      ()=>{
+        img.hidden=true;
+      },
       {once:true}
     );
 
@@ -2104,10 +1358,10 @@ function coverElement(cls,imagePath,label){
   return root;
 }
 
-/* TAG ANIMATION */
-
+/* TAGS */
 function tagsViewport(tags){
   const text=tags.join("　");
+
   const viewport=document.createElement("div");
   viewport.className="tag-viewport";
   viewport.setAttribute("aria-label",text);
@@ -2131,29 +1385,35 @@ function tagsViewport(tags){
 }
 
 function refreshTagMarquees(){
-  document.querySelectorAll(".tag-viewport").forEach(viewport=>{
-    const copy=viewport.querySelector(".tag-copy");
-    const overflow=
-      copy.scrollWidth>viewport.clientWidth+2;
+  document
+    .querySelectorAll(".tag-viewport")
+    .forEach(viewport=>{
+      const copy=viewport.querySelector(
+        ".tag-copy"
+      );
 
-    viewport.classList.toggle(
-      "scrolling",
-      overflow&&!reducedMotion
-    );
+      const overflow=
+        copy.scrollWidth>
+        viewport.clientWidth+2;
 
-    const seconds=Math.max(
-      9,Math.round(copy.scrollWidth/18)
-    );
+      viewport.classList.toggle(
+        "scrolling",
+        overflow&&!reducedMotion
+      );
 
-    viewport.style.setProperty(
-      "--tag-duration",
-      seconds+"s"
-    );
-  });
+      const seconds=Math.max(
+        9,
+        Math.round(copy.scrollWidth/18)
+      );
+
+      viewport.style.setProperty(
+        "--tag-duration",
+        seconds+"s"
+      );
+    });
 }
 
 /* PLOT GRID */
-
 function renderPlotGrid(){
   const grid=$("plotGrid");
   grid.replaceChildren();
@@ -2170,7 +1430,8 @@ function renderPlotGrid(){
       coverElement(
         "plot-cover",
         plot.image,
-        "PLOT\n"+String(index+1).padStart(2,"0")
+        "PLOT\n"+
+        String(index+1).padStart(2,"0")
       )
     );
 
@@ -2189,6 +1450,7 @@ function renderPlotGrid(){
 
     const foot=document.createElement("div");
     foot.className="plot-card-footer";
+
     foot.innerHTML=
       '<span>VIEW PLOT</span>'+
       '<b class="vector-arrow">'+
@@ -2196,7 +1458,13 @@ function renderPlotGrid(){
       '<path d="M6 18 18 6 M8 6h10v10"/>'+
       '</svg></b>';
 
-    info.append(title,intro,tags,foot);
+    info.append(
+      title,
+      intro,
+      tags,
+      foot
+    );
+
     card.appendChild(info);
 
     card.addEventListener("click",()=>{
@@ -2207,43 +1475,42 @@ function renderPlotGrid(){
   });
 }
 
+/* PLOT DETAIL */
 let selectedPlot=0;
 let selectedCharacter=0;
 
-/* OPEN PLOT */
-
-function openPlot(index){
-  if(
-    current!=="plots"||
-    transitioning||
-    !PLOT_DATA[index]
-  )return;
-
-  selectedPlot=index;
+function renderPlotDetail(index){
   const plot=PLOT_DATA[index];
 
-  $("selectedPlotCode").textContent=
-    "PLOT / "+String(index+1).padStart(2,"0");
+  if(!plot)return;
 
-  $("selectedPlotTitle").textContent=plot.title;
+  $("selectedPlotCode").textContent=
+    "PLOT / "+
+    String(index+1).padStart(2,"0");
+
+  $("selectedPlotTitle").textContent=
+    plot.title;
+
   $("selectedPlotIntro").textContent=
     plot.description||plot.intro;
+
   $("selectedPlotTags").textContent=
     plot.tags.join("　");
 
-  $("selectedPlotCover").replaceWith(
-    coverElement(
-      "plot-hero-cover",
-      plot.image,
-      "PLOT / "+String(index+1).padStart(2,"0")
-    )
+  const cover=coverElement(
+    "plot-hero-cover",
+    plot.image,
+    "PLOT / "+
+    String(index+1).padStart(2,"0")
   );
 
-  document.querySelector(".plot-hero-cover")
-    .id="selectedPlotCover";
+  cover.id="selectedPlotCover";
+
+  $("selectedPlotCover").replaceWith(cover);
 
   $("characterCount").textContent=
-    String(plot.characters.length).padStart(2,"0")+
+    String(plot.characters.length)
+      .padStart(2,"0")+
     " PEOPLE";
 
   const grid=$("characterGrid");
@@ -2258,7 +1525,8 @@ function openPlot(index){
       coverElement(
         "character-cover",
         character.image,
-        "CHARACTER\n"+String(i+1).padStart(2,"0")
+        "CHARACTER\n"+
+        String(i+1).padStart(2,"0")
       )
     );
 
@@ -2269,9 +1537,11 @@ function openPlot(index){
     title.textContent=character.name;
 
     const role=document.createElement("small");
-    role.textContent=character.role||"CHARACTER";
+    role.textContent=
+      character.role||"CHARACTER";
 
     const arrow=document.createElement("span");
+
     arrow.innerHTML=
       'VIEW PROFILE '+
       '<span class="vector-arrow">'+
@@ -2288,47 +1558,61 @@ function openPlot(index){
 
     grid.appendChild(button);
   });
+}
+
+function openPlot(index){
+  if(
+    current!=="plots"||
+    transitioning||
+    !PLOT_DATA[index]
+  ){
+    return;
+  }
+
+  selectedPlot=index;
+  renderPlotDetail(index);
 
   $("plotViewScroll").scrollTop=0;
   changeScreen("plotView");
 }
 
-/* OPEN CHARACTER */
-
-function openCharacter(index){
-  if(current!=="plotView"||transitioning)return;
-
+/* CHARACTER DETAIL */
+function renderCharacterDetail(index){
   const character=
-    PLOT_DATA[selectedPlot]?.characters[index];
+    PLOT_DATA[selectedPlot]
+      ?.characters[index];
 
   if(!character)return;
-
-  selectedCharacter=index;
 
   $("characterNumber").textContent=
     String(index+1).padStart(2,"0");
 
-  $("characterName").textContent=character.name;
+  $("characterName").textContent=
+    character.name;
+
   $("characterSub").textContent=
     PLOT_DATA[selectedPlot].title+
-    " / "+(character.role||"CHARACTER");
+    " / "+
+    (character.role||"CHARACTER");
 
-  $("characterPortrait").replaceWith(
-    coverElement(
-      "profile-cover",
-      character.image,
-      "CHARACTER / "+String(index+1).padStart(2,"0")
-    )
+  const cover=coverElement(
+    "profile-cover",
+    character.image,
+    "CHARACTER / "+
+    String(index+1).padStart(2,"0")
   );
 
-  document.querySelector(".profile-cover")
-    .id="characterPortrait";
+  cover.id="characterPortrait";
+
+  $("characterPortrait").replaceWith(cover);
 
   $("characterBio").textContent=
-    character.profile||"詳細は準備中です。";
+    character.profile||
+    "詳細は準備中です。";
 
   $("characterNotes").textContent=
-    character.personality||"詳細は準備中です。";
+    character.personality||
+    "詳細は準備中です。";
 
   const fields=$("characterFields");
   fields.replaceChildren();
@@ -2349,23 +1633,115 @@ function openCharacter(index){
     block.append(dt,dd);
     fields.appendChild(block);
   }
+}
+
+function openCharacter(index){
+  if(
+    current!=="plotView"||
+    transitioning
+  ){
+    return;
+  }
+
+  if(
+    !PLOT_DATA[selectedPlot]
+      ?.characters[index]
+  ){
+    return;
+  }
+
+  selectedCharacter=index;
+  renderCharacterDetail(index);
 
   $("characterScroll").scrollTop=0;
   changeScreen("character");
 }
 
+/* LIVE VIEW REFRESH */
+function refreshDisplayedDetails(
+  oldPlotId,
+  oldCharacterId
+){
+  const viewingDetail=
+    current==="plotView"||
+    current==="character";
+
+  if(!viewingDetail)return;
+
+  const newPlotIndex=PLOT_DATA.findIndex(
+    p=>p.id===oldPlotId
+  );
+
+  if(newPlotIndex<0){
+    if(current==="plotView"){
+      $("selectedPlotIntro").textContent=
+        "このプロットは公開終了しました。";
+
+      $("characterGrid").replaceChildren();
+
+      $("characterCount").textContent=
+        "00 PEOPLE";
+    }else{
+      $("characterBio").textContent=
+        "このキャラクターの公開は終了しました。";
+    }
+
+    return;
+  }
+
+  selectedPlot=newPlotIndex;
+
+  if(current==="plotView"){
+    const scroll=
+      $("plotViewScroll").scrollTop;
+
+    renderPlotDetail(newPlotIndex);
+
+    $("plotViewScroll").scrollTop=
+      scroll;
+  }
+
+  if(current==="character"){
+    const newCharIndex=
+      PLOT_DATA[newPlotIndex]
+        .characters.findIndex(
+          c=>c.id===oldCharacterId
+        );
+
+    if(newCharIndex<0){
+      $("characterBio").textContent=
+        "このキャラクターの公開は終了しました。";
+
+      return;
+    }
+
+    selectedCharacter=newCharIndex;
+
+    const scroll=
+      $("characterScroll").scrollTop;
+
+    renderCharacterDetail(newCharIndex);
+
+    $("characterScroll").scrollTop=
+      scroll;
+  }
+}
+
 renderPlotGrid();
 
 addEventListener(
-  "resize",refreshTagMarquees,{passive:true}
+  "resize",
+  refreshTagMarquees,
+  {passive:true}
 );
 
 if(document.fonts?.ready){
-  document.fonts.ready.then(refreshTagMarquees);
+  document.fonts.ready.then(
+    refreshTagMarquees
+  );
 }
 
 /* OTHER PAGES */
-
 const pages=[
   {
     kicker:"SECTION 02 / NOVELS",
@@ -2391,60 +1767,104 @@ const pages=[
 ];
 
 function openCategory(index){
-  if(current!=="home"||transitioning)return;
+  if(
+    current!=="home"||
+    transitioning
+  ){
+    return;
+  }
 
   if(index===0){
     $("plotsScroll").scrollTop=0;
+
     refreshTagMarquees();
     changeScreen("plots");
-    setTimeout(refreshTagMarquees,450);
+
+    setTimeout(
+      refreshTagMarquees,
+      450
+    );
+
     return;
   }
 
   const page=pages[index-1];
+
   if(!page)return;
 
-  $("detailKicker").textContent=page.kicker;
-  $("detailTitle").textContent=page.title;
-  $("detailSubtitle").textContent=page.subtitle;
-  $("detailText").textContent=page.text;
+  $("detailKicker").textContent=
+    page.kicker;
+
+  $("detailTitle").textContent=
+    page.title;
+
+  $("detailSubtitle").textContent=
+    page.subtitle;
+
+  $("detailText").textContent=
+    page.text;
 
   $("detailPageNumber").textContent=
-    String(index+1).padStart(2,"0")+" / 04";
+    String(index+1).padStart(2,"0")+
+    " / 04";
 
-  $("detailEmpty").hidden=!page.empty;
+  $("detailEmpty").hidden=
+    !page.empty;
+
   $("detailScroll").scrollTop=0;
+
   changeScreen("detail");
 }
 
-document.querySelectorAll("[data-page]").forEach(button=>{
-  button.addEventListener("click",()=>{
-    openCategory(Number(button.dataset.page));
+document
+  .querySelectorAll("[data-page]")
+  .forEach(button=>{
+    button.addEventListener("click",()=>{
+      openCategory(
+        Number(button.dataset.page)
+      );
+    });
   });
-});
 
-/* MASCOT ANIMATION */
-
+/* MASCOT */
 const mascot=$("mascotButton");
 const sparkleField=$("sparkleField");
-const bounceLayer=mascot.querySelector(".mascot-bounce");
+
+const bounceLayer=mascot.querySelector(
+  ".mascot-bounce"
+);
 
 const spring={
-  y:0,vy:0,stretch:0,vs:0,
-  running:false,last:0
+  y:0,
+  vy:0,
+  stretch:0,
+  vs:0,
+  running:false,
+  last:0
 };
 
 function bounceFrame(now){
   const dt=spring.last
-    ?Math.min((now-spring.last)/16.667,2)
+    ?Math.min(
+      (now-spring.last)/16.667,
+      2
+    )
     :1;
 
   spring.last=now;
-  spring.vy+=(-.095*spring.y-.18*spring.vy)*dt;
-  spring.y+=spring.vy*dt;
-  spring.vs+=(
-    -.18*spring.stretch-.30*spring.vs
+
+  spring.vy+=(
+    -.095*spring.y-
+    .18*spring.vy
   )*dt;
+
+  spring.y+=spring.vy*dt;
+
+  spring.vs+=(
+    -.18*spring.stretch-
+    .30*spring.vs
+  )*dt;
+
   spring.stretch+=spring.vs*dt;
 
   bounceLayer.style.transform=
@@ -2463,12 +1883,14 @@ function bounceFrame(now){
 
   if(energy<.08){
     bounceLayer.style.transform="";
+
     spring.y=0;
     spring.vy=0;
     spring.stretch=0;
     spring.vs=0;
     spring.running=false;
     spring.last=0;
+
     return;
   }
 
@@ -2490,20 +1912,56 @@ function addSparkles(){
     const a=
       i/12*TAU+
       (Math.random()-.5)*.35;
-    const distance=26+Math.random()*47;
+
+    const distance=
+      26+Math.random()*47;
 
     const set=(key,value)=>{
-      el.style.setProperty(key,value);
+      el.style.setProperty(
+        key,
+        value
+      );
     };
 
-    set("--x",(31+Math.random()*38)+"%");
-    set("--y",(24+Math.random()*49)+"%");
-    set("--size",(5+Math.random()*7)+"px");
-    set("--dx",Math.cos(a)*distance+"px");
-    set("--dy",Math.sin(a)*distance+"px");
-    set("--color",colors[i%colors.length]);
-    set("--delay",(Math.random()*.09)+"s");
-    set("--duration",(.55+Math.random()*.32)+"s");
+    set(
+      "--x",
+      (31+Math.random()*38)+"%"
+    );
+
+    set(
+      "--y",
+      (24+Math.random()*49)+"%"
+    );
+
+    set(
+      "--size",
+      (5+Math.random()*7)+"px"
+    );
+
+    set(
+      "--dx",
+      Math.cos(a)*distance+"px"
+    );
+
+    set(
+      "--dy",
+      Math.sin(a)*distance+"px"
+    );
+
+    set(
+      "--color",
+      colors[i%colors.length]
+    );
+
+    set(
+      "--delay",
+      (Math.random()*.09)+"s"
+    );
+
+    set(
+      "--duration",
+      (.55+Math.random()*.32)+"s"
+    );
 
     sparkleField.appendChild(el);
 
@@ -2514,252 +1972,406 @@ function addSparkles(){
     );
   }
 
-  while(sparkleField.children.length>100){
+  while(
+    sparkleField.children.length>100
+  ){
     sparkleField.firstElementChild.remove();
   }
 }
 
 mascot.addEventListener("click",()=>{
-  if(current!=="home"||transitioning)return;
+  if(
+    current!=="home"||
+    transitioning
+  ){
+    return;
+  }
 
-  spring.vy=clamp(spring.vy-4.1,-12,12);
-  spring.stretch=clamp(
-    spring.stretch+.055,-.18,.22
+  spring.vy=clamp(
+    spring.vy-4.1,
+    -12,
+    12
   );
+
+  spring.stretch=clamp(
+    spring.stretch+.055,
+    -.18,
+    .22
+  );
+
   spring.vs+=.018;
 
   if(!spring.running){
     spring.running=true;
     spring.last=0;
-    requestAnimationFrame(bounceFrame);
+
+    requestAnimationFrame(
+      bounceFrame
+    );
   }
 
   addSparkles();
 });
 
-/* GITHUB ADMIN CONFIG */
+/* LEGACY GITHUB DATA - READ ONLY */
+let legacyData=null;
+let legacyChecked=false;
 
-const GITHUB={
-  owner:"2twLc",
-  repo:"aerialis",
-  branch:"main",
-  file:"plots.json"
-};
-
-const API_ROOT=
-  `https://api.github.com/repos/`+
-  `${GITHUB.owner}/${GITHUB.repo}`;
-
-let adminSecret="";
-let adminUser="";
-let draftPlots=[];
-let draftNotices=[];
-let editPlotIndex=-1;
-let editCharacterIndex=-1;
-let editBaselineSHA=null;
-let publishing=false;
-
-const pendingImages=new Map();
-const transientURLs=new Set();
-
-const makeID=()=>
-  crypto.randomUUID
-    ?crypto.randomUUID()
-    :`${Date.now()}_${Math.random().toString(36).slice(2)}`;
-
-const deepCopy=value=>
-  JSON.parse(JSON.stringify(value));
-
-/* NORMALIZE DATA */
-
-function normalizedPlots(items){
-  if(!Array.isArray(items)){
-    throw new Error(
-      "プロットデータの形式が正しくありません。"
-    );
+async function loadLegacyData(){
+  if(legacyChecked){
+    return legacyData;
   }
 
-  return items.map(p=>({
-    id:String(p.id||makeID()),
-    title:String(p.title||"無題"),
-    image:String(p.image||""),
-    intro:String(p.intro||""),
-    description:String(p.description||p.intro||""),
-    tags:Array.isArray(p.tags)
-      ?p.tags.map(String):[],
-    characters:(
-      Array.isArray(p.characters)
-        ?p.characters:[]
-    ).map(c=>({
-      id:String(c.id||makeID()),
-      name:String(c.name||"名前未設定"),
-      image:String(c.image||""),
-      role:String(c.role||"CHARACTER"),
-      age:String(c.age||"未設定"),
-      birthday:String(c.birthday||"未設定"),
-      profile:String(c.profile||""),
-      personality:String(c.personality||"")
-    }))
-  }));
-}
+  legacyChecked=true;
 
-/* LOAD PUBLIC DATA */
-
-async function loadPublishedPlots(){
   try{
-    const res=await fetch(
-      `./${GITHUB.file}?t=${Date.now()}`,
+    const response=await fetch(
+      "./plots.json?t="+Date.now(),
       {cache:"no-store"}
     );
 
-    if(!res.ok)return;
-
-    const data=await res.json();
-
-    PLOT_DATA=normalizedPlots(
-      Array.isArray(data)
-        ?data:data.plots
-    );
-
-    if(
-      !Array.isArray(data)&&
-      Array.isArray(data.notices)
-    ){
-      NOTICES=data.notices.map(String);
+    if(!response.ok){
+      return null;
     }
 
-    if(!Array.isArray(data)){
+    const data=await response.json();
+
+    legacyData={
+      plots:normalizedPlots(
+        Array.isArray(data)
+          ?data
+          :data.plots
+      ),
+      notices:
+        !Array.isArray(data)&&
+        Array.isArray(data.notices)
+          ?data.notices.map(String)
+          :[...INITIAL_NOTICES],
+      updates:
+        !Array.isArray(data)
+          ?normalizedUpdates(data.updates)
+          :[]
+    };
+
+    return legacyData;
+
+  }catch(error){
+    console.warn(
+      "旧データは読み込まれませんでした:",
+      error.message
+    );
+
+    return null;
+  }
+}
+
+/* SUPABASE READ */
+let publicLoadPromise=null;
+let lastRemoteSignature=null;
+let latestRemoteRows=null;
+let publishing=false;
+
+function checkDB(){
+  if(!db){
+    throw new Error(
+      "Supabaseのライブラリを読み込めませんでした。"
+    );
+  }
+}
+
+function checkResult(result,name){
+  if(result.error){
+    throw new Error(
+      name+"："+result.error.message
+    );
+  }
+
+  return result.data||[];
+}
+
+async function readRemote(){
+  checkDB();
+
+  const results=await Promise.all([
+    db.from("plots")
+      .select("*")
+      .order("sort_order",{ascending:true})
+      .order("id",{ascending:true}),
+
+    db.from("characters")
+      .select("*")
+      .order("sort_order",{ascending:true})
+      .order("id",{ascending:true}),
+
+    db.from("announcements")
+      .select("*")
+      .order("sort_order",{ascending:true})
+      .order("id",{ascending:true}),
+
+    db.from("site_updates")
+      .select("*")
+      .order("published_at",{ascending:false})
+      .order("id",{ascending:true})
+      .limit(150)
+  ]);
+
+  return {
+    plots:checkResult(
+      results[0],
+      "プロット"
+    ),
+    characters:checkResult(
+      results[1],
+      "キャラクター"
+    ),
+    announcements:checkResult(
+      results[2],
+      "お知らせ"
+    ),
+    site_updates:checkResult(
+      results[3],
+      "更新履歴"
+    )
+  };
+}
+
+function remoteSignature(rows){
+  return JSON.stringify(rows);
+}
+
+function jstDate(date){
+  return new Intl.DateTimeFormat(
+    "en-CA",
+    {
+      timeZone:"Asia/Tokyo",
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit"
+    }
+  ).format(new Date(date))
+    .replace(/-/g,".");
+}
+
+function convertRemotePlots(rows){
+  const characterMap=new Map();
+
+  for(const c of rows.characters){
+    if(!characterMap.has(c.plot_id)){
+      characterMap.set(c.plot_id,[]);
+    }
+
+    characterMap.get(c.plot_id).push({
+      id:c.id,
+      name:c.name,
+      image:c.image_url||"",
+      role:c.role,
+      age:c.age,
+      birthday:c.birthday,
+      profile:c.profile,
+      personality:c.personality
+    });
+  }
+
+  return normalizedPlots(
+    rows.plots.map(p=>({
+      id:p.id,
+      title:p.title,
+      intro:p.intro,
+      description:p.description,
+      image:p.image_url||"",
+      tags:p.tags||[],
+      characters:
+        characterMap.get(p.id)||[]
+    }))
+  );
+}
+
+function remoteHasContent(rows){
+  return (
+    rows.plots.length>0||
+    rows.characters.length>0||
+    rows.announcements.length>0||
+    rows.site_updates.length>0
+  );
+}
+
+async function loadPublishedPlots(force=false){
+  if((document.hidden||publishing)&&!force){
+    return;
+  }
+
+  if(publicLoadPromise){
+    return publicLoadPromise;
+  }
+
+  publicLoadPromise=(async()=>{
+    const rows=await readRemote();
+    const signature=remoteSignature(rows);
+
+    latestRemoteRows=rows;
+    lastRemoteSignature=signature;
+
+    const oldPlotId=
+      PLOT_DATA[selectedPlot]?.id||"";
+
+    const oldCharacterId=
+      PLOT_DATA[selectedPlot]
+        ?.characters[selectedCharacter]
+        ?.id||"";
+
+    if(remoteHasContent(rows)){
+      PLOT_DATA=convertRemotePlots(rows);
+
+      NOTICES=rows.announcements.map(
+        n=>String(n.content||"")
+      );
+
       PUBLISHED_UPDATES=
-        normalizedUpdates(data.updates);
+        rows.site_updates.map(item=>({
+          id:item.id,
+          date:jstDate(item.published_at),
+          text:item.content
+        }));
+
+    }else{
+      const legacy=await loadLegacyData();
+
+      if(legacy){
+        PLOT_DATA=normalizedPlots(
+          deepCopy(legacy.plots)
+        );
+
+        NOTICES=[...legacy.notices];
+
+        PUBLISHED_UPDATES=
+          normalizedUpdates(
+            legacy.updates
+          );
+      }else{
+        PLOT_DATA=normalizedPlots(
+          deepCopy(INITIAL_PLOTS)
+        );
+
+        NOTICES=[...INITIAL_NOTICES];
+        PUBLISHED_UPDATES=[];
+      }
     }
 
     renderPlotGrid();
     renderAnnouncements();
     refreshTagMarquees();
 
-  }catch(error){
+    refreshDisplayedDetails(
+      oldPlotId,
+      oldCharacterId
+    );
+
+    return rows;
+  })();
+
+  try{
+    return await publicLoadPromise;
+  }finally{
+    publicLoadPromise=null;
+  }
+}
+
+function refreshPublicSilently(){
+  loadPublishedPlots().catch(error=>{
     console.warn(
-      "公開プロットを読み込めません:",
+      "公開データの更新に失敗:",
       error.message
     );
+  });
+}
+
+setInterval(
+  refreshPublicSilently,
+  30000
+);
+
+document.addEventListener(
+  "visibilitychange",
+  ()=>{
+    if(!document.hidden){
+      refreshPublicSilently();
+    }
   }
+);
+
+window.addEventListener(
+  "online",
+  refreshPublicSilently
+);
+
+/* ADMIN STATE */
+let draftPlots=[];
+let draftNotices=[];
+let editPlotIndex=-1;
+let editCharacterIndex=-1;
+let editBaselineSignature=null;
+
+const pendingImages=new Map();
+const objectURLs=new Map();
+
+function clearObjectURLs(){
+  for(const url of objectURLs.values()){
+    URL.revokeObjectURL(url.url);
+  }
+
+  objectURLs.clear();
 }
 
-/* GITHUB API */
+function pendingURL(key){
+  const file=pendingImages.get(key);
 
-function githubHeaders(){
-  return {
-    Accept:"application/vnd.github+json",
-    Authorization:`Bearer ${adminSecret}`,
-    "X-GitHub-Api-Version":"2022-11-28"
-  };
-}
+  if(!file)return "";
 
-async function githubRequest(url,options={}){
-  const response=await fetch(url,{
-    ...options,
-    headers:{
-      ...githubHeaders(),
-      ...(options.headers||{})
-    },
-    cache:"no-store"
+  const previous=objectURLs.get(key);
+
+  if(previous?.file===file){
+    return previous.url;
+  }
+
+  if(previous){
+    URL.revokeObjectURL(
+      previous.url
+    );
+  }
+
+  const url=URL.createObjectURL(file);
+
+  objectURLs.set(key,{
+    file,
+    url
   });
 
-  if(response.status===404){
-    return {notFound:true};
-  }
-
-  const data=await response.json()
-    .catch(()=>({}));
-
-  if(!response.ok){
-    throw new Error(
-      `${response.status}: `+
-      `${data.message||"GitHubへの接続に失敗しました"}`
-    );
-  }
-
-  return data;
+  return url;
 }
 
-function fileAPI(path){
-  return `${API_ROOT}/contents/`+
-    path.split("/").map(
-      encodeURIComponent
-    ).join("/");
+function clearPendingImages(){
+  pendingImages.clear();
+  clearObjectURLs();
 }
 
-async function getGitHubFile(path){
-  return githubRequest(
-    fileAPI(path)+
-    `?ref=${encodeURIComponent(GITHUB.branch)}`
-  );
-}
-
-/* BASE64 */
-
-function base64UTF8(text){
-  const bytes=new TextEncoder().encode(text);
-  let binary="";
-
-  for(let i=0;i<bytes.length;i+=8192){
-    binary+=String.fromCharCode(
-      ...bytes.subarray(i,i+8192)
-    );
-  }
-
-  return btoa(binary);
-}
-
-function utf8FromBase64(base64){
-  const binary=atob(
-    base64.replace(/\s/g,"")
-  );
-
-  const bytes=Uint8Array.from(
-    binary,
-    c=>c.charCodeAt(0)
-  );
-
-  return new TextDecoder().decode(bytes);
-}
-
-async function githubPut(path,base64,message,sha){
-  const body={
-    message,
-    content:base64,
-    branch:GITHUB.branch
-  };
-
-  if(sha)body.sha=sha;
-
-  return githubRequest(
-    fileAPI(path),
-    {
-      method:"PUT",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify(body)
-    }
-  );
-}
-
-function adminMessage(id,text){
-  $(id).textContent=text;
+/* ADMIN MESSAGES */
+function adminMessage(id,message){
+  $(id).textContent=message;
 }
 
 function setAdminView(logged){
   $("adminLoginPanel").classList.toggle(
-    "admin-hidden",logged
+    "admin-hidden",
+    logged
   );
+
   $("adminDashboard").classList.toggle(
-    "admin-hidden",!logged
+    "admin-hidden",
+    !logged
   );
 }
 
-/* ADMIN LIST AND REORDERING */
-
+/* ADMIN PLOT LIST */
 function renderAdminList(){
   const list=$("adminPlotList");
   list.replaceChildren();
@@ -2772,17 +2384,16 @@ function renderAdminList(){
     img.className="admin-thumb";
     img.alt="";
 
-    img.src=pendingImages.has(`plot:${plot.id}`)
-      ?URL.createObjectURL(
-        pendingImages.get(`plot:${plot.id}`)
-      )
-      :plot.image||"";
+    img.src=
+      pendingURL(`plot:${plot.id}`)||
+      plot.image||"";
 
     const body=document.createElement("div");
     body.className="admin-item-body";
     body.textContent=plot.title||"無題";
 
     const count=document.createElement("small");
+
     count.textContent=
       `${i+1} / ${draftPlots.length}　登場人物 ${plot.characters.length}人`;
 
@@ -2810,7 +2421,13 @@ function renderAdminList(){
 
       btn.addEventListener("click",()=>{
         const [moved]=draftPlots.splice(i,1);
-        draftPlots.splice(i+offset,0,moved);
+
+        draftPlots.splice(
+          i+offset,
+          0,
+          moved
+        );
+
         renderAdminList();
 
         adminMessage(
@@ -2841,7 +2458,9 @@ function renderAdminList(){
     del.addEventListener("click",()=>{
       if(!confirm(
         `「${plot.title}」を下書きから削除しますか？`
-      ))return;
+      )){
+        return;
+      }
 
       draftPlots.splice(i,1);
       renderAdminList();
@@ -2860,135 +2479,136 @@ function renderAdminList(){
   if(!draftPlots.length){
     const p=document.createElement("p");
     p.className="admin-note";
+
     p.textContent=
       "プロットがありません。追加ボタンから作成できます。";
+
     list.appendChild(p);
   }
 }
 
 /* ADMIN LOGIN */
-
 async function loginAdmin(){
-  const secret=$("adminToken").value.trim();
+  const email=$("adminEmail").value.trim();
+  const password=$("adminPassword").value;
 
-  if(!secret){
+  if(!email||!password){
     adminMessage(
       "loginStatus",
-      "GitHubの管理キーを入力してください。"
+      "メールアドレスとパスワードを入力してください。"
     );
     return;
   }
 
-  const btn=$("adminLoginBtn");
-  btn.disabled=true;
+  const button=$("adminLoginBtn");
+  button.disabled=true;
 
   adminMessage(
     "loginStatus",
-    "GitHubの認証を確認しています…"
+    "認証しています…"
   );
 
-  adminSecret=secret;
-
   try{
-    const user=await githubRequest(
-      "https://api.github.com/user"
-    );
+    checkDB();
+
+    const {data,error}=
+      await db.auth.signInWithPassword({
+        email,
+        password
+      });
+
+    if(error){
+      throw error;
+    }
 
     if(
-      user.login?.toLowerCase()!==
-      GITHUB.owner.toLowerCase()
+      !data.user||
+      data.user.id!==ADMIN_UID
     ){
+      await db.auth.signOut();
+
       throw new Error(
-        "このリポジトリの所有者アカウントではありません。"
+        "このアカウントには管理者権限がありません。"
       );
     }
 
-    const repo=await githubRequest(API_ROOT);
+    await loadPublishedPlots(true);
 
-    if(repo.permissions?.push===false){
-      throw new Error(
-        "このアカウントには書き込み権限がありません。"
-      );
-    }
-
-    GITHUB.branch=repo.default_branch||"main";
-
-    const file=await getGitHubFile(GITHUB.file);
-    editBaselineSHA=file.notFound?null:file.sha;
-
-    if(!file.notFound&&file.content){
-      const data=JSON.parse(
-        utf8FromBase64(file.content)
-      );
-
-      PLOT_DATA=normalizedPlots(
-        Array.isArray(data)
-          ?data:data.plots
-      );
-
-      if(
-        !Array.isArray(data)&&
-        Array.isArray(data.notices)
-      ){
-        NOTICES=data.notices.map(String);
-      }
-
-      if(!Array.isArray(data)){
-        PUBLISHED_UPDATES=
-          normalizedUpdates(data.updates);
-      }
-
-      renderPlotGrid();
-      renderAnnouncements();
-    }
+    editBaselineSignature=
+      lastRemoteSignature;
 
     draftPlots=normalizedPlots(
       deepCopy(PLOT_DATA)
     );
 
     draftNotices=[...NOTICES];
+
     $("adminNotices").value=
       draftNotices.join("\n");
 
-    pendingImages.clear();
-    adminUser=user.login;
+    clearPendingImages();
 
-    $("adminToken").value="";
+    adminUser=data.user.email||email;
+
+    $("adminEmail").value="";
+    $("adminPassword").value="";
+
     setAdminView(true);
     renderAdminList();
 
     adminMessage(
       "publishStatus",
-      `@${adminUser} として認証しました。変更を編集できます。`
+      `${adminUser} で認証しました。変更を編集できます。`
     );
-
-  }catch(err){
-    adminSecret="";
 
     adminMessage(
       "loginStatus",
-      "認証できませんでした："+err.message
+      ""
+    );
+
+  }catch(error){
+    adminUser="";
+
+    if(db){
+      await db.auth.signOut()
+        .catch(()=>{});
+    }
+
+    adminMessage(
+      "loginStatus",
+      "認証できませんでした："+error.message
     );
 
   }finally{
-    btn.disabled=false;
+    button.disabled=false;
+    $("adminPassword").value="";
   }
 }
 
 /* LOGOUT */
-
-function logoutAdmin(){
-  adminSecret="";
+async function logoutAdmin(){
   adminUser="";
   draftPlots=[];
   draftNotices=[];
-  pendingImages.clear();
+  editBaselineSignature=null;
 
-  $("adminToken").value="";
+  clearPendingImages();
+
+  $("adminEmail").value="";
+  $("adminPassword").value="";
+
   setAdminView(false);
 
   adminMessage("loginStatus","");
   adminMessage("publishStatus","");
+
+  if(db){
+    try{
+      await db.auth.signOut();
+    }catch(error){
+      console.warn(error);
+    }
+  }
 }
 
 function leaveAdmin(){
@@ -3001,13 +2621,11 @@ function getEditedPlot(){
 }
 
 function getEditedCharacter(){
-  return getEditedPlot()?.characters[
-    editCharacterIndex
-  ];
+  return getEditedPlot()
+    ?.characters[editCharacterIndex];
 }
 
 /* PREVIEW */
-
 function setPreview(id,path){
   const img=$(id);
 
@@ -3029,54 +2647,77 @@ function setPreview(id,path){
 function displayFile(file,key,previewID){
   if(!file)return;
 
-  if(!file.type.startsWith("image/")){
-    alert("画像ファイルを選択してください。");
+  const accepted=[
+    "image/png",
+    "image/jpeg",
+    "image/webp",
+    "image/gif",
+    "image/avif"
+  ];
+
+  if(!accepted.includes(file.type)){
+    alert(
+      "PNG・JPEG・WebP・GIF・AVIF画像を選択してください。"
+    );
+    return;
+  }
+
+  if(file.size>30*1024*1024){
+    alert(
+      "30MB以下の画像を選んでください。"
+    );
     return;
   }
 
   pendingImages.set(key,file);
 
-  const objectURL=URL.createObjectURL(file);
-  transientURLs.add(objectURL);
-
-  setPreview(previewID,objectURL);
+  setPreview(
+    previewID,
+    pendingURL(key)
+  );
 }
 
 /* PLOT EDITOR */
-
 function openPlotEditor(index){
-  if(!adminSecret||!draftPlots[index])return;
+  if(
+    !adminUser||
+    !draftPlots[index]
+  ){
+    return;
+  }
 
   editPlotIndex=index;
+
   const p=getEditedPlot();
 
   $("epTitle").value=p.title;
   $("epIntro").value=p.intro;
+
   $("epDescription").value=
     p.description||p.intro;
 
-  $("epTags").value=p.tags.join("\n");
+  $("epTags").value=
+    p.tags.join("\n");
+
   $("epImage").value=p.image;
   $("epFile").value="";
 
-  const imgFile=pendingImages.get(
-    `plot:${p.id}`
-  );
-
   setPreview(
     "epPreview",
-    imgFile?URL.createObjectURL(imgFile):p.image
+    pendingURL(`plot:${p.id}`)||
+    p.image
   );
 
   renderEditCharacters();
+
   $("editPlotScroll").scrollTop=0;
   changeScreen("editPlot");
 }
 
-/* CHARACTERS IN EDITOR */
-
+/* CHARACTER LIST EDITOR */
 function renderEditCharacters(){
   const p=getEditedPlot();
+
   if(!p)return;
 
   $("epCharCount").textContent=
@@ -3093,17 +2734,50 @@ function renderEditCharacters(){
     img.className="admin-thumb";
     img.alt="";
 
-    const pending=pendingImages.get(
-      `char:${c.id}`
-    );
-
-    img.src=pending
-      ?URL.createObjectURL(pending)
-      :c.image||"";
+    img.src=
+      pendingURL(`char:${c.id}`)||
+      c.image||"";
 
     const body=document.createElement("div");
     body.className="admin-item-body";
     body.textContent=c.name||"名前未設定";
+
+    const move=document.createElement("div");
+    move.className="admin-move-tools";
+
+    for(const [label,offset] of [
+      ["上へ",-1],
+      ["下へ",1]
+    ]){
+      const btn=document.createElement("button");
+      btn.type="button";
+      btn.textContent=label;
+
+      btn.disabled=
+        i+offset<0||
+        i+offset>=p.characters.length;
+
+      btn.addEventListener("click",()=>{
+        const [moved]=p.characters.splice(
+          i,1
+        );
+
+        p.characters.splice(
+          i+offset,
+          0,
+          moved
+        );
+
+        renderEditCharacters();
+
+        adminMessage(
+          "publishStatus",
+          "キャラクターの順番を変更しました。"
+        );
+      });
+
+      move.appendChild(btn);
+    }
 
     const tools=document.createElement("div");
     tools.className="admin-item-tools";
@@ -3127,20 +2801,35 @@ function renderEditCharacters(){
       )){
         p.characters.splice(i,1);
         renderEditCharacters();
+
+        adminMessage(
+          "publishStatus",
+          "未公開の変更があります。"
+        );
       }
     });
 
     tools.append(edit,del);
-    row.append(img,body,tools);
+    row.append(img,body,move,tools);
     list.appendChild(row);
   });
+
+  if(!p.characters.length){
+    const empty=document.createElement("p");
+    empty.className="admin-note";
+    empty.textContent=
+      "キャラクターはまだ登録されていません。";
+
+    list.appendChild(empty);
+  }
 }
 
 /* CHARACTER EDITOR */
-
 function openCharacterEditor(index){
-  const c=getEditedPlot()?.characters[index];
-  if(!c||!adminSecret)return;
+  const c=getEditedPlot()
+    ?.characters[index];
+
+  if(!c||!adminUser)return;
 
   editCharacterIndex=index;
 
@@ -3158,25 +2847,24 @@ function openCharacterEditor(index){
 
   $("ecFile").value="";
 
-  const pending=pendingImages.get(
-    `char:${c.id}`
-  );
-
   setPreview(
     "ecPreview",
-    pending?URL.createObjectURL(pending):c.image
+    pendingURL(`char:${c.id}`)||
+    c.image
   );
 
   $("editCharacterScroll").scrollTop=0;
   changeScreen("editCharacter");
 }
 
-/* EDIT FIELDS */
-
+/* FIELD BINDINGS */
 function bindField(id,getTarget,key){
   $(id).addEventListener("input",()=>{
-    const t=getTarget();
-    if(t)t[key]=$(id).value;
+    const target=getTarget();
+
+    if(target){
+      target[key]=$(id).value;
+    }
   });
 }
 
@@ -3186,19 +2874,26 @@ for(const [id,key] of [
   ["epDescription","description"],
   ["epImage","image"]
 ]){
-  bindField(id,getEditedPlot,key);
+  bindField(
+    id,
+    getEditedPlot,
+    key
+  );
 }
 
-$("epTags").addEventListener("input",()=>{
-  const p=getEditedPlot();
+$("epTags").addEventListener(
+  "input",
+  ()=>{
+    const p=getEditedPlot();
 
-  if(p){
-    p.tags=$("epTags").value
-      .split(/[\n,、]+/)
-      .map(t=>t.trim())
-      .filter(Boolean);
+    if(p){
+      p.tags=$("epTags").value
+        .split(/[\n,、]+/)
+        .map(t=>t.trim())
+        .filter(Boolean);
+    }
   }
-});
+);
 
 for(const [id,key] of [
   ["ecName","name"],
@@ -3209,13 +2904,17 @@ for(const [id,key] of [
   ["ecPersonality","personality"],
   ["ecImage","image"]
 ]){
-  bindField(id,getEditedCharacter,key);
+  bindField(
+    id,
+    getEditedCharacter,
+    key
+  );
 }
 
-/* IMAGE INPUTS */
-
+/* FILE INPUTS */
 $("epFile").addEventListener("change",e=>{
   const p=getEditedPlot();
+
   if(p){
     displayFile(
       e.target.files[0],
@@ -3227,6 +2926,7 @@ $("epFile").addEventListener("change",e=>{
 
 $("ecFile").addEventListener("change",e=>{
   const c=getEditedCharacter();
+
   if(c){
     displayFile(
       e.target.files[0],
@@ -3237,148 +2937,202 @@ $("ecFile").addEventListener("change",e=>{
 });
 
 $("epImage").addEventListener("input",()=>{
-  setPreview("epPreview",$("epImage").value);
+  const p=getEditedPlot();
+
+  if(!p)return;
+
+  pendingImages.delete(`plot:${p.id}`);
+
+  setPreview(
+    "epPreview",
+    $("epImage").value
+  );
 });
 
 $("ecImage").addEventListener("input",()=>{
-  setPreview("ecPreview",$("ecImage").value);
-});
-
-$("epClearImage").addEventListener("click",()=>{
-  const p=getEditedPlot();
-  if(!p)return;
-
-  p.image="";
-  pendingImages.delete(`plot:${p.id}`);
-  $("epImage").value="";
-  $("epFile").value="";
-  setPreview("epPreview","");
-});
-
-$("ecClearImage").addEventListener("click",()=>{
   const c=getEditedCharacter();
+
   if(!c)return;
 
-  c.image="";
   pendingImages.delete(`char:${c.id}`);
-  $("ecImage").value="";
-  $("ecFile").value="";
-  setPreview("ecPreview","");
-});
 
-/* ADD CHARACTER */
-
-$("epNewCharacter").addEventListener("click",()=>{
-  const p=getEditedPlot();
-  if(!p)return;
-
-  p.characters.push({
-    id:makeID(),
-    name:"新しいキャラクター",
-    image:"",
-    role:"CHARACTER",
-    age:"未設定",
-    birthday:"未設定",
-    profile:"",
-    personality:""
-  });
-
-  openCharacterEditor(p.characters.length-1);
-});
-
-/* ADD PLOT */
-
-$("newPlotBtn").addEventListener("click",()=>{
-  draftPlots.push({
-    id:makeID(),
-    title:"新しいプロット",
-    image:"",
-    intro:"",
-    description:"",
-    tags:[],
-    characters:[]
-  });
-
-  openPlotEditor(draftPlots.length-1);
-});
-
-/* EDIT NOTICES */
-
-$("adminNotices").addEventListener("input",()=>{
-  draftNotices=$("adminNotices").value
-    .split(/\r?\n/)
-    .map(t=>t.trim())
-    .filter(Boolean);
-
-  adminMessage(
-    "publishStatus",
-    "お知らせに未公開の変更があります。"
+  setPreview(
+    "ecPreview",
+    $("ecImage").value
   );
 });
 
-/* RESET DRAFT */
+$("epClearImage").addEventListener(
+  "click",
+  ()=>{
+    const p=getEditedPlot();
 
-$("resetDraftBtn").addEventListener("click",()=>{
-  if(!confirm(
-    "未公開の編集内容をすべて破棄しますか？"
-  ))return;
+    if(!p)return;
 
-  draftPlots=normalizedPlots(deepCopy(PLOT_DATA));
-  draftNotices=[...NOTICES];
-  $("adminNotices").value=draftNotices.join("\n");
-  pendingImages.clear();
-  renderAdminList();
+    p.image="";
 
-  adminMessage(
-    "publishStatus",
-    "下書きを破棄しました。"
-  );
-});
+    pendingImages.delete(
+      `plot:${p.id}`
+    );
 
-/* ADMIN BUTTONS */
+    $("epImage").value="";
+    $("epFile").value="";
 
-$("adminLoginBtn").addEventListener(
-  "click",loginAdmin
+    setPreview("epPreview","");
+  }
 );
 
-$("adminToken").addEventListener("keydown",e=>{
-  if(e.key==="Enter")loginAdmin();
-});
+$("ecClearImage").addEventListener(
+  "click",
+  ()=>{
+    const c=getEditedCharacter();
+
+    if(!c)return;
+
+    c.image="";
+
+    pendingImages.delete(
+      `char:${c.id}`
+    );
+
+    $("ecImage").value="";
+    $("ecFile").value="";
+
+    setPreview("ecPreview","");
+  }
+);
+
+/* ADD CHARACTER */
+$("epNewCharacter").addEventListener(
+  "click",
+  ()=>{
+    const p=getEditedPlot();
+
+    if(!p)return;
+
+    p.characters.push({
+      id:makeID(),
+      name:"新しいキャラクター",
+      image:"",
+      role:"CHARACTER",
+      age:"未設定",
+      birthday:"未設定",
+      profile:"",
+      personality:""
+    });
+
+    openCharacterEditor(
+      p.characters.length-1
+    );
+  }
+);
+
+/* ADD PLOT */
+$("newPlotBtn").addEventListener(
+  "click",
+  ()=>{
+    draftPlots.push({
+      id:makeID(),
+      title:"新しいプロット",
+      image:"",
+      intro:"",
+      description:"",
+      tags:[],
+      characters:[]
+    });
+
+    openPlotEditor(
+      draftPlots.length-1
+    );
+  }
+);
+
+/* NOTICE EDITING */
+$("adminNotices").addEventListener(
+  "input",
+  ()=>{
+    draftNotices=$("adminNotices").value
+      .split(/\r?\n/)
+      .map(t=>t.trim())
+      .filter(Boolean);
+
+    adminMessage(
+      "publishStatus",
+      "お知らせに未公開の変更があります。"
+    );
+  }
+);
+
+/* RESET DRAFT */
+$("resetDraftBtn").addEventListener(
+  "click",
+  ()=>{
+    if(!confirm(
+      "未公開の編集内容をすべて破棄しますか？"
+    )){
+      return;
+    }
+
+    draftPlots=normalizedPlots(
+      deepCopy(PLOT_DATA)
+    );
+
+    draftNotices=[...NOTICES];
+
+    $("adminNotices").value=
+      draftNotices.join("\n");
+
+    clearPendingImages();
+    renderAdminList();
+
+    adminMessage(
+      "publishStatus",
+      "下書きを破棄しました。"
+    );
+  }
+);
+
+/* ADMIN EVENTS */
+$("adminLoginBtn").addEventListener(
+  "click",
+  loginAdmin
+);
+
+for(const id of [
+  "adminEmail",
+  "adminPassword"
+]){
+  $(id).addEventListener(
+    "keydown",
+    e=>{
+      if(e.key==="Enter"){
+        loginAdmin();
+      }
+    }
+  );
+}
 
 $("adminLogoutBtn").addEventListener(
-  "click",logoutAdmin
+  "click",
+  ()=>{
+    logoutAdmin();
+  }
 );
 
 $("leaveAdmin").addEventListener(
-  "click",leaveAdmin
+  "click",
+  leaveAdmin
 );
 
-$("openAdmin").addEventListener("click",()=>{
-  $("adminScroll").scrollTop=0;
-  changeScreen("admin");
-});
-
-document.addEventListener("pagehide",()=>{
-  adminSecret="";
-});
+$("openAdmin").addEventListener(
+  "click",
+  ()=>{
+    $("adminScroll").scrollTop=0;
+    changeScreen("admin");
+  }
+);
 
 /* IMAGE QUALITY */
-
-async function blobToBase64(blob){
-  const dataURL=await new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-
-    reader.onload=()=>resolve(reader.result);
-    reader.onerror=()=>reject(
-      new Error("画像ファイルを読み込めませんでした。")
-    );
-
-    reader.readAsDataURL(blob);
-  });
-
-  return String(dataURL).split(",")[1];
-}
-
 async function prepareImage(file){
   const MiB=1024*1024;
 
@@ -3396,22 +3150,23 @@ async function prepareImage(file){
     "image/avif":"avif"
   };
 
-  if(supported[file.type]&&file.size<=8*MiB){
+  if(!supported[file.type]){
+    throw new Error(
+      "対応していない画像形式です。"
+    );
+  }
+
+  if(file.size<=8*MiB){
     return {
-      base64:await blobToBase64(file),
-      extension:supported[file.type]
+      blob:file,
+      extension:supported[file.type],
+      contentType:file.type
     };
   }
 
   if(file.type==="image/gif"){
     throw new Error(
       "アニメーションGIFは8MB以下のものを選んでください。"
-    );
-  }
-
-  if(!file.type.startsWith("image/")){
-    throw new Error(
-      "画像ファイルを選んでください。"
     );
   }
 
@@ -3423,7 +3178,7 @@ async function prepareImage(file){
 
     try{
       await img.decode();
-    }catch(_){
+    }catch(error){
       throw new Error(
         "画像を開けませんでした。PNGかJPEGで選び直してください。"
       );
@@ -3440,15 +3195,21 @@ async function prepareImage(file){
       );
     }
 
-    const scale=Math.min(1,2560/maxSide);
+    const scale=Math.min(
+      1,
+      2560/maxSide
+    );
+
     const canvas=document.createElement("canvas");
 
     canvas.width=Math.max(
-      1,Math.round(img.naturalWidth*scale)
+      1,
+      Math.round(img.naturalWidth*scale)
     );
 
     canvas.height=Math.max(
-      1,Math.round(img.naturalHeight*scale)
+      1,
+      Math.round(img.naturalHeight*scale)
     );
 
     const ctx=canvas.getContext("2d");
@@ -3463,25 +3224,38 @@ async function prepareImage(file){
     ctx.imageSmoothingQuality="high";
 
     ctx.drawImage(
-      img,0,0,canvas.width,canvas.height
+      img,
+      0,
+      0,
+      canvas.width,
+      canvas.height
     );
 
     let output=null;
 
-    for(const quality of [.97,.94,.90]){
-      output=await new Promise(resolve=>
+    for(const quality of [
+      .97,
+      .94,
+      .90
+    ]){
+      output=await new Promise(resolve=>{
         canvas.toBlob(
-          resolve,"image/webp",quality
-        )
-      );
+          resolve,
+          "image/webp",
+          quality
+        );
+      });
 
       if(!output)break;
-      if(output.size<=8*MiB)break;
+
+      if(output.size<=8*MiB){
+        break;
+      }
     }
 
     if(!output||output.type!=="image/webp"){
       throw new Error(
-        "画像を変換できませんでした。PNGかJPEGでお試しください。"
+        "画像を変換できませんでした。"
       );
     }
 
@@ -3492,8 +3266,9 @@ async function prepareImage(file){
     }
 
     return {
-      base64:await blobToBase64(output),
-      extension:"webp"
+      blob:output,
+      extension:"webp",
+      contentType:"image/webp"
     };
 
   }finally{
@@ -3501,27 +3276,178 @@ async function prepareImage(file){
   }
 }
 
-/* PUBLISH */
+/* STORAGE UPLOAD */
+async function uploadImage(
+  file,
+  prefix,
+  id
+){
+  checkDB();
 
+  const prepared=await prepareImage(file);
+
+  const safeID=id.replace(
+    /[^a-zA-Z0-9_-]/g,
+    ""
+  );
+
+  const filename=
+    `${prefix}/${safeID}_${Date.now()}_`+
+    `${Math.random().toString(36).slice(2,9)}.`+
+    prepared.extension;
+
+  const result=await db.storage
+    .from(STORAGE_BUCKET)
+    .upload(
+      filename,
+      prepared.blob,
+      {
+        contentType:prepared.contentType,
+        cacheControl:"3600",
+        upsert:false
+      }
+    );
+
+  if(result.error){
+    throw new Error(
+      "画像アップロード失敗："+result.error.message
+    );
+  }
+
+  const publicResult=db.storage
+    .from(STORAGE_BUCKET)
+    .getPublicUrl(filename);
+
+  const url=publicResult.data?.publicUrl;
+
+  if(!url){
+    throw new Error(
+      "画像の公開URLを取得できませんでした。"
+    );
+  }
+
+  return url;
+}
+
+/* WRITE HELPERS */
+async function writeRows(
+  table,
+  values,
+  label
+){
+  if(!values.length)return;
+
+  const result=await db
+    .from(table)
+    .upsert(
+      values,
+      {onConflict:"id"}
+    );
+
+  if(result.error){
+    throw new Error(
+      label+"："+result.error.message
+    );
+  }
+}
+
+async function deleteRows(
+  table,
+  ids,
+  label
+){
+  if(!ids.length)return;
+
+  const result=await db
+    .from(table)
+    .delete()
+    .in("id",ids);
+
+  if(result.error){
+    throw new Error(
+      label+"："+result.error.message
+    );
+  }
+}
+
+/* DATE UTILS */
+function getJSTDateTime(){
+  const now=new Date();
+
+  return {
+    date:jstDate(now),
+    time:jstClock.format(now),
+    iso:now.toISOString()
+  };
+}
+
+function legacyTimestamp(date){
+  const cleaned=String(date||"")
+    .replace(/\./g,"-");
+
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(cleaned)){
+    return null;
+  }
+
+  const parsed=new Date(
+    cleaned+"T00:00:00+09:00"
+  );
+
+  return Number.isNaN(parsed.getTime())
+    ?null
+    :parsed.toISOString();
+}
+
+/* PUBLISH */
 async function publishPlots(){
-  if(!adminSecret||publishing)return;
+  if(!adminUser||publishing){
+    return;
+  }
 
   publishing=true;
   $("publishBtn").disabled=true;
 
-  try{
-    const latest=await getGitHubFile(GITHUB.file);
-    const sha=latest.notFound?null:latest.sha;
+  let startedWriting=false;
 
-    if(sha!==editBaselineSHA){
+  try{
+    checkDB();
+
+    adminMessage(
+      "publishStatus",
+      "管理者権限を確認しています…"
+    );
+
+    const auth=await db.auth.getUser();
+
+    if(
+      auth.error||
+      auth.data.user?.id!==ADMIN_UID
+    ){
       throw new Error(
-        "ほかの場所でデータが更新されています。ページを開き直してから編集してください。"
+        "管理者セッションが無効です。ログインし直してください。"
       );
     }
 
+    const remote=await readRemote();
+
+    if(
+      remoteSignature(remote)!==
+      editBaselineSignature
+    ){
+      throw new Error(
+        "別の場所でデータが更新されています。編集内容を確認してからページを開き直してください。"
+      );
+    }
+
+    const clean=normalizedPlots(
+      deepCopy(draftPlots)
+    );
+
+    const notices=[...draftNotices];
+
     const jobs=[];
 
-    for(const p of draftPlots){
+    for(const p of clean){
       if(pendingImages.has(`plot:${p.id}`)){
         jobs.push({
           target:p,
@@ -3535,7 +3461,7 @@ async function publishPlots(){
           jobs.push({
             target:c,
             key:`char:${c.id}`,
-            prefix:"char"
+            prefix:"character"
           });
         }
       }
@@ -3549,103 +3475,199 @@ async function publishPlots(){
         `画像をアップロード中 ${i+1}/${jobs.length}…`
       );
 
-      const prepared=await prepareImage(
-        pendingImages.get(job.key)
+      job.target.image=await uploadImage(
+        pendingImages.get(job.key),
+        job.prefix,
+        job.target.id
       );
-
-      const safeID=job.target.id
-        .replace(/[^a-zA-Z0-9_-]/g,"")
-        .slice(0,40);
-
-      const path=
-        `uploads/${job.prefix}_`+
-        `${safeID}_${Date.now()}_${i}.`+
-        prepared.extension;
-
-      await githubPut(
-        path,
-        prepared.base64,
-        `Upload ${job.prefix} image`
-      );
-
-      job.target.image="./"+path;
     }
+
+    const plotRows=clean.map((p,i)=>({
+      id:p.id,
+      sort_order:i,
+      title:p.title||"無題",
+      intro:p.intro||"",
+      description:p.description||"",
+      tags:p.tags,
+      image_url:p.image||""
+    }));
+
+    const characterRows=[];
+
+    clean.forEach(p=>{
+      p.characters.forEach((c,i)=>{
+        characterRows.push({
+          id:c.id,
+          plot_id:p.id,
+          sort_order:i,
+          name:c.name||"名前未設定",
+          role:c.role||"CHARACTER",
+          age:c.age||"",
+          birthday:c.birthday||"",
+          profile:c.profile||"",
+          personality:c.personality||"",
+          image_url:c.image||""
+        });
+      });
+    });
+
+    const noticeRows=notices.map((content,i)=>({
+      id:remote.announcements[i]?.id||
+        makeID(),
+      sort_order:i,
+      content,
+      is_active:true
+    }));
+
+    const newPlotIDs=new Set(
+      plotRows.map(p=>p.id)
+    );
+
+    const newCharacterIDs=new Set(
+      characterRows.map(c=>c.id)
+    );
+
+    const newNoticeIDs=new Set(
+      noticeRows.map(n=>n.id)
+    );
+
+    const deletedPlotIDs=remote.plots
+      .filter(p=>!newPlotIDs.has(p.id))
+      .map(p=>p.id);
+
+    const deletedCharacterIDs=
+      remote.characters
+        .filter(c=>!newCharacterIDs.has(c.id))
+        .map(c=>c.id);
+
+    const deletedNoticeIDs=
+      remote.announcements
+        .filter(n=>!newNoticeIDs.has(n.id))
+        .map(n=>n.id);
+
+    startedWriting=true;
 
     adminMessage(
       "publishStatus",
-      "プロット情報をGitHubへ保存中…"
+      "プロットを保存しています…"
     );
 
-    const clean=normalizedPlots(
-      deepCopy(draftPlots)
+    await writeRows(
+      "plots",
+      plotRows,
+      "プロットの保存"
     );
 
-    const notices=[...draftNotices];
-
-    const today=new Intl.DateTimeFormat("en-CA",{
-      timeZone:"Asia/Tokyo",
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit"
-    }).format(new Date()).replace(/-/g,".");
-
-    const publishedTime=new Intl.DateTimeFormat("ja-JP",{
-      timeZone:"Asia/Tokyo",
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit",
-      hourCycle:"h23"
-    }).format(new Date());
-
-    const nextUpdates=[
-      {
-        id:makeID(),
-        date:today,
-        text:`サイトの公開情報を更新しました（${publishedTime}）。`
-      },
-      ...PUBLISHED_UPDATES
-    ].slice(0,150);
-
-    const data={
-      version:2,
-      plots:clean,
-      notices,
-      updates:nextUpdates
-    };
-
-    const result=await githubPut(
-      GITHUB.file,
-      base64UTF8(
-        JSON.stringify(data,null,2)
-      ),
-      "Update NITU plots and announcements",
-      sha
+    adminMessage(
+      "publishStatus",
+      "キャラクターを保存しています…"
     );
 
-    editBaselineSHA=result.content?.sha||null;
+    await writeRows(
+      "characters",
+      characterRows,
+      "キャラクターの保存"
+    );
 
-    PLOT_DATA=normalizedPlots(deepCopy(clean));
-    draftPlots=normalizedPlots(deepCopy(clean));
-    NOTICES=[...notices];
-    PUBLISHED_UPDATES=nextUpdates;
-    draftNotices=[...notices];
+    adminMessage(
+      "publishStatus",
+      "お知らせを保存しています…"
+    );
 
-    pendingImages.clear();
+    await writeRows(
+      "announcements",
+      noticeRows,
+      "お知らせの保存"
+    );
 
-    renderPlotGrid();
-    renderAnnouncements();
-    refreshTagMarquees();
+    await deleteRows(
+      "characters",
+      deletedCharacterIDs,
+      "キャラクターの削除"
+    );
+
+    await deleteRows(
+      "plots",
+      deletedPlotIDs,
+      "プロットの削除"
+    );
+
+    await deleteRows(
+      "announcements",
+      deletedNoticeIDs,
+      "お知らせの削除"
+    );
+
+    const now=getJSTDateTime();
+
+    const updateRows=[];
+
+    if(
+      remote.site_updates.length===0 &&
+      legacyData?.updates?.length
+    ){
+      for(const entry of legacyData.updates){
+        const timestamp=legacyTimestamp(
+          entry.date
+        );
+
+        if(timestamp){
+          updateRows.push({
+            content:entry.text,
+            published_at:timestamp
+          });
+        }
+      }
+    }
+
+    updateRows.push({
+      content:
+        `サイトの公開情報を更新しました（${now.time}）。`,
+      published_at:now.iso
+    });
+
+    const updateResult=await db
+      .from("site_updates")
+      .insert(updateRows);
+
+    if(updateResult.error){
+      throw new Error(
+        "更新履歴："+updateResult.error.message
+      );
+    }
+
+    clearPendingImages();
+
+    await loadPublishedPlots(true);
+
+    draftPlots=normalizedPlots(
+      deepCopy(PLOT_DATA)
+    );
+
+    draftNotices=[...NOTICES];
+
+    $("adminNotices").value=
+      draftNotices.join("\n");
+
+    editBaselineSignature=
+      lastRemoteSignature;
+
     renderAdminList();
 
     adminMessage(
       "publishStatus",
-      "公開用データをGitHubに保存しました。サイトへの反映まで少し時間がかかる場合があります。"
+      "公開しました。Supabaseに保存された内容がサイトに反映されました。"
     );
 
   }catch(error){
     adminMessage(
       "publishStatus",
-      "公開できませんでした："+error.message
+      "公開できませんでした："+error.message+
+      (
+        startedWriting
+          ?"\n一部の変更が保存された可能性があります。再実行する前にSupabaseの内容を確認してください。"
+          :""
+      )
     );
 
   }finally{
@@ -3655,13 +3677,14 @@ async function publishPlots(){
 }
 
 $("publishBtn").addEventListener(
-  "click",publishPlots
+  "click",
+  publishPlots
 );
 
-/* START */
-
-loadPublishedPlots();
+/* INITIALIZATION */
+refreshPublicSilently();
 setScreen("loading");
+
 </script>
 </body>
 </html>
