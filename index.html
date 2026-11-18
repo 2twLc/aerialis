@@ -29,7 +29,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
   position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;
   background-color:var(--bg);
   background-image:radial-gradient(circle,rgba(95,170,207,.115) 1.35px,transparent 1.7px);
-  background-size:34px 34px;transition:opacity .63s ease,visibility .63s ease;
+  background-size:34px 34px;transition:opacity .28s ease,visibility .28s ease;
 }
 .screen.active{opacity:1;visibility:visible;pointer-events:auto}
 .ambient{position:absolute;inset:-25%;pointer-events:none;background:radial-gradient(ellipse at 20% 23%,rgba(255,255,255,.56),transparent 39%),radial-gradient(ellipse at 88% 75%,rgba(162,217,246,.26),transparent 47%);animation:ambientDrift 16s ease-in-out infinite alternate}
@@ -44,7 +44,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 .wave-logo.card-size{width:65px;height:39px}
 .wave-logo::after{content:"";position:absolute;inset:12% -16%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse,rgba(255,255,255,.66),transparent 70%)}
 #softWipe{position:absolute;inset:0;z-index:50;opacity:0;pointer-events:none;background:#f7fdff;visibility:hidden}
-#softWipe.play{visibility:visible;animation:softWipe .78s ease-in-out both}
+#softWipe.play{visibility:visible;animation:softWipe .46s ease-in-out both}
 @keyframes softWipe{0%{opacity:0}43%,56%{opacity:1}100%{opacity:0}}
 @keyframes contentIn{from{opacity:0;transform:translateY(20px);filter:blur(4px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
 @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.975)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -81,8 +81,18 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
   box-shadow:0 6px 19px rgba(59,137,171,.065);
 }
 .notice-window{flex:1;min-width:0;overflow:hidden;white-space:nowrap;padding-left:7vw}
-.notice-track{display:flex;width:max-content;animation:noticeFlow 26s linear infinite}
-.notice-loop{display:inline-flex;align-items:center;flex:none;white-space:nowrap}
+.notice-track{
+  display:flex;
+  width:max-content;
+  animation:noticeFlow var(--notice-duration,26s) linear infinite;
+  will-change:transform;
+}
+.notice-loop{
+  display:inline-flex;
+  align-items:center;
+  flex:none;
+  white-space:nowrap;
+}
 .notice-copy{
   flex:none;color:#587e96;
   font:600 12px var(--raj);
@@ -94,7 +104,10 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
   flex:none;width:50px;color:#eba2c5;
   font:700 11px var(--raj);letter-spacing:0;
 }
-@keyframes noticeFlow{to{transform:translateX(-50%)}}
+@keyframes noticeFlow{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-50%,0,0)}
+}
 
 .update-panel{position:absolute;z-index:7;top:calc(106px + var(--safe-top));left:7%;width:47%;max-width:280px;height:min(240px,calc(43dvh - 130px - var(--safe-top)));padding:14px;border:1px solid rgba(255,255,255,.88);border-radius:12px;background:rgba(255,255,255,.65);box-shadow:0 12px 30px rgba(71,138,172,.08);overflow:hidden}
 .update-heading{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:#307da7;font:700 11px var(--orbit);letter-spacing:.04em;white-space:nowrap}
@@ -155,12 +168,29 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 .plot-card-name{display:block;font:700 clamp(13px,3.5vw,18px)/1.5 var(--jp);overflow-wrap:anywhere;color:#254f67}
 .plot-card-intro{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;margin:6px 0 8px;font:400 11px/1.65 var(--jp);color:#718c9b;min-height:2.9em}
 .tag-viewport{position:relative;display:block;overflow:hidden;width:100%;white-space:nowrap;color:#489dc6;font:700 11px/1.7 var(--raj);letter-spacing:.02em;pointer-events:none}
-.tag-track{display:inline-flex;align-items:center;gap:28px;width:max-content;max-width:none;vertical-align:top}
-.tag-copy{display:inline-block;white-space:nowrap}
+.tag-track{
+  display:inline-flex;
+  align-items:center;
+  gap:24px;
+  width:max-content;
+  max-width:none;
+  vertical-align:top;
+}
+.tag-copy{
+  display:inline-block;
+  flex:none;
+  white-space:nowrap;
+}
 .tag-duplicate{display:none}
 .tag-viewport.scrolling .tag-duplicate{display:inline-block}
-.tag-viewport.scrolling .tag-track{animation:tagFlow var(--tag-duration,14s) linear infinite}
-@keyframes tagFlow{to{transform:translateX(calc(-50% - 14px))}}
+.tag-viewport.scrolling .tag-track{
+  animation:tagFlow var(--tag-duration,14s) linear infinite;
+  will-change:transform;
+}
+@keyframes tagFlow{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(var(--tag-shift,-200px),0,0)}
+}
 .plot-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:7px;border-top:1px solid #e9f3f9;color:#91adbe;font:700 10px var(--raj);letter-spacing:.05em}
 .plot-card-footer b{display:block;width:18px;height:18px;color:#75b0d2}
 
@@ -904,6 +934,18 @@ let NOTICES=[...INITIAL_NOTICES];
 const SITE_UPDATES=[
   {
     date:"2026.11.19",
+    text:"画面切り替え時の白い演出を短縮し、ページ遷移をより軽快にしました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"お知らせ帯を改良し、掲載が1件だけでも余白なく連続して流れるようにしました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"プロットのタグ表示を改良し、スクロールの継ぎ目や自動更新時の引っかかりを軽減しました。"
+  },
+  {
+    date:"2026.11.19",
     text:"管理画面の自動ログアウトを修正し、画面を移動してもログイン状態を維持できるようにしました。"
   },
   {
@@ -1043,6 +1085,9 @@ function normalizedUpdates(items){
 let PLOT_DATA=normalizedPlots(INITIAL_PLOTS);
 
 /* ANNOUNCEMENTS */
+/* 1件だけでも帯全体を埋めて自然にループ */
+let lastNoticeWindowWidth=0;
+
 function renderAnnouncements(){
   const track=$("noticeTrack");
   track.replaceChildren();
@@ -1051,11 +1096,13 @@ function renderAnnouncements(){
     ?NOTICES
     :["お知らせはありません。"];
 
-  for(let loop=0;loop<2;loop++){
-    const group=document.createElement("span");
-    group.className="notice-loop";
-    group.setAttribute("aria-hidden","true");
+  const group=document.createElement("span");
+  group.className="notice-loop";
+  group.setAttribute("aria-hidden","true");
 
+  track.appendChild(group);
+
+  const addNoticeSet=()=>{
     for(const message of messages){
       const item=document.createElement("span");
       item.className="notice-copy";
@@ -1067,9 +1114,40 @@ function renderAnnouncements(){
 
       group.append(item,divider);
     }
+  };
 
-    track.appendChild(group);
-  }
+  const windowEl=track.parentElement;
+  const width=windowEl.clientWidth||
+    window.innerWidth;
+
+  lastNoticeWindowWidth=width;
+
+  const minimumWidth=width+100;
+
+  let repeats=0;
+
+  do{
+    addNoticeSet();
+    repeats++;
+  }while(
+    group.scrollWidth<minimumWidth &&
+    repeats<150
+  );
+
+  const duplicate=group.cloneNode(true);
+  track.appendChild(duplicate);
+
+  const distance=group.getBoundingClientRect().width;
+
+  const duration=Math.max(
+    12,
+    distance/42
+  );
+
+  track.style.setProperty(
+    "--notice-duration",
+    duration.toFixed(2)+"s"
+  );
 
   const list=$("updateList");
   list.replaceChildren();
@@ -1157,6 +1235,7 @@ function setScreen(name){
   }
 }
 
+/* SHORTER WHITE TRANSITION */
 function changeScreen(name){
   if(transitioning||current===name){
     return;
@@ -1171,12 +1250,12 @@ function changeScreen(name){
 
   setTimeout(()=>{
     setScreen(name);
-  },330);
+  },198);
 
   setTimeout(()=>{
     transitioning=false;
     veil.classList.remove("play");
-  },815);
+  },490);
 }
 
 document
@@ -1369,6 +1448,7 @@ function coverElement(cls,imagePath,label){
 }
 
 /* TAGS */
+/* 3つの同一テキストを使用して継ぎ目をなくす */
 function tagsViewport(tags){
   const text=tags.join("　");
 
@@ -1383,12 +1463,16 @@ function tagsViewport(tags){
   one.className="tag-copy";
   one.textContent=text;
 
-  const two=document.createElement("span");
-  two.className="tag-copy tag-duplicate";
-  two.textContent=text;
-  two.setAttribute("aria-hidden","true");
+  track.appendChild(one);
 
-  track.append(one,two);
+  for(let i=0;i<2;i++){
+    const duplicate=document.createElement("span");
+    duplicate.className="tag-copy tag-duplicate";
+    duplicate.textContent=text;
+    duplicate.setAttribute("aria-hidden","true");
+    track.appendChild(duplicate);
+  }
+
   viewport.appendChild(track);
 
   return viewport;
@@ -1402,24 +1486,59 @@ function refreshTagMarquees(){
         ".tag-copy"
       );
 
+      const track=viewport.querySelector(
+        ".tag-track"
+      );
+
+      const copyWidth=
+        copy.getBoundingClientRect().width;
+
       const overflow=
-        copy.scrollWidth>
-        viewport.clientWidth+2;
+        copyWidth>viewport.clientWidth+2;
+
+      const shouldScroll=
+        overflow&&!reducedMotion;
 
       viewport.classList.toggle(
         "scrolling",
-        overflow&&!reducedMotion
+        shouldScroll
       );
 
-      const seconds=Math.max(
-        9,
-        Math.round(copy.scrollWidth/18)
-      );
+      if(!shouldScroll)return;
 
-      viewport.style.setProperty(
-        "--tag-duration",
-        seconds+"s"
-      );
+      const gap=parseFloat(
+        getComputedStyle(track).columnGap
+      )||24;
+
+      const distance=copyWidth+gap;
+      const shift=(-distance).toFixed(3)+"px";
+
+      const duration=Math.max(
+        11,
+        distance/32
+      ).toFixed(3)+"s";
+
+      if(
+        viewport.style.getPropertyValue(
+          "--tag-shift"
+        )!==shift
+      ){
+        viewport.style.setProperty(
+          "--tag-shift",
+          shift
+        );
+      }
+
+      if(
+        viewport.style.getPropertyValue(
+          "--tag-duration"
+        )!==duration
+      ){
+        viewport.style.setProperty(
+          "--tag-duration",
+          duration
+        );
+      }
     });
 }
 
@@ -1483,6 +1602,10 @@ function renderPlotGrid(){
 
     grid.appendChild(card);
   });
+
+  requestAnimationFrame(
+    refreshTagMarquees
+  );
 }
 
 /* PLOT DETAIL */
@@ -1739,16 +1862,31 @@ function refreshDisplayedDetails(
 
 renderPlotGrid();
 
+/* RESIZE WITHOUT UNNECESSARY MARQUEE RESET */
 addEventListener(
   "resize",
-  refreshTagMarquees,
+  ()=>{
+    const width=$("noticeTrack")
+      .parentElement.clientWidth;
+
+    if(
+      Math.abs(
+        width-lastNoticeWindowWidth
+      )>6
+    ){
+      renderAnnouncements();
+    }
+
+    refreshTagMarquees();
+  },
   {passive:true}
 );
 
 if(document.fonts?.ready){
-  document.fonts.ready.then(
-    refreshTagMarquees
-  );
+  document.fonts.ready.then(()=>{
+    renderAnnouncements();
+    refreshTagMarquees();
+  });
 }
 
 /* OTHER PAGES */
@@ -1792,7 +1930,7 @@ function openCategory(index){
 
     setTimeout(
       refreshTagMarquees,
-      450
+      300
     );
 
     return;
@@ -2079,6 +2217,7 @@ async function loadLegacyData(){
 let publicLoadPromise=null;
 let lastRemoteSignature=null;
 let latestRemoteRows=null;
+let hasRenderedRemote=false;
 let publishing=false;
 
 function checkDB(){
@@ -2214,6 +2353,7 @@ function remoteHasContent(rows){
   );
 }
 
+/* AVOID RESTARTING MARQUEES WHEN DATA IS UNCHANGED */
 async function loadPublishedPlots(force=false){
   if((document.hidden||publishing)&&!force){
     return;
@@ -2228,7 +2368,14 @@ async function loadPublishedPlots(force=false){
     const signature=remoteSignature(rows);
 
     latestRemoteRows=rows;
-    lastRemoteSignature=signature;
+
+    if(
+      !force &&
+      hasRenderedRemote &&
+      signature===lastRemoteSignature
+    ){
+      return rows;
+    }
 
     const oldPlotId=
       PLOT_DATA[selectedPlot]?.id||"";
@@ -2284,6 +2431,9 @@ async function loadPublishedPlots(force=false){
       oldPlotId,
       oldCharacterId
     );
+
+    lastRemoteSignature=signature;
+    hasRenderedRemote=true;
 
     return rows;
   })();
@@ -2654,7 +2804,6 @@ async function restoreAdminSession(){
 }
 
 /* LOGOUT */
-/* ログアウトボタンを押したときだけ認証を解除 */
 async function logoutAdmin(){
   adminUser="";
   draftPlots=[];
@@ -2681,7 +2830,6 @@ async function logoutAdmin(){
 }
 
 /* BACK FROM ADMIN */
-/* ホームに戻ってもログアウトしない */
 function leaveAdmin(){
   changeScreen("home");
 }
