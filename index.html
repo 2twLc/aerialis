@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#e0f5ff">
-<title>AERIALIS | Plot Archive</title>
+<title>NITU | Plot Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700&family=Michroma&family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,12 +19,23 @@
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%}
-body{position:fixed;inset:0;background:var(--bg);color:var(--ink);font-family:var(--jp);-webkit-tap-highlight-color:transparent}
+html,body{
+  width:100%;height:100%;margin:0;overflow:hidden;
+  overscroll-behavior:none;-webkit-text-size-adjust:100%;
+}
+body{
+  position:fixed;inset:0;background:var(--bg);
+  color:var(--ink);font-family:var(--jp);
+  -webkit-tap-highlight-color:transparent;
+}
 button{font:inherit;cursor:pointer}
-button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
-#app{position:fixed;inset:0;height:100dvh;overflow:hidden;isolation:isolate}
-
+button:focus-visible{
+  outline:2px solid var(--cyan);outline-offset:3px;
+}
+#app{
+  position:fixed;inset:0;height:100dvh;
+  overflow:hidden;isolation:isolate;
+}
 .screen{
   position:absolute;inset:0;overflow:hidden;
   opacity:0;visibility:hidden;pointer-events:none;
@@ -35,22 +46,31 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   background-size:34px 34px;
   transition:opacity .63s ease,visibility .63s ease;
 }
-.screen.active{opacity:1;visibility:visible;pointer-events:auto}
-
+.screen.active{
+  opacity:1;visibility:visible;pointer-events:auto;
+}
 .ambient{
   position:absolute;inset:-25%;pointer-events:none;
   background:
-    radial-gradient(ellipse at 20% 23%,rgba(255,255,255,.56),transparent 39%),
-    radial-gradient(ellipse at 88% 75%,rgba(162,217,246,.26),transparent 47%);
+    radial-gradient(
+      ellipse at 20% 23%,
+      rgba(255,255,255,.56),transparent 39%
+    ),
+    radial-gradient(
+      ellipse at 88% 75%,
+      rgba(162,217,246,.26),transparent 47%
+    );
   animation:ambientDrift 16s ease-in-out infinite alternate;
 }
 @keyframes ambientDrift{
   to{transform:translate3d(3%,-2%,0) scale(1.06)}
 }
 
-/* WAVES */
+/* WAVE LOGO */
 
-.wave-svg{display:block;width:100%;height:100%;overflow:visible}
+.wave-svg{
+  display:block;width:100%;height:100%;overflow:visible;
+}
 .wave-top,.wave-bottom{
   fill:none;stroke-width:9.5;
   stroke-linecap:round;stroke-linejoin:round;
@@ -62,8 +82,8 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 .wave-logo.small{width:48px;height:29px}
 .wave-logo.card-size{width:65px;height:39px}
 .wave-logo::after{
-  content:"";position:absolute;inset:12% -16%;
-  z-index:-1;pointer-events:none;
+  content:"";position:absolute;inset:12% -16%;z-index:-1;
+  pointer-events:none;
   background:radial-gradient(
     ellipse,rgba(255,255,255,.66),transparent 70%
   );
@@ -72,8 +92,9 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 /* TRANSITIONS */
 
 #softWipe{
-  position:absolute;inset:0;z-index:50;opacity:0;
-  pointer-events:none;background:#f7fdff;visibility:hidden;
+  position:absolute;inset:0;z-index:50;
+  opacity:0;pointer-events:none;
+  background:#f7fdff;visibility:hidden;
 }
 #softWipe.play{
   visibility:visible;
@@ -85,12 +106,20 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   100%{opacity:0}
 }
 @keyframes contentIn{
-  from{opacity:0;transform:translateY(20px);filter:blur(4px)}
-  to{opacity:1;transform:translateY(0);filter:blur(0)}
+  from{
+    opacity:0;transform:translateY(20px);filter:blur(4px);
+  }
+  to{
+    opacity:1;transform:translateY(0);filter:blur(0);
+  }
 }
 @keyframes cardIn{
-  from{opacity:0;transform:translateY(24px) scale(.975)}
-  to{opacity:1;transform:translateY(0) scale(1)}
+  from{
+    opacity:0;transform:translateY(24px) scale(.975);
+  }
+  to{
+    opacity:1;transform:translateY(0) scale(1);
+  }
 }
 
 /* LOADING */
@@ -117,7 +146,8 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 }
 .loader-track{
   position:relative;height:13px;padding:2px;overflow:hidden;
-  border-radius:20px;border:1px solid rgba(111,180,216,.37);
+  border-radius:20px;
+  border:1px solid rgba(111,180,216,.37);
   background:rgba(255,255,255,.96);
   box-shadow:0 2px 12px rgba(84,163,201,.11);
 }
@@ -145,9 +175,8 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   color:rgba(73,119,148,.69);
   font:700 12px var(--raj);letter-spacing:.16em;
 }
-.skip-intro:active{color:#177fb3}
 
-/* HEADER / CLOCK */
+/* SHARED HEADER */
 
 .site-header{
   position:absolute;z-index:10;
@@ -168,40 +197,35 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   letter-spacing:.045em;font-variant-numeric:tabular-nums;
 }
 .header-actions{
-  display:flex;flex-direction:column;align-items:flex-end;gap:3px;
+  display:flex;flex-direction:column;
+  align-items:flex-end;gap:3px;
 }
 .site-footer{
-  position:absolute;z-index:9;
-  left:7%;right:7%;
+  position:absolute;z-index:9;left:7%;right:7%;
   bottom:calc(22px + var(--safe-bottom));
   display:flex;align-items:center;
   justify-content:space-between;
   font:600 11px var(--raj);
   letter-spacing:.1em;color:#7d9cae;
 }
+.back-button{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 3px;border:0;background:none;
+  color:#447e9e;font:700 12px var(--raj);
+  letter-spacing:.09em;
+}
+.back-arrow{font-size:20px;line-height:1}
 
-/* MAIN MENU */
+/* HOME */
 
 #home{background-color:#e0f4ff}
-
-/* FULL-WIDTH ANNOUNCEMENT BAND */
-
 .notice-bar{
-  position:absolute;
-  z-index:12;
+  position:absolute;z-index:12;
   top:calc(64px + var(--safe-top));
-  left:0;
-  right:0;
-  width:100%;
-  height:33px;
-  display:flex;
-  align-items:center;
-  overflow:hidden;
+  left:0;right:0;width:100%;height:33px;
+  display:flex;align-items:center;overflow:hidden;
   border-top:1px solid rgba(188,218,236,.55);
   border-bottom:1px solid rgba(188,218,236,.55);
-  border-left:0;
-  border-right:0;
-  border-radius:0;
   background:#fff;
   box-shadow:0 6px 19px rgba(59,137,171,.065);
 }
@@ -238,8 +262,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 }
 .update-heading{
   display:flex;align-items:center;gap:8px;margin-bottom:10px;
-  color:#307da7;
-  font:700 11px var(--orbit);
+  color:#307da7;font:700 11px var(--orbit);
   letter-spacing:.04em;white-space:nowrap;
 }
 .update-heading::before{
@@ -248,11 +271,9 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 }
 .update-list{
   height:calc(100% - 27px);
-  overflow-y:auto;
-  overscroll-behavior:contain;
+  overflow-y:auto;overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
-  touch-action:pan-y;
-  scrollbar-width:none;
+  touch-action:pan-y;scrollbar-width:none;
 }
 .update-list::-webkit-scrollbar{display:none}
 .update-item{
@@ -278,8 +299,8 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   position:absolute;z-index:6;
   right:2.5%;top:17.3%;
   width:clamp(190px,53vw,275px);
-  aspect-ratio:1;border:0;
-  background:none;padding:0;overflow:visible;
+  aspect-ratio:1;border:0;background:none;
+  padding:0;overflow:visible;
   user-select:none;-webkit-user-select:none;
   touch-action:manipulation;
 }
@@ -291,8 +312,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 }
 .mascot-bounce{
   display:block;width:100%;height:100%;
-  transform-origin:50% 78%;
-  will-change:transform;
+  transform-origin:50% 78%;will-change:transform;
 }
 .mascot-img{
   width:100%;height:100%;display:block;
@@ -304,7 +324,8 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   50%{transform:translateY(-7px) rotate(1deg)}
 }
 .sparkles{
-  position:absolute;inset:0;overflow:visible;pointer-events:none;
+  position:absolute;inset:0;
+  overflow:visible;pointer-events:none;
 }
 .spark{
   position:absolute;left:var(--x);top:var(--y);
@@ -336,7 +357,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   }
 }
 
-/* FOUR MENU CARDS */
+/* FOUR HOME MENU CARDS */
 
 .directory{
   position:absolute;z-index:8;
@@ -351,8 +372,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   display:flex;flex-direction:column;
   justify-content:space-between;padding:14px;
   border:1px solid rgba(255,255,255,.95);
-  border-radius:14px;
-  background:rgba(255,255,255,.77);
+  border-radius:14px;background:rgba(255,255,255,.77);
   box-shadow:
     0 13px 32px rgba(58,136,176,.105),
     0 2px 7px rgba(61,126,161,.045);
@@ -362,31 +382,26 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   transition:transform .25s,box-shadow .25s,background .25s;
 }
 .entry::before{
-  content:"";position:absolute;top:0;left:17px;right:17px;
-  height:3px;border-radius:0 0 8px 8px;
+  content:"";position:absolute;top:0;
+  left:17px;right:17px;height:3px;
+  border-radius:0 0 8px 8px;
   background:linear-gradient(
-    90deg,
-    rgba(65,182,235,.77),
-    rgba(240,146,191,.75)
+    90deg,rgba(65,182,235,.77),rgba(240,146,191,.75)
   );
 }
 .entry:active{
   transform:scale(.965);background:#fff;
 }
 .entry-top{
-  display:flex;
-  justify-content:space-between;
+  display:flex;justify-content:space-between;
   align-items:flex-start;gap:4px;
 }
 .entry-index{
   font:700 10px var(--raj);
-  letter-spacing:.015em;
-  color:#73a3bc;
-  white-space:nowrap;
+  letter-spacing:.015em;color:#73a3bc;white-space:nowrap;
 }
 .entry .wave-logo{
-  opacity:.78;
-  transform:translate(5px,-1px);
+  opacity:.78;transform:translate(5px,-1px);
 }
 .entry-title{
   position:relative;display:block;z-index:1;
@@ -395,8 +410,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 .entry-title strong{
   display:block;
   font:800 clamp(12px,3.2vw,19px)/1.25 var(--orbit);
-  letter-spacing:-.04em;
-  overflow-wrap:anywhere;
+  letter-spacing:-.04em;overflow-wrap:anywhere;
 }
 .entry-title small{
   display:block;margin-top:9px;
@@ -407,70 +421,255 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   position:absolute;right:13px;bottom:12px;
   color:#68a6ca;font:600 22px/1 var(--raj);
 }
-#home.active .entry{
-  animation:cardIn .63s both;
-}
-#home.active .entry:nth-child(2){
-  animation-delay:.09s;
-}
-#home.active .entry:nth-child(3){
-  animation-delay:.18s;
-}
-#home.active .entry:nth-child(4){
-  animation-delay:.27s;
-}
+#home.active .entry{animation:cardIn .63s both}
+#home.active .entry:nth-child(2){animation-delay:.09s}
+#home.active .entry:nth-child(3){animation-delay:.18s}
+#home.active .entry:nth-child(4){animation-delay:.27s}
 
-/* DETAIL PAGES */
+/* INNER PAGES */
 
-#detail{background-color:#e1f5ff}
-.back-button{
-  display:flex;align-items:center;gap:7px;
-  padding:9px 4px;border:0;background:none;
-  color:#447e9e;
-  font:700 13px var(--raj);
-  letter-spacing:.09em;
+#plots,#plotView,#character,#detail{
+  background-color:#e1f5ff;
 }
-.back-button .back-arrow{
-  font-size:21px;line-height:.7;
-}
-.detail-scroll{
-  position:absolute;
-  top:calc(101px + var(--safe-top));
-  bottom:calc(30px + var(--safe-bottom));
+.inner-scroll{
+  position:absolute;z-index:4;
+  top:calc(111px + var(--safe-top));
+  bottom:calc(18px + var(--safe-bottom));
   left:7%;right:7%;
-  overflow-y:auto;
-  overscroll-behavior:contain;
+  overflow-y:auto;overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
   touch-action:pan-y;
-  padding:6px 0 34px;
+  padding:2px 0 35px;scrollbar-width:none;
 }
-.detail-kicker{
-  font:700 12px var(--raj);
-  letter-spacing:.19em;color:#579ec1;
+.inner-scroll::-webkit-scrollbar{display:none}
+.page-kicker{
+  font:700 11px var(--raj);
+  letter-spacing:.16em;color:#5c9dbe;
 }
-.detail-title{
-  margin:16px 0 12px;
-  font:800 clamp(26px,7.9vw,53px)/1.1 var(--orbit);
-  letter-spacing:-.05em;
+.page-title{
+  margin:11px 0 8px;
+  font:800 clamp(27px,8vw,51px)/1.15 var(--orbit);
+  letter-spacing:-.06em;overflow-wrap:anywhere;
+}
+.page-description{
+  margin:0;color:#7393a4;
+  font:500 12px/1.9 var(--jp);
+}
+.section-line{
+  height:1px;background:rgba(91,155,193,.22);
+  margin:18px 0 19px;
+}
+
+/* PLOTS: TWO COLUMNS */
+
+.plot-grid,.character-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;align-items:start;
+}
+.plot-card,.character-card{
+  display:block;min-width:0;width:100%;padding:0;
+  border:1px solid rgba(255,255,255,.97);
+  border-radius:15px;overflow:hidden;
+  background:rgba(255,255,255,.84);
+  box-shadow:0 9px 22px rgba(58,136,176,.11);
+  color:var(--ink);text-align:left;
+  transition:transform .2s,box-shadow .2s;
+}
+.plot-card:active,.character-card:active{
+  transform:scale(.97);
+  box-shadow:0 4px 10px rgba(58,136,176,.09);
+}
+.plot-cover,.character-cover,.plot-hero-cover,.profile-cover{
+  position:relative;display:flex;
+  align-items:center;justify-content:center;overflow:hidden;
+  background:linear-gradient(
+    146deg,#f2fcff 0%,#bfe8fb 53%,#f5cbe3 100%
+  );
+}
+.plot-cover{aspect-ratio:4/4.35}
+.plot-cover::before,
+.character-cover::before,
+.plot-hero-cover::before,
+.profile-cover::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(
+      circle at 22% 22%,
+      rgba(255,255,255,.86),transparent 47%
+    ),
+    linear-gradient(160deg,transparent 45%,rgba(255,255,255,.28));
+  pointer-events:none;
+}
+.plot-cover img,
+.character-cover img,
+.plot-hero-cover img,
+.profile-cover img{
+  position:absolute;inset:0;
+  display:block;width:100%;height:100%;
+  object-fit:cover;z-index:2;
+}
+.plot-cover img[hidden],
+.character-cover img[hidden],
+.plot-hero-cover img[hidden],
+.profile-cover img[hidden]{display:none}
+.cover-placeholder{
+  z-index:1;position:relative;text-align:center;
+  color:rgba(41,118,164,.56);
+  font:700 10px/1.8 var(--orbit);
+  letter-spacing:.15em;white-space:pre-line;
+}
+.cover-placeholder::before{
+  content:"";display:block;width:48px;height:3px;
+  margin:0 auto 13px;border-radius:5px;
+  background:linear-gradient(90deg,var(--cyan),var(--pink));
+}
+.plot-card-info{
+  padding:12px 11px 14px;min-width:0;
+}
+.plot-card-name{
+  display:block;
+  font:700 clamp(13px,3.5vw,18px)/1.5 var(--jp);
+  overflow-wrap:anywhere;color:#254f67;
+}
+.plot-card-intro{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  line-clamp:2;
+  overflow:hidden;
+  margin:6px 0 8px;
+  font:400 11px/1.65 var(--jp);
+  color:#718c9b;min-height:2.9em;
+}
+
+/* LONG TAGS SCROLL ONLY WHEN THEY OVERFLOW */
+
+.tag-viewport{
+  position:relative;display:block;overflow:hidden;
+  width:100%;white-space:nowrap;color:#489dc6;
+  font:700 11px/1.7 var(--raj);
+  letter-spacing:.02em;pointer-events:none;
+}
+.tag-track{
+  display:inline-flex;align-items:center;
+  gap:28px;width:max-content;max-width:none;
+  vertical-align:top;
+}
+.tag-copy{
+  display:inline-block;white-space:nowrap;
+}
+.tag-duplicate{display:none}
+.tag-viewport.scrolling .tag-duplicate{display:inline-block}
+.tag-viewport.scrolling .tag-track{
+  animation:tagFlow var(--tag-duration,14s) linear infinite;
+}
+@keyframes tagFlow{
+  to{transform:translateX(calc(-50% - 14px))}
+}
+.plot-card-footer{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin-top:10px;padding-top:7px;
+  border-top:1px solid #e9f3f9;
+  color:#91adbe;
+  font:700 10px var(--raj);letter-spacing:.05em;
+}
+.plot-card-footer b{
+  font:700 17px var(--raj);color:#75b0d2;
+}
+
+/* PLOT DESCRIPTION AND CHARACTERS */
+
+.plot-hero-cover{
+  width:100%;aspect-ratio:16/8.8;
+  border:1px solid #fff;border-radius:16px;
+  margin-top:18px;
+  box-shadow:0 12px 30px rgba(58,136,176,.1);
+}
+.plot-hero-cover .cover-placeholder{font-size:12px}
+.plot-info-panel,.profile-panel{
+  margin-top:17px;border:1px solid #fff;
+  border-radius:15px;background:rgba(255,255,255,.78);
+  padding:17px 16px 20px;
+  box-shadow:0 9px 22px rgba(58,136,176,.075);
+}
+.plot-info-panel h3,.profile-panel h3{
+  margin:0 0 10px;color:#3b90ba;
+  font:700 11px var(--orbit);letter-spacing:.11em;
+}
+.plot-info-panel p,.profile-panel p{
+  margin:0;font:400 13px/2 var(--jp);
+  white-space:pre-line;color:#395e73;
+}
+.plot-tags{
+  margin-top:13px;color:#4a9cc6;
+  font:600 12px/1.8 var(--raj);
   overflow-wrap:anywhere;
 }
-.detail-subtitle{
-  color:#7f9cab;
-  font:500 10px/1.7 var(--mich);
-  letter-spacing:.04em;
+.inner-section-heading{
+  margin:27px 0 14px;
+  display:flex;justify-content:space-between;
+  align-items:baseline;gap:8px;
+  color:#2f759b;
+  font:700 13px var(--orbit);
+  letter-spacing:.065em;
 }
+.inner-section-heading small{
+  font:700 11px var(--raj);
+  letter-spacing:.06em;color:#85aabb;
+}
+.character-cover{aspect-ratio:4/4.6}
+.character-card-info{padding:11px}
+.character-card-info strong{
+  display:block;font:700 13px/1.5 var(--jp);
+  color:#2b5268;overflow-wrap:anywhere;
+}
+.character-card-info small{
+  display:block;margin-top:4px;
+  color:#8da9b9;font:700 11px var(--raj);
+}
+.character-card-info span{
+  display:block;margin-top:5px;
+  color:#5fa3c6;font:700 11px var(--raj);
+}
+
+/* CHARACTER PROFILE */
+
+.profile-cover{
+  width:100%;aspect-ratio:4/3.5;
+  margin-top:18px;border:1px solid #fff;border-radius:17px;
+}
+.profile-cover img{object-fit:contain}
+.profile-panel{margin-top:17px}
+.profile-fields{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:12px;margin:17px 0;padding-top:16px;
+  border-top:1px solid #e0eff7;
+}
+.profile-field{min-width:0}
+.profile-field dt{
+  color:#85a9bd;font:700 11px var(--raj);
+  letter-spacing:.08em;
+}
+.profile-field dd{
+  margin:5px 0 0;font:600 13px/1.65 var(--jp);
+  overflow-wrap:anywhere;color:#315a71;
+}
+
+/* OTHER PAGES */
+
 .detail-paper{
   position:relative;margin-top:30px;
   padding:27px 22px 30px;
   border:1px solid rgba(255,255,255,.95);
-  border-radius:18px;
-  background:rgba(255,255,255,.78);
+  border-radius:18px;background:rgba(255,255,255,.78);
   box-shadow:0 17px 36px rgba(60,130,175,.1);
   overflow:hidden;
 }
 .detail-paper::before{
-  content:"";position:absolute;
-  top:0;left:22px;right:22px;height:3px;
+  content:"";position:absolute;top:0;
+  left:22px;right:22px;height:3px;
   background:linear-gradient(90deg,var(--cyan),var(--pink));
   border-radius:0 0 6px 6px;
 }
@@ -491,14 +690,9 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   letter-spacing:.09em;
 }
 .detail-bottom{
-  margin-top:22px;
-  display:flex;justify-content:space-between;
-  color:#8aa9bb;
-  font:700 11px var(--raj);
-  letter-spacing:.1em;
-}
-#detail.active .detail-scroll{
-  animation:contentIn .62s both;
+  margin-top:22px;display:flex;
+  justify-content:space-between;color:#8aa9bb;
+  font:700 11px var(--raj);letter-spacing:.1em;
 }
 
 /* RESPONSIVE */
@@ -509,6 +703,8 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   .site-brand strong{font-size:12px}
   .live-clock{font-size:11px;letter-spacing:0}
   .update-panel{width:48%;padding:11px}
+  .plot-grid,.character-grid{gap:10px}
+  .plot-card-info{padding:10px 9px}
 }
 @media(max-height:720px){
   .loading-main{top:31%}
@@ -548,7 +744,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 }
 @media(min-width:700px){
   .site-header,.site-footer,.update-panel,
-  .directory,.detail-scroll{
+  .directory,.inner-scroll{
     left:12%;right:12%;
   }
   .notice-bar{left:0;right:0}
@@ -559,12 +755,13 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
     right:16%;width:min(31vw,310px);
   }
   .update-panel{width:300px;max-width:300px}
-  .detail-scroll{
-    max-width:730px;margin-inline:auto;
+  .inner-scroll{
+    max-width:780px;margin-inline:auto;
   }
+  .plot-grid,.character-grid{gap:20px}
 }
 @media(prefers-reduced-motion:reduce){
-  .ambient,.mascot-float,.notice-track{
+  .ambient,.mascot-float,.notice-track,.tag-track{
     animation:none!important;
   }
   .screen{transition:none}
@@ -579,16 +776,22 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 
 <section class="screen active" id="loading" aria-hidden="false">
   <div class="ambient"></div>
-  <button class="skip-intro" type="button" id="skipIntro">SKIP</button>
+
+  <button class="skip-intro" type="button" id="skipIntro">
+    SKIP
+  </button>
+
   <div class="loading-main">
     <div class="wave-logo large" aria-hidden="true">
-      <svg class="wave-svg" viewBox="0 0 150 64" xmlns="http://www.w3.org/2000/svg">
+      <svg class="wave-svg" viewBox="0 0 150 64">
         <path class="wave-top"></path>
         <path class="wave-bottom"></path>
       </svg>
     </div>
+
     <h1 class="intro-title">NITU</h1>
     <div class="intro-subtitle">PLOT ARCHIVE</div>
+
     <div
       class="loader"
       role="progressbar"
@@ -601,6 +804,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
       <div class="loader-track">
         <div class="loader-fill" id="loaderFill"></div>
       </div>
+
       <div class="loader-info">
         <span>LOADING</span>
         <strong id="loaderNumber">0%</strong>
@@ -624,10 +828,11 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
       </span>
       <strong>AERIALIS</strong>
     </div>
-    <time class="live-clock" aria-label="日本時間">00:00:00</time>
-  </header>
 
-  <!-- SCROLLING ANNOUNCEMENTS -->
+    <time class="live-clock" aria-label="日本時間">
+      00:00:00
+    </time>
+  </header>
 
   <div class="notice-bar" aria-label="お知らせ">
     <div class="notice-window" aria-hidden="true">
@@ -635,14 +840,10 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
     </div>
   </div>
 
-  <!-- UPDATE HISTORY -->
-
   <section class="update-panel" aria-label="更新履歴">
     <div class="update-heading">UPDATE LOG</div>
     <div class="update-list" id="updateList"></div>
   </section>
-
-  <!-- MASCOT -->
 
   <button
     class="home-mascot"
@@ -660,13 +861,11 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
         >
       </span>
     </span>
+
     <span class="sparkles" id="sparkleField" aria-hidden="true"></span>
   </button>
 
-  <!-- FOUR CATEGORIES -->
-
   <nav class="directory" aria-label="アーカイブのメニュー">
-
     <button class="entry" type="button" data-page="0">
       <span class="entry-top">
         <span class="entry-index">01 / PLOTS</span>
@@ -712,7 +911,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
         </span>
       </span>
       <span class="entry-title">
-        <strong>Q&A</strong>
+        <strong>Q&amp;A</strong>
         <small>QUESTIONS &amp; ANSWERS</small>
       </span>
       <span class="entry-arrow">↗</span>
@@ -734,7 +933,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
       </span>
       <span class="entry-arrow">↗</span>
     </button>
-
   </nav>
 
   <footer class="site-footer">
@@ -743,7 +941,141 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   </footer>
 </section>
 
-<!-- DETAIL -->
+<!-- PLOTS LIST -->
+
+<section class="screen" id="plots" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>AERIALIS</strong>
+    </div>
+
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button" type="button" data-back="home">
+        <span class="back-arrow">←</span>
+        BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="plotsScroll">
+    <div class="page-kicker">SECTION 01 / ARCHIVE</div>
+    <h2 class="page-title">PLOTS</h2>
+    <p class="page-description">
+      物語と世界観のコレクション。
+    </p>
+
+    <div class="section-line"></div>
+
+    <div class="plot-grid" id="plotGrid"></div>
+  </main>
+</section>
+
+<!-- PLOT DETAIL -->
+
+<section class="screen" id="plotView" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>AERIALIS</strong>
+    </div>
+
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button" type="button" data-back="plots">
+        <span class="back-arrow">←</span>
+        BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="plotViewScroll">
+    <div class="page-kicker" id="selectedPlotCode">
+      PLOT / 01
+    </div>
+
+    <h2 class="page-title" id="selectedPlotTitle"></h2>
+
+    <div class="plot-hero-cover" id="selectedPlotCover"></div>
+
+    <article class="plot-info-panel">
+      <h3>STORY / INTRODUCTION</h3>
+      <p id="selectedPlotIntro"></p>
+      <div class="plot-tags" id="selectedPlotTags"></div>
+    </article>
+
+    <div class="inner-section-heading">
+      CHARACTERS
+      <small id="characterCount">00 PEOPLE</small>
+    </div>
+
+    <div class="character-grid" id="characterGrid"></div>
+  </main>
+</section>
+
+<!-- CHARACTER PROFILE -->
+
+<section class="screen" id="character" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>AERIALIS</strong>
+    </div>
+
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button" type="button" data-back="plotView">
+        <span class="back-arrow">←</span>
+        BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="characterScroll">
+    <div class="page-kicker">
+      CHARACTER FILE / <span id="characterNumber">01</span>
+    </div>
+
+    <h2 class="page-title" id="characterName"></h2>
+    <p class="page-description" id="characterSub"></p>
+
+    <div class="profile-cover" id="characterPortrait"></div>
+
+    <article class="profile-panel">
+      <h3>PROFILE</h3>
+      <p id="characterBio"></p>
+
+      <dl class="profile-fields" id="characterFields"></dl>
+
+      <h3>PERSONALITY / NOTES</h3>
+      <p id="characterNotes"></p>
+    </article>
+  </main>
+</section>
+
+<!-- NOVELS / Q&A / GUIDELINES -->
 
 <section class="screen" id="detail" aria-hidden="true">
   <div class="ambient"></div>
@@ -760,24 +1092,18 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
     </div>
 
     <div class="header-actions">
-      <time class="live-clock" aria-label="日本時間">00:00:00</time>
-      <button class="back-button" id="backButton" type="button">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button" type="button" data-back="home">
         <span class="back-arrow">←</span>
         BACK
       </button>
     </div>
   </header>
 
-  <div class="detail-scroll" id="detailScroll">
-    <div class="detail-kicker" id="detailKicker">
-      SECTION 01 / PLOTS
-    </div>
-
-    <h2 class="detail-title" id="detailTitle">PLOTS</h2>
-
-    <div class="detail-subtitle" id="detailSubtitle">
-      PLOT COLLECTION
-    </div>
+  <main class="inner-scroll" id="detailScroll">
+    <div class="page-kicker" id="detailKicker"></div>
+    <h2 class="page-title" id="detailTitle"></h2>
+    <p class="page-description" id="detailSubtitle"></p>
 
     <article class="detail-paper">
       <div class="wave-logo small" aria-hidden="true">
@@ -786,7 +1112,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
           <path class="wave-bottom"></path>
         </svg>
       </div>
-
       <p id="detailText"></p>
 
       <div class="archive-empty" id="detailEmpty" hidden>
@@ -796,9 +1121,9 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 
     <div class="detail-bottom">
       <span>AERIALIS / PLOT ARCHIVE</span>
-      <span id="detailPageNumber">01 / 04</span>
+      <span id="detailPageNumber">02 / 04</span>
     </div>
-  </div>
+  </main>
 </section>
 
 <div id="softWipe"></div>
@@ -824,9 +1149,7 @@ for(const name of [
 document.addEventListener(
   "touchmove",
   e=>{
-    if(e.touches.length>1){
-      e.preventDefault();
-    }
+    if(e.touches.length>1)e.preventDefault();
   },
   {passive:false}
 );
@@ -840,10 +1163,8 @@ document.addEventListener(
 
 const $=id=>document.getElementById(id);
 const TAU=Math.PI*2;
-
-const clamp=(value,min,max)=>{
-  return Math.min(max,Math.max(min,value));
-};
+const clamp=(value,min,max)=>
+  Math.min(max,Math.max(min,value));
 
 /* CLOCK */
 
@@ -869,7 +1190,7 @@ function updateClock(){
 updateClock();
 setInterval(updateClock,1000);
 
-/* ANNOUNCEMENTS / UPDATE HISTORY */
+/* NOTICES / UPDATES */
 
 const NOTICES=[
   "NITUへようこそ。",
@@ -887,20 +1208,16 @@ const UPDATES=[
   }
 ];
 
-/* RENDER ANNOUNCEMENTS */
-
 function renderAnnouncements(){
-  const message=
-    NOTICES.join("　 /　 ")+
-    "　 /　 ";
-
+  const text=NOTICES.join("　 /　 ")+"　 /　 ";
   const track=$("noticeTrack");
+
   track.replaceChildren();
 
   for(let i=0;i<2;i++){
     const item=document.createElement("span");
     item.className="notice-copy";
-    item.textContent=message;
+    item.textContent=text;
     track.appendChild(item);
   }
 
@@ -928,11 +1245,16 @@ renderAnnouncements();
 
 /* SCREEN MANAGEMENT */
 
-const screens={
-  loading:$("loading"),
-  home:$("home"),
-  detail:$("detail")
-};
+const screens=Object.fromEntries(
+  [
+    "loading",
+    "home",
+    "plots",
+    "plotView",
+    "character",
+    "detail"
+  ].map(id=>[id,$(id)])
+);
 
 let current="loading";
 let transitioning=false;
@@ -942,12 +1264,7 @@ function setScreen(name){
     const active=key===name;
 
     el.classList.toggle("active",active);
-
-    el.setAttribute(
-      "aria-hidden",
-      String(!active)
-    );
-
+    el.setAttribute("aria-hidden",String(!active));
     el.inert=!active;
   }
 
@@ -964,15 +1281,32 @@ function changeScreen(name){
   void veil.offsetWidth;
   veil.classList.add("play");
 
-  setTimeout(()=>{
-    setScreen(name);
-  },330);
+  setTimeout(()=>setScreen(name),330);
 
   setTimeout(()=>{
     transitioning=false;
     veil.classList.remove("play");
   },815);
 }
+
+document.querySelectorAll("[data-back]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    changeScreen(button.dataset.back);
+  });
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape"||transitioning)return;
+
+  const back={
+    plots:"home",
+    plotView:"plots",
+    character:"plotView",
+    detail:"home"
+  };
+
+  if(back[current])changeScreen(back[current]);
+});
 
 /* WAVES */
 
@@ -1007,7 +1341,6 @@ const reducedMotion=window.matchMedia(
 
 function drawWave(time){
   const phase=reducedMotion?0:time*.0022;
-
   const top=sinePath(18,phase);
   const bottom=sinePath(45,phase+.33);
 
@@ -1045,25 +1378,19 @@ function endLoading(){
 
   $("loaderFill").style.width="100%";
   $("loaderNumber").textContent="100%";
-
-  $("progressTrack").setAttribute(
-    "aria-valuenow",
-    "100"
-  );
+  $("progressTrack").setAttribute("aria-valuenow","100");
 
   changeScreen("home");
 }
 
 function loadFrame(time){
   if(loadFinished)return;
-
-  if(!loadStarted){
-    loadStarted=time;
-  }
+  if(!loadStarted)loadStarted=time;
 
   const progress=clamp(
     (time-loadStarted)/loadDuration,
-    0,1
+    0,
+    1
   );
 
   const percent=Math.round(progress*100);
@@ -1085,30 +1412,383 @@ function loadFrame(time){
 
 requestAnimationFrame(loadFrame);
 
-$("skipIntro").addEventListener(
-  "click",
-  endLoading
+$("skipIntro").addEventListener("click",endLoading);
+
+/* =======================================
+   PLOTS DATA
+
+   ここで画像・タイトル・紹介文・タグ、
+   登場人物とそのプロフィールを編集できます。
+
+   画像は index.html と同じ場所へ
+   アップロードしてください。
+======================================= */
+
+const PLOT_DATA=[
+  {
+    title:"プロット 01",
+    image:"./plot01.png",
+
+    intro:
+      "ここにプロットの簡単な紹介を入力します。"+
+      "世界観や物語の始まりなどを短く紹介できます。",
+
+    tags:[
+      "#ファンタジー",
+      "#オリジナル",
+      "#世界観設定",
+      "#キャラクター設定資料"
+    ],
+
+    characters:[
+      {
+        name:"登場人物 01",
+        image:"./character01.png",
+        role:"MAIN CHARACTER",
+        age:"未設定",
+        birthday:"未設定",
+
+        profile:
+          "ここにキャラクターの紹介文を入力します。",
+
+        personality:
+          "性格や特徴、ほかのキャラクターとの"+
+          "関係性などを記載できます。"
+      },
+
+      {
+        name:"登場人物 02",
+        image:"./character02.png",
+        role:"CHARACTER",
+        age:"未設定",
+        birthday:"未設定",
+
+        profile:
+          "ここにキャラクターの紹介文を入力します。",
+
+        personality:
+          "ここに性格や追加設定を入力します。"
+      }
+    ]
+  },
+
+  {
+    title:"プロット 02",
+    image:"./plot02.png",
+
+    intro:
+      "こちらには別のプロットの短い紹介を表示できます。",
+
+    tags:[
+      "#オリジナル",
+      "#物語"
+    ],
+
+    characters:[
+      {
+        name:"登場人物 03",
+        image:"./character03.png",
+        role:"MAIN CHARACTER",
+        age:"未設定",
+        birthday:"未設定",
+
+        profile:
+          "このキャラクターの詳細情報を記載できます。",
+
+        personality:
+          "性格や人物関係などを記載できます。"
+      }
+    ]
+  }
+];
+
+/* IMAGE FALLBACK */
+
+function coverElement(cls,imagePath,label){
+  const root=document.createElement("div");
+  root.className=cls;
+
+  const placeholder=document.createElement("span");
+  placeholder.className="cover-placeholder";
+  placeholder.textContent=label;
+
+  root.appendChild(placeholder);
+
+  if(imagePath){
+    const img=document.createElement("img");
+    img.alt="";
+    img.loading="lazy";
+    img.decoding="async";
+
+    img.addEventListener(
+      "error",
+      ()=>{img.hidden=true;},
+      {once:true}
+    );
+
+    root.appendChild(img);
+    img.src=imagePath;
+  }
+
+  return root;
+}
+
+/* TAGS THAT MARQUEE ONLY WHEN TOO LONG */
+
+function tagsViewport(tags){
+  const text=tags.join("　");
+
+  const viewport=document.createElement("div");
+  viewport.className="tag-viewport";
+  viewport.setAttribute("aria-label",text);
+
+  const track=document.createElement("span");
+  track.className="tag-track";
+
+  const one=document.createElement("span");
+  one.className="tag-copy";
+  one.textContent=text;
+
+  const two=document.createElement("span");
+  two.className="tag-copy tag-duplicate";
+  two.textContent=text;
+  two.setAttribute("aria-hidden","true");
+
+  track.append(one,two);
+  viewport.appendChild(track);
+
+  return viewport;
+}
+
+function refreshTagMarquees(){
+  document.querySelectorAll(".tag-viewport").forEach(viewport=>{
+    const copy=viewport.querySelector(".tag-copy");
+
+    const overflow=
+      copy.scrollWidth>viewport.clientWidth+2;
+
+    viewport.classList.toggle(
+      "scrolling",
+      overflow&&!reducedMotion
+    );
+
+    const seconds=Math.max(
+      9,
+      Math.round(copy.scrollWidth/18)
+    );
+
+    viewport.style.setProperty(
+      "--tag-duration",
+      seconds+"s"
+    );
+  });
+}
+
+/* PLOT CARDS */
+
+function renderPlotGrid(){
+  const grid=$("plotGrid");
+  grid.replaceChildren();
+
+  PLOT_DATA.forEach((plot,index)=>{
+    const card=document.createElement("button");
+    card.type="button";
+    card.className="plot-card";
+
+    card.appendChild(
+      coverElement(
+        "plot-cover",
+        plot.image,
+        "PLOT\n"+String(index+1).padStart(2,"0")
+      )
+    );
+
+    const info=document.createElement("div");
+    info.className="plot-card-info";
+
+    const title=document.createElement("strong");
+    title.className="plot-card-name";
+    title.textContent=plot.title;
+
+    const intro=document.createElement("p");
+    intro.className="plot-card-intro";
+    intro.textContent=plot.intro;
+
+    const tags=tagsViewport(plot.tags);
+
+    const foot=document.createElement("div");
+    foot.className="plot-card-footer";
+    foot.innerHTML="<span>VIEW PLOT</span><b>↗</b>";
+
+    info.append(title,intro,tags,foot);
+    card.appendChild(info);
+
+    card.addEventListener("click",()=>{
+      openPlot(index);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+let selectedPlot=0;
+let selectedCharacter=0;
+
+/* OPEN PLOT */
+
+function openPlot(index){
+  if(
+    current!=="plots"||
+    transitioning||
+    !PLOT_DATA[index]
+  )return;
+
+  selectedPlot=index;
+
+  const plot=PLOT_DATA[index];
+
+  $("selectedPlotCode").textContent=
+    "PLOT / "+String(index+1).padStart(2,"0");
+
+  $("selectedPlotTitle").textContent=plot.title;
+  $("selectedPlotIntro").textContent=plot.intro;
+  $("selectedPlotTags").textContent=plot.tags.join("　");
+
+  $("selectedPlotCover").replaceWith(
+    coverElement(
+      "plot-hero-cover",
+      plot.image,
+      "PLOT / "+String(index+1).padStart(2,"0")
+    )
+  );
+
+  document.querySelector(".plot-hero-cover").id=
+    "selectedPlotCover";
+
+  $("characterCount").textContent=
+    String(plot.characters.length).padStart(2,"0")+
+    " PEOPLE";
+
+  const grid=$("characterGrid");
+  grid.replaceChildren();
+
+  plot.characters.forEach((character,i)=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="character-card";
+
+    button.appendChild(
+      coverElement(
+        "character-cover",
+        character.image,
+        "CHARACTER\n"+String(i+1).padStart(2,"0")
+      )
+    );
+
+    const info=document.createElement("div");
+    info.className="character-card-info";
+
+    const title=document.createElement("strong");
+    title.textContent=character.name;
+
+    const role=document.createElement("small");
+    role.textContent=character.role||"CHARACTER";
+
+    const arrow=document.createElement("span");
+    arrow.textContent="VIEW PROFILE ↗";
+
+    info.append(title,role,arrow);
+    button.appendChild(info);
+
+    button.addEventListener("click",()=>{
+      openCharacter(i);
+    });
+
+    grid.appendChild(button);
+  });
+
+  $("plotViewScroll").scrollTop=0;
+  changeScreen("plotView");
+}
+
+/* OPEN CHARACTER */
+
+function openCharacter(index){
+  if(current!=="plotView"||transitioning)return;
+
+  const character=
+    PLOT_DATA[selectedPlot]?.characters[index];
+
+  if(!character)return;
+
+  selectedCharacter=index;
+
+  $("characterNumber").textContent=
+    String(index+1).padStart(2,"0");
+
+  $("characterName").textContent=character.name;
+
+  $("characterSub").textContent=
+    PLOT_DATA[selectedPlot].title+
+    " / "+
+    (character.role||"CHARACTER");
+
+  $("characterPortrait").replaceWith(
+    coverElement(
+      "profile-cover",
+      character.image,
+      "CHARACTER / "+String(index+1).padStart(2,"0")
+    )
+  );
+
+  document.querySelector(".profile-cover").id=
+    "characterPortrait";
+
+  $("characterBio").textContent=
+    character.profile||"詳細は準備中です。";
+
+  $("characterNotes").textContent=
+    character.personality||"詳細は準備中です。";
+
+  const fields=$("characterFields");
+  fields.replaceChildren();
+
+  for(const [label,value] of [
+    ["AGE",character.age],
+    ["BIRTHDAY",character.birthday]
+  ]){
+    const block=document.createElement("div");
+    block.className="profile-field";
+
+    const dt=document.createElement("dt");
+    dt.textContent=label;
+
+    const dd=document.createElement("dd");
+    dd.textContent=value||"未設定";
+
+    block.append(dt,dd);
+    fields.appendChild(block);
+  }
+
+  $("characterScroll").scrollTop=0;
+  changeScreen("character");
+}
+
+renderPlotGrid();
+
+addEventListener(
+  "resize",
+  refreshTagMarquees,
+  {passive:true}
 );
 
-/* =========================
-   FOUR CATEGORY PAGES
+if(document.fonts?.ready){
+  document.fonts.ready.then(refreshTagMarquees);
+}
 
-   PLOTS       - プロット・設定まとめ
-   NOVELS      - 小説
-   Q&A         - 質問と回答
-   GUIDELINES  - ガイドライン
-========================= */
+/* OTHER THREE SECTIONS */
 
 const pages=[
-  {
-    kicker:"SECTION 01 / PLOTS",
-    title:"PLOTS",
-    subtitle:"PLOT COLLECTION",
-    text:
-      "キャラクターや世界観、物語の設定など、プロットをまとめるページです。\n\n"+
-      "今後、作品ごとのプロット一覧を追加できます。",
-    empty:true
-  },
   {
     kicker:"SECTION 02 / NOVELS",
     title:"NOVELS",
@@ -1132,24 +1812,30 @@ const pages=[
     title:"GUIDELINES",
     subtitle:"SITE GUIDELINES",
     text:
-      "サイトの閲覧や作品の取り扱いについて、ガイドラインを掲載するページです。\n\n"+
+      "サイトの閲覧や作品の取り扱いについて、"+
+      "ガイドラインを掲載するページです。\n\n"+
       "詳しい内容は今後追加できます。",
     empty:true
   }
 ];
 
-/* CATEGORY NAVIGATION */
+/* MAIN MENU NAVIGATION */
 
 function openCategory(index){
-  if(
-    current!=="home"||
-    transitioning||
-    !pages[index]
-  ){
+  if(current!=="home"||transitioning)return;
+
+  if(index===0){
+    $("plotsScroll").scrollTop=0;
+
+    refreshTagMarquees();
+    changeScreen("plots");
+
+    setTimeout(refreshTagMarquees,450);
     return;
   }
 
-  const page=pages[index];
+  const page=pages[index-1];
+  if(!page)return;
 
   $("detailKicker").textContent=page.kicker;
   $("detailTitle").textContent=page.title;
@@ -1171,26 +1857,11 @@ document.querySelectorAll("[data-page]").forEach(button=>{
   });
 });
 
-$("backButton").addEventListener("click",()=>{
-  if(current==="detail"){
-    changeScreen("home");
-  }
-});
-
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"&&current==="detail"){
-    changeScreen("home");
-  }
-});
-
 /* MASCOT SPRING */
 
 const mascot=$("mascotButton");
 const sparkleField=$("sparkleField");
-
-const bounceLayer=mascot.querySelector(
-  ".mascot-bounce"
-);
+const bounceLayer=mascot.querySelector(".mascot-bounce");
 
 const spring={
   y:0,
@@ -1209,15 +1880,13 @@ function bounceFrame(now){
   spring.last=now;
 
   spring.vy+=(
-    -.095*spring.y-
-    .18*spring.vy
+    -.095*spring.y-.18*spring.vy
   )*dt;
 
   spring.y+=spring.vy*dt;
 
   spring.vs+=(
-    -.18*spring.stretch-
-    .30*spring.vs
+    -.18*spring.stretch-.30*spring.vs
   )*dt;
 
   spring.stretch+=spring.vs*dt;
@@ -1245,9 +1914,9 @@ function bounceFrame(now){
     spring.vy=0;
     spring.stretch=0;
     spring.vs=0;
-
     spring.running=false;
     spring.last=0;
+
     return;
   }
 
@@ -1281,7 +1950,6 @@ function addSparkles(){
     set("--x",(31+Math.random()*38)+"%");
     set("--y",(24+Math.random()*49)+"%");
     set("--size",(5+Math.random()*7)+"px");
-
     set("--dx",Math.cos(a)*distance+"px");
     set("--dy",Math.sin(a)*distance+"px");
     set("--color",colors[i%colors.length]);
@@ -1307,16 +1975,11 @@ function addSparkles(){
 mascot.addEventListener("click",()=>{
   if(current!=="home"||transitioning)return;
 
-  spring.vy=clamp(
-    spring.vy-4.1,
-    -12,12
-  );
-
+  spring.vy=clamp(spring.vy-4.1,-12,12);
   spring.stretch=clamp(
     spring.stretch+.055,
     -.18,.22
   );
-
   spring.vs+=.018;
 
   if(!spring.running){
