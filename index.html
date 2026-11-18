@@ -4,33 +4,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#d9ecf7">
-<title>AERIALIS | Above the Clouds</title>
-
+<meta name="theme-color" content="#e0f5ff">
+<title>AERIALIS | Plot Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700;800&family=Michroma&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700&family=Michroma&family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --ink:#143955;
-  --navy:#123653;
-  --midnight:#07192d;
-  --blue:#4189b8;
-  --orbitron:"Orbitron",sans-serif;
-  --rajdhani:"Rajdhani",sans-serif;
-  --michroma:"Michroma",sans-serif;
-  --kaisei:"Kaisei Tokumin",serif;
+  --bg:#dff4ff;
+  --ink:#183b50;
+  --muted:#607f91;
+  --cyan:#3fb7eb;
+  --pink:#f58db6;
+  --orbit:"Orbitron",sans-serif;
+  --raj:"Rajdhani",sans-serif;
+  --mich:"Michroma",sans-serif;
+  --jp:"Kaisei Tokumin",serif;
   --safe-top:env(safe-area-inset-top,0px);
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
-  margin:0;
   width:100%;
   height:100%;
+  margin:0;
   overflow:hidden;
   overscroll-behavior:none;
   -webkit-text-size-adjust:100%;
@@ -39,8 +41,9 @@ html,body{
 body{
   position:fixed;
   inset:0;
-  background:var(--midnight);
-  font-family:var(--kaisei);
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--jp);
   -webkit-tap-highlight-color:transparent;
 }
 
@@ -50,7 +53,7 @@ button{
 }
 
 button:focus-visible{
-  outline:2px solid currentColor;
+  outline:2px solid var(--cyan);
   outline-offset:4px;
 }
 
@@ -66,88 +69,151 @@ button:focus-visible{
   position:absolute;
   inset:0;
   overflow:hidden;
-  visibility:hidden;
   opacity:0;
+  visibility:hidden;
   pointer-events:none;
-  transition:opacity .58s ease,visibility .58s;
+
+  background-color:var(--bg);
+  background-image:radial-gradient(
+    circle,
+    rgba(95,170,207,.115) 1.35px,
+    transparent 1.7px
+  );
+  background-size:34px 34px;
+
+  transition:
+    opacity .63s ease,
+    visibility .63s ease;
 }
 
 .screen.active{
-  visibility:visible;
   opacity:1;
+  visibility:visible;
   pointer-events:auto;
 }
 
-canvas.scene-canvas{
+.ambient{
   position:absolute;
-  inset:0;
+  inset:-25%;
+  pointer-events:none;
+  background:
+    radial-gradient(
+      ellipse at 20% 23%,
+      rgba(255,255,255,.56),
+      transparent 39%
+    ),
+    radial-gradient(
+      ellipse at 88% 75%,
+      rgba(162,217,246,.26),
+      transparent 47%
+    );
+
+  animation:ambientDrift 16s ease-in-out infinite alternate;
+}
+
+@keyframes ambientDrift{
+  to{
+    transform:translate3d(3%,-2%,0) scale(1.06);
+  }
+}
+
+/* =============================
+   ANIMATED WAVE LOGO
+============================= */
+
+.wave-svg{
+  display:block;
   width:100%;
   height:100%;
+  overflow:visible;
+}
+
+.wave-top,
+.wave-bottom{
+  fill:none;
+  stroke-width:9.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.wave-top{
+  stroke:var(--cyan);
+}
+
+.wave-bottom{
+  stroke:var(--pink);
+}
+
+.wave-logo{
+  position:relative;
+  display:block;
+  flex:none;
+}
+
+.wave-logo.large{
+  width:112px;
+  height:65px;
+}
+
+.wave-logo.small{
+  width:48px;
+  height:29px;
+}
+
+.wave-logo.card-size{
+  width:65px;
+  height:39px;
+}
+
+.wave-logo::after{
+  content:"";
+  position:absolute;
+  inset:12% -16%;
+  z-index:-1;
+  background:radial-gradient(
+    ellipse,
+    rgba(255,255,255,.66),
+    transparent 70%
+  );
   pointer-events:none;
 }
 
-#grain{
-  position:absolute;
-  inset:0;
-  z-index:40;
-  pointer-events:none;
-  opacity:.07;
-  mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.67' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-}
+/* =============================
+   SCREEN TRANSITIONS
+============================= */
 
-#transition{
+#softWipe{
   position:absolute;
   inset:0;
-  z-index:35;
-  pointer-events:none;
+  z-index:50;
   opacity:0;
-  background:#0a2c4b;
+  pointer-events:none;
+  background:#f7fdff;
+  visibility:hidden;
 }
 
-#transition.play{
-  animation:irisWipe 1.08s cubic-bezier(.65,0,.2,1) both;
+#softWipe.play{
+  visibility:visible;
+  animation:softWipe 1s ease-in-out both;
 }
 
-@keyframes irisWipe{
+@keyframes softWipe{
   0%{
     opacity:0;
-    clip-path:inset(0 100% 0 0);
   }
-  33%,61%{
+  43%,56%{
     opacity:1;
-    clip-path:inset(0);
   }
   100%{
     opacity:0;
-    clip-path:inset(0 0 0 100%);
   }
 }
 
-#flash{
-  position:absolute;
-  inset:0;
-  z-index:36;
-  pointer-events:none;
-  opacity:0;
-  background:#e5f6ff;
-}
-
-#flash.play{
-  animation:flashOut .85s ease-out both;
-}
-
-@keyframes flashOut{
-  0%{opacity:0}
-  18%{opacity:.85}
-  100%{opacity:0}
-}
-
-@keyframes reveal{
+@keyframes contentIn{
   from{
     opacity:0;
-    transform:translateY(22px);
-    filter:blur(7px);
+    transform:translateY(20px);
+    filter:blur(4px);
   }
   to{
     opacity:1;
@@ -156,34 +222,10 @@ canvas.scene-canvas{
   }
 }
 
-@keyframes shimmer{
-  0%,56%{transform:translateX(-160%)}
-  84%,100%{transform:translateX(160%)}
-}
-
-@keyframes streaming{
-  to{transform:translateX(-50%)}
-}
-
-@keyframes breathe{
-  50%{opacity:.35}
-}
-
-@keyframes scan{
-  to{transform:translateY(100vh)}
-}
-
-@keyframes pulse{
-  50%{
-    opacity:.5;
-    transform:scale(1.2);
-  }
-}
-
 @keyframes cardIn{
   from{
     opacity:0;
-    transform:translateY(24px) scale(.97);
+    transform:translateY(24px) scale(.975);
   }
   to{
     opacity:1;
@@ -191,1277 +233,735 @@ canvas.scene-canvas{
   }
 }
 
-/* ========================
-   OPENING
-======================== */
+/* =============================
+   INITIAL LOADING SCREEN
+============================= */
 
-#opening{
-  color:var(--ink);
-  background:linear-gradient(
-    154deg,
-    #f3fbff 0%,
-    #cae9fa 36%,
-    #86c0e2 77%,
-    #5798c6 100%
-  );
+#loading{
+  background-color:#e1f5ff;
 }
 
-.open-wash{
+.loading-main{
   position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    linear-gradient(
-      100deg,
-      rgba(255,255,255,.5),
-      transparent 66%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(34,96,144,.14),
-      transparent 43%
-    );
-}
+  top:37%;
+  left:10%;
+  right:10%;
 
-.light-fog{
-  position:absolute;
-  inset:-24%;
-  pointer-events:none;
-  mix-blend-mode:screen;
-  background:
-    radial-gradient(
-      ellipse at 67% 29%,
-      rgba(255,255,255,.7),
-      transparent 34%
-    ),
-    radial-gradient(
-      ellipse at 18% 75%,
-      rgba(225,247,255,.55),
-      transparent 30%
-    );
-  animation:fogMove 19s ease-in-out infinite alternate;
-}
-
-@keyframes fogMove{
-  to{
-    transform:translate3d(-5%,3%,0) scale(1.06);
-  }
-}
-
-.glass-slice{
-  position:absolute;
-  z-index:1;
-  top:13%;
-  right:-17%;
-  width:67vw;
-  height:58%;
-  transform:skewX(-17deg);
-  background:linear-gradient(
-    112deg,
-    rgba(255,255,255,.21),
-    rgba(255,255,255,.02) 40%,
-    rgba(255,255,255,.13) 67%,
-    transparent
-  );
-  border-left:1px solid rgba(255,255,255,.32);
-  pointer-events:none;
-  animation:glassDrift 17s ease-in-out infinite alternate;
-}
-
-@keyframes glassDrift{
-  to{
-    transform:translateX(-18px) skewX(-13deg);
-  }
-}
-
-.open-top{
-  position:absolute;
-  z-index:5;
-  top:calc(29px + var(--safe-top));
-  left:7%;
-  right:7%;
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-}
-
-.brand{
-  font-family:var(--orbitron);
-  font-size:15px;
-  font-weight:800;
-  letter-spacing:.105em;
-}
-
-.micro-data{
-  font:700 11px/1.55 var(--rajdhani);
-  letter-spacing:.13em;
-  text-align:right;
-}
-
-.signal{
-  display:inline-block;
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#2781b7;
-  box-shadow:0 0 11px #70c7f0;
-  margin-right:6px;
-  animation:breathe 2.3s infinite;
-}
-
-.open-marquee{
-  position:absolute;
-  z-index:4;
-  top:calc(88px + var(--safe-top));
-  left:0;
-  right:0;
-  height:26px;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  background:rgba(244,252,255,.23);
-  border-block:1px solid rgba(255,255,255,.36);
-}
-
-.open-marquee-track{
-  flex:none;
-  width:max-content;
-  white-space:nowrap;
-  font:700 11px var(--rajdhani);
-  letter-spacing:.24em;
-  animation:streaming 32s linear infinite;
-}
-
-.open-intro{
-  position:absolute;
-  z-index:5;
-  top:23%;
-  left:7%;
-  right:6%;
-  animation:reveal 1.25s .1s both;
-}
-
-.open-kicker{
-  font:400 clamp(6px,1.8vw,9px) var(--michroma);
-  letter-spacing:.07em;
-}
-
-.open-title{
-  position:relative;
-  margin:15px 0 11px;
-  font:900 clamp(39px,11vw,108px)/1.1 var(--orbitron);
-  letter-spacing:-.073em;
-  white-space:nowrap;
-  color:#163f61;
-  text-shadow:0 11px 27px rgba(17,78,120,.13);
-}
-
-.open-title span{
-  color:rgba(251,255,255,.75);
-  -webkit-text-stroke:1px #2e7eae;
-}
-
-.open-subtitle{
-  font:400 clamp(6px,1.72vw,9px)/2.15 var(--michroma);
-  letter-spacing:.11em;
-}
-
-.open-specimen{
-  position:absolute;
-  z-index:2;
-  left:-7%;
-  top:40%;
-  font:900 clamp(110px,30vw,340px)/1 var(--orbitron);
-  letter-spacing:-.09em;
-  color:rgba(255,255,255,.065);
-  white-space:nowrap;
-  pointer-events:none;
-  transform:rotate(-7deg);
-}
-
-.open-telemetry{
-  position:absolute;
-  z-index:5;
-  top:51%;
-  left:7%;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  column-gap:23px;
-  row-gap:11px;
-  font:600 11px/1.55 var(--rajdhani);
-  letter-spacing:.08em;
-}
-
-.open-telemetry strong{
-  display:block;
-  margin-top:2px;
-  font:700 10px/1.45 var(--orbitron);
-  letter-spacing:0;
-}
-
-.open-side{
-  position:absolute;
-  right:2.5%;
-  top:39%;
-  z-index:4;
-  writing-mode:vertical-rl;
-  font:700 11px var(--rajdhani);
-  letter-spacing:.22em;
-  opacity:.6;
-}
-
-.open-caption{
-  position:absolute;
-  z-index:2;
-  right:7%;
-  top:52%;
-  width:45%;
-  text-align:right;
-  font:600 10px/1.6 var(--rajdhani);
-  letter-spacing:.1em;
-  opacity:.5;
-  pointer-events:none;
-}
-
-/* ========================
-   BOARDING PASS
-======================== */
-
-.ticket-area{
-  position:absolute;
-  z-index:8;
-  left:7%;
-  right:7%;
-  bottom:calc(95px + var(--safe-bottom));
-  height:128px;
-  animation:reveal 1s .5s both;
-}
-
-.ticket-shadow{
-  position:absolute;
-  inset:8px 0 -15px;
-  background:rgba(17,78,118,.2);
-  filter:blur(17px);
-  pointer-events:none;
-}
-
-.open-ticket{
-  position:relative;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 31%;
-  align-items:stretch;
-  height:100%;
-  width:100%;
-  isolation:isolate;
-}
-
-.ticket-body{
-  position:relative;
-  z-index:1;
-  min-width:0;
-  height:100%;
-  padding:16px 16px 14px;
-  background:rgba(250,253,255,.96);
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  box-shadow:0 8px 23px rgba(17,74,117,.1);
-  border:1px solid rgba(255,255,255,.95);
-  border-right:0;
-}
-
-.ticket-top,
-.ticket-bottom{
-  display:flex;
-  justify-content:space-between;
-  gap:7px;
-  font:700 clamp(9px,2.55vw,12px)/1.35 var(--rajdhani);
-  letter-spacing:.04em;
-}
-
-.ticket-top span:last-child{
-  white-space:nowrap;
-}
-
-.ticket-bottom{
-  align-items:flex-end;
-}
-
-.ticket-bottom strong{
-  display:block;
-  font:800 clamp(19px,5.45vw,31px)/1.1 var(--orbitron);
-  letter-spacing:-.045em;
-}
-
-.ticket-bottom small{
-  display:block;
-  margin-top:6px;
-  font:700 clamp(9px,2.25vw,11px)/1.2 var(--rajdhani);
-  letter-spacing:.035em;
-}
-
-.admit{
-  line-height:1.23;
-  flex:none;
-}
-
-.ticket-stub{
-  position:relative;
-  z-index:3;
-  width:100%;
-  height:100%;
-  padding:0;
-  border:0;
-  border-radius:0;
-  margin:0;
-  background:#163956;
-  color:#fff;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
-  gap:8px;
-  touch-action:none;
-  user-select:none;
-  -webkit-user-select:none;
-  cursor:grab;
-  transform:translate3d(0,0,0);
-  will-change:transform,opacity;
-  box-shadow:0 8px 22px rgba(10,53,92,.17);
+  text-align:center;
 }
 
-.ticket-stub::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(
-    115deg,
-    transparent 36%,
-    rgba(255,255,255,.13) 50%,
-    transparent 64%
-  );
-  animation:shimmer 6s infinite;
-  pointer-events:none;
-}
-
-.ticket-stub::after{
-  content:"";
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  width:2px;
-  background:repeating-linear-gradient(
-    to bottom,
-    rgba(245,253,255,.85) 0 5px,
-    transparent 5px 10px
-  );
-  pointer-events:none;
-}
-
-.stub-title{
-  font:400 clamp(9px,2.3vw,13px) var(--michroma);
-  letter-spacing:.01em;
-  pointer-events:none;
-}
-
-.stub-arrow{
-  font:400 35px/1 var(--rajdhani);
-  pointer-events:none;
-  transition:transform .2s;
-}
-
-.stub-instruction{
-  position:absolute;
-  bottom:9px;
-  font:600 10px var(--rajdhani);
-  letter-spacing:.07em;
-  opacity:.7;
-  pointer-events:none;
-}
-
-.ticket-stub.dragging{
-  cursor:grabbing;
-}
-
-.ticket-stub.dragging .stub-arrow{
-  transform:translateX(6px);
-}
-
-.ticket-stub.snap-back{
-  transition:transform .46s cubic-bezier(.22,1.4,.35,1);
-}
-
-.ticket-stub.torn{
-  transform:translate3d(150vw,-13px,0) rotate(10deg)!important;
-  opacity:0;
-  transition:
-    transform .77s cubic-bezier(.24,.8,.2,1),
-    opacity .6s ease;
-  pointer-events:none;
-}
-
-.ticket-stub.torn::before{
-  animation:none;
-}
-
-.ticket-status{
-  position:absolute;
-  top:calc(100% + 10px);
-  right:0;
-  font:700 11px var(--rajdhani);
-  letter-spacing:.14em;
-  pointer-events:none;
-}
-
-.open-footer{
-  position:absolute;
-  z-index:5;
-  left:7%;
-  right:7%;
-  bottom:calc(25px + var(--safe-bottom));
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  font:700 11px/1.6 var(--rajdhani);
-  letter-spacing:.06em;
-}
-
-.open-footer span:last-child{
-  text-align:right;
-}
-
-/* ========================
-   BOARDING SYSTEM
-======================== */
-
-#boarding{
-  color:#eaf8ff;
-  background:radial-gradient(
-    ellipse at 55% 40%,
-    #19537b 0%,
-    #0b2b4c 47%,
-    #061728 100%
-  );
-}
-
-.system-shade{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:radial-gradient(
-    ellipse at center,
-    transparent 12%,
-    rgba(1,12,25,.33) 100%
-  );
-}
-
-.system-scan{
-  position:absolute;
-  top:-100vh;
-  left:0;
-  right:0;
-  height:28vh;
-  pointer-events:none;
-  background:linear-gradient(
-    transparent,
-    rgba(153,216,252,.08),
-    transparent
-  );
-  animation:scan 7s linear infinite;
-}
-
-.system-header{
-  position:absolute;
-  z-index:4;
-  top:calc(32px + var(--safe-top));
-  left:7%;
-  right:7%;
-  display:flex;
-  justify-content:space-between;
-  align-items:start;
-}
-
-.system-header strong{
-  font:800 15px var(--orbitron);
-  letter-spacing:.12em;
-}
-
-.system-header small{
-  display:block;
-  margin-top:7px;
-  font:600 11px var(--rajdhani);
+.intro-title{
+  margin:22px 0 0;
+  font:800 clamp(27px,7.8vw,43px)/1.35 var(--orbit);
   letter-spacing:.16em;
-  opacity:.7;
+  text-indent:.16em;
+  color:#173949;
 }
 
-.system-clock{
-  font:700 12px var(--rajdhani);
-  letter-spacing:.12em;
+.intro-subtitle{
+  margin-top:16px;
+  font:500 clamp(9px,2.4vw,14px)/1.6 var(--mich);
+  letter-spacing:.27em;
+  text-indent:.27em;
+  color:#698798;
+  white-space:nowrap;
 }
 
-.system-meta{
-  position:absolute;
-  z-index:4;
-  top:17%;
-  left:7%;
-  right:7%;
+.loader{
+  margin-top:70px;
+  width:min(100%,380px);
+  text-align:left;
+}
+
+.loader-track{
+  position:relative;
+  height:13px;
+  padding:2px;
+  overflow:hidden;
+  border-radius:20px;
+
+  border:1px solid rgba(111,180,216,.37);
+  background:rgba(255,255,255,.96);
+
+  box-shadow:0 2px 12px rgba(84,163,201,.11);
+}
+
+.loader-fill{
+  height:100%;
+  width:0%;
+  border-radius:15px;
+
+  background:linear-gradient(
+    90deg,
+    #38b9eb 0%,
+    #90b5e9 55%,
+    #f686b2 100%
+  );
+
+  box-shadow:0 0 11px rgba(242,137,193,.32);
+  transition:width .085s linear;
+}
+
+.loader-info{
   display:flex;
   justify-content:space-between;
-  font:600 11px/1.65 var(--rajdhani);
-  letter-spacing:.09em;
-  opacity:.77;
+  align-items:center;
+  margin-top:17px;
+
+  color:#607e90;
+  font:500 15px var(--mich);
+  letter-spacing:.17em;
 }
 
-.system-meta span:last-child{
+.loader-info strong{
+  font-weight:500;
+  letter-spacing:.13em;
+  font-variant-numeric:tabular-nums;
+}
+
+.skip-intro{
+  position:absolute;
+  z-index:4;
+  right:6%;
+  top:calc(25px + var(--safe-top));
+
+  padding:9px 8px;
+  border:0;
+  background:transparent;
+
+  color:rgba(73,119,148,.69);
+  font:700 12px var(--raj);
+  letter-spacing:.16em;
+}
+
+.skip-intro:active{
+  color:#177fb3;
+}
+
+/* =============================
+   SHARED HEADER / FOOTER
+============================= */
+
+.site-header{
+  position:absolute;
+  z-index:10;
+  top:calc(25px + var(--safe-top));
+  left:7%;
+  right:7%;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:9px;
+}
+
+.site-brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.site-brand strong{
+  font:800 clamp(13px,3.5vw,17px) var(--orbit);
+  letter-spacing:.055em;
+  white-space:nowrap;
+}
+
+.header-caption{
+  font:600 11px/1.4 var(--raj);
+  letter-spacing:.1em;
+  color:#7e9aaa;
   text-align:right;
 }
 
-.system-center{
+.site-footer{
   position:absolute;
-  z-index:3;
-  top:41%;
-  left:50%;
-  width:min(80vw,390px);
-  aspect-ratio:1;
-  transform:translate(-50%,-50%);
-  display:grid;
-  place-items:center;
-  pointer-events:none;
-}
-
-.system-core{
-  position:absolute;
-  width:35%;
-  aspect-ratio:1;
-  border-radius:50%;
-  background:radial-gradient(
-    circle at 35% 30%,
-    rgba(210,247,255,.48),
-    rgba(78,176,228,.12) 42%,
-    transparent 70%
-  );
-  box-shadow:
-    0 0 55px rgba(83,194,255,.23),
-    inset 0 0 33px rgba(153,222,252,.15);
-  border:1px solid rgba(190,235,255,.26);
-}
-
-.system-center-label{
-  position:relative;
-  font:700 12px var(--orbitron);
-  letter-spacing:.12em;
-  text-shadow:0 0 17px rgba(137,222,255,.9);
-}
-
-.system-core-pulse{
-  position:absolute;
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:#dcf8ff;
-  box-shadow:0 0 19px #8bddff;
-  animation:pulse 2.5s ease-in-out infinite;
-}
-
-.system-progress{
-  position:absolute;
-  z-index:5;
+  z-index:9;
   left:7%;
   right:7%;
-  bottom:15%;
-}
+  bottom:calc(22px + var(--safe-bottom));
 
-.system-progress h2{
-  margin:0 0 13px;
-  font:700 clamp(22px,6vw,37px) var(--orbitron);
-  letter-spacing:.07em;
-}
-
-.system-progress p{
-  margin:0 0 21px;
-  font:400 7px/1.8 var(--michroma);
-  letter-spacing:.05em;
-}
-
-.progress-track{
-  height:2px;
-  background:rgba(188,230,255,.2);
-}
-
-.progress-fill{
-  height:100%;
-  width:0;
-  background:#e0f8ff;
-  box-shadow:0 0 14px #83d8ff;
-  position:relative;
-}
-
-.progress-fill::after{
-  content:"";
-  position:absolute;
-  right:0;
-  top:-4px;
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:white;
-  box-shadow:0 0 20px #87d9ff;
-}
-
-.progress-labels{
-  margin-top:12px;
   display:flex;
-  justify-content:space-between;
-  font:600 12px var(--rajdhani);
-  letter-spacing:.12em;
-}
-
-.progress-labels strong{
-  font:700 12px var(--orbitron);
-}
-
-.system-steps{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-  margin-top:22px;
-}
-
-.system-step{
-  font:600 10px var(--rajdhani);
-  color:rgba(213,240,255,.42);
-  border-top:1px solid rgba(184,229,255,.24);
-  padding-top:8px;
-  transition:color .3s,border-color .3s;
-}
-
-.system-step.done{
-  color:#eaf8ff;
-  border-color:#eaf8ff;
-}
-
-.system-footer{
-  position:absolute;
-  left:7%;
-  right:7%;
-  bottom:calc(25px + var(--safe-bottom));
-  display:flex;
-  justify-content:space-between;
-  font:600 10px var(--rajdhani);
-  letter-spacing:.11em;
-  opacity:.65;
-}
-
-/* ========================
-   MAIN MENU
-======================== */
-
-#menu{
-  color:var(--ink);
-  background:linear-gradient(
-    153deg,
-    #effaff 0%,
-    #c9e8f9 45%,
-    #83b8d8 100%
-  );
-}
-
-.menu-veil{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:linear-gradient(
-    100deg,
-    rgba(255,255,255,.33),
-    transparent 78%
-  );
-}
-
-.menu-header{
-  position:absolute;
-  z-index:4;
-  top:calc(31px + var(--safe-top));
-  left:7%;
-  right:7%;
-  display:flex;
-  justify-content:space-between;
   align-items:center;
-}
+  justify-content:space-between;
 
-.menu-header strong{
-  font:800 15px var(--orbitron);
-  letter-spacing:.11em;
-}
-
-.menu-header small{
-  font:700 12px var(--rajdhani);
-}
-
-.menu-heading{
-  position:absolute;
-  z-index:4;
-  top:14%;
-  left:7%;
-  right:7%;
-}
-
-.menu-heading .eyebrow{
-  font:400 7px var(--michroma);
+  font:600 11px var(--raj);
   letter-spacing:.1em;
+  color:#7d9cae;
 }
 
-.menu-heading h2{
-  font:800 clamp(33px,9vw,78px)/1.15 var(--orbitron);
-  letter-spacing:-.065em;
-  margin:15px 0 9px;
+/* =============================
+   MAIN DIRECTORY
+============================= */
+
+#home{
+  background-color:#e0f4ff;
 }
 
-.menu-heading h2 span{
-  color:rgba(255,255,255,.8);
-  -webkit-text-stroke:1px #367aab;
-}
-
-.menu-heading p{
-  font:600 12px/1.5 var(--rajdhani);
-  letter-spacing:.13em;
-  margin:0;
-}
-
-.menu-list{
+.home-hero{
   position:absolute;
   z-index:5;
   left:7%;
   right:7%;
-  top:38%;
-  bottom:13%;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  grid-template-rows:1fr 1fr;
-  gap:11px;
-}
-
-.menu-card{
-  position:relative;
-  min-width:0;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.83);
-  background:rgba(246,252,255,.79);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  box-shadow:0 12px 40px rgba(32,86,125,.12);
-  text-align:left;
-  color:var(--ink);
-  padding:14px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  transition:background .2s,transform .2s;
-}
-
-.menu-card:active{
-  background:#fff;
-  transform:scale(.97);
-}
-
-.menu-card::before{
-  content:"";
-  position:absolute;
-  inset:-40%;
-  background:linear-gradient(
-    110deg,
-    transparent 41%,
-    rgba(255,255,255,.7) 51%,
-    transparent 60%
-  );
-  transform:translateX(-160%);
-  animation:shimmer 10s infinite;
+  top:15.2%;
   pointer-events:none;
 }
 
-.menu-card:nth-child(2)::before{
-  animation-delay:2s;
+.home-eyebrow{
+  font:600 11px var(--raj);
+  letter-spacing:.2em;
+  color:#579bc3;
 }
 
-.menu-card:nth-child(3)::before{
-  animation-delay:4s;
+.home-hero h2{
+  margin:13px 0 12px;
+  font:800 clamp(28px,7.8vw,44px)/1.13 var(--orbit);
+  letter-spacing:-.06em;
+  color:#153f56;
 }
 
-.menu-card:nth-child(4)::before{
-  animation-delay:6s;
+.home-hero h2 span{
+  color:#60a9ce;
 }
 
-.menu-card-top{
-  position:relative;
-  display:flex;
-  justify-content:space-between;
-  gap:4px;
-  font:700 10px var(--rajdhani);
-  letter-spacing:.06em;
+.home-hero p{
+  margin:0;
+  width:47%;
+  color:#66899f;
+
+  font:600 clamp(10px,2.7vw,12px)/1.6 var(--raj);
+  letter-spacing:.09em;
 }
 
-.menu-card-index{
+#home.active .home-hero{
+  animation:contentIn .75s both;
+}
+
+/* =============================
+   MASCOT
+============================= */
+
+.home-mascot{
   position:absolute;
-  top:32%;
-  right:8px;
-  color:rgba(39,108,156,.085);
-  font:800 51px var(--orbitron);
-  letter-spacing:-.08em;
-  pointer-events:none;
-}
+  z-index:6;
+  right:-5%;
+  top:14.7%;
+  width:clamp(190px,53vw,275px);
+  aspect-ratio:1;
 
-.menu-card-body{
-  position:relative;
-  z-index:1;
-}
-
-.menu-card-body strong{
-  display:block;
-  font:800 clamp(12px,3.16vw,22px) var(--orbitron);
-  letter-spacing:-.035em;
-  overflow-wrap:anywhere;
-}
-
-.menu-card-body small{
-  display:block;
-  margin-top:6px;
-  font:600 10px var(--rajdhani);
-  letter-spacing:.08em;
-  opacity:.7;
-}
-
-.menu-card-arrow{
-  position:absolute;
-  right:13px;
-  bottom:12px;
-  font:500 25px/1 var(--rajdhani);
-}
-
-#menu.active .menu-card{
-  animation:cardIn .67s both;
-}
-
-#menu.active .menu-card:nth-child(2){
-  animation-delay:.1s;
-}
-
-#menu.active .menu-card:nth-child(3){
-  animation-delay:.2s;
-}
-
-#menu.active .menu-card:nth-child(4){
-  animation-delay:.3s;
-}
-
-.menu-footer{
-  position:absolute;
-  z-index:4;
-  left:7%;
-  right:7%;
-  bottom:calc(26px + var(--safe-bottom));
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  font:700 11px var(--rajdhani);
-  letter-spacing:.08em;
-}
-
-.menu-footer button{
   border:0;
   background:none;
-  color:inherit;
-  padding:10px 0;
-  font:700 12px var(--rajdhani);
-}
-
-/* ========================
-   CHARACTER / MASCOT
-======================== */
-
-.mascot-button{
-  position:absolute;
-  z-index:5;
-  right:5.5%;
-  top:17%;
-  width:clamp(112px,31vw,225px);
-  height:auto;
-  aspect-ratio:631/700;
-  display:block;
-  border:0;
   padding:0;
-  margin:0;
-  background:transparent;
-  cursor:pointer;
   overflow:visible;
-  touch-action:manipulation;
+
   user-select:none;
   -webkit-user-select:none;
-  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
 }
 
 .mascot-float{
   position:absolute;
   inset:0;
-  display:block;
-  transform-origin:50% 80%;
-  animation:mascotFloat 4.5s ease-in-out infinite;
-  filter:drop-shadow(
-    0 9px 11px rgba(40,95,138,.12)
-  );
   pointer-events:none;
+  transform-origin:50% 75%;
+
+  animation:mascotFloat 4.7s ease-in-out infinite;
+
+  filter:drop-shadow(
+    0 12px 9px rgba(45,128,167,.14)
+  );
 }
 
-.mascot-image{
-  display:block;
+.mascot-img{
   width:100%;
   height:100%;
+  display:block;
   object-fit:contain;
+  image-rendering:auto;
+
   pointer-events:none;
   -webkit-user-drag:none;
 }
 
 @keyframes mascotFloat{
   0%,100%{
-    transform:translate3d(0,0,0) rotate(-1deg);
+    transform:translateY(0) rotate(-1deg);
   }
   50%{
-    transform:translate3d(0,-7px,0) rotate(1deg);
+    transform:translateY(-7px) rotate(1deg);
   }
 }
 
-.mascot-button.pop .mascot-float{
-  animation:mascotBoing .85s both;
+.home-mascot.pop .mascot-float{
+  animation:boing .8s both;
 }
 
-@keyframes mascotBoing{
-  0%{
-    transform:translateY(0) scale(1,1) rotate(0);
+@keyframes boing{
+  0%,100%{
+    transform:translateY(0) scale(1);
   }
-  13%{
-    transform:translateY(8px) scale(1.13,.86) rotate(-3deg);
+  15%{
+    transform:translateY(7px) scale(1.11,.88);
   }
-  29%{
-    transform:translateY(-24px) scale(.9,1.14) rotate(3deg);
+  34%{
+    transform:translateY(-23px) scale(.9,1.12) rotate(2deg);
   }
-  47%{
-    transform:translateY(-8px) scale(1.06,.95) rotate(-2deg);
+  54%{
+    transform:translateY(-5px) scale(1.05,.97);
   }
-  64%{
-    transform:translateY(4px) scale(.97,1.05) rotate(1deg);
+  73%{
+    transform:translateY(3px) scale(.98,1.03);
   }
-  80%{
-    transform:translateY(-4px) scale(1.02,.99) rotate(0);
-  }
-  100%{
-    transform:translateY(0) scale(1,1) rotate(0);
+  87%{
+    transform:translateY(-2px) scale(1.01,.99);
   }
 }
 
-.mascot-glow{
-  position:absolute;
-  inset:9%;
-  z-index:-1;
-  border-radius:50%;
-  pointer-events:none;
-  opacity:0;
-  background:radial-gradient(
-    circle,
-    rgba(255,255,255,.64),
-    rgba(156,213,249,.2) 45%,
-    transparent 73%
-  );
-}
-
-.mascot-button.pop .mascot-glow{
-  animation:mascotGlow .75s ease-out both;
-}
-
-@keyframes mascotGlow{
-  0%{
-    opacity:0;
-    transform:scale(.65);
-  }
-  28%{
-    opacity:1;
-    transform:scale(1.12);
-  }
-  100%{
-    opacity:0;
-    transform:scale(1.52);
-  }
-}
-
-.sparkle-field{
+.sparkles{
   position:absolute;
   inset:0;
-  z-index:6;
-  pointer-events:none;
   overflow:visible;
+  pointer-events:none;
 }
 
-.mascot-star{
+.spark{
   position:absolute;
+  left:var(--x);
+  top:var(--y);
   width:var(--size);
   height:var(--size);
+
   background:var(--color);
-  opacity:0;
-  filter:drop-shadow(
-    0 0 4px rgba(255,255,255,.9)
-  );
   clip-path:polygon(
-    50% 0%,
-    61% 37%,
+    50% 0,
+    61% 38%,
     100% 50%,
-    61% 63%,
+    61% 62%,
     50% 100%,
-    39% 63%,
-    0% 50%,
-    39% 37%
+    39% 62%,
+    0 50%,
+    39% 38%
   );
-  animation:
-    mascotSparkle var(--duration)
-    ease-out var(--delay) forwards;
+
+  filter:drop-shadow(0 0 5px #fff);
+
+  animation:sparkOut var(--duration)
+    ease-out var(--delay) both;
 }
 
-@keyframes mascotSparkle{
+@keyframes sparkOut{
   0%{
     opacity:0;
-    transform:translate(-50%,-50%) scale(.1) rotate(0);
+    transform:translate(-50%,-50%) scale(.1);
   }
-  22%{
+  25%{
     opacity:1;
-    transform:translate(-50%,-50%) scale(1.15) rotate(20deg);
+    transform:translate(-50%,-50%) scale(1.2);
   }
-  55%{
+  60%{
     opacity:1;
   }
   100%{
     opacity:0;
-    transform:
-      translate(
-        calc(-50% + var(--dx)),
-        calc(-50% + var(--dy))
-      )
-      scale(.15)
-      rotate(var(--rot));
+    transform:translate(
+      calc(-50% + var(--dx)),
+      calc(-50% + var(--dy))
+    ) rotate(120deg) scale(.15);
   }
 }
 
-/* ========================
-   DETAIL
-======================== */
+/* =============================
+   DIRECTORY CARDS
+============================= */
 
-#detail{
-  color:var(--ink);
-  background:linear-gradient(
-    150deg,
-    #f7fcff 0%,
-    #d4edf9 58%,
-    #9fcae5 100%
-  );
-}
-
-.detail-veil{
+.directory{
   position:absolute;
-  inset:0;
-  background:linear-gradient(
-    90deg,
-    rgba(255,255,255,.49),
-    transparent 85%
-  );
-  pointer-events:none;
-}
-
-.detail-header{
-  position:absolute;
-  z-index:5;
-  top:calc(32px + var(--safe-top));
+  z-index:8;
   left:7%;
   right:7%;
+  top:43%;
+  bottom:11%;
+
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.entry{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  padding:14px;
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:14px;
+
+  background:rgba(255,255,255,.77);
+
+  box-shadow:
+    0 13px 32px rgba(58,136,176,.105),
+    0 2px 7px rgba(61,126,161,.045);
+
+  color:#1d455b;
+  text-align:left;
+
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+
+  transition:
+    transform .25s,
+    box-shadow .25s,
+    background .25s;
+}
+
+.entry::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:17px;
+  right:17px;
+  height:3px;
+
+  border-radius:0 0 8px 8px;
+
+  background:linear-gradient(
+    90deg,
+    rgba(65,182,235,.77),
+    rgba(240,146,191,.75)
+  );
+}
+
+.entry:active{
+  transform:scale(.965);
+  background:#fff;
+}
+
+.entry-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:4px;
+}
+
+.entry-index{
+  font:700 10px var(--raj);
+  letter-spacing:.015em;
+  color:#73a3bc;
+  white-space:nowrap;
+}
+
+.entry .wave-logo{
+  opacity:.78;
+  transform:translate(5px,-1px);
+}
+
+.entry-title{
+  position:relative;
+  display:block;
+  z-index:1;
+  margin-bottom:5px;
+  padding-right:22px;
+}
+
+.entry-title strong{
+  display:block;
+  font:800 clamp(12px,3.2vw,19px)/1.25 var(--orbit);
+  letter-spacing:-.04em;
+  overflow-wrap:anywhere;
+}
+
+.entry-title small{
+  display:block;
+  margin-top:9px;
+
+  font:600 11px/1.25 var(--raj);
+  letter-spacing:.085em;
+  color:#8ba7b7;
+}
+
+.entry-arrow{
+  position:absolute;
+  right:13px;
+  bottom:12px;
+  color:#68a6ca;
+  font:600 22px/1 var(--raj);
+}
+
+#home.active .entry{
+  animation:cardIn .63s both;
+}
+
+#home.active .entry:nth-child(2){
+  animation-delay:.09s;
+}
+
+#home.active .entry:nth-child(3){
+  animation-delay:.18s;
+}
+
+#home.active .entry:nth-child(4){
+  animation-delay:.27s;
+}
+
+/* =============================
+   CATEGORY DETAIL PAGES
+============================= */
+
+#detail{
+  background-color:#e1f5ff;
+}
+
+.back-button{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap:10px;
+  gap:7px;
+
+  padding:9px 4px;
+  border:0;
+  background:none;
+  color:#447e9e;
+
+  font:700 13px var(--raj);
+  letter-spacing:.09em;
 }
 
-.detail-header span{
-  font:400 7px var(--michroma);
-  letter-spacing:.05em;
-}
-
-.detail-close{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  border:1px solid rgba(44,118,168,.45);
-  background:rgba(255,255,255,.69);
-  color:var(--ink);
-  font:500 28px var(--rajdhani);
+.back-button .back-arrow{
+  font-size:21px;
+  line-height:.7;
 }
 
 .detail-scroll{
   position:absolute;
-  z-index:5;
+  top:calc(101px + var(--safe-top));
+  bottom:calc(30px + var(--safe-bottom));
   left:7%;
   right:7%;
-  top:22%;
-  bottom:13%;
+
   overflow-y:auto;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
   touch-action:pan-y;
-  padding-bottom:45px;
+
+  padding:6px 0 34px;
 }
 
-.detail-index{
-  font:700 13px var(--rajdhani);
-  letter-spacing:.15em;
-  color:#418ab7;
+.detail-kicker{
+  font:700 12px var(--raj);
+  letter-spacing:.19em;
+  color:#579ec1;
 }
 
-.detail-scroll h2{
-  margin:20px 0 29px;
-  font:800 clamp(32px,8vw,72px)/1.1 var(--orbitron);
-  letter-spacing:-.055em;
+.detail-title{
+  margin:16px 0 12px;
+
+  font:800 clamp(26px,7.9vw,53px)/1.1 var(--orbit);
+  letter-spacing:-.05em;
   overflow-wrap:anywhere;
 }
 
-.detail-rule{
-  width:80px;
-  height:2px;
-  background:var(--ink);
-  margin-bottom:30px;
+.detail-subtitle{
+  color:#7f9cab;
+
+  font:500 10px/1.7 var(--mich);
+  letter-spacing:.04em;
 }
 
-.detail-scroll p{
-  font:400 13px/2.35 var(--kaisei);
-  white-space:pre-line;
-  max-width:660px;
+.detail-paper{
+  position:relative;
+  margin-top:30px;
+  padding:27px 22px 30px;
+
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:18px;
+
+  background:rgba(255,255,255,.78);
+  box-shadow:0 17px 36px rgba(60,130,175,.1);
+
+  overflow:hidden;
 }
 
-.detail-stamp{
-  display:inline-block;
-  margin-top:37px;
-  border:1px solid var(--blue);
-  padding:10px 17px;
-  font:700 12px var(--rajdhani);
-  letter-spacing:.15em;
-  transform:rotate(-3deg);
-}
-
-.detail-footer{
+.detail-paper::before{
+  content:"";
   position:absolute;
-  z-index:5;
-  left:7%;
-  right:7%;
-  bottom:calc(27px + var(--safe-bottom));
+  top:0;
+  left:22px;
+  right:22px;
+  height:3px;
+
+  background:linear-gradient(
+    90deg,
+    var(--cyan),
+    var(--pink)
+  );
+
+  border-radius:0 0 6px 6px;
+}
+
+.detail-paper .wave-logo{
+  margin-bottom:24px;
+  opacity:.83;
+}
+
+.detail-paper p{
+  margin:0;
+  white-space:pre-line;
+
+  font:400 13px/2.35 var(--jp);
+  color:#355c71;
+}
+
+.archive-empty{
+  margin-top:22px;
+  padding:18px 15px;
+
+  border:1px dashed rgba(95,161,199,.36);
+  border-radius:10px;
+
+  background:rgba(229,246,255,.55);
+
+  color:#7b9bab;
+  font:600 12px/1.7 var(--raj);
+  letter-spacing:.09em;
+}
+
+.detail-bottom{
+  margin-top:22px;
   display:flex;
   justify-content:space-between;
-  font:700 11px var(--rajdhani);
+
+  color:#8aa9bb;
+  font:700 11px var(--raj);
   letter-spacing:.1em;
 }
 
-/* ========================
+#detail.active .detail-scroll{
+  animation:contentIn .62s both;
+}
+
+/* =============================
    RESPONSIVE
-======================== */
+============================= */
 
 @media(max-height:720px){
-  .open-intro{
-    top:21%;
+  .loading-main{
+    top:31%;
   }
 
-  .open-title{
-    font-size:10.2vw;
+  .loader{
+    margin-top:48px;
   }
 
-  .open-telemetry{
-    top:48%;
+  .home-hero{
+    top:13%;
   }
 
-  .ticket-area{
-    height:107px;
-    bottom:calc(78px + var(--safe-bottom));
+  .home-hero h2{
+    font-size:clamp(25px,7.1vw,38px);
   }
 
-  .ticket-body{
-    padding:12px 13px;
+  .home-mascot{
+    top:12.5%;
+    width:clamp(160px,48vw,242px);
   }
 
-  .open-footer{
-    bottom:calc(20px + var(--safe-bottom));
+  .directory{
+    top:42%;
+    bottom:10%;
+    gap:9px;
   }
 
-  .system-center{
-    top:39%;
-    width:min(66vw,300px);
+  .entry{
+    padding:11px;
+    border-radius:11px;
   }
 
-  .system-progress{
-    bottom:12%;
+  .entry .wave-logo{
+    width:50px;
+    height:31px;
   }
 
-  .system-steps{
-    margin-top:13px;
+  .entry-title small{
+    margin-top:6px;
   }
 
-  .menu-heading{
-    top:12%;
-  }
-
-  .menu-list{
-    top:36%;
-    bottom:12%;
-  }
-
-  .mascot-button{
-    top:16%;
-    width:clamp(94px,26vw,195px);
-    right:5%;
+  .site-footer{
+    bottom:calc(12px + var(--safe-bottom));
   }
 }
 
-@media(min-width:750px){
-  .open-top,
-  .open-intro,
-  .open-telemetry,
-  .open-footer,
-  .menu-header,
-  .menu-heading,
-  .menu-footer,
-  .detail-header,
-  .detail-scroll,
-  .detail-footer{
+@media(max-height:580px){
+  .home-hero{
+    top:11%;
+  }
+
+  .home-mascot{
+    width:39vw;
+    top:11%;
+  }
+
+  .home-hero p{
+    display:none;
+  }
+
+  .directory{
+    top:37%;
+    bottom:9%;
+  }
+
+  .entry-title small{
+    display:none;
+  }
+}
+
+@media(min-width:700px){
+  .site-header,
+  .site-footer,
+  .home-hero,
+  .directory,
+  .detail-scroll{
     left:12%;
     right:12%;
   }
 
-  .ticket-area{
-    left:12%;
-    right:auto;
-    width:min(550px,76%);
+  .directory{
+    max-width:820px;
+    margin-inline:auto;
+    gap:18px;
   }
 
-  .menu-list{
-    left:12%;
-    right:12%;
-    max-width:920px;
+  .home-mascot{
+    right:16%;
+    width:min(31vw,310px);
   }
 
-  .system-progress{
-    left:20%;
-    right:20%;
+  .home-hero h2{
+    font-size:clamp(40px,6vw,72px);
+  }
+
+  .detail-scroll{
+    max-width:730px;
+    margin-inline:auto;
   }
 }
 
 @media(prefers-reduced-motion:reduce){
-  .open-marquee-track,
-  .light-fog,
-  .glass-slice,
-  .ticket-stub::before,
-  .menu-card::before,
-  .system-scan,
+  .ambient,
   .mascot-float{
     animation:none!important;
+  }
+
+  .screen{
+    transition:none;
   }
 }
 </style>
@@ -1470,1734 +970,965 @@ canvas.scene-canvas{
 <body>
 <div id="app">
 
-<!-- ========================
-     OPENING
+<!-- =========================
+     LOADING SCREEN
 ========================= -->
 
-<section class="screen active" id="opening" aria-hidden="false">
+<section
+  class="screen active"
+  id="loading"
+  aria-hidden="false"
+>
+  <div class="ambient"></div>
 
-  <canvas class="scene-canvas" id="skyCanvas"></canvas>
+  <button
+    class="skip-intro"
+    type="button"
+    id="skipIntro"
+  >
+    SKIP
+  </button>
 
-  <div class="light-fog"></div>
-  <div class="glass-slice"></div>
-  <div class="open-wash"></div>
+  <div class="loading-main">
 
-  <header class="open-top">
-    <strong class="brand">AERIALIS</strong>
-
-    <div class="micro-data">
-      <span class="signal"></span> ATMOSPHERIC LINK<br>
-      <span class="clock">00:00:00</span>
+    <div
+      class="wave-logo large"
+      aria-hidden="true"
+    >
+      <svg
+        class="wave-svg"
+        viewBox="0 0 150 64"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path class="wave-top"></path>
+        <path class="wave-bottom"></path>
+      </svg>
     </div>
-  </header>
 
-  <div class="open-marquee" aria-hidden="true">
-    <div class="open-marquee-track">
-      AERIALIS &nbsp; / &nbsp; AN ARCHIVE ABOVE THE CLOUDS &nbsp; / &nbsp; FLIGHT AR—001 &nbsp; / &nbsp; INTO THE BLUE &nbsp; / &nbsp; AERIALIS &nbsp; / &nbsp; AN ARCHIVE ABOVE THE CLOUDS &nbsp; / &nbsp; FLIGHT AR—001 &nbsp; / &nbsp; INTO THE BLUE &nbsp; / &nbsp;
-    </div>
-  </div>
-
-  <div class="open-intro">
-    <div class="open-kicker">
-      THE JOURNEY BEGINS HERE
-    </div>
-
-    <h1 class="open-title">
-      AER<span>IALIS</span>
+    <h1 class="intro-title">
+      AERIALIS
     </h1>
 
-    <div class="open-subtitle">
-      BEYOND THE ORDINARY.<br>
-      AN ARCHIVE ABOVE THE CLOUDS.
-    </div>
-  </div>
-
-  <div class="open-specimen" aria-hidden="true">
-    AERIALIS
-  </div>
-
-  <div class="open-telemetry">
-    <div>
-      FLIGHT NUMBER
-      <strong>AR—001</strong>
+    <div class="intro-subtitle">
+      PLOT ARCHIVE
     </div>
 
-    <div>
-      DEPARTURE
-      <strong>NOW BOARDING</strong>
-    </div>
-
-    <div>
-      ALTITUDE
-      <strong>35,000 FT</strong>
-    </div>
-
-    <div>
-      DESTINATION
-      <strong>UNKNOWN</strong>
-    </div>
-  </div>
-
-  <div class="open-caption">
-    LIVE WEATHER VISUALIZATION<br>
-    UPPER ATMOSPHERE · 001
-  </div>
-
-  <div class="open-side">
-    AERIALIS AVIATION ARCHIVE
-  </div>
-
-  <div class="ticket-area" id="ticketArea">
-    <div class="ticket-shadow"></div>
-
-    <div class="open-ticket">
-      <div class="ticket-body">
-        <div class="ticket-top">
-          <span>BOARDING PASS / 001</span>
-          <span>GATE 01</span>
-        </div>
-
-        <div class="ticket-bottom">
-          <div>
-            <strong>AR—001</strong>
-            <small>DESTINATION / UNKNOWN</small>
-          </div>
-
-          <span class="admit">ADMIT<br>ONE</span>
-        </div>
+    <div
+      class="loader"
+      role="progressbar"
+      id="progressTrack"
+      aria-label="サイトを読み込み中"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+    >
+      <div class="loader-track">
+        <div
+          class="loader-fill"
+          id="loaderFill"
+        ></div>
       </div>
 
-      <button
-        class="ticket-stub"
-        id="startButton"
-        type="button"
-        aria-label="右にスワイプして航空券を切り取る"
-      >
-        <span class="stub-title">BOARD</span>
-        <span class="stub-arrow">→</span>
-        <span class="stub-instruction">DRAG TO TEAR</span>
-      </button>
+      <div class="loader-info">
+        <span>LOADING</span>
+
+        <strong id="loaderNumber">
+          0%
+        </strong>
+      </div>
     </div>
 
-    <div class="ticket-status" id="ticketStatus">
-      SLIDE RIGHT TO BOARD
-    </div>
   </div>
-
-  <footer class="open-footer">
-    <span>
-      AERIALIS AIRLINES<br>
-      ESTABLISHED 2026
-    </span>
-
-    <span>
-      FLIGHT EXPERIENCE<br>
-      VERSION 03.0
-    </span>
-  </footer>
-
 </section>
 
-<!-- ========================
-     BOARDING
-========================= -->
-
-<section class="screen" id="boarding" aria-hidden="true">
-
-  <canvas class="scene-canvas" id="systemCanvas"></canvas>
-
-  <div class="system-shade"></div>
-  <div class="system-scan"></div>
-
-  <header class="system-header">
-    <div>
-      <strong>AERIALIS</strong>
-      <small>FLIGHT CONTROL / SYSTEM 001</small>
-    </div>
-
-    <span class="system-clock clock">00:00:00</span>
-  </header>
-
-  <div class="system-meta">
-    <span>
-      SYS / ACTIVE<br>
-      NAV / INITIALIZING<br>
-      SEC / VERIFIED
-    </span>
-
-    <span>
-      FLIGHT AR—001<br>
-      CONTROL CHANNEL 07<br>
-      STATUS / STANDBY
-    </span>
-  </div>
-
-  <div class="system-center">
-    <div class="system-core"></div>
-    <div class="system-center-label">AR 001</div>
-    <div class="system-core-pulse"></div>
-  </div>
-
-  <div class="system-progress">
-    <h2 id="boardingTitle">BOARDING...</h2>
-
-    <p id="boardingCaption">
-      VERIFYING PASSENGER INFORMATION
-    </p>
-
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-
-    <div class="progress-labels">
-      <span id="boardingStep">CHECK-IN / 01</span>
-      <strong id="progressNumber">000%</strong>
-    </div>
-
-    <div class="system-steps">
-      <span class="system-step">CHECK-IN</span>
-      <span class="system-step">BOARDING</span>
-      <span class="system-step">ON BOARD</span>
-      <span class="system-step">DEPARTURE</span>
-    </div>
-  </div>
-
-  <footer class="system-footer">
-    <span>AR—001 / SECURE CONNECTION</span>
-    <span>PLEASE STAND BY</span>
-  </footer>
-
-</section>
-
-<!-- ========================
+<!-- =========================
      MAIN MENU
 ========================= -->
 
-<section class="screen" id="menu" aria-hidden="true">
+<section
+  class="screen"
+  id="home"
+  aria-hidden="true"
+>
+  <div class="ambient"></div>
 
-  <canvas class="scene-canvas" id="menuCanvas"></canvas>
+  <header class="site-header">
+    <div class="site-brand">
 
-  <div class="menu-veil"></div>
+      <span
+        class="wave-logo small"
+        aria-hidden="true"
+      >
+        <svg
+          class="wave-svg"
+          viewBox="0 0 150 64"
+        >
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
 
-  <header class="menu-header">
-    <strong>AERIALIS</strong>
-    <small class="clock">00:00:00</small>
+      <strong>AERIALIS</strong>
+    </div>
+
+    <span class="header-caption">
+      PLOT ARCHIVE<br>
+      EST. 2026
+    </span>
   </header>
 
-  <div class="menu-heading">
-    <div class="eyebrow">FLIGHT DIRECTORY / 001</div>
+  <div class="home-hero">
+
+    <div class="home-eyebrow">
+      A WORLD OF STORIES
+    </div>
 
     <h2>
-      WELCOME<br>
-      <span>ABOARD.</span>
+      YOUR<br>
+      <span>ARCHIVE.</span>
     </h2>
 
     <p>
-      SELECT YOUR DESTINATION.<br>
-      FOUR SECTIONS ARE AVAILABLE.
+      CHARACTERS, STORIES<br>
+      AND EVERYTHING BETWEEN.
     </p>
+
   </div>
 
-  <!-- ========================
-       CHARACTER
-  ========================= -->
+  <!-- CHARACTER -->
 
   <button
-    id="mascotButton"
-    class="mascot-button"
+    class="home-mascot"
     type="button"
-    aria-label="キャラクターをぽよんと跳ねさせる"
+    id="mascotButton"
+    aria-label="キャラクターを跳ねさせる"
   >
-    <span class="mascot-glow" aria-hidden="true"></span>
-
     <span class="mascot-float">
       <img
-        class="mascot-image"
+        class="mascot-img"
         src="./無題299_20261117135551.png"
-        alt="ピンクの髪の羽のあるキャラクター"
+        alt="ピンクの髪と白い羽のキャラクター"
         draggable="false"
       >
     </span>
 
     <span
-      class="sparkle-field"
+      class="sparkles"
       id="sparkleField"
       aria-hidden="true"
     ></span>
   </button>
 
-  <!-- ========================
-       MENU CARDS
-  ========================= -->
+  <!-- DIRECTORY -->
 
-  <div class="menu-list">
-
-    <button class="menu-card" data-page="0">
-      <span class="menu-card-top">
-        <span>01 / INFORMATION</span>
-        <span>AR 01</span>
-      </span>
-
-      <span class="menu-card-index">01</span>
-
-      <span class="menu-card-body">
-        <strong>ABOUT</strong>
-        <small>FLIGHT INFORMATION</small>
-      </span>
-
-      <span class="menu-card-arrow">↗</span>
-    </button>
-
-    <button class="menu-card" data-page="1">
-      <span class="menu-card-top">
-        <span>02 / PASSENGERS</span>
-        <span>AR 02</span>
-      </span>
-
-      <span class="menu-card-index">02</span>
-
-      <span class="menu-card-body">
-        <strong>CHARACTERS</strong>
-        <small>PASSENGER DIRECTORY</small>
-      </span>
-
-      <span class="menu-card-arrow">↗</span>
-    </button>
-
-    <button class="menu-card" data-page="2">
-      <span class="menu-card-top">
-        <span>03 / RECORDS</span>
-        <span>AR 03</span>
-      </span>
-
-      <span class="menu-card-index">03</span>
-
-      <span class="menu-card-body">
-        <strong>STORIES</strong>
-        <small>FLIGHT RECORDS</small>
-      </span>
-
-      <span class="menu-card-arrow">↗</span>
-    </button>
-
-    <button class="menu-card" data-page="3">
-      <span class="menu-card-top">
-        <span>04 / COLLECTION</span>
-        <span>AR 04</span>
-      </span>
-
-      <span class="menu-card-index">04</span>
-
-      <span class="menu-card-body">
-        <strong>GALLERY</strong>
-        <small>VISUAL COLLECTION</small>
-      </span>
-
-      <span class="menu-card-arrow">↗</span>
-    </button>
-
-  </div>
-
-  <footer class="menu-footer">
-    <button id="exitButton">← EXIT AIRCRAFT</button>
-    <span>FLIGHT AR—001 / 2026</span>
-  </footer>
-
-</section>
-
-<!-- ========================
-     DETAIL
-========================= -->
-
-<section class="screen" id="detail" aria-hidden="true">
-
-  <canvas class="scene-canvas" id="detailCanvas"></canvas>
-
-  <div class="detail-veil"></div>
-
-  <header class="detail-header">
-    <span>AERIALIS / FLIGHT ARCHIVE</span>
+  <nav
+    class="directory"
+    aria-label="アーカイブのメニュー"
+  >
 
     <button
-      class="detail-close"
-      id="closeDetail"
-      aria-label="メニューへ戻る"
-    >×</button>
-  </header>
+      class="entry"
+      type="button"
+      data-page="0"
+    >
+      <span class="entry-top">
 
-  <div class="detail-scroll" id="detailScroll">
-    <div class="detail-index" id="detailIndex">
-      SECTION / 01
-    </div>
+        <span class="entry-index">
+          01 / PROFILE
+        </span>
 
-    <h2 id="detailTitle">ABOUT</h2>
+        <span
+          class="wave-logo card-size"
+          aria-hidden="true"
+        >
+          <svg
+            class="wave-svg"
+            viewBox="0 0 150 64"
+          >
+            <path class="wave-top"></path>
+            <path class="wave-bottom"></path>
+          </svg>
+        </span>
+      </span>
 
-    <div class="detail-rule"></div>
+      <span class="entry-title">
+        <strong>ABOUT</strong>
+        <small>ABOUT THIS SPACE</small>
+      </span>
 
-    <p id="detailText"></p>
+      <span class="entry-arrow">↗</span>
+    </button>
 
-    <div class="detail-stamp">
-      AERIALIS / VERIFIED
-    </div>
-  </div>
+    <button
+      class="entry"
+      type="button"
+      data-page="1"
+    >
+      <span class="entry-top">
 
-  <footer class="detail-footer">
-    <span>FLIGHT AR—001</span>
-    <span>© AERIALIS 2026</span>
+        <span class="entry-index">
+          02 / PEOPLE
+        </span>
+
+        <span
+          class="wave-logo card-size"
+          aria-hidden="true"
+        >
+          <svg
+            class="wave-svg"
+            viewBox="0 0 150 64"
+          >
+            <path class="wave-top"></path>
+            <path class="wave-bottom"></path>
+          </svg>
+        </span>
+      </span>
+
+      <span class="entry-title">
+        <strong>CHARACTERS</strong>
+        <small>CHARACTER PROFILES</small>
+      </span>
+
+      <span class="entry-arrow">↗</span>
+    </button>
+
+    <button
+      class="entry"
+      type="button"
+      data-page="2"
+    >
+      <span class="entry-top">
+
+        <span class="entry-index">
+          03 / WRITING
+        </span>
+
+        <span
+          class="wave-logo card-size"
+          aria-hidden="true"
+        >
+          <svg
+            class="wave-svg"
+            viewBox="0 0 150 64"
+          >
+            <path class="wave-top"></path>
+            <path class="wave-bottom"></path>
+          </svg>
+        </span>
+      </span>
+
+      <span class="entry-title">
+        <strong>STORIES</strong>
+        <small>STORY COLLECTION</small>
+      </span>
+
+      <span class="entry-arrow">↗</span>
+    </button>
+
+    <button
+      class="entry"
+      type="button"
+      data-page="3"
+    >
+      <span class="entry-top">
+
+        <span class="entry-index">
+          04 / VISUALS
+        </span>
+
+        <span
+          class="wave-logo card-size"
+          aria-hidden="true"
+        >
+          <svg
+            class="wave-svg"
+            viewBox="0 0 150 64"
+          >
+            <path class="wave-top"></path>
+            <path class="wave-bottom"></path>
+          </svg>
+        </span>
+      </span>
+
+      <span class="entry-title">
+        <strong>GALLERY</strong>
+        <small>IMAGE COLLECTION</small>
+      </span>
+
+      <span class="entry-arrow">↗</span>
+    </button>
+
+  </nav>
+
+  <footer class="site-footer">
+    <span>
+      AN ARCHIVE OF IMAGINATION
+    </span>
+
+    <span>© 2026</span>
   </footer>
 
 </section>
 
-<div id="transition"></div>
-<div id="flash"></div>
-<div id="grain"></div>
+<!-- =========================
+     DETAIL PAGES
+========================= -->
+
+<section
+  class="screen"
+  id="detail"
+  aria-hidden="true"
+>
+  <div class="ambient"></div>
+
+  <header class="site-header">
+
+    <div class="site-brand">
+
+      <span
+        class="wave-logo small"
+        aria-hidden="true"
+      >
+        <svg
+          class="wave-svg"
+          viewBox="0 0 150 64"
+        >
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+
+      <strong>AERIALIS</strong>
+    </div>
+
+    <button
+      class="back-button"
+      id="backButton"
+      type="button"
+    >
+      <span class="back-arrow">←</span>
+      BACK
+    </button>
+
+  </header>
+
+  <div
+    class="detail-scroll"
+    id="detailScroll"
+  >
+
+    <div
+      class="detail-kicker"
+      id="detailKicker"
+    >
+      SECTION 01 / PROFILE
+    </div>
+
+    <h2
+      class="detail-title"
+      id="detailTitle"
+    >
+      ABOUT
+    </h2>
+
+    <div
+      class="detail-subtitle"
+      id="detailSubtitle"
+    >
+      A PRIVATE PLOT ARCHIVE
+    </div>
+
+    <article class="detail-paper">
+
+      <div
+        class="wave-logo small"
+        aria-hidden="true"
+      >
+        <svg
+          class="wave-svg"
+          viewBox="0 0 150 64"
+        >
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </div>
+
+      <p id="detailText"></p>
+
+      <div
+        class="archive-empty"
+        id="detailEmpty"
+        hidden
+      >
+        NO ENTRIES YET / COMING SOON
+      </div>
+
+    </article>
+
+    <div class="detail-bottom">
+      <span>AERIALIS / PLOT ARCHIVE</span>
+
+      <span id="detailPageNumber">
+        01 / 04
+      </span>
+    </div>
+
+  </div>
+
+</section>
+
+<div id="softWipe"></div>
 
 </div>
 
 <script>
 "use strict";
 
-/* ========================
-   MOBILE VIEWPORT
-======================== */
+/* =========================
+   MOBILE SETTINGS
+========================= */
 
-for(const eventName of [
+for(const name of [
   "gesturestart",
   "gesturechange",
   "gestureend"
 ]){
   document.addEventListener(
-    eventName,
+    name,
     e=>e.preventDefault(),
     {passive:false}
   );
 }
 
-document.addEventListener("touchmove",e=>{
-  if(e.touches.length>1){
-    e.preventDefault();
-  }
-},{passive:false});
+document.addEventListener(
+  "touchmove",
+  e=>{
+    if(e.touches.length>1){
+      e.preventDefault();
+    }
+  },
+  {passive:false}
+);
 
-document.addEventListener("dblclick",e=>{
-  e.preventDefault();
-});
+document.addEventListener(
+  "dblclick",
+  e=>e.preventDefault()
+);
 
-/* ========================
-   CLOCK
-======================== */
+/* =========================
+   UTILITIES
+========================= */
 
-function updateClock(){
-  const d=new Date();
-
-  const value=[
-    d.getHours(),
-    d.getMinutes(),
-    d.getSeconds()
-  ].map(v=>String(v).padStart(2,"0")).join(":");
-
-  document.querySelectorAll(".clock").forEach(el=>{
-    el.textContent=value;
-  });
-}
-
-updateClock();
-setInterval(updateClock,1000);
-
-/* ========================
-   SCREEN MANAGEMENT
-======================== */
-
-const screens={
-  opening:document.getElementById("opening"),
-  boarding:document.getElementById("boarding"),
-  menu:document.getElementById("menu"),
-  detail:document.getElementById("detail")
-};
-
-let currentScreen="opening";
-let switching=false;
-let switchTimer=0;
-let unlockTimer=0;
-
-function showScreen(name){
-  for(const [key,el] of Object.entries(screens)){
-    const active=key===name;
-
-    el.classList.toggle("active",active);
-    el.setAttribute("aria-hidden",String(!active));
-    el.inert=!active;
-  }
-
-  currentScreen=name;
-}
-
-function switchScreen(name,onChange){
-  if(switching)return false;
-
-  switching=true;
-
-  const overlay=document.getElementById("transition");
-
-  overlay.classList.remove("play");
-  void overlay.offsetWidth;
-  overlay.classList.add("play");
-
-  clearTimeout(switchTimer);
-  clearTimeout(unlockTimer);
-
-  switchTimer=setTimeout(()=>{
-    showScreen(name);
-    if(onChange)onChange();
-  },425);
-
-  unlockTimer=setTimeout(()=>{
-    switching=false;
-    overlay.classList.remove("play");
-  },1100);
-
-  return true;
-}
-
-function flash(){
-  const el=document.getElementById("flash");
-
-  el.classList.remove("play");
-  void el.offsetWidth;
-  el.classList.add("play");
-}
-
-/* ========================
-   CLOUD GENERATOR
-======================== */
+const $=id=>document.getElementById(id);
 
 const TAU=Math.PI*2;
 
-const clamp=(n,a,b)=>{
-  return Math.max(a,Math.min(b,n));
+const clamp=(value,min,max)=>{
+  return Math.min(
+    max,
+    Math.max(min,value)
+  );
 };
 
-const mix=(a,b,t)=>{
-  return a+(b-a)*t;
+const screens={
+  loading:$("loading"),
+  home:$("home"),
+  detail:$("detail")
 };
 
-function rng(seed){
-  let s=seed>>>0;
+let current="loading";
+let transitioning=false;
 
-  return ()=>{
-    s=(1664525*s+1013904223)>>>0;
-    return s/4294967296;
-  };
+/* =========================
+   SCREEN MANAGEMENT
+========================= */
+
+function setScreen(name){
+
+  for(const [key,el] of Object.entries(screens)){
+
+    const active=key===name;
+
+    el.classList.toggle(
+      "active",
+      active
+    );
+
+    el.setAttribute(
+      "aria-hidden",
+      String(!active)
+    );
+
+    el.inert=!active;
+  }
+
+  current=name;
 }
 
-function cloudTexture(seed,shade){
-  const W=420;
-  const H=250;
+function changeScreen(name){
 
-  const canvas=document.createElement("canvas");
-  canvas.width=W;
-  canvas.height=H;
-
-  const ctx=canvas.getContext("2d");
-  const image=ctx.createImageData(W,H);
-  const data=image.data;
-  const random=rng(seed);
-
-  const scales=[
-    [5,4,.49],
-    [11,8,.28],
-    [23,15,.15],
-    [47,30,.08]
-  ];
-
-  const grids=scales.map(([gw,gh])=>{
-    const d=new Float32Array((gw+1)*(gh+1));
-
-    for(let i=0;i<d.length;i++){
-      d[i]=random();
-    }
-
-    return {gw,gh,d};
-  });
-
-  function valueNoise(g,u,v){
-    const fx=u*g.gw;
-    const fy=v*g.gh;
-
-    const ix=clamp(Math.floor(fx),0,g.gw-1);
-    const iy=clamp(Math.floor(fy),0,g.gh-1);
-
-    let tx=fx-ix;
-    let ty=fy-iy;
-
-    tx=tx*tx*(3-2*tx);
-    ty=ty*ty*(3-2*ty);
-
-    const stride=g.gw+1;
-    const index=iy*stride+ix;
-
-    const top=mix(
-      g.d[index],
-      g.d[index+1],
-      tx
-    );
-
-    const bottom=mix(
-      g.d[index+stride],
-      g.d[index+stride+1],
-      tx
-    );
-
-    return mix(top,bottom,ty);
-  }
-
-  for(let py=0;py<H;py++){
-    const v=py/(H-1);
-
-    const envelope=Math.pow(
-      Math.sin(Math.PI*v),
-      1.15
-    );
-
-    for(let px=0;px<W;px++){
-      const u=px/(W-1);
-      const index=(py*W+px)*4;
-
-      let n=0;
-
-      for(let j=0;j<scales.length;j++){
-        n+=valueNoise(
-          grids[j],u,v
-        )*scales[j][2];
-      }
-
-      const turbulence=
-        .045*Math.sin(u*11+v*6)
-        +.03*Math.cos(u*20-v*8);
-
-      const density=clamp(
-        (n+turbulence-.385)*3.1,
-        0,1
-      );
-
-      const ridge=clamp(
-        (n-.49)*3.8,
-        0,1
-      );
-
-      const edge=Math.pow(
-        Math.sin(Math.PI*u),
-        .48
-      );
-
-      const alpha=
-        density*
-        envelope*
-        edge*
-        (.43+.57*ridge);
-
-      const highlight=clamp(
-        (n-.42)*3.4,
-        0,1
-      );
-
-      data[index]=mix(
-        shade[0],255,highlight*.39
-      );
-
-      data[index+1]=mix(
-        shade[1],255,highlight*.37
-      );
-
-      data[index+2]=mix(
-        shade[2],255,highlight*.34
-      );
-
-      data[index+3]=Math.round(
-        alpha*shade[3]
-      );
-    }
-  }
-
-  ctx.putImageData(image,0,0);
-
-  return canvas;
-}
-
-const clouds=[
-  cloudTexture(1108,[198,224,242,187]),
-  cloudTexture(2256,[235,250,255,212]),
-  cloudTexture(8935,[117,181,220,124]),
-  cloudTexture(6019,[246,253,255,195])
-];
-
-/* ========================
-   CANVAS SETUP
-======================== */
-
-function canvasSurface(id){
-  const el=document.getElementById(id);
-  const ctx=el.getContext("2d",{alpha:true});
-
-  let w=0;
-  let h=0;
-  let dpr=1;
-
-  function resize(){
-    w=window.innerWidth;
-    h=window.innerHeight;
-
-    dpr=Math.min(
-      window.devicePixelRatio||1,
-      2
-    );
-
-    el.width=Math.round(w*dpr);
-    el.height=Math.round(h*dpr);
-
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-
-  resize();
-
-  window.addEventListener(
-    "resize",
-    resize,
-    {passive:true}
-  );
-
-  return {
-    ctx,
-    get w(){return w},
-    get h(){return h}
-  };
-}
-
-const sky=canvasSurface("skyCanvas");
-const boarding=canvasSurface("systemCanvas");
-const menu=canvasSurface("menuCanvas");
-const detail=canvasSurface("detailCanvas");
-
-const random=rng(1996);
-
-const dust=Array.from({length:94},()=>({
-  x:random(),
-  y:random(),
-  size:.3+random()*1.4,
-  phase:random()*TAU,
-  speed:.001+random()*.006
-}));
-
-/* ========================
-   ATMOSPHERIC ANIMATION
-======================== */
-
-function atmosphere(surface,t,variant){
-  const {ctx,w,h}=surface;
-
-  const s=t*.001;
-  const menuMode=variant!=="opening";
-
-  ctx.clearRect(0,0,w,h);
-  ctx.save();
-
-  const sunX=
-    w*(menuMode?.76:.7)
-    +Math.sin(s*.13)*w*.045;
-
-  const sunY=h*(menuMode?.2:.28);
-
-  let glow=ctx.createRadialGradient(
-    sunX,sunY,0,
-    sunX,sunY,
-    Math.max(w,h)*.72
-  );
-
-  glow.addColorStop(
-    0,"rgba(255,255,255,.43)"
-  );
-
-  glow.addColorStop(
-    .4,"rgba(228,249,255,.13)"
-  );
-
-  glow.addColorStop(
-    1,"rgba(255,255,255,0)"
-  );
-
-  ctx.fillStyle=glow;
-  ctx.fillRect(0,0,w,h);
-
-  /* Animated light shafts */
-
-  ctx.globalCompositeOperation="screen";
-
-  for(let i=0;i<7;i++){
-    const theta=
-      -.66+i*.21
-      +Math.sin(s*.09+i)*.04;
-
-    const reach=h*1.25;
-    const width=w*(.075+i*.009);
-
-    const ex=sunX+Math.sin(theta)*reach;
-    const ey=sunY+Math.cos(theta)*reach;
-
-    const g=ctx.createLinearGradient(
-      sunX,sunY,ex,ey
-    );
-
-    g.addColorStop(
-      0,"rgba(255,255,255,.135)"
-    );
-
-    g.addColorStop(
-      .8,"rgba(255,255,255,.015)"
-    );
-
-    g.addColorStop(
-      1,"rgba(255,255,255,0)"
-    );
-
-    ctx.fillStyle=g;
-    ctx.beginPath();
-    ctx.moveTo(sunX,sunY);
-    ctx.lineTo(ex-width,ey);
-    ctx.lineTo(ex+width,ey);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  /* Multiple moving cloud layers */
-
-  const layers=[
-    {
-      tex:clouds[0],
-      y:.055,hh:.49,ww:1.6,
-      x:-.24,dx:.023,speed:.16,
-      alpha:menuMode?.5:.63
-    },
-    {
-      tex:clouds[1],
-      y:.23,hh:.47,ww:1.62,
-      x:-.3,dx:.039,speed:.11,
-      alpha:menuMode?.7:.84
-    },
-    {
-      tex:clouds[2],
-      y:.43,hh:.49,ww:1.55,
-      x:-.23,dx:.027,speed:-.13,
-      alpha:menuMode?.48:.56
-    },
-    {
-      tex:clouds[3],
-      y:.61,hh:.46,ww:1.66,
-      x:-.31,dx:.052,speed:.1,
-      alpha:menuMode?.65:.73
-    }
-  ];
-
-  for(let i=0;i<layers.length;i++){
-    const p=layers[i];
-
-    const x=w*(
-      p.x+Math.sin(s*p.speed+i)*p.dx
-    );
-
-    const y=h*(
-      p.y+
-      Math.cos(s*p.speed*.7+i)*.01
-    );
-
-    ctx.globalAlpha=p.alpha;
-
-    ctx.drawImage(
-      p.tex,x,y,w*p.ww,h*p.hh
-    );
-  }
-
-  ctx.globalAlpha=1;
-  ctx.globalCompositeOperation="source-over";
-  ctx.lineCap="round";
-
-  /* Flowing air currents */
-
-  const count=menuMode?13:18;
-
-  for(let i=0;i<count;i++){
-    const p=i/(count-1);
-    const base=h*(.17+p*.7);
-
-    const offset=
-      Math.sin(s*.19+i*.4)*h*.014;
-
-    ctx.beginPath();
-    ctx.moveTo(-w*.24,base+offset);
-
-    ctx.bezierCurveTo(
-      w*.18,
-      base-h*(.13-.07*p),
-      w*.52,
-      base+h*(.085+.03*p),
-      w*1.25,
-      base-h*(.13+.05*p)
-    );
-
-    const color=menuMode
-      ?"58,126,175"
-      :"255,255,255";
-
-    ctx.strokeStyle=
-      `rgba(${color},${.018+(i%4)*.008})`;
-
-    ctx.lineWidth=i%5===0?2:.65;
-    ctx.stroke();
-  }
-
-  /* Optical arcs */
-
-  const arcX=w*(menuMode?.94:1.03);
-  const arcY=h*(menuMode?.08:.24);
-
-  for(let i=0;i<5;i++){
-    ctx.beginPath();
-
-    const r=w*(.35+i*.17);
-    const a=-2.64+s*(i%2?-.006:.008);
-
-    ctx.arc(
-      arcX,arcY,r,
-      a,a+1.45+i*.035
-    );
-
-    ctx.strokeStyle=
-      `rgba(31,105,156,${.04+i*.014})`;
-
-    ctx.lineWidth=i===0?1.8:.85;
-    ctx.stroke();
-  }
-
-  /* Suspended particles */
-
-  for(const p of dust){
-    const x=(
-      p.x+.008*Math.sin(s*.17+p.phase)
-    )*w;
-
-    const y=(
-      (p.y+s*p.speed)%1
-    )*h;
-
-    const alpha=
-      .09+.17*(.5+.5*Math.sin(s*.5+p.phase));
-
-    ctx.fillStyle=
-      `rgba(255,255,255,${alpha})`;
-
-    ctx.beginPath();
-    ctx.arc(x,y,p.size,0,TAU);
-    ctx.fill();
-  }
-
-  /* Moving optical highlight */
-
-  const fx=w*(
-    .19+(.5+.5*Math.sin(s*.09))*.7
-  );
-
-  const fy=h*.45;
-
-  glow=ctx.createRadialGradient(
-    fx,fy,0,
-    fx,fy,w*.41
-  );
-
-  glow.addColorStop(
-    0,"rgba(235,251,255,.13)"
-  );
-
-  glow.addColorStop(
-    1,"rgba(235,251,255,0)"
-  );
-
-  ctx.fillStyle=glow;
-  ctx.fillRect(0,0,w,h);
-
-  ctx.restore();
-}
-
-/* ========================
-   BOARDING ANIMATION
-======================== */
-
-const nodes=Array.from({length:140},()=>({
-  x:random()*2-1,
-  y:random()*2-1,
-  z:.07+random()*.92,
-  scale:random()*1.2+.3
-}));
-
-function drawBoarding(t){
-  const {ctx,w,h}=boarding;
-
-  const s=t*.001;
-  const cx=w*.5;
-  const cy=h*.41;
-  const R=Math.min(w*.41,h*.285);
-
-  ctx.clearRect(0,0,w,h);
-  ctx.save();
-
-  let halo=ctx.createRadialGradient(
-    cx,cy,0,
-    cx,cy,R*2.65
-  );
-
-  halo.addColorStop(
-    0,"rgba(83,179,228,.1)"
-  );
-
-  halo.addColorStop(
-    .5,"rgba(57,129,190,.06)"
-  );
-
-  halo.addColorStop(
-    1,"rgba(1,18,35,0)"
-  );
-
-  ctx.fillStyle=halo;
-  ctx.fillRect(0,0,w,h);
-
-  /* Perspective corridor */
-
-  ctx.strokeStyle="rgba(125,196,235,.085)";
-  ctx.lineWidth=.7;
-
-  for(let i=-9;i<=9;i++){
-    ctx.beginPath();
-    ctx.moveTo(cx+i*8,cy);
-    ctx.lineTo(cx+i*w*.23,cy+h*.8);
-    ctx.stroke();
-  }
-
-  for(let i=0;i<19;i++){
-    const depth=(i/19+s*.115)%1;
-    const spread=depth*depth;
-    const y=cy+spread*h*.72;
-
-    ctx.beginPath();
-    ctx.moveTo(cx-w*spread*3,y);
-    ctx.lineTo(cx+w*spread*3,y);
-
-    ctx.strokeStyle=
-      `rgba(161,215,251,${.018+depth*.09})`;
-
-    ctx.stroke();
-  }
-
-  /* Orbital layers */
-
-  for(let i=0;i<9;i++){
-    const a=s*(i%2?-.03:.045)+i*.74;
-    const r=R*(.38+i*.115);
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-      cx,cy,
-      r,
-      r*(.31+(i%4)*.12),
-      a,
-      .05,
-      TAU-.12
-    );
-
-    ctx.strokeStyle=
-      `rgba(165,224,255,${.08+(i%4)*.034})`;
-
-    ctx.lineWidth=i%3===0?1.4:.7;
-    ctx.stroke();
-  }
-
-  /* Circular instrument ticks */
-
-  ctx.save();
-  ctx.translate(cx,cy);
-  ctx.rotate(s*.018);
-
-  for(let i=0;i<160;i++){
-    const a=i*TAU/160;
-    const r1=R*1.08;
-    const r2=r1+(i%10===0?11:3.2);
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      Math.cos(a)*r1,
-      Math.sin(a)*r1
-    );
-
-    ctx.lineTo(
-      Math.cos(a)*r2,
-      Math.sin(a)*r2
-    );
-
-    ctx.strokeStyle=i%10===0
-      ?"rgba(192,238,255,.49)"
-      :"rgba(192,238,255,.16)";
-
-    ctx.lineWidth=.8;
-    ctx.stroke();
-  }
-
-  ctx.restore();
-
-  /* Moving radar beam */
-
-  const angle=s*.42;
-
-  ctx.beginPath();
-  ctx.moveTo(cx,cy);
-  ctx.arc(
-    cx,cy,R*.99,
-    angle-.33,angle
-  );
-  ctx.closePath();
-
-  const beam=ctx.createRadialGradient(
-    cx,cy,0,
-    cx,cy,R
-  );
-
-  beam.addColorStop(
-    0,"rgba(160,226,255,.015)"
-  );
-
-  beam.addColorStop(
-    1,"rgba(160,226,255,.11)"
-  );
-
-  ctx.fillStyle=beam;
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.moveTo(cx,cy);
-
-  ctx.lineTo(
-    cx+Math.cos(angle)*R,
-    cy+Math.sin(angle)*R
-  );
-
-  ctx.strokeStyle="rgba(216,248,255,.43)";
-  ctx.lineWidth=1;
-  ctx.stroke();
-
-  /* Perspective particles */
-
-  for(const p of nodes){
-    const z=(p.z+s*.038)%1;
-    const depth=1-z;
-
-    const px=
-      cx+p.x*(.06+depth*depth)*w*.75;
-
-    const py=
-      cy+p.y*(.06+depth*depth)*h*.47;
-
-    if(px<0||px>w||py<0||py>h){
-      continue;
-    }
-
-    ctx.fillStyle=
-      `rgba(196,237,255,${.055+depth*.32})`;
-
-    ctx.beginPath();
-
-    ctx.arc(
-      px,py,
-      Math.max(.35,depth*p.scale),
-      0,TAU
-    );
-
-    ctx.fill();
-  }
-
-  /* Side telemetry */
-
-  for(const side of [-1,1]){
-    for(let i=0;i<13;i++){
-      const px=
-        cx+side*(R*1.38+i%3*5);
-
-      const py=
-        cy-R*.83+i*R*.14;
-
-      const alpha=
-        .08+.27*(.5+.5*Math.sin(s*1.5+i*.69+side));
-
-      ctx.fillStyle=
-        `rgba(175,231,255,${alpha})`;
-
-      ctx.fillRect(px,py,side*11,1);
-    }
-  }
-
-  /* Degree labels */
-
-  ctx.fillStyle="rgba(199,240,255,.4)";
-  ctx.font="600 10px Rajdhani, sans-serif";
-  ctx.textAlign="center";
-
-  for(let i=0;i<8;i++){
-    const a=i*TAU/8-Math.PI/2;
-    const r=R*1.32;
-
-    ctx.fillText(
-      String(i*45).padStart(3,"0"),
-      cx+Math.cos(a)*r,
-      cy+Math.sin(a)*r
-    );
-  }
-
-  ctx.restore();
-}
-
-/* ========================
-   ANIMATION LOOP
-======================== */
-
-let lastFrame=-100;
-
-function animate(time){
-  requestAnimationFrame(animate);
-
-  if(document.hidden||time-lastFrame<25){
-    return;
-  }
-
-  lastFrame=time;
-
-  if(currentScreen==="opening"){
-    atmosphere(sky,time,"opening");
-  }
-
-  if(currentScreen==="boarding"){
-    drawBoarding(time);
-  }
-
-  if(currentScreen==="menu"){
-    atmosphere(menu,time,"menu");
-  }
-
-  if(currentScreen==="detail"){
-    atmosphere(detail,time,"detail");
-  }
-}
-
-requestAnimationFrame(animate);
-
-/* ========================
-   BOARDING PASS INTERACTION
-======================== */
-
-const stub=document.getElementById("startButton");
-const ticketStatus=document.getElementById("ticketStatus");
-
-let dragging=false;
-let torn=false;
-let pointerId=null;
-let startX=0;
-let distance=0;
-let tearTimer=0;
-
-function resetTicket(){
-  clearTimeout(tearTimer);
-
-  dragging=false;
-  torn=false;
-  pointerId=null;
-  distance=0;
-
-  stub.classList.remove(
-    "dragging",
-    "snap-back",
-    "torn"
-  );
-
-  stub.style.transform="";
-  stub.disabled=false;
-
-  ticketStatus.textContent=
-    "SLIDE RIGHT TO BOARD";
-}
-
-function finishTear(){
-  if(torn||currentScreen!=="opening"){
-    return;
-  }
-
-  torn=true;
-  dragging=false;
-
-  stub.classList.remove(
-    "dragging",
-    "snap-back"
-  );
-
-  stub.style.transform="";
-  stub.classList.add("torn");
-  stub.disabled=true;
-
-  ticketStatus.textContent=
-    "BOARDING PASS ACCEPTED";
-
-  tearTimer=setTimeout(
-    startBoarding,
-    670
-  );
-}
-
-stub.addEventListener("pointerdown",e=>{
   if(
-    torn||
-    switching||
-    currentScreen!=="opening"||
-    (e.pointerType==="mouse"&&e.button!==0)
+    transitioning||
+    current===name
   ){
     return;
   }
 
-  dragging=true;
-  pointerId=e.pointerId;
-  startX=e.clientX;
-  distance=0;
+  transitioning=true;
 
-  stub.classList.remove("snap-back");
-  stub.classList.add("dragging");
+  const veil=$("softWipe");
 
-  try{
-    stub.setPointerCapture(e.pointerId);
-  }catch(err){}
-});
+  veil.classList.remove("play");
+  void veil.offsetWidth;
+  veil.classList.add("play");
 
-stub.addEventListener("pointermove",e=>{
-  if(!dragging||e.pointerId!==pointerId){
-    return;
-  }
+  setTimeout(()=>{
+    setScreen(name);
+  },430);
 
-  distance=Math.max(
-    0,e.clientX-startX
-  );
-
-  const x=distance<30
-    ?distance*.72
-    :21.6+(distance-30)*.88;
-
-  const angle=
-    Math.min(distance/88,1)*2.3;
-
-  const lift=
-    Math.min(distance/90,1)*-2;
-
-  stub.style.transform=
-    `translate3d(${x}px,${lift}px,0) rotate(${angle}deg)`;
-
-  ticketStatus.textContent=distance>60
-    ?"RELEASE TO BOARD"
-    :"SLIDE RIGHT TO BOARD";
-
-  if(distance>=100){
-    finishTear();
-  }
-});
-
-function endDrag(e){
-  if(!dragging||e.pointerId!==pointerId){
-    return;
-  }
-
-  dragging=false;
-  pointerId=null;
-
-  stub.classList.remove("dragging");
-
-  if(distance>=67){
-    finishTear();
-    return;
-  }
-
-  stub.classList.add("snap-back");
-  stub.style.transform="";
-
-  ticketStatus.textContent=
-    "SLIDE RIGHT TO BOARD";
+  setTimeout(()=>{
+    transitioning=false;
+    veil.classList.remove("play");
+  },1040);
 }
 
-stub.addEventListener("pointerup",endDrag);
-stub.addEventListener("pointercancel",endDrag);
+/* =========================
+   ANIMATED WAVES
+========================= */
 
-stub.addEventListener("lostpointercapture",()=>{
-  if(torn||!dragging){
-    return;
-  }
+/*
+  The two lines continually change shape.
+  They are real sine waves drawn with SVG,
+  not an image being moved left and right.
+*/
 
-  dragging=false;
-  pointerId=null;
-
-  stub.classList.remove("dragging");
-  stub.classList.add("snap-back");
-  stub.style.transform="";
-});
-
-stub.addEventListener("click",e=>{
-  if(e.detail===0&&!torn){
-    finishTear();
-  }
-});
-
-/* ========================
-   BOARDING PROGRESS
-======================== */
-
-const progressFill=
-  document.getElementById("progressFill");
-
-const progressNumber=
-  document.getElementById("progressNumber");
-
-const boardingCaption=
-  document.getElementById("boardingCaption");
-
-const boardingStep=
-  document.getElementById("boardingStep");
-
-const boardingTitle=
-  document.getElementById("boardingTitle");
-
-const stepEls=[
-  ...document.querySelectorAll(".system-step")
+const waveGraphics=[
+  ...document.querySelectorAll(
+    ".wave-svg"
+  )
 ];
 
-const stages=[
-  [
-    "CHECK-IN / 01",
-    "VERIFYING PASSENGER INFORMATION"
-  ],
-  [
-    "BOARDING / 02",
-    "PREPARING FLIGHT ENVIRONMENT"
-  ],
-  [
-    "ON BOARD / 03",
-    "SYNCHRONIZING FLIGHT SYSTEMS"
-  ],
-  [
-    "DEPARTURE / 04",
-    "CLEARANCE CONFIRMED"
-  ]
-];
+function sinePath(baseY,phase){
 
-let boardingRAF=0;
-let boardingTimer=0;
-let boardingPending=0;
-let boardingStart=0;
+  let result="";
+  const points=46;
 
-function stopBoarding(){
-  cancelAnimationFrame(boardingRAF);
-  clearTimeout(boardingTimer);
-  clearTimeout(boardingPending);
+  for(let i=0;i<=points;i++){
+
+    const x=
+      7+i*136/points;
+
+    const y=
+      baseY+
+      6.8*Math.sin(
+        i/points*TAU*2.25+phase
+      );
+
+    result+=
+      (i===0?"M":" L")+
+      x.toFixed(2)+
+      " "+
+      y.toFixed(2);
+  }
+
+  return result;
 }
 
-function boardingTick(t){
-  if(currentScreen!=="boarding"){
+let lastWave=0;
+
+const reducedMotion=window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
+function drawWave(time){
+
+  const phase=reducedMotion
+    ?0
+    :time*.0022;
+
+  const top=sinePath(
+    18,
+    phase
+  );
+
+  const bottom=sinePath(
+    45,
+    phase+.33
+  );
+
+  for(const svg of waveGraphics){
+
+    if(!svg.closest(".active")){
+      continue;
+    }
+
+    svg.querySelector(
+      ".wave-top"
+    ).setAttribute("d",top);
+
+    svg.querySelector(
+      ".wave-bottom"
+    ).setAttribute("d",bottom);
+  }
+}
+
+function waveLoop(t){
+
+  requestAnimationFrame(waveLoop);
+
+  if(
+    document.hidden||
+    t-lastWave<30
+  ){
     return;
   }
 
-  const p=clamp(
-    (t-boardingStart)/6200,
-    0,1
+  lastWave=t;
+  drawWave(t);
+}
+
+drawWave(0);
+requestAnimationFrame(waveLoop);
+
+/* =========================
+   LOADING PROGRESS
+========================= */
+
+let loadFinished=false;
+let loadStarted=0;
+
+const loadDuration=4000;
+
+function endLoading(){
+
+  if(loadFinished){
+    return;
+  }
+
+  loadFinished=true;
+
+  $("loaderFill").style.width="100%";
+
+  $("loaderNumber").textContent="100%";
+
+  $("progressTrack").setAttribute(
+    "aria-valuenow",
+    "100"
   );
 
-  const smooth=
-    p*p*(3-2*p);
+  changeScreen("home");
+}
 
-  const stage=Math.min(
-    3,Math.floor(smooth*4)
+function loadFrame(time){
+
+  if(loadFinished){
+    return;
+  }
+
+  if(!loadStarted){
+    loadStarted=time;
+  }
+
+  const progress=clamp(
+    (time-loadStarted)/loadDuration,
+    0,
+    1
   );
 
-  progressFill.style.width=
-    smooth*100+"%";
+  const percent=Math.round(
+    progress*100
+  );
 
-  progressNumber.textContent=
-    String(
-      Math.round(smooth*100)
-    ).padStart(3,"0")+"%";
+  $("loaderFill").style.width=
+    percent+"%";
 
-  boardingStep.textContent=
-    stages[stage][0];
+  $("loaderNumber").textContent=
+    percent+"%";
 
-  boardingCaption.textContent=
-    stages[stage][1];
+  $("progressTrack").setAttribute(
+    "aria-valuenow",
+    String(percent)
+  );
 
-  boardingTitle.textContent=
-    p>=1?"CLEARED.":"BOARDING...";
+  if(progress===1){
 
-  stepEls.forEach((el,i)=>{
-    el.classList.toggle(
-      "done",
-      i<=stage
+    setTimeout(
+      endLoading,
+      240
     );
-  });
 
-  if(p<1){
-    boardingRAF=requestAnimationFrame(
-      boardingTick
-    );
   }else{
-    boardingTimer=setTimeout(()=>{
-      if(currentScreen!=="boarding"){
-        return;
-      }
 
-      flash();
-      showScreen("menu");
-    },450);
+    requestAnimationFrame(
+      loadFrame
+    );
+
   }
 }
 
-function startBoarding(){
-  if(currentScreen!=="opening"||switching){
+requestAnimationFrame(loadFrame);
+
+$("skipIntro").addEventListener(
+  "click",
+  endLoading
+);
+
+/* =========================
+   ARCHIVE CONTENT
+========================= */
+
+const pages=[
+  {
+    kicker:"SECTION 01 / PROFILE",
+    title:"ABOUT",
+    subtitle:"ABOUT THIS ARCHIVE",
+
+    text:
+      "AERIALISへようこそ。\n\n"+
+      "ここは、キャラクターや物語、イラストを集めた個人アーカイブです。\n\n"+
+      "好きな世界を、好きな形で残していく場所。",
+
+    empty:false
+  },
+
+  {
+    kicker:"SECTION 02 / PEOPLE",
+    title:"CHARACTERS",
+    subtitle:"CHARACTER PROFILES",
+
+    text:
+      "キャラクターのプロフィール、設定、関係性をまとめるページです。\n\n"+
+      "これからキャラクターの一覧や個別ページを追加できます。",
+
+    empty:true
+  },
+
+  {
+    kicker:"SECTION 03 / WRITING",
+    title:"STORIES",
+    subtitle:"STORY COLLECTION",
+
+    text:
+      "物語や世界観、エピソードをまとめるページです。\n\n"+
+      "ここにストーリーの一覧や各作品の記録を追加できます。",
+
+    empty:true
+  },
+
+  {
+    kicker:"SECTION 04 / VISUALS",
+    title:"GALLERY",
+    subtitle:"IMAGE COLLECTION",
+
+    text:
+      "イラストや画像を展示するギャラリーです。\n\n"+
+      "作品ごとのアルバムやサムネイル一覧を追加できます。",
+
+    empty:true
+  }
+];
+
+function openCategory(index){
+
+  if(
+    current!=="home"||
+    transitioning||
+    !pages[index]
+  ){
     return;
   }
 
-  stopBoarding();
+  const page=pages[index];
 
-  progressFill.style.width="0%";
-  progressNumber.textContent="000%";
+  $("detailKicker").textContent=
+    page.kicker;
 
-  boardingTitle.textContent="BOARDING...";
-  boardingStep.textContent=stages[0][0];
-  boardingCaption.textContent=stages[0][1];
+  $("detailTitle").textContent=
+    page.title;
 
-  stepEls.forEach(el=>{
-    el.classList.remove("done");
-  });
+  $("detailSubtitle").textContent=
+    page.subtitle;
 
-  switchScreen("boarding",()=>{
-    boardingPending=setTimeout(()=>{
-      if(currentScreen!=="boarding"){
-        return;
-      }
+  $("detailText").textContent=
+    page.text;
 
-      boardingRAF=requestAnimationFrame(t=>{
-        boardingStart=t;
-        boardingTick(t);
-      });
-    },100);
-  });
+  $("detailPageNumber").textContent=
+    String(index+1).padStart(2,"0")+
+    " / 04";
+
+  $("detailEmpty").hidden=
+    !page.empty;
+
+  $("detailScroll").scrollTop=0;
+
+  changeScreen("detail");
 }
 
-/* ========================
-   CHARACTER BOUNCE & SPARKLES
-======================== */
+document.querySelectorAll(
+  "[data-page]"
+).forEach(button=>{
 
-const mascotButton=
-  document.getElementById("mascotButton");
+  button.addEventListener(
+    "click",
+    ()=>{
 
-const sparkleField=
-  document.getElementById("sparkleField");
+      openCategory(
+        Number(button.dataset.page)
+      );
 
-let mascotResetTimer=0;
+    }
+  );
 
-mascotButton.addEventListener("click",()=>{
-  if(currentScreen!=="menu"||switching){
+});
+
+/* RETURN TO MAIN MENU */
+
+$("backButton").addEventListener(
+  "click",
+  ()=>{
+
+    if(current==="detail"){
+      changeScreen("home");
+    }
+
+  }
+);
+
+document.addEventListener(
+  "keydown",
+  e=>{
+
+    if(
+      e.key==="Escape"&&
+      current==="detail"
+    ){
+      changeScreen("home");
+    }
+
+  }
+);
+
+/* =========================
+   MASCOT INTERACTION
+========================= */
+
+const mascot=$("mascotButton");
+
+const sparkleField=$("sparkleField");
+
+let mascotTimer=0;
+
+mascot.addEventListener("click",()=>{
+
+  if(
+    current!=="home"||
+    transitioning
+  ){
     return;
   }
 
-  clearTimeout(mascotResetTimer);
+  clearTimeout(mascotTimer);
 
-  mascotButton.classList.remove("pop");
-  void mascotButton.offsetWidth;
-  mascotButton.classList.add("pop");
+  mascot.classList.remove("pop");
+
+  void mascot.offsetWidth;
+
+  mascot.classList.add("pop");
 
   sparkleField.replaceChildren();
 
   const colors=[
     "#ffffff",
-    "#d6f5ff",
-    "#9cd8fc",
-    "#ffe6f1",
-    "#f9fbff"
+    "#55c2f1",
+    "#f993c0",
+    "#b4e5ff"
   ];
 
-  for(let i=0;i<17;i++){
-    const star=document.createElement("span");
-    star.className="mascot-star";
+  for(let i=0;i<18;i++){
 
-    const angle=
-      (i/17)*Math.PI*2+
-      (Math.random()-.5)*.42;
-
-    const length=
-      32+Math.random()*47;
-
-    const dx=
-      Math.cos(angle)*length;
-
-    const dy=
-      Math.sin(angle)*length;
-
-    const size=
-      6+Math.random()*9;
-
-    star.style.left=
-      (35+Math.random()*30)+"%";
-
-    star.style.top=
-      (28+Math.random()*48)+"%";
-
-    star.style.setProperty(
-      "--dx",dx.toFixed(1)+"px"
+    const el=document.createElement(
+      "span"
     );
 
-    star.style.setProperty(
-      "--dy",dy.toFixed(1)+"px"
+    el.className="spark";
+
+    const a=
+      i/18*TAU+
+      (Math.random()-.5)*.32;
+
+    const distance=
+      33+Math.random()*48;
+
+    const set=(key,value)=>{
+      el.style.setProperty(
+        key,
+        value
+      );
+    };
+
+    set(
+      "--x",
+      (30+Math.random()*40)+"%"
     );
 
-    star.style.setProperty(
-      "--size",size.toFixed(1)+"px"
+    set(
+      "--y",
+      (24+Math.random()*49)+"%"
     );
 
-    star.style.setProperty(
-      "--rot",
-      (65+Math.random()*135).toFixed(1)+"deg"
+    set(
+      "--size",
+      (6+Math.random()*8)+"px"
     );
 
-    star.style.setProperty(
+    set(
+      "--dx",
+      Math.cos(a)*distance+"px"
+    );
+
+    set(
+      "--dy",
+      Math.sin(a)*distance+"px"
+    );
+
+    set(
       "--color",
       colors[i%colors.length]
     );
 
-    star.style.setProperty(
-      "--duration",
-      (.55+Math.random()*.35).toFixed(2)+"s"
-    );
-
-    star.style.setProperty(
+    set(
       "--delay",
-      (Math.random()*.12).toFixed(2)+"s"
+      (Math.random()*.12)+"s"
     );
 
-    sparkleField.appendChild(star);
+    set(
+      "--duration",
+      (.55+Math.random()*.32)+"s"
+    );
 
-    star.addEventListener(
+    sparkleField.appendChild(el);
+
+    el.addEventListener(
       "animationend",
-      ()=>star.remove(),
+      ()=>el.remove(),
       {once:true}
     );
   }
 
-  mascotResetTimer=setTimeout(()=>{
-    mascotButton.classList.remove("pop");
-  },860);
+  mascotTimer=setTimeout(
+    ()=>{
+      mascot.classList.remove("pop");
+    },
+    830
+  );
+
 });
 
-/* ========================
-   DETAIL PAGES
-======================== */
+/* =========================
+   INITIAL STATE
+========================= */
 
-const pages=[
-  {
-    title:"ABOUT",
-    text:
-      "AERIALISへようこそ。\n\n"+
-      "ここは、空の旅をテーマにした個人アーカイブサイトです。\n\n"+
-      "サイトの紹介や各種情報を掲載する場所です。"
-  },
-  {
-    title:"CHARACTERS",
-    text:
-      "PASSENGER DIRECTORY.\n\n"+
-      "キャラクターのプロフィール、設定、関係性を記録する場所です。\n\n"+
-      "今後、個別のキャラクターカードや一覧を追加できます。"
-  },
-  {
-    title:"STORIES",
-    text:
-      "FLIGHT RECORDS.\n\n"+
-      "物語や世界観、出来事を記録する場所です。\n\n"+
-      "それぞれの物語をフライトログとして管理する予定です。"
-  },
-  {
-    title:"GALLERY",
-    text:
-      "VISUAL COLLECTION.\n\n"+
-      "イラストや画像を展示する場所です。\n\n"+
-      "作品ごとのギャラリーを追加できます。"
-  }
-];
-
-document.querySelectorAll("[data-page]").forEach(button=>{
-  button.addEventListener("click",()=>{
-    if(currentScreen!=="menu"||switching){
-      return;
-    }
-
-    const index=Number(button.dataset.page);
-    const page=pages[index];
-
-    if(!page)return;
-
-    document.getElementById(
-      "detailIndex"
-    ).textContent=
-      "SECTION / "+
-      String(index+1).padStart(2,"0");
-
-    document.getElementById(
-      "detailTitle"
-    ).textContent=page.title;
-
-    document.getElementById(
-      "detailText"
-    ).textContent=page.text;
-
-    document.getElementById(
-      "detailScroll"
-    ).scrollTop=0;
-
-    switchScreen("detail");
-  });
-});
-
-document.getElementById(
-  "closeDetail"
-).addEventListener("click",()=>{
-  if(currentScreen==="detail"){
-    switchScreen("menu");
-  }
-});
-
-document.getElementById(
-  "exitButton"
-).addEventListener("click",()=>{
-  if(currentScreen==="menu"){
-    switchScreen("opening",resetTicket);
-  }
-});
-
-document.addEventListener(
-  "visibilitychange",
-  ()=>{
-    if(document.hidden&&currentScreen==="boarding"){
-      stopBoarding();
-      showScreen("menu");
-    }
-  }
-);
-
-showScreen("opening");
-resetTicket();
+setScreen("loading");
 
 </script>
 </body>
