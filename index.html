@@ -269,7 +269,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 }
 </style>
 </head>
-
 <body>
 <div id="app">
 
@@ -592,9 +591,6 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 
     <div class="admin-panel" id="adminLoginPanel">
       <h3>LOGIN</h3>
-      <p class="admin-note">
-        Supabaseに登録した管理者アカウントでログインしてください。
-      </p>
       <label class="admin-field">
         EMAIL
         <input id="adminEmail" type="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="メールアドレス">
@@ -614,7 +610,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
     <div class="admin-panel admin-hidden" id="adminDashboard">
       <h3>PLOT MANAGER</h3>
       <p class="admin-note">
-        編集内容は下書きです。「サイトへ公開」を押すまでデータベースには保存されません。画像も公開時にアップロードされます。
+        追加・編集・削除した内容は下書きです。「サイトへ公開」を押すまで閲覧者には反映されません。画像も公開時にアップロードされます。
       </p>
       <div class="admin-actions">
         <button class="admin-btn" id="newPlotBtn" type="button">
@@ -813,7 +809,8 @@ const db = window.supabase
       SUPABASE_KEY,
       {
         auth:{
-          persistSession:false,
+          persistSession:true,
+          storage:window.sessionStorage,
           autoRefreshToken:true,
           detectSessionInUrl:false
         }
@@ -851,6 +848,7 @@ document.addEventListener(
 
 const $ = id=>document.getElementById(id);
 const TAU = Math.PI*2;
+
 const clamp = (v,min,max)=>
   Math.min(max,Math.max(min,v));
 
@@ -904,6 +902,18 @@ const INITIAL_NOTICES=[
 let NOTICES=[...INITIAL_NOTICES];
 
 const SITE_UPDATES=[
+  {
+    date:"2026.11.19",
+    text:"管理画面の自動ログアウトを修正し、画面を移動してもログイン状態を維持できるようにしました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"プロット・キャラクター・画像・お知らせの変更内容を、更新履歴に詳しく記録する機能を追加しました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"管理者ログイン画面の表示を調整しました。"
+  },
   {
     date:"2026.11.19",
     text:"自動更新・お知らせ帯の区切り・管理画面の表示を調整しました。"
@@ -2140,16 +2150,25 @@ function remoteSignature(rows){
 }
 
 function jstDate(date){
-  return new Intl.DateTimeFormat(
-    "en-CA",
+  const parts=new Intl.DateTimeFormat(
+    "en-US",
     {
       timeZone:"Asia/Tokyo",
       year:"numeric",
       month:"2-digit",
       day:"2-digit"
     }
-  ).format(new Date(date))
-    .replace(/-/g,".");
+  ).formatToParts(new Date(date));
+
+  const values=Object.fromEntries(
+    parts.map(p=>[p.type,p.value])
+  );
+
+  return [
+    values.year,
+    values.month,
+    values.day
+  ].join(".");
 }
 
 function convertRemotePlots(rows){
@@ -2222,9 +2241,9 @@ async function loadPublishedPlots(force=false){
     if(remoteHasContent(rows)){
       PLOT_DATA=convertRemotePlots(rows);
 
-      NOTICES=rows.announcements.map(
-        n=>String(n.content||"")
-      );
+      NOTICES=rows.announcements
+        .filter(n=>n.is_active)
+        .map(n=>String(n.content||""));
 
       PUBLISHED_UPDATES=
         rows.site_updates.map(item=>({
@@ -2315,8 +2334,8 @@ const pendingImages=new Map();
 const objectURLs=new Map();
 
 function clearObjectURLs(){
-  for(const url of objectURLs.values()){
-    URL.revokeObjectURL(url.url);
+  for(const entry of objectURLs.values()){
+    URL.revokeObjectURL(entry.url);
   }
 
   objectURLs.clear();
@@ -2334,9 +2353,7 @@ function pendingURL(key){
   }
 
   if(previous){
-    URL.revokeObjectURL(
-      previous.url
-    );
+    URL.revokeObjectURL(previous.url);
   }
 
   const url=URL.createObjectURL(file);
@@ -2354,7 +2371,6 @@ function clearPendingImages(){
   clearObjectURLs();
 }
 
-/* ADMIN MESSAGES */
 function adminMessage(id,message){
   $(id).textContent=message;
 }
@@ -2487,6 +2503,25 @@ function renderAdminList(){
   }
 }
 
+/* ADMIN DRAFT INITIALIZATION */
+function initializeAdminDraft(){
+  editBaselineSignature=
+    lastRemoteSignature;
+
+  draftPlots=normalizedPlots(
+    deepCopy(PLOT_DATA)
+  );
+
+  draftNotices=[...NOTICES];
+
+  $("adminNotices").value=
+    draftNotices.join("\n");
+
+  clearPendingImages();
+  setAdminView(true);
+  renderAdminList();
+}
+
 /* ADMIN LOGIN */
 async function loginAdmin(){
   const email=$("adminEmail").value.trim();
@@ -2534,31 +2569,16 @@ async function loginAdmin(){
 
     await loadPublishedPlots(true);
 
-    editBaselineSignature=
-      lastRemoteSignature;
-
-    draftPlots=normalizedPlots(
-      deepCopy(PLOT_DATA)
-    );
-
-    draftNotices=[...NOTICES];
-
-    $("adminNotices").value=
-      draftNotices.join("\n");
-
-    clearPendingImages();
-
     adminUser=data.user.email||email;
+
+    initializeAdminDraft();
 
     $("adminEmail").value="";
     $("adminPassword").value="";
 
-    setAdminView(true);
-    renderAdminList();
-
     adminMessage(
       "publishStatus",
-      `${adminUser} で認証しました。変更を編集できます。`
+      "管理者として認証しました。編集できます。"
     );
 
     adminMessage(
@@ -2570,9 +2590,12 @@ async function loginAdmin(){
     adminUser="";
 
     if(db){
-      await db.auth.signOut()
-        .catch(()=>{});
+      try{
+        await db.auth.signOut();
+      }catch(_){}
     }
+
+    setAdminView(false);
 
     adminMessage(
       "loginStatus",
@@ -2585,7 +2608,53 @@ async function loginAdmin(){
   }
 }
 
+/* RESTORE ADMIN LOGIN */
+async function restoreAdminSession(){
+  if(!db)return;
+
+  try{
+    const result=await db.auth.getSession();
+
+    if(
+      result.error||
+      !result.data.session
+    ){
+      return;
+    }
+
+    const auth=await db.auth.getUser();
+
+    if(
+      auth.error||
+      auth.data.user?.id!==ADMIN_UID
+    ){
+      await db.auth.signOut();
+      return;
+    }
+
+    adminUser=
+      auth.data.user.email||
+      "管理者";
+
+    await loadPublishedPlots(true);
+
+    initializeAdminDraft();
+
+    adminMessage(
+      "publishStatus",
+      "ログイン状態を復元しました。"
+    );
+
+  }catch(error){
+    console.warn(
+      "ログイン状態の復元に失敗:",
+      error.message
+    );
+  }
+}
+
 /* LOGOUT */
+/* ログアウトボタンを押したときだけ認証を解除 */
 async function logoutAdmin(){
   adminUser="";
   draftPlots=[];
@@ -2611,8 +2680,9 @@ async function logoutAdmin(){
   }
 }
 
+/* BACK FROM ADMIN */
+/* ホームに戻ってもログアウトしない */
 function leaveAdmin(){
-  logoutAdmin();
   changeScreen("home");
 }
 
@@ -3370,6 +3440,272 @@ async function deleteRows(
   }
 }
 
+/* UPDATE LOG CHANGE DETECTION */
+function sameValue(a,b){
+  return JSON.stringify(a)===
+    JSON.stringify(b);
+}
+
+function shortName(value){
+  const text=String(value||"無題").trim();
+
+  return text.length>28
+    ?text.slice(0,28)+"…"
+    :text;
+}
+
+function collectChangeLogs(
+  oldPlots,
+  newPlots,
+  oldNotices,
+  newNotices
+){
+  const changes=[];
+
+  const oldPlotMap=new Map(
+    oldPlots.map(p=>[p.id,p])
+  );
+
+  const newPlotMap=new Map(
+    newPlots.map(p=>[p.id,p])
+  );
+
+  for(const plot of newPlots){
+    const old=oldPlotMap.get(plot.id);
+    const title=shortName(plot.title);
+
+    if(!old){
+      changes.push(
+        `新しいプロット「${title}」を追加しました。`
+      );
+
+      for(const character of plot.characters){
+        changes.push(
+          `「${title}」にキャラクター「${shortName(character.name)}」を追加しました。`
+        );
+      }
+
+      continue;
+    }
+
+    if(old.title!==plot.title){
+      changes.push(
+        `プロット「${shortName(old.title)}」のタイトルを「${title}」に変更しました。`
+      );
+    }
+
+    if(old.intro!==plot.intro){
+      changes.push(
+        `プロット「${title}」の一覧紹介文を更新しました。`
+      );
+    }
+
+    if(old.description!==plot.description){
+      changes.push(
+        `プロット「${title}」のあらすじ・世界観説明を編集しました。`
+      );
+    }
+
+    if(!sameValue(old.tags,plot.tags)){
+      changes.push(
+        `プロット「${title}」のタグ情報を更新しました。`
+      );
+    }
+
+    if(old.image!==plot.image){
+      if(!plot.image){
+        changes.push(
+          `プロット「${title}」のカバー画像を削除しました。`
+        );
+      }else if(!old.image){
+        changes.push(
+          `プロット「${title}」にカバー画像を設定しました。`
+        );
+      }else{
+        changes.push(
+          `プロット「${title}」のカバー画像を差し替えました。`
+        );
+      }
+    }
+
+    const oldCharacters=new Map(
+      old.characters.map(c=>[c.id,c])
+    );
+
+    const newCharacters=new Map(
+      plot.characters.map(c=>[c.id,c])
+    );
+
+    for(const character of plot.characters){
+      const previous=oldCharacters.get(
+        character.id
+      );
+
+      const name=shortName(character.name);
+
+      if(!previous){
+        changes.push(
+          `「${title}」にキャラクター「${name}」を追加しました。`
+        );
+        continue;
+      }
+
+      if(previous.name!==character.name){
+        changes.push(
+          `キャラクター「${shortName(previous.name)}」の名前を「${name}」に変更しました。`
+        );
+      }
+
+      const basicChanged=
+        previous.role!==character.role||
+        previous.age!==character.age||
+        previous.birthday!==character.birthday;
+
+      if(basicChanged){
+        changes.push(
+          `キャラクター「${name}」の基本情報を更新しました。`
+        );
+      }
+
+      if(previous.profile!==character.profile){
+        changes.push(
+          `キャラクター「${name}」のプロフィールを更新しました。`
+        );
+      }
+
+      if(
+        previous.personality!==
+        character.personality
+      ){
+        changes.push(
+          `キャラクター「${name}」の性格・人物設定を編集しました。`
+        );
+      }
+
+      if(previous.image!==character.image){
+        if(!character.image){
+          changes.push(
+            `キャラクター「${name}」の画像を削除しました。`
+          );
+        }else if(!previous.image){
+          changes.push(
+            `キャラクター「${name}」に画像を追加しました。`
+          );
+        }else{
+          changes.push(
+            `キャラクター「${name}」の画像を変更しました。`
+          );
+        }
+      }
+    }
+
+    for(const character of old.characters){
+      if(!newCharacters.has(character.id)){
+        changes.push(
+          `「${title}」からキャラクター「${shortName(character.name)}」を削除しました。`
+        );
+      }
+    }
+
+    const oldCharacterOrder=
+      old.characters
+        .filter(c=>newCharacters.has(c.id))
+        .map(c=>c.id);
+
+    const newCharacterOrder=
+      plot.characters
+        .filter(c=>oldCharacters.has(c.id))
+        .map(c=>c.id);
+
+    if(
+      !sameValue(
+        oldCharacterOrder,
+        newCharacterOrder
+      )
+    ){
+      changes.push(
+        `「${title}」のキャラクター表示順を変更しました。`
+      );
+    }
+  }
+
+  for(const plot of oldPlots){
+    if(!newPlotMap.has(plot.id)){
+      changes.push(
+        `プロット「${shortName(plot.title)}」の公開を終了しました。`
+      );
+    }
+  }
+
+  const oldPlotOrder=
+    oldPlots
+      .filter(p=>newPlotMap.has(p.id))
+      .map(p=>p.id);
+
+  const newPlotOrder=
+    newPlots
+      .filter(p=>oldPlotMap.has(p.id))
+      .map(p=>p.id);
+
+  if(
+    !sameValue(
+      oldPlotOrder,
+      newPlotOrder
+    )
+  ){
+    changes.push(
+      "プロット一覧の表示順を変更しました。"
+    );
+  }
+
+  if(!sameValue(oldNotices,newNotices)){
+    if(
+      oldNotices.length===0&&
+      newNotices.length>0
+    ){
+      changes.push(
+        `お知らせを${newNotices.length}件追加しました。`
+      );
+    }else if(newNotices.length===0){
+      changes.push(
+        "お知らせの掲載を終了しました。"
+      );
+    }else if(
+      newNotices.length>
+      oldNotices.length
+    ){
+      changes.push(
+        "お知らせに新しい情報を追加しました。"
+      );
+    }else if(
+      newNotices.length<
+      oldNotices.length
+    ){
+      changes.push(
+        "お知らせを整理し、掲載内容を更新しました。"
+      );
+    }else{
+      changes.push(
+        "お知らせの掲載内容を更新しました。"
+      );
+    }
+  }
+
+  const MAX_CHANGES=24;
+
+  if(changes.length>MAX_CHANGES){
+    const remaining=
+      changes.length-(MAX_CHANGES-1);
+
+    return [
+      ...changes.slice(0,MAX_CHANGES-1),
+      `その他${remaining}件の公開情報を更新しました。`
+    ];
+  }
+
+  return changes;
+}
+
 /* DATE UTILS */
 function getJSTDateTime(){
   const now=new Date();
@@ -3467,6 +3803,12 @@ async function publishPlots(){
       }
     }
 
+    const oldPlots=convertRemotePlots(remote);
+
+    const oldNotices=remote.announcements
+      .filter(n=>n.is_active)
+      .map(n=>String(n.content||""));
+
     for(let i=0;i<jobs.length;i++){
       const job=jobs[i];
 
@@ -3480,6 +3822,21 @@ async function publishPlots(){
         job.prefix,
         job.target.id
       );
+    }
+
+    const changeLogs=collectChangeLogs(
+      oldPlots,
+      clean,
+      oldNotices,
+      notices
+    );
+
+    if(changeLogs.length===0){
+      adminMessage(
+        "publishStatus",
+        "公開内容に変更はありません。"
+      );
+      return;
     }
 
     const plotRows=clean.map((p,i)=>({
@@ -3549,7 +3906,7 @@ async function publishPlots(){
 
     adminMessage(
       "publishStatus",
-      "プロットを保存しています…"
+      "プロット情報を保存しています…"
     );
 
     await writeRows(
@@ -3560,7 +3917,7 @@ async function publishPlots(){
 
     adminMessage(
       "publishStatus",
-      "キャラクターを保存しています…"
+      "キャラクター情報を保存しています…"
     );
 
     await writeRows(
@@ -3598,8 +3955,12 @@ async function publishPlots(){
       "お知らせの削除"
     );
 
-    const now=getJSTDateTime();
+    adminMessage(
+      "publishStatus",
+      "変更内容を更新履歴に記録しています…"
+    );
 
+    const now=getJSTDateTime();
     const updateRows=[];
 
     if(
@@ -3620,10 +3981,15 @@ async function publishPlots(){
       }
     }
 
-    updateRows.push({
-      content:
-        `サイトの公開情報を更新しました（${now.time}）。`,
-      published_at:now.iso
+    const publishTime=Date.now();
+
+    changeLogs.forEach((text,index)=>{
+      updateRows.push({
+        content:text,
+        published_at:new Date(
+          publishTime-index*1000
+        ).toISOString()
+      });
     });
 
     const updateResult=await db
@@ -3656,7 +4022,7 @@ async function publishPlots(){
 
     adminMessage(
       "publishStatus",
-      "公開しました。Supabaseに保存された内容がサイトに反映されました。"
+      `公開しました。${changeLogs.length}件の変更内容を更新履歴に記録しました。`
     );
 
   }catch(error){
@@ -3683,6 +4049,7 @@ $("publishBtn").addEventListener(
 
 /* INITIALIZATION */
 refreshPublicSilently();
+restoreAdminSession();
 setScreen("loading");
 
 </script>
