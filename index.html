@@ -750,180 +750,83 @@ a:focus-visible{
 }
 
 /* Q&A PUBLIC */
+#qa .page-title{
+  margin-top:6px;
+  margin-bottom:3px;
+}
+#qa .page-description{
+  line-height:1.4;
+}
 .qa-intro-card{
-  position:relative;margin-top:22px;
-  padding:22px 18px 23px;
-  border:1px solid #fff;border-radius:17px;
-  background:rgba(255,255,255,.77);
-  box-shadow:0 12px 28px rgba(61,133,174,.085);
+  position:relative;
+  margin-top:12px;
+  padding:13px 14px 14px;
+  border:1px solid #fff;
+  border-radius:15px;
+  background:rgba(255,255,255,.79);
+  box-shadow:0 10px 25px rgba(61,133,174,.08);
   overflow:hidden;
 }
 .qa-intro-card::before{
-  content:"";position:absolute;
-  top:0;left:19px;right:19px;height:3px;
+  content:"";
+  position:absolute;
+  top:0;left:18px;right:18px;
+  height:3px;
   background:linear-gradient(
     90deg,var(--cyan),var(--pink)
   );
 }
 .qa-intro-index{
-  display:block;color:#70a2ba;
-  font:700 11px var(--raj);
-  letter-spacing:.16em;
+  display:block;
+  color:#70a2ba;
+  font:700 10px var(--raj);
+  letter-spacing:.14em;
 }
 .qa-intro-card h3{
-  margin:12px 0 8px;
+  margin:5px 0 3px;
   color:#295c77;
-  font:700 18px/1.6 var(--jp);
+  font:700 16px/1.5 var(--jp);
 }
 .qa-intro-card p{
-  margin:0;color:#7192a4;
-  font:400 12px/2 var(--jp);
-}
-.qa-section-heading{
-  display:flex;align-items:center;
-  justify-content:space-between;
-  gap:9px;margin:25px 0 13px;
-}
-.qa-section-heading strong{
-  font:700 13px var(--orbit);
-  color:#347fa8;letter-spacing:.055em;
-}
-.qa-section-heading small{
-  font:700 11px var(--raj);
-  color:#87a8ba;letter-spacing:.08em;
+  margin:0;
+  color:#7192a4;
+  font:400 11px/1.7 var(--jp);
 }
 .qa-search{
-  display:block;width:100%;min-height:43px;
+  display:block;
+  width:100%;
+  min-height:40px;
+  margin-top:10px;
   border:1px solid #d8eaf4;
-  border-radius:11px;background:#fff;
-  padding:11px 13px;
-  color:#315a70;font:400 13px var(--jp);
+  border-radius:9px;background:#fff;
+  padding:10px 12px;
+  color:#315a70;
+  font:400 13px var(--jp);
   outline:none;
-  -webkit-appearance:none;appearance:none;
+  -webkit-appearance:none;
+  appearance:none;
 }
 .qa-search:focus{
   border-color:#75bde2;
   box-shadow:0 0 0 3px rgba(91,179,225,.12);
 }
-.qa-list{
-  display:flex;flex-direction:column;
-  gap:11px;margin-top:13px;
-}
-.qa-item{
-  border:1px solid #fff;
-  border-radius:14px;
-  background:rgba(255,255,255,.83);
-  box-shadow:0 8px 21px rgba(58,136,176,.075);
-  overflow:hidden;
-}
-.qa-item summary{
-  position:relative;list-style:none;
-  cursor:pointer;display:flex;
-  align-items:flex-start;gap:11px;
-  padding:17px 16px;color:#315b73;
-  font:600 13px/1.8 var(--jp);
-}
-.qa-item summary::-webkit-details-marker{display:none}
-.qa-q-symbol{
-  flex:none;color:#4bb4e5;
-  font:700 17px/1.4 var(--orbit);
-}
-.qa-question-text{
-  min-width:0;flex:1;
-  overflow-wrap:anywhere;
-  white-space:pre-wrap;
-}
-.qa-plus{
-  position:relative;flex:none;
-  width:19px;height:19px;margin-top:4px;
-  border-radius:50%;background:#e5f4fc;
-}
-.qa-plus::before,.qa-plus::after{
-  content:"";position:absolute;
-  left:50%;top:50%;background:#69a8cd;
-  border-radius:2px;
-  transform:translate(-50%,-50%);
-  transition:transform .23s,opacity .23s;
-}
-.qa-plus::before{width:9px;height:1.5px}
-.qa-plus::after{width:1.5px;height:9px}
-.qa-item[open] .qa-plus::after{
-  opacity:0;
-  transform:translate(-50%,-50%) rotate(90deg);
-}
-.qa-item[open]{
-  background:rgba(255,255,255,.95);
-}
-.qa-answer-wrap{
-  display:flex;gap:11px;
-  margin:0 16px 17px;padding:16px 0 0;
-  border-top:1px solid #e4f0f7;
-}
-.qa-a-symbol{
-  flex:none;color:#e992b9;
-  font:700 17px/1.5 var(--orbit);
-}
-.qa-answer-text{
-  flex:1;min-width:0;margin:0;
-  color:#456f83;
-  font:400 12px/2.1 var(--jp);
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-}
-.qa-empty{
-  margin-top:13px;padding:25px 15px;
-  border:1px dashed #b7d8eb;
-  border-radius:13px;
-  background:rgba(255,255,255,.48);
-  color:#7a9caf;text-align:center;
-  font:500 12px/1.9 var(--jp);
-}
-
-/* WAVEBOX */
-.qa-wavebox-card{
-  position:relative;margin-top:29px;
-  padding:22px 18px 24px;
-  border:1px solid #fff;border-radius:17px;
-  background:rgba(255,255,255,.84);
-  box-shadow:0 12px 28px rgba(61,133,174,.08);
-  overflow:hidden;
-}
-.qa-wavebox-card::before{
-  content:"";position:absolute;
-  top:0;left:18px;right:18px;height:3px;
-  background:linear-gradient(
-    90deg,#75c5ed,#f2a0c4
-  );
-}
-.qa-wavebox-kicker{
-  color:#83a6bc;
-  font:700 11px var(--raj);
-  letter-spacing:.15em;
-}
-.qa-wavebox-card h3{
-  margin:11px 0 9px;
-  color:#2d6380;
-  font:700 18px/1.6 var(--jp);
-}
-.qa-wavebox-card p{
-  margin:0;color:#7194a6;
-  font:400 12px/2 var(--jp);
-}
 .qa-wavebox-link{
   display:flex;
+  align-items:center;
   justify-content:space-between;
-  align-items:center;gap:10px;
+  gap:12px;
+  min-height:42px;
   width:100%;
-  margin-top:18px;
-  padding:15px 16px;
+  margin-top:8px;
+  padding:8px 12px;
   border:1px solid rgba(84,177,224,.5);
-  border-radius:12px;
+  border-radius:9px;
   background:linear-gradient(
     115deg,#4eafe2,#78c1e8
   );
   color:#fff;
   text-decoration:none;
-  box-shadow:0 7px 18px rgba(65,151,196,.16);
+  box-shadow:0 5px 14px rgba(65,151,196,.13);
   transition:transform .2s,filter .2s;
 }
 .qa-wavebox-link:active{
@@ -933,24 +836,189 @@ a:focus-visible{
 .qa-wavebox-link[hidden]{display:none!important}
 .qa-wavebox-link strong{
   display:block;
-  font:700 12px var(--orbit);
-  letter-spacing:.055em;
+  font:700 12px/1.4 var(--jp);
+  letter-spacing:.015em;
 }
 .qa-wavebox-link small{
-  display:block;margin-top:5px;
-  font:600 11px var(--raj);
-  letter-spacing:.07em;
-  color:rgba(255,255,255,.88);
+  display:block;
+  margin-top:1px;
+  color:rgba(255,255,255,.85);
+  font:600 10px var(--raj);
+  letter-spacing:.1em;
 }
 .qa-wavebox-arrow{
   flex:none;
-  font:700 22px var(--raj);
-  line-height:1;
+  display:block;
+  width:18px;
+  height:18px;
 }
-.qa-wavebox-unset{
-  margin-top:14px!important;
-  color:#9bb0bd!important;
-  font:500 11px/1.8 var(--jp)!important;
+.qa-wavebox-arrow svg{
+  display:block;
+  width:100%;height:100%;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.qa-intro-card .qa-wavebox-unset{
+  margin-top:9px;
+  color:#91aab9;
+  font:500 11px/1.6 var(--jp);
+}
+.qa-section-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:9px;
+  margin:14px 0 9px;
+}
+.qa-section-heading strong{
+  font:700 12px var(--orbit);
+  color:#347fa8;
+  letter-spacing:.04em;
+}
+.qa-section-heading small{
+  font:700 11px var(--raj);
+  color:#87a8ba;
+  letter-spacing:.08em;
+}
+.qa-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  margin-top:0;
+}
+.qa-item{
+  border:1px solid #fff;
+  border-radius:14px;
+  background:rgba(255,255,255,.83);
+  box-shadow:0 8px 21px rgba(58,136,176,.075);
+  overflow:hidden;
+}
+.qa-item.is-pinned{
+  border-color:rgba(90,184,231,.5);
+  background:rgba(255,255,255,.94);
+  box-shadow:0 7px 22px rgba(69,155,198,.12);
+}
+.qa-item summary{
+  position:relative;
+  list-style:none;
+  cursor:pointer;
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  padding:14px 15px;
+  color:#315b73;
+  font:600 13px/1.8 var(--jp);
+}
+.qa-item summary::-webkit-details-marker{
+  display:none;
+}
+.qa-question-block{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  min-width:0;
+  flex:1;
+}
+.qa-question-row{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  min-width:0;
+}
+.qa-q-symbol,.qa-a-symbol{
+  display:inline-block;
+  flex:none;
+  font-family:var(--orbit);
+  font-size:17px;
+  font-style:normal;
+  font-weight:700;
+  line-height:1.45;
+  letter-spacing:0;
+  font-variant-ligatures:none;
+}
+.qa-q-symbol{color:#4bb4e5}
+.qa-a-symbol{color:#e992b9}
+.qa-question-text{
+  display:block;
+  min-width:0;
+  flex:1;
+  overflow-wrap:anywhere;
+  white-space:pre-wrap;
+}
+.qa-pinned-flag{
+  display:inline-flex;
+  align-items:center;
+  align-self:flex-start;
+  gap:5px;
+  color:#4c9ec8;
+  font:700 10px/1.5 var(--raj);
+  letter-spacing:.09em;
+}
+.qa-pinned-flag svg{
+  display:block;
+  width:12px;
+  height:12px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.qa-plus{
+  position:relative;flex:none;
+  width:19px;height:19px;
+  margin-top:4px;
+  border-radius:50%;
+  background:#e5f4fc;
+}
+.qa-plus::before,.qa-plus::after{
+  content:"";
+  position:absolute;
+  left:50%;top:50%;
+  background:#69a8cd;
+  border-radius:2px;
+  transform:translate(-50%,-50%);
+  transition:transform .23s,opacity .23s;
+}
+.qa-plus::before{
+  width:9px;height:1.5px;
+}
+.qa-plus::after{
+  width:1.5px;height:9px;
+}
+.qa-item[open] .qa-plus::after{
+  opacity:0;
+  transform:translate(-50%,-50%) rotate(90deg);
+}
+.qa-item[open]{
+  background:rgba(255,255,255,.95);
+}
+.qa-answer-wrap{
+  display:flex;
+  gap:11px;
+  margin:0 16px 17px;
+  padding:16px 0 0;
+  border-top:1px solid #e4f0f7;
+}
+.qa-answer-text{
+  flex:1;min-width:0;margin:0;
+  color:#456f83;
+  font:400 12px/2.1 var(--jp);
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.qa-empty{
+  margin-top:0;
+  padding:22px 14px;
+  border:1px dashed #b7d8eb;
+  border-radius:13px;
+  background:rgba(255,255,255,.48);
+  color:#7a9caf;
+  text-align:center;
+  font:500 12px/1.9 var(--jp);
 }
 
 /* ADMIN */
@@ -1090,7 +1158,7 @@ a:focus-visible{
 .admin-image-preview{
   width:100%;aspect-ratio:1/1;
   object-fit:cover;border-radius:12px;
-  border:1px solid #d9ebf5;
+  border:1px solid #d9eaf5;
   background:linear-gradient(
     145deg,#eaf9ff,#f7e7f4
   );
@@ -1123,6 +1191,10 @@ a:focus-visible{
   border:1px solid #e1edf6;
   border-radius:11px;background:#f5fbff;
 }
+.qa-admin-item.pinned{
+  border-color:#a7d8f0;
+  background:#f0f9ff;
+}
 .qa-admin-meta{
   display:flex;align-items:center;
   justify-content:space-between;
@@ -1141,6 +1213,10 @@ a:focus-visible{
 .qa-admin-badge.pending{
   background:#fff1f6;color:#c77f9d;
 }
+.qa-admin-badge.pinned{
+  background:#d8eefc;
+  color:#347fa8;
+}
 .qa-admin-question{
   color:#315a72;
   font:600 12px/1.7 var(--jp);
@@ -1155,6 +1231,10 @@ a:focus-visible{
 }
 .qa-admin-item .admin-actions{
   margin-top:10px;
+}
+.qa-admin-item .admin-btn{
+  padding:8px 11px;
+  min-height:36px;
 }
 .qa-admin-empty{
   margin:11px 0;padding:15px 12px;
@@ -1606,40 +1686,15 @@ a:focus-visible{
       <span class="qa-intro-index">
         AERIALIS / QUESTIONS
       </span>
+
       <h3>質問と回答</h3>
-      <p>
-        作品やキャラクター、このサイトに関する
-        質問と回答をまとめています。
-        質問の受付はWaveboxから行っています。
-      </p>
-    </article>
+      <p>FAタグ#22stans</p>
 
-    <div class="qa-section-heading">
-      <strong>ANSWERED QUESTIONS</strong>
-      <small id="qaCount">00 ENTRIES</small>
-    </div>
-
-    <input class="qa-search"
-      id="qaSearch"
-      type="search"
-      placeholder="質問や回答を検索"
-      aria-label="公開Q&Aを検索">
-
-    <div class="qa-list" id="qaPublishedList">
-      <div class="qa-empty">
-        Q&amp;Aを読み込んでいます。
-      </div>
-    </div>
-
-    <section class="qa-wavebox-card">
-      <span class="qa-wavebox-kicker">
-        EXTERNAL MESSAGE BOX
-      </span>
-      <h3>質問を送る</h3>
-      <p>
-        質問・感想・リクエストなどは、
-        外部サービスのWaveboxで受け付けています。
-      </p>
+      <input class="qa-search"
+        id="qaSearch"
+        type="search"
+        placeholder="質問や回答を検索"
+        aria-label="公開Q&Aを検索">
 
       <a class="qa-wavebox-link"
         id="waveboxLink"
@@ -1648,18 +1703,33 @@ a:focus-visible{
         rel="noopener noreferrer"
         hidden>
         <span>
-          <strong>GO TO WAVEBOX</strong>
-          <small>質問・メッセージを送る</small>
+          <strong>質問を送る</strong>
+          <small>GO TO WAVEBOX</small>
         </span>
         <span class="qa-wavebox-arrow"
-          aria-hidden="true">↗</span>
+          aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 18 18 6 M8 6h10v10"/>
+          </svg>
+        </span>
       </a>
 
       <p class="qa-wavebox-unset"
         id="waveboxUnset">
         質問受付は準備中です。
       </p>
-    </section>
+    </article>
+
+    <div class="qa-section-heading">
+      <strong>ANSWERED QUESTIONS</strong>
+      <small id="qaCount">00 ENTRIES</small>
+    </div>
+
+    <div class="qa-list" id="qaPublishedList">
+      <div class="qa-empty">
+        Q&amp;Aを読み込んでいます。
+      </div>
+    </div>
   </main>
 </section>
 
@@ -1833,8 +1903,8 @@ a:focus-visible{
 
       <p class="admin-note">
         質問受付に使用するWaveboxのURLを設定します。
-        保存すると、Q&amp;Aページの「GO TO WAVEBOX」
-        ボタンから移動できるようになります。
+        保存すると、Q&amp;Aページの質問ボタンから
+        Waveboxへ移動できるようになります。
       </p>
 
       <label class="admin-field">
@@ -1873,8 +1943,7 @@ a:focus-visible{
       <p class="admin-note">
         Waveboxで受け取った質問を手動で登録し、
         回答を付けて公開できます。
-        自分でFAQを作成することもできます。
-        公開していない質問は閲覧者に表示されません。
+        公開済みのQ&amp;Aは最上部に固定することもできます。
       </p>
 
       <div class="admin-actions">
@@ -2317,6 +2386,34 @@ const INITIAL_NOTICES=[
 let NOTICES=[...INITIAL_NOTICES];
 
 const SITE_UPDATES=[
+  {
+    date:"2026.11.19",
+    text:"Q&Aの上部説明を「FAタグ#22stans」に変更しました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"公開済みQ&Aを最上部に固定・固定解除できる機能を追加し、固定済みマークを表示するようにしました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"Q&Aの検索欄を質問送信ボタンの上に配置し、公開済みの質問・回答を見つけやすくしました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"Q&A上部の説明と余白を縮小し、回答一覧が画面の上の方に表示されるよう調整しました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"Q&Aの説明とWaveboxの質問送信ボタンを1枚のカードに統合し、表示をコンパクトにしました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"Q&Aの質問受付リンクを回答一覧の上へ移動し、画面構成を調整しました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"Waveboxのリンクボタンを線画アイコンに変更し、Q&AのQ・A表示フォントを統一しました。"
+  },
   {
     date:"2026.11.19",
     text:"Q&Aの質問受付をWavebox方式に変更しました。サイト内の質問送信フォームは撤去しました。"
@@ -3732,6 +3829,24 @@ function refreshPublicSilently(){
   });
 }
 
+/* Q&A PINNING */
+/*
+  Uses the existing sort_order field.
+  -1: pinned at the top
+   0: normal display order
+
+  No additional database column is necessary.
+*/
+function qaIsPinned(item){
+  return Number(item?.sort_order)<0;
+}
+
+const QA_PIN_ICON=
+  '<svg viewBox="0 0 24 24" aria-hidden="true">'+
+  '<path d="M8 4h8l-1.6 5.5 2.8 3V15H6.8v-2.5l2.8-3L8 4Z"/>'+
+  '<path d="M12 15v6"/>'+
+  '</svg>';
+
 /* PUBLIC Q&A */
 let publicQA=[];
 let qaPublicSignature=null;
@@ -3810,10 +3925,37 @@ function renderPublicQA(){
   }
 
   for(const item of filtered){
+    const pinned=qaIsPinned(item);
+
     const details=document.createElement("details");
     details.className="qa-item";
 
+    if(pinned){
+      details.classList.add("is-pinned");
+    }
+
     const summary=document.createElement("summary");
+
+    const questionBlock=
+      document.createElement("span");
+    questionBlock.className="qa-question-block";
+
+    if(pinned){
+      const flag=document.createElement("span");
+      flag.className="qa-pinned-flag";
+
+      flag.innerHTML=QA_PIN_ICON;
+
+      const flagText=document.createElement("span");
+      flagText.textContent="固定済み";
+
+      flag.appendChild(flagText);
+      questionBlock.appendChild(flag);
+    }
+
+    const questionRow=
+      document.createElement("span");
+    questionRow.className="qa-question-row";
 
     const questionSymbol=
       document.createElement("span");
@@ -3825,15 +3967,18 @@ function renderPublicQA(){
     questionText.className="qa-question-text";
     questionText.textContent=item.question;
 
+    questionRow.append(
+      questionSymbol,
+      questionText
+    );
+
+    questionBlock.appendChild(questionRow);
+
     const plus=document.createElement("span");
     plus.className="qa-plus";
     plus.setAttribute("aria-hidden","true");
 
-    summary.append(
-      questionSymbol,
-      questionText,
-      plus
-    );
+    summary.append(questionBlock,plus);
 
     const answerWrap=document.createElement("div");
     answerWrap.className="qa-answer-wrap";
@@ -5723,6 +5868,7 @@ $("publishBtn").addEventListener(
 let qaAdminItems=[];
 let qaEditorID=null;
 let qaEditorBusy=false;
+let qaPinBusy=false;
 
 async function loadAdminQA(){
   if(!adminUser)return;
@@ -5751,25 +5897,120 @@ function refreshAdminQA(){
   });
 }
 
+/* PIN / UNPIN AN ANSWER */
+async function toggleQAPin(item){
+  if(
+    !adminUser||
+    qaPinBusy||
+    !item.is_published
+  )return;
+
+  qaPinBusy=true;
+
+  const wasPinned=qaIsPinned(item);
+  const nextOrder=wasPinned?0:-1;
+
+  adminMessage(
+    "qaAdminStatus",
+    wasPinned
+      ?"固定を解除しています…"
+      :"Q&Aを最上部に固定しています…"
+  );
+
+  try{
+    await checkAdminAuth();
+
+    const {data,error}=await db
+      .from(QA_TABLE)
+      .update({
+        sort_order:nextOrder
+      })
+      .eq("id",item.id)
+      .eq("is_published",true)
+      .select("id");
+
+    if(error)throw error;
+
+    if(!data||data.length!==1){
+      throw new Error(
+        "対象のQ&Aを更新できませんでした。"
+      );
+    }
+
+    let logWarning="";
+
+    try{
+      await addUpdateLog(
+        wasPinned
+          ?`Q&A「${shortName(item.question)}」の最上部固定を解除しました。`
+          :`Q&A「${shortName(item.question)}」を最上部に固定しました。`
+      );
+    }catch(error){
+      logWarning=
+        "固定状態は変更できましたが、更新履歴の記録に失敗しました。";
+
+      console.warn(
+        "Q&A固定更新履歴:",
+        error.message
+      );
+    }
+
+    await Promise.all([
+      loadAdminQA(),
+      loadPublicQA(true),
+      loadPublishedPlots(true)
+    ]);
+
+    adminMessage(
+      "qaAdminStatus",
+      logWarning||
+      (
+        wasPinned
+          ?"最上部への固定を解除しました。"
+          :"Q&Aを最上部に固定しました。"
+      )
+    );
+
+  }catch(error){
+    adminMessage(
+      "qaAdminStatus",
+      "固定状態を変更できませんでした："+error.message
+    );
+
+  }finally{
+    qaPinBusy=false;
+  }
+}
+
 function qaAdminCard(item){
   const row=document.createElement("div");
   row.className="qa-admin-item";
+
+  const pinned=qaIsPinned(item);
+
+  if(pinned&&item.is_published){
+    row.classList.add("pinned");
+  }
 
   const meta=document.createElement("div");
   meta.className="qa-admin-meta";
 
   const type=document.createElement("span");
   type.className="qa-admin-type";
-  type.textContent=
-    "MANUAL Q&A";
+  type.textContent="MANUAL Q&A";
 
   const status=document.createElement("span");
   status.className="qa-admin-badge";
 
   if(item.is_published){
-    status.textContent="公開中";
+    if(pinned){
+      status.textContent="固定済み・公開中";
+      status.classList.add("pinned");
+    }else{
+      status.textContent="公開中";
+    }
   }else{
-    status.textContent=item.answer.trim()
+    status.textContent=String(item.answer||"").trim()
       ?"回答下書き"
       :"未回答";
 
@@ -5785,7 +6026,7 @@ function qaAdminCard(item){
   const preview=document.createElement("p");
   preview.className="qa-admin-answer-preview";
 
-  preview.textContent=item.answer.trim()
+  preview.textContent=String(item.answer||"").trim()
     ?item.answer.slice(0,120)
     :"回答はまだ登録されていません。";
 
@@ -5802,8 +6043,31 @@ function qaAdminCard(item){
   });
 
   actions.appendChild(edit);
-  row.append(meta,question,preview,actions);
 
+  if(item.is_published){
+    const pinButton=document.createElement("button");
+    pinButton.type="button";
+    pinButton.className="admin-btn secondary";
+
+    pinButton.textContent=pinned
+      ?"固定解除"
+      :"最上部に固定";
+
+    pinButton.setAttribute(
+      "aria-label",
+      pinned
+        ?`「${item.question}」の固定を解除`
+        :`「${item.question}」を最上部に固定`
+    );
+
+    pinButton.addEventListener("click",()=>{
+      toggleQAPin(item);
+    });
+
+    actions.appendChild(pinButton);
+  }
+
+  row.append(meta,question,preview,actions);
   return row;
 }
 
@@ -5815,9 +6079,19 @@ function renderAdminQA(){
     item=>!item.is_published
   );
 
-  const published=qaAdminItems.filter(
-    item=>item.is_published
-  );
+  const published=qaAdminItems
+    .filter(item=>item.is_published)
+    .sort((a,b)=>{
+      const aPin=qaIsPinned(a)?1:0;
+      const bPin=qaIsPinned(b)?1:0;
+
+      if(aPin!==bPin){
+        return bPin-aPin;
+      }
+
+      return new Date(b.created_at)-
+        new Date(a.created_at);
+    });
 
   const addGroup=(title,items)=>{
     const heading=document.createElement("div");
@@ -6020,6 +6294,7 @@ async function saveQA(published){
     let result;
 
     if(previous){
+      /* Preserve existing pin status during edits. */
       result=await db
         .from(QA_TABLE)
         .update({
@@ -6032,7 +6307,10 @@ async function saveQA(published){
     }else{
       result=await db
         .from(QA_TABLE)
-        .insert(next);
+        .insert({
+          ...next,
+          sort_order:0
+        });
     }
 
     if(result.error)throw result.error;
