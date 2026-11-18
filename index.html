@@ -226,6 +226,16 @@ a:focus-visible{
   letter-spacing:.09em;
 }
 .back-arrow{font-size:20px;line-height:1}
+.admin-home-top{
+  color:#2f83ad;
+  font-weight:700;
+}
+.admin-return-home{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
 
 /* HOME */
 #home{background-color:#e0f4ff}
@@ -934,13 +944,16 @@ a:focus-visible{
   font-family:var(--orbit);
   font-size:17px;
   font-style:normal;
-  font-weight:700;
+  font-weight:800;
   line-height:1.45;
   letter-spacing:0;
   font-variant-ligatures:none;
 }
 .qa-q-symbol{color:#4bb4e5}
-.qa-a-symbol{color:#e992b9}
+.qa-a-symbol{
+  color:#e992b9;
+  -webkit-text-stroke:.35px currentColor;
+}
 .qa-question-text{
   display:block;
   min-width:0;
@@ -1003,10 +1016,11 @@ a:focus-visible{
   padding:16px 0 0;
   border-top:1px solid #e4f0f7;
 }
+/* Question and answer text now have identical weight. */
 .qa-answer-text{
   flex:1;min-width:0;margin:0;
   color:#456f83;
-  font:400 12px/2.1 var(--jp);
+  font:600 12px/2.1 var(--jp);
   white-space:pre-wrap;
   overflow-wrap:anywhere;
 }
@@ -1344,7 +1358,6 @@ a:focus-visible{
 }
 </style>
 </head>
-
 <body>
 <div id="app">
 
@@ -1800,9 +1813,9 @@ a:focus-visible{
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button class="back-button"
+      <button class="back-button admin-home-top"
         type="button" id="leaveAdmin">
-        <span class="back-arrow">←</span>BACK
+        <span class="back-arrow">←</span>HOME
       </button>
     </div>
   </header>
@@ -1837,6 +1850,10 @@ a:focus-visible{
           id="adminLoginBtn" type="button">
           認証して編集
         </button>
+        <button class="admin-btn secondary admin-return-home"
+          id="loginHomeBtn" type="button">
+          ホームに戻る
+        </button>
       </div>
 
       <p class="admin-status"
@@ -1861,6 +1878,10 @@ a:focus-visible{
         <button class="admin-btn secondary"
           id="adminLogoutBtn" type="button">
           ログアウト
+        </button>
+        <button class="admin-btn secondary admin-return-home"
+          id="adminHomeBtn" type="button">
+          ホームに戻る
         </button>
       </div>
 
@@ -2386,6 +2407,14 @@ const INITIAL_NOTICES=[
 let NOTICES=[...INITIAL_NOTICES];
 
 const SITE_UPDATES=[
+  {
+    date:"2026.11.19",
+    text:"Q&Aの質問文と回答文の文字の太さを統一しました。"
+  },
+  {
+    date:"2026.11.19",
+    text:"ADMINにホームへ戻るボタンを追加し、ログイン状態を保ったまま移動できるようにしました。"
+  },
   {
     date:"2026.11.19",
     text:"Q&Aの上部説明を「FAタグ#22stans」に変更しました。"
@@ -3830,13 +3859,6 @@ function refreshPublicSilently(){
 }
 
 /* Q&A PINNING */
-/*
-  Uses the existing sort_order field.
-  -1: pinned at the top
-   0: normal display order
-
-  No additional database column is necessary.
-*/
 function qaIsPinned(item){
   return Number(item?.sort_order)<0;
 }
@@ -5088,6 +5110,16 @@ $("leaveAdmin").addEventListener(
   leaveAdmin
 );
 
+$("loginHomeBtn").addEventListener(
+  "click",
+  leaveAdmin
+);
+
+$("adminHomeBtn").addEventListener(
+  "click",
+  leaveAdmin
+);
+
 $("openAdmin").addEventListener("click",()=>{
   $("adminScroll").scrollTop=0;
   changeScreen("admin");
@@ -6294,7 +6326,6 @@ async function saveQA(published){
     let result;
 
     if(previous){
-      /* Preserve existing pin status during edits. */
       result=await db
         .from(QA_TABLE)
         .update({
