@@ -11,962 +11,228 @@
 <link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700&family=Michroma&family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#dff4ff;
-  --ink:#183b50;
-  --muted:#607f91;
-  --cyan:#3fb7eb;
-  --pink:#f58db6;
-  --orbit:"Orbitron",sans-serif;
-  --raj:"Rajdhani",sans-serif;
-  --mich:"Michroma",sans-serif;
-  --jp:"Kaisei Tokumin",serif;
+  --bg:#dff4ff;--ink:#183b50;--muted:#607f91;
+  --cyan:#3fb7eb;--pink:#f58db6;
+  --orbit:"Orbitron",sans-serif;--raj:"Rajdhani",sans-serif;
+  --mich:"Michroma",sans-serif;--jp:"Kaisei Tokumin",serif;
   --safe-top:env(safe-area-inset-top,0px);
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box}
-html,body{
-  width:100%;height:100%;margin:0;
-  overflow:hidden;overscroll-behavior:none;
-  -webkit-text-size-adjust:100%;
-}
-body{
-  position:fixed;inset:0;background:var(--bg);
-  color:var(--ink);font-family:var(--jp);
-  -webkit-tap-highlight-color:transparent;
-}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%}
+body{position:fixed;inset:0;background:var(--bg);color:var(--ink);font-family:var(--jp);-webkit-tap-highlight-color:transparent}
 button{font:inherit;cursor:pointer}
-button:focus-visible{
-  outline:2px solid var(--cyan);
-  outline-offset:3px;
-}
-#app{
-  position:fixed;inset:0;height:100dvh;
-  overflow:hidden;isolation:isolate;
-}
+button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+#app{position:fixed;inset:0;height:100dvh;overflow:hidden;isolation:isolate}
 .screen{
-  position:absolute;inset:0;overflow:hidden;
-  opacity:0;visibility:hidden;pointer-events:none;
+  position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;
   background-color:var(--bg);
-  background-image:radial-gradient(
-    circle,rgba(95,170,207,.115) 1.35px,
-    transparent 1.7px
-  );
-  background-size:34px 34px;
-  transition:opacity .63s ease,visibility .63s ease;
+  background-image:radial-gradient(circle,rgba(95,170,207,.115) 1.35px,transparent 1.7px);
+  background-size:34px 34px;transition:opacity .63s ease,visibility .63s ease;
 }
-.screen.active{
-  opacity:1;visibility:visible;pointer-events:auto;
-}
-.ambient{
-  position:absolute;inset:-25%;pointer-events:none;
-  background:
-    radial-gradient(
-      ellipse at 20% 23%,
-      rgba(255,255,255,.56),transparent 39%
-    ),
-    radial-gradient(
-      ellipse at 88% 75%,
-      rgba(162,217,246,.26),transparent 47%
-    );
-  animation:ambientDrift 16s ease-in-out infinite alternate;
-}
-@keyframes ambientDrift{
-  to{transform:translate3d(3%,-2%,0) scale(1.06)}
-}
-
-/* WAVE LOGO */
-
-.wave-svg{
-  display:block;width:100%;height:100%;
-  overflow:visible;
-}
-.wave-top,.wave-bottom{
-  fill:none;stroke-width:9.5;
-  stroke-linecap:round;stroke-linejoin:round;
-}
-.wave-top{stroke:var(--cyan)}
-.wave-bottom{stroke:var(--pink)}
+.screen.active{opacity:1;visibility:visible;pointer-events:auto}
+.ambient{position:absolute;inset:-25%;pointer-events:none;background:radial-gradient(ellipse at 20% 23%,rgba(255,255,255,.56),transparent 39%),radial-gradient(ellipse at 88% 75%,rgba(162,217,246,.26),transparent 47%);animation:ambientDrift 16s ease-in-out infinite alternate}
+@keyframes ambientDrift{to{transform:translate3d(3%,-2%,0) scale(1.06)}}
+.wave-svg{display:block;width:100%;height:100%;overflow:visible}
+.wave-top,.wave-bottom{fill:none;stroke-width:9.5;stroke-linecap:round;stroke-linejoin:round}
+.wave-top{stroke:var(--cyan)}.wave-bottom{stroke:var(--pink)}
 .wave-logo{position:relative;display:block;flex:none}
-.wave-logo.large{width:112px;height:65px}
-.wave-logo.small{width:48px;height:29px}
-.wave-logo.card-size{width:65px;height:39px}
-.wave-logo::after{
-  content:"";position:absolute;inset:12% -16%;
-  z-index:-1;pointer-events:none;
-  background:radial-gradient(
-    ellipse,rgba(255,255,255,.66),transparent 70%
-  );
-}
+.wave-logo.large{width:112px;height:65px}.wave-logo.small{width:48px;height:29px}.wave-logo.card-size{width:65px;height:39px}
+.wave-logo::after{content:"";position:absolute;inset:12% -16%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse,rgba(255,255,255,.66),transparent 70%)}
+#softWipe{position:absolute;inset:0;z-index:50;opacity:0;pointer-events:none;background:#f7fdff;visibility:hidden}
+#softWipe.play{visibility:visible;animation:softWipe .78s ease-in-out both}
+@keyframes softWipe{0%{opacity:0}43%,56%{opacity:1}100%{opacity:0}}
+@keyframes contentIn{from{opacity:0;transform:translateY(20px);filter:blur(4px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.975)}to{opacity:1;transform:translateY(0) scale(1)}}
 
-/* TRANSITIONS */
-
-#softWipe{
-  position:absolute;inset:0;z-index:50;
-  opacity:0;pointer-events:none;
-  background:#f7fdff;visibility:hidden;
-}
-#softWipe.play{
-  visibility:visible;
-  animation:softWipe .78s ease-in-out both;
-}
-@keyframes softWipe{
-  0%{opacity:0}
-  43%,56%{opacity:1}
-  100%{opacity:0}
-}
-@keyframes contentIn{
-  from{
-    opacity:0;transform:translateY(20px);
-    filter:blur(4px);
-  }
-  to{
-    opacity:1;transform:translateY(0);
-    filter:blur(0);
-  }
-}
-@keyframes cardIn{
-  from{
-    opacity:0;
-    transform:translateY(24px) scale(.975);
-  }
-  to{
-    opacity:1;transform:translateY(0) scale(1);
-  }
-}
-
-/* LOADING */
+/* OPENING / LOADING */
 
 #loading{background-color:#e1f5ff}
-.loading-main{
-  position:absolute;top:37%;left:10%;right:10%;
-  display:flex;flex-direction:column;
-  align-items:center;text-align:center;
-}
-.intro-title{
-  margin:22px 0 0;
-  font:800 clamp(27px,7.8vw,43px)/1.35 var(--orbit);
-  letter-spacing:.16em;text-indent:.16em;
-  color:#173949;
-}
-.intro-subtitle{
-  margin-top:16px;
-  font:500 clamp(9px,2.4vw,14px)/1.6 var(--mich);
-  letter-spacing:.27em;text-indent:.27em;
-  color:#698798;white-space:nowrap;
-}
-.loader{
-  margin-top:70px;width:min(100%,380px);
-  text-align:left;
-}
-.loader-track{
-  position:relative;height:13px;padding:2px;
-  overflow:hidden;border-radius:20px;
-  border:1px solid rgba(111,180,216,.37);
-  background:rgba(255,255,255,.96);
-  box-shadow:0 2px 12px rgba(84,163,201,.11);
-}
-.loader-fill{
-  height:100%;width:0%;border-radius:15px;
-  background:linear-gradient(
-    90deg,#38b9eb 0%,#90b5e9 55%,#f686b2 100%
-  );
-  box-shadow:0 0 11px rgba(242,137,193,.32);
-  transition:width .085s linear;
-}
-.loader-info{
-  display:flex;justify-content:space-between;
-  align-items:center;margin-top:17px;
-  color:#607e90;font:500 15px var(--mich);
-  letter-spacing:.17em;
-}
-.loader-info strong{
-  font-weight:500;letter-spacing:.13em;
-  font-variant-numeric:tabular-nums;
-}
-.skip-intro{
-  position:absolute;z-index:4;right:6%;
-  top:calc(25px + var(--safe-top));
-  padding:9px 8px;border:0;background:transparent;
-  color:rgba(73,119,148,.69);
-  font:700 12px var(--raj);letter-spacing:.16em;
-}
+.loading-main{position:absolute;top:37%;left:10%;right:10%;display:flex;flex-direction:column;align-items:center;text-align:center}
+.intro-title{margin:22px 0 0;font:800 clamp(27px,7.8vw,43px)/1.35 var(--orbit);letter-spacing:.16em;text-indent:.16em;color:#173949}
+.intro-subtitle{margin-top:16px;font:500 clamp(9px,2.4vw,14px)/1.6 var(--mich);letter-spacing:.27em;text-indent:.27em;color:#698798;white-space:nowrap}
+.loader{margin-top:70px;width:min(100%,380px);text-align:left}
+.loader-track{position:relative;height:13px;padding:2px;overflow:hidden;border-radius:20px;border:1px solid rgba(111,180,216,.37);background:rgba(255,255,255,.96);box-shadow:0 2px 12px rgba(84,163,201,.11)}
+.loader-fill{height:100%;width:0%;border-radius:15px;background:linear-gradient(90deg,#38b9eb 0%,#90b5e9 55%,#f686b2 100%);box-shadow:0 0 11px rgba(242,137,193,.32);transition:width .085s linear}
+.loader-info{display:flex;justify-content:space-between;align-items:center;margin-top:17px;color:#607e90;font:500 15px var(--mich);letter-spacing:.17em}
+.loader-info strong{font-weight:500;letter-spacing:.13em;font-variant-numeric:tabular-nums}
+.skip-intro{position:absolute;z-index:4;right:6%;top:calc(25px + var(--safe-top));padding:9px 8px;border:0;background:transparent;color:rgba(73,119,148,.69);font:700 12px var(--raj);letter-spacing:.16em}
 
-/* HEADER */
+/* SHARED HEADER */
 
-.site-header{
-  position:absolute;z-index:10;
-  top:calc(25px + var(--safe-top));
-  left:7%;right:7%;
-  display:flex;align-items:center;
-  justify-content:space-between;gap:9px;
-}
-.site-brand{
-  display:flex;align-items:center;gap:9px;min-width:0;
-}
-.site-brand strong{
-  font:800 clamp(13px,3.5vw,17px) var(--orbit);
-  letter-spacing:.055em;white-space:nowrap;
-}
-.live-clock{
-  font:700 clamp(11px,3vw,13px)/1 var(--raj);
-  letter-spacing:.045em;
-  font-variant-numeric:tabular-nums;
-}
-.header-actions{
-  display:flex;flex-direction:column;
-  align-items:flex-end;gap:3px;
-}
-.site-footer{
-  position:absolute;z-index:9;left:7%;right:7%;
-  bottom:calc(22px + var(--safe-bottom));
-  display:flex;align-items:center;
-  justify-content:space-between;
-  font:600 11px var(--raj);
-  letter-spacing:.1em;color:#7d9cae;
-}
-.back-button{
-  display:flex;align-items:center;gap:7px;
-  padding:7px 3px;border:0;background:none;
-  color:#447e9e;font:700 12px var(--raj);
-  letter-spacing:.09em;
-}
+.site-header{position:absolute;z-index:10;top:calc(25px + var(--safe-top));left:7%;right:7%;display:flex;align-items:center;justify-content:space-between;gap:9px}
+.site-brand{display:flex;align-items:center;gap:9px;min-width:0}
+.site-brand strong{font:800 clamp(13px,3.5vw,17px) var(--orbit);letter-spacing:.055em;white-space:nowrap}
+.live-clock{font:700 clamp(11px,3vw,13px)/1 var(--raj);letter-spacing:.045em;font-variant-numeric:tabular-nums}
+.header-actions{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.site-footer{position:absolute;z-index:9;left:7%;right:7%;bottom:calc(22px + var(--safe-bottom));display:flex;align-items:center;justify-content:space-between;font:600 11px var(--raj);letter-spacing:.1em;color:#7d9cae}
+.back-button{display:flex;align-items:center;gap:7px;padding:7px 3px;border:0;background:none;color:#447e9e;font:700 12px var(--raj);letter-spacing:.09em}
 .back-arrow{font-size:20px;line-height:1}
 
 /* HOME */
 
 #home{background-color:#e0f4ff}
-.notice-bar{
-  position:absolute;z-index:12;
-  top:calc(64px + var(--safe-top));
-  left:0;right:0;width:100%;height:33px;
-  display:flex;align-items:center;overflow:hidden;
-  border-top:1px solid rgba(188,218,236,.55);
-  border-bottom:1px solid rgba(188,218,236,.55);
-  background:#fff;
-  box-shadow:0 6px 19px rgba(59,137,171,.065);
-}
-.notice-window{
-  flex:1;min-width:0;overflow:hidden;
-  white-space:nowrap;padding-left:7vw;
-}
-.notice-track{
-  display:flex;width:max-content;
-  animation:noticeFlow 26s linear infinite;
-}
-.notice-copy{
-  flex:none;padding-right:48px;color:#587e96;
-  font:600 12px var(--raj);
-  letter-spacing:.035em;white-space:nowrap;
-}
-@keyframes noticeFlow{
-  to{transform:translateX(-50%)}
-}
-
-/* UPDATE LOG */
-
-.update-panel{
-  position:absolute;z-index:7;
-  top:calc(106px + var(--safe-top));
-  left:7%;width:47%;max-width:280px;
-  height:min(
-    240px,
-    calc(43dvh - 130px - var(--safe-top))
-  );
-  padding:14px;
-  border:1px solid rgba(255,255,255,.88);
-  border-radius:12px;
-  background:rgba(255,255,255,.65);
-  box-shadow:0 12px 30px rgba(71,138,172,.08);
-  overflow:hidden;
-}
-.update-heading{
-  display:flex;align-items:center;gap:8px;
-  margin-bottom:10px;
-  color:#307da7;font:700 11px var(--orbit);
-  letter-spacing:.04em;white-space:nowrap;
-}
-.update-heading::before{
-  content:"";width:6px;height:6px;flex:none;
-  border-radius:50%;background:var(--pink);
-}
-.update-list{
-  height:calc(100% - 27px);
-  overflow-y:auto;overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;
-  touch-action:pan-y;scrollbar-width:none;
-}
+.notice-bar{position:absolute;z-index:12;top:calc(64px + var(--safe-top));left:0;right:0;width:100%;height:33px;display:flex;align-items:center;overflow:hidden;border-top:1px solid rgba(188,218,236,.55);border-bottom:1px solid rgba(188,218,236,.55);background:#fff;box-shadow:0 6px 19px rgba(59,137,171,.065)}
+.notice-window{flex:1;min-width:0;overflow:hidden;white-space:nowrap;padding-left:7vw}
+.notice-track{display:flex;width:max-content;animation:noticeFlow 26s linear infinite}
+.notice-copy{flex:none;padding-right:48px;color:#587e96;font:600 12px var(--raj);letter-spacing:.035em;white-space:nowrap}
+@keyframes noticeFlow{to{transform:translateX(-50%)}}
+.update-panel{position:absolute;z-index:7;top:calc(106px + var(--safe-top));left:7%;width:47%;max-width:280px;height:min(240px,calc(43dvh - 130px - var(--safe-top)));padding:14px;border:1px solid rgba(255,255,255,.88);border-radius:12px;background:rgba(255,255,255,.65);box-shadow:0 12px 30px rgba(71,138,172,.08);overflow:hidden}
+.update-heading{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:#307da7;font:700 11px var(--orbit);letter-spacing:.04em;white-space:nowrap}
+.update-heading::before{content:"";width:6px;height:6px;flex:none;border-radius:50%;background:var(--pink)}
+.update-list{height:calc(100% - 27px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:none}
 .update-list::-webkit-scrollbar{display:none}
-.update-item{
-  padding:9px 0 11px;
-  border-top:1px solid rgba(92,165,202,.22);
-}
-.update-date{
-  display:block;color:#6d9ab3;
-  font:700 11px var(--raj);letter-spacing:.06em;
-}
-.update-text{
-  display:block;margin-top:3px;color:#355e74;
-  font:500 12px/1.5 var(--jp);
-  overflow-wrap:anywhere;
-}
-#home.active .update-panel{
-  animation:contentIn .75s both;
-}
+.update-item{padding:9px 0 11px;border-top:1px solid rgba(92,165,202,.22)}
+.update-date{display:block;color:#6d9ab3;font:700 11px var(--raj);letter-spacing:.06em}
+.update-text{display:block;margin-top:3px;color:#355e74;font:500 12px/1.5 var(--jp);overflow-wrap:anywhere}
+#home.active .update-panel{animation:contentIn .75s both}
 
 /* MASCOT */
 
-.home-mascot{
-  position:absolute;z-index:6;
-  right:2.5%;top:17.3%;
-  width:clamp(190px,53vw,275px);
-  aspect-ratio:1;border:0;background:none;
-  padding:0;overflow:visible;
-  user-select:none;-webkit-user-select:none;
-  touch-action:manipulation;
-}
-.mascot-float{
-  position:absolute;inset:0;pointer-events:none;
-  animation:mascotFloat 4.7s ease-in-out infinite;
-  transform-origin:50% 75%;
-  filter:drop-shadow(
-    0 12px 9px rgba(45,128,167,.14)
-  );
-}
-.mascot-bounce{
-  display:block;width:100%;height:100%;
-  transform-origin:50% 78%;will-change:transform;
-}
-.mascot-img{
-  width:100%;height:100%;display:block;
-  object-fit:contain;image-rendering:auto;
-  pointer-events:none;-webkit-user-drag:none;
-}
-@keyframes mascotFloat{
-  0%,100%{
-    transform:translateY(0) rotate(-1deg);
-  }
-  50%{
-    transform:translateY(-7px) rotate(1deg);
-  }
-}
-.sparkles{
-  position:absolute;inset:0;
-  overflow:visible;pointer-events:none;
-}
-.spark{
-  position:absolute;left:var(--x);top:var(--y);
-  width:var(--size);height:var(--size);
-  background:var(--color);
-  clip-path:polygon(
-    50% 0,61% 38%,100% 50%,61% 62%,
-    50% 100%,39% 62%,0 50%,39% 38%
-  );
-  filter:drop-shadow(0 0 5px #fff);
-  animation:sparkOut var(--duration)
-    ease-out var(--delay) both;
-}
-@keyframes sparkOut{
-  0%{
-    opacity:0;
-    transform:translate(-50%,-50%) scale(.1);
-  }
-  25%{
-    opacity:1;
-    transform:translate(-50%,-50%) scale(1.2);
-  }
-  60%{opacity:1}
-  100%{
-    opacity:0;
-    transform:translate(
-      calc(-50% + var(--dx)),
-      calc(-50% + var(--dy))
-    ) rotate(120deg) scale(.15);
-  }
-}
+.home-mascot{position:absolute;z-index:6;right:2.5%;top:17.3%;width:clamp(190px,53vw,275px);aspect-ratio:1;border:0;background:none;padding:0;overflow:visible;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.mascot-float{position:absolute;inset:0;pointer-events:none;animation:mascotFloat 4.7s ease-in-out infinite;transform-origin:50% 75%;filter:drop-shadow(0 12px 9px rgba(45,128,167,.14))}
+.mascot-bounce{display:block;width:100%;height:100%;transform-origin:50% 78%;will-change:transform}
+.mascot-img{width:100%;height:100%;display:block;object-fit:contain;image-rendering:auto;pointer-events:none;-webkit-user-drag:none}
+@keyframes mascotFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
+.sparkles{position:absolute;inset:0;overflow:visible;pointer-events:none}
+.spark{position:absolute;left:var(--x);top:var(--y);width:var(--size);height:var(--size);background:var(--color);clip-path:polygon(50% 0,61% 38%,100% 50%,61% 62%,50% 100%,39% 62%,0 50%,39% 38%);filter:drop-shadow(0 0 5px #fff);animation:sparkOut var(--duration) ease-out var(--delay) both}
+@keyframes sparkOut{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}60%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(120deg) scale(.15)}}
 
-/* HOME CARDS */
+/* FOUR MAIN CARDS */
 
-.directory{
-  position:absolute;z-index:8;
-  left:7%;right:7%;top:43%;bottom:11%;
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  grid-template-rows:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-.entry{
-  position:relative;min-width:0;min-height:0;
-  overflow:hidden;display:flex;flex-direction:column;
-  justify-content:space-between;padding:14px;
-  border:1px solid rgba(255,255,255,.95);
-  border-radius:14px;
-  background:rgba(255,255,255,.77);
-  box-shadow:
-    0 13px 32px rgba(58,136,176,.105),
-    0 2px 7px rgba(61,126,161,.045);
-  color:#1d455b;text-align:left;
-  -webkit-backdrop-filter:blur(10px);
-  backdrop-filter:blur(10px);
-  transition:transform .25s,box-shadow .25s,
-    background .25s;
-}
-.entry::before{
-  content:"";position:absolute;top:0;
-  left:17px;right:17px;height:3px;
-  border-radius:0 0 8px 8px;
-  background:linear-gradient(
-    90deg,rgba(65,182,235,.77),
-    rgba(240,146,191,.75)
-  );
-}
-.entry:active{
-  transform:scale(.965);background:#fff;
-}
-.entry-top{
-  display:flex;justify-content:space-between;
-  align-items:flex-start;gap:4px;
-}
-.entry-index{
-  font:700 10px var(--raj);
-  letter-spacing:.015em;
-  color:#73a3bc;white-space:nowrap;
-}
-.entry .wave-logo{
-  opacity:.78;transform:translate(5px,-1px);
-}
-.entry-title{
-  position:relative;display:block;z-index:1;
-  margin-bottom:5px;padding-right:22px;
-}
-.entry-title strong{
-  display:block;
-  font:800 clamp(12px,3.2vw,19px)/1.25 var(--orbit);
-  letter-spacing:-.04em;overflow-wrap:anywhere;
-}
-.entry-title small{
-  display:block;margin-top:9px;
-  font:600 11px/1.25 var(--raj);
-  letter-spacing:.085em;color:#8ba7b7;
-}
-.entry-arrow{
-  position:absolute;right:13px;bottom:12px;
-  color:#68a6ca;width:21px;height:21px;display:block;
-}
-.entry-arrow svg,.vector-arrow svg{
-  display:block;width:100%;height:100%;
-  fill:none;stroke:currentColor;stroke-width:1.7;
-  stroke-linecap:round;stroke-linejoin:round;
-}
-.vector-arrow{
-  display:inline-block;width:17px;height:17px;
-  flex:none;vertical-align:middle;
-}
-#home.active .entry{
-  animation:cardIn .63s both;
-}
-#home.active .entry:nth-child(2){
-  animation-delay:.09s;
-}
-#home.active .entry:nth-child(3){
-  animation-delay:.18s;
-}
-#home.active .entry:nth-child(4){
-  animation-delay:.27s;
-}
+.directory{position:absolute;z-index:8;left:7%;right:7%;top:43%;bottom:11%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:12px}
+.entry{position:relative;min-width:0;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:14px;border:1px solid rgba(255,255,255,.95);border-radius:14px;background:rgba(255,255,255,.77);box-shadow:0 13px 32px rgba(58,136,176,.105),0 2px 7px rgba(61,126,161,.045);color:#1d455b;text-align:left;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:transform .25s,box-shadow .25s,background .25s}
+.entry::before{content:"";position:absolute;top:0;left:17px;right:17px;height:3px;border-radius:0 0 8px 8px;background:linear-gradient(90deg,rgba(65,182,235,.77),rgba(240,146,191,.75))}
+.entry:active{transform:scale(.965);background:#fff}
+.entry-top{display:flex;justify-content:space-between;align-items:flex-start;gap:4px}
+.entry-index{font:700 10px var(--raj);letter-spacing:.015em;color:#73a3bc;white-space:nowrap}
+.entry .wave-logo{opacity:.78;transform:translate(5px,-1px)}
+.entry-title{position:relative;display:block;z-index:1;margin-bottom:5px;padding-right:22px}
+.entry-title strong{display:block;font:800 clamp(12px,3.2vw,19px)/1.25 var(--orbit);letter-spacing:-.04em;overflow-wrap:anywhere}
+.entry-title small{display:block;margin-top:9px;font:600 11px/1.25 var(--raj);letter-spacing:.085em;color:#8ba7b7}
+.entry-arrow{position:absolute;right:13px;bottom:12px;color:#68a6ca;width:21px;height:21px;display:block}
+.entry-arrow svg,.vector-arrow svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.vector-arrow{display:inline-block;width:17px;height:17px;flex:none;vertical-align:middle}
+#home.active .entry{animation:cardIn .63s both}
+#home.active .entry:nth-child(2){animation-delay:.09s}
+#home.active .entry:nth-child(3){animation-delay:.18s}
+#home.active .entry:nth-child(4){animation-delay:.27s}
 
 /* INNER PAGES */
 
-#plots,#plotView,#character,#detail,
-#admin,#editPlot,#editCharacter{
-  background-color:#e1f5ff;
-}
-.inner-scroll{
-  position:absolute;z-index:4;
-  top:calc(111px + var(--safe-top));
-  bottom:calc(18px + var(--safe-bottom));
-  left:7%;right:7%;
-  overflow-y:auto;overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;
-  touch-action:pan-y;
-  padding:2px 0 35px;scrollbar-width:none;
-}
+#plots,#plotView,#character,#detail,#admin,#editPlot,#editCharacter{background-color:#e1f5ff}
+.inner-scroll{position:absolute;z-index:4;top:calc(111px + var(--safe-top));bottom:calc(18px + var(--safe-bottom));left:7%;right:7%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:2px 0 35px;scrollbar-width:none}
 .inner-scroll::-webkit-scrollbar{display:none}
-.page-kicker{
-  font:700 11px var(--raj);
-  letter-spacing:.16em;color:#5c9dbe;
-}
-.page-title{
-  margin:11px 0 8px;
-  font:800 clamp(27px,8vw,51px)/1.15 var(--orbit);
-  letter-spacing:-.06em;overflow-wrap:anywhere;
-}
-.page-description{
-  margin:0;color:#7393a4;
-  font:500 12px/1.9 var(--jp);
-}
-.section-line{
-  height:1px;background:rgba(91,155,193,.22);
-  margin:18px 0 19px;
-}
+.page-kicker{font:700 11px var(--raj);letter-spacing:.16em;color:#5c9dbe}
+.page-title{margin:11px 0 8px;font:800 clamp(27px,8vw,51px)/1.15 var(--orbit);letter-spacing:-.06em;overflow-wrap:anywhere}
+.page-description{margin:0;color:#7393a4;font:500 12px/1.9 var(--jp)}
+.section-line{height:1px;background:rgba(91,155,193,.22);margin:18px 0 19px}
 
-/* PLOT IMAGES: SQUARE */
+/* PLOTS TWO COLUMNS */
 
-.plot-grid,.character-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:13px;align-items:start;
-}
-.plot-card,.character-card{
-  display:block;min-width:0;width:100%;padding:0;
-  border:1px solid rgba(255,255,255,.97);
-  border-radius:15px;overflow:hidden;
-  background:rgba(255,255,255,.84);
-  box-shadow:0 9px 22px rgba(58,136,176,.11);
-  color:var(--ink);text-align:left;
-  transition:transform .2s,box-shadow .2s;
-}
-.plot-card:active,.character-card:active{
-  transform:scale(.97);
-  box-shadow:0 4px 10px rgba(58,136,176,.09);
-}
-.plot-cover,.character-cover,
-.plot-hero-cover,.profile-cover{
-  position:relative;display:flex;
-  align-items:center;justify-content:center;
-  overflow:hidden;
-  aspect-ratio:1/1;
-  background:linear-gradient(
-    146deg,#f2fcff 0%,#bfe8fb 53%,#f5cbe3 100%
-  );
-}
-.plot-cover::before,.character-cover::before,
-.plot-hero-cover::before,.profile-cover::before{
-  content:"";position:absolute;inset:0;
-  background:
-    radial-gradient(
-      circle at 22% 22%,
-      rgba(255,255,255,.86),transparent 47%
-    ),
-    linear-gradient(
-      160deg,transparent 45%,rgba(255,255,255,.28)
-    );
-  pointer-events:none;
-}
-.plot-cover img,.character-cover img,
-.plot-hero-cover img,.profile-cover img{
-  position:absolute;inset:0;
-  display:block;width:100%;height:100%;
-  object-fit:cover;object-position:center;
-  z-index:2;
-}
-.plot-cover img[hidden],.character-cover img[hidden],
-.plot-hero-cover img[hidden],
-.profile-cover img[hidden]{
-  display:none;
-}
-.cover-placeholder{
-  z-index:1;position:relative;text-align:center;
-  color:rgba(41,118,164,.56);
-  font:700 10px/1.8 var(--orbit);
-  letter-spacing:.15em;white-space:pre-line;
-}
-.cover-placeholder::before{
-  content:"";display:block;width:48px;height:3px;
-  margin:0 auto 13px;border-radius:5px;
-  background:linear-gradient(
-    90deg,var(--cyan),var(--pink)
-  );
-}
-.plot-card-info{
-  padding:12px 11px 14px;min-width:0;
-}
-.plot-card-name{
-  display:block;
-  font:700 clamp(13px,3.5vw,18px)/1.5 var(--jp);
-  overflow-wrap:anywhere;color:#254f67;
-}
-.plot-card-intro{
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;line-clamp:2;
-  overflow:hidden;margin:6px 0 8px;
-  font:400 11px/1.65 var(--jp);
-  color:#718c9b;min-height:2.9em;
-}
-.tag-viewport{
-  position:relative;display:block;overflow:hidden;
-  width:100%;white-space:nowrap;color:#489dc6;
-  font:700 11px/1.7 var(--raj);
-  letter-spacing:.02em;pointer-events:none;
-}
-.tag-track{
-  display:inline-flex;align-items:center;
-  gap:28px;width:max-content;max-width:none;
-  vertical-align:top;
-}
-.tag-copy{
-  display:inline-block;white-space:nowrap;
-}
+.plot-grid,.character-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;align-items:start}
+.plot-card,.character-card{display:block;min-width:0;width:100%;padding:0;border:1px solid rgba(255,255,255,.97);border-radius:15px;overflow:hidden;background:rgba(255,255,255,.84);box-shadow:0 9px 22px rgba(58,136,176,.11);color:var(--ink);text-align:left;transition:transform .2s,box-shadow .2s}
+.plot-card:active,.character-card:active{transform:scale(.97);box-shadow:0 4px 10px rgba(58,136,176,.09)}
+.plot-cover,.character-cover,.plot-hero-cover,.profile-cover{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(146deg,#f2fcff 0%,#bfe8fb 53%,#f5cbe3 100%)}
+.plot-cover{aspect-ratio:1/1}
+.plot-cover::before,.character-cover::before,.plot-hero-cover::before,.profile-cover::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 22% 22%,rgba(255,255,255,.86),transparent 47%),linear-gradient(160deg,transparent 45%,rgba(255,255,255,.28));pointer-events:none}
+.plot-cover img,.character-cover img,.plot-hero-cover img,.profile-cover img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;z-index:2}
+.plot-cover img[hidden],.character-cover img[hidden],.plot-hero-cover img[hidden],.profile-cover img[hidden]{display:none}
+.cover-placeholder{z-index:1;position:relative;text-align:center;color:rgba(41,118,164,.56);font:700 10px/1.8 var(--orbit);letter-spacing:.15em;white-space:pre-line}
+.cover-placeholder::before{content:"";display:block;width:48px;height:3px;margin:0 auto 13px;border-radius:5px;background:linear-gradient(90deg,var(--cyan),var(--pink))}
+.plot-card-info{padding:12px 11px 14px;min-width:0}
+.plot-card-name{display:block;font:700 clamp(13px,3.5vw,18px)/1.5 var(--jp);overflow-wrap:anywhere;color:#254f67}
+.plot-card-intro{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;margin:6px 0 8px;font:400 11px/1.65 var(--jp);color:#718c9b;min-height:2.9em}
+.tag-viewport{position:relative;display:block;overflow:hidden;width:100%;white-space:nowrap;color:#489dc6;font:700 11px/1.7 var(--raj);letter-spacing:.02em;pointer-events:none}
+.tag-track{display:inline-flex;align-items:center;gap:28px;width:max-content;max-width:none;vertical-align:top}
+.tag-copy{display:inline-block;white-space:nowrap}
 .tag-duplicate{display:none}
-.tag-viewport.scrolling .tag-duplicate{
-  display:inline-block;
-}
-.tag-viewport.scrolling .tag-track{
-  animation:tagFlow var(--tag-duration,14s)
-    linear infinite;
-}
-@keyframes tagFlow{
-  to{transform:translateX(calc(-50% - 14px))}
-}
-.plot-card-footer{
-  display:flex;align-items:center;
-  justify-content:space-between;
-  margin-top:10px;padding-top:7px;
-  border-top:1px solid #e9f3f9;
-  color:#91adbe;
-  font:700 10px var(--raj);
-  letter-spacing:.05em;
-}
-.plot-card-footer b{
-  display:block;width:18px;height:18px;
-  color:#75b0d2;
-}
+.tag-viewport.scrolling .tag-duplicate{display:inline-block}
+.tag-viewport.scrolling .tag-track{animation:tagFlow var(--tag-duration,14s) linear infinite}
+@keyframes tagFlow{to{transform:translateX(calc(-50% - 14px))}}
+.plot-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:7px;border-top:1px solid #e9f3f9;color:#91adbe;font:700 10px var(--raj);letter-spacing:.05em}
+.plot-card-footer b{display:block;width:18px;height:18px;color:#75b0d2}
 
-/* PLOT DETAIL */
+/* PLOT PAGE */
 
-.plot-hero-cover{
-  width:100%;aspect-ratio:1/1;
-  border:1px solid #fff;border-radius:16px;
-  margin-top:18px;
-  box-shadow:0 12px 30px rgba(58,136,176,.1);
-}
+.plot-hero-cover{width:100%;aspect-ratio:1/1;border:1px solid #fff;border-radius:16px;margin-top:18px;box-shadow:0 12px 30px rgba(58,136,176,.1)}
 .plot-hero-cover .cover-placeholder{font-size:12px}
-.plot-info-panel,.profile-panel{
-  margin-top:17px;
-  border:1px solid #fff;border-radius:15px;
-  background:rgba(255,255,255,.78);
-  padding:17px 16px 20px;
-  box-shadow:0 9px 22px rgba(58,136,176,.075);
-}
-.plot-info-panel h3,.profile-panel h3{
-  margin:0 0 10px;color:#3b90ba;
-  font:700 11px var(--orbit);letter-spacing:.11em;
-}
-.plot-info-panel p,.profile-panel p{
-  margin:0;font:400 13px/2 var(--jp);
-  white-space:pre-line;color:#395e73;
-}
-.plot-tags{
-  margin-top:13px;color:#4a9cc6;
-  font:600 12px/1.8 var(--raj);
-  overflow-wrap:anywhere;
-}
-.inner-section-heading{
-  margin:27px 0 14px;display:flex;
-  justify-content:space-between;
-  align-items:baseline;gap:8px;
-  color:#2f759b;font:700 13px var(--orbit);
-  letter-spacing:.065em;
-}
-.inner-section-heading small{
-  font:700 11px var(--raj);
-  letter-spacing:.06em;color:#85aabb;
-}
+.plot-info-panel,.profile-panel{margin-top:17px;border:1px solid #fff;border-radius:15px;background:rgba(255,255,255,.78);padding:17px 16px 20px;box-shadow:0 9px 22px rgba(58,136,176,.075)}
+.plot-info-panel h3,.profile-panel h3{margin:0 0 10px;color:#3b90ba;font:700 11px var(--orbit);letter-spacing:.11em}
+.plot-info-panel p,.profile-panel p{margin:0;font:400 13px/2 var(--jp);white-space:pre-line;color:#395e73}
+.plot-tags{margin-top:13px;color:#4a9cc6;font:600 12px/1.8 var(--raj);overflow-wrap:anywhere}
+.inner-section-heading{margin:27px 0 14px;display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:#2f759b;font:700 13px var(--orbit);letter-spacing:.065em}
+.inner-section-heading small{font:700 11px var(--raj);letter-spacing:.06em;color:#85aabb}
 .character-cover{aspect-ratio:1/1}
 .character-card-info{padding:11px}
-.character-card-info strong{
-  display:block;font:700 13px/1.5 var(--jp);
-  color:#2b5268;overflow-wrap:anywhere;
-}
-.character-card-info small{
-  display:block;margin-top:4px;
-  color:#8da9b9;font:700 11px var(--raj);
-}
-.character-card-info span{
-  display:inline-flex;align-items:center;
-  gap:4px;margin-top:5px;
-  color:#5fa3c6;font:700 11px var(--raj);
-}
+.character-card-info strong{display:block;font:700 13px/1.5 var(--jp);color:#2b5268;overflow-wrap:anywhere}
+.character-card-info small{display:block;margin-top:4px;color:#8da9b9;font:700 11px var(--raj)}
+.character-card-info span{display:inline-flex;align-items:center;gap:4px;margin-top:5px;color:#5fa3c6;font:700 11px var(--raj)}
 
 /* CHARACTER PROFILE */
 
-.profile-cover{
-  width:100%;aspect-ratio:1/1;
-  margin-top:18px;border:1px solid #fff;
-  border-radius:17px;
-}
+.profile-cover{width:100%;aspect-ratio:1/1;margin-top:18px;border:1px solid #fff;border-radius:17px}
+.profile-cover img{object-fit:cover}
 .profile-panel{margin-top:17px}
-.profile-fields{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:12px;margin:17px 0;
-  padding-top:16px;border-top:1px solid #e0eff7;
-}
+.profile-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:17px 0;padding-top:16px;border-top:1px solid #e0eff7}
 .profile-field{min-width:0}
-.profile-field dt{
-  color:#85a9bd;
-  font:700 11px var(--raj);
-  letter-spacing:.08em;
-}
-.profile-field dd{
-  margin:5px 0 0;
-  font:600 13px/1.65 var(--jp);
-  overflow-wrap:anywhere;color:#315a71;
-}
+.profile-field dt{color:#85a9bd;font:700 11px var(--raj);letter-spacing:.08em}
+.profile-field dd{margin:5px 0 0;font:600 13px/1.65 var(--jp);overflow-wrap:anywhere;color:#315a71}
 
-/* OTHER PAGES */
+/* GENERIC DETAIL */
 
-.detail-paper{
-  position:relative;margin-top:30px;
-  padding:27px 22px 30px;
-  border:1px solid rgba(255,255,255,.95);
-  border-radius:18px;
-  background:rgba(255,255,255,.78);
-  box-shadow:0 17px 36px rgba(60,130,175,.1);
-  overflow:hidden;
-}
-.detail-paper::before{
-  content:"";position:absolute;top:0;
-  left:22px;right:22px;height:3px;
-  background:linear-gradient(
-    90deg,var(--cyan),var(--pink)
-  );
-  border-radius:0 0 6px 6px;
-}
-.detail-paper .wave-logo{
-  margin-bottom:24px;opacity:.83;
-}
-.detail-paper p{
-  margin:0;white-space:pre-line;
-  font:400 13px/2.35 var(--jp);
-  color:#355c71;
-}
-.archive-empty{
-  margin-top:22px;padding:18px 15px;
-  border:1px dashed rgba(95,161,199,.36);
-  border-radius:10px;
-  background:rgba(229,246,255,.55);
-  color:#7b9bab;
-  font:600 12px/1.7 var(--raj);
-  letter-spacing:.09em;
-}
-.detail-bottom{
-  margin-top:22px;display:flex;
-  justify-content:space-between;
-  color:#8aa9bb;
-  font:700 11px var(--raj);
-  letter-spacing:.1em;
-}
+.detail-paper{position:relative;margin-top:30px;padding:27px 22px 30px;border:1px solid rgba(255,255,255,.95);border-radius:18px;background:rgba(255,255,255,.78);box-shadow:0 17px 36px rgba(60,130,175,.1);overflow:hidden}
+.detail-paper::before{content:"";position:absolute;top:0;left:22px;right:22px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--pink));border-radius:0 0 6px 6px}
+.detail-paper .wave-logo{margin-bottom:24px;opacity:.83}
+.detail-paper p{margin:0;white-space:pre-line;font:400 13px/2.35 var(--jp);color:#355c71}
+.archive-empty{margin-top:22px;padding:18px 15px;border:1px dashed rgba(95,161,199,.36);border-radius:10px;background:rgba(229,246,255,.55);color:#7b9bab;font:600 12px/1.7 var(--raj);letter-spacing:.09em}
+.detail-bottom{margin-top:22px;display:flex;justify-content:space-between;color:#8aa9bb;font:700 11px var(--raj);letter-spacing:.1em}
 
-/* ADMIN */
+/* ADMIN / EDITOR */
 
-.admin-link{
-  border:0;background:transparent;
-  color:#83a3b5;font:700 10px var(--raj);
-  letter-spacing:.13em;padding:7px 4px;
-}
-.admin-panel{
-  margin-top:20px;padding:18px 15px 20px;
-  background:rgba(255,255,255,.85);
-  border:1px solid #fff;border-radius:16px;
-  box-shadow:0 10px 25px rgba(56,126,167,.09);
-}
-.admin-panel h3{
-  margin:0 0 14px;color:#2f83ad;
-  font:700 12px var(--orbit);
-  letter-spacing:.08em;
-}
-.admin-note{
-  margin:9px 0 16px;color:#688a9e;
-  font:400 12px/1.95 var(--jp);
-  overflow-wrap:anywhere;
-}
-.admin-field{
-  display:block;margin:15px 0;color:#497d9a;
-  font:700 11px/1.5 var(--raj);
-  letter-spacing:.04em;
-}
-.admin-field input,.admin-field textarea{
-  display:block;margin-top:7px;
-  width:100%;min-width:0;
-  border:1px solid #d1e7f3;
-  border-radius:9px;background:#f8fdff;
-  padding:12px 11px;color:#25495e;
-  font:400 14px/1.7 var(--jp);
-  outline:none;
-  -webkit-appearance:none;appearance:none;
-}
-.admin-field textarea{
-  resize:vertical;min-height:88px;
-}
-.admin-field input:focus,
-.admin-field textarea:focus{
-  border-color:#6db9e0;
-  box-shadow:0 0 0 2px rgba(91,179,225,.14);
-}
-.admin-field input[type=file]{
-  padding:11px;font-size:12px;
-}
-.admin-field input[type=password]{
-  font-family:system-ui,sans-serif;
-  letter-spacing:.08em;
-}
-.admin-actions{
-  display:flex;align-items:center;
-  flex-wrap:wrap;gap:9px;margin-top:17px;
-}
-.admin-btn{
-  border:1px solid #78bddf;
-  background:#5db5e2;border-radius:9px;
-  color:#fff;padding:11px 14px;
-  font:700 12px var(--raj);
-  letter-spacing:.07em;min-height:40px;
-}
-.admin-btn.secondary{
-  background:#fff;color:#4189ac;
-  border-color:#d1e5f1;
-}
-.admin-btn.danger{
-  background:#fff;color:#c46178;
-  border-color:#f1cbda;
-}
-.admin-btn:disabled{
-  opacity:.5;cursor:default;
-}
-.admin-status{
-  margin:13px 0 0;min-height:20px;
-  font:500 12px/1.7 var(--jp);
-  color:#467b9a;white-space:pre-line;
-}
-.admin-list-item{
-  display:flex;align-items:center;gap:11px;
-  margin:10px 0;padding:10px;
-  background:#f2faff;
-  border:1px solid #e4f1f9;
-  border-radius:11px;
-}
-.admin-list-item .admin-thumb{
-  width:55px;aspect-ratio:1;
-  object-fit:cover;border-radius:8px;
-  background:linear-gradient(140deg,#c5eafa,#f3cbe0);
-  flex:none;
-}
-.admin-item-body{
-  flex:1;min-width:0;color:#315e78;
-  font:700 12px/1.6 var(--jp);
-  overflow-wrap:anywhere;
-}
-.admin-item-body small{
-  display:block;color:#85a6bb;
-  font:600 10px var(--raj);
-}
-.admin-item-tools{
-  display:flex;flex-direction:column;gap:5px;flex:none;
-}
-.admin-item-tools button{
-  border:1px solid #cce4f1;
-  border-radius:7px;background:white;
-  color:#4d92b8;padding:6px;
-  font:700 11px var(--raj);
-}
+.admin-link{border:0;background:transparent;color:#83a3b5;font:700 10px var(--raj);letter-spacing:.13em;padding:7px 4px}
+.admin-panel{margin-top:20px;padding:18px 15px 20px;background:rgba(255,255,255,.85);border:1px solid #fff;border-radius:16px;box-shadow:0 10px 25px rgba(56,126,167,.09)}
+.admin-panel h3{margin:0 0 14px;color:#2f83ad;font:700 12px var(--orbit);letter-spacing:.08em}
+.admin-note{margin:9px 0 16px;color:#688a9e;font:400 12px/1.95 var(--jp);overflow-wrap:anywhere}
+.admin-field{display:block;margin:15px 0;color:#497d9a;font:700 11px/1.5 var(--raj);letter-spacing:.04em}
+.admin-field input,.admin-field textarea{display:block;margin-top:7px;width:100%;min-width:0;border:1px solid #d1e7f3;border-radius:9px;background:#f8fdff;padding:12px 11px;color:#25495e;font:400 14px/1.7 var(--jp);outline:none;-webkit-appearance:none;appearance:none}
+.admin-field textarea{resize:vertical;min-height:88px}
+.admin-field input:focus,.admin-field textarea:focus{border-color:#6db9e0;box-shadow:0 0 0 2px rgba(91,179,225,.14)}
+.admin-field input[type=file]{padding:11px;font-size:12px}
+.admin-field input[type=password]{font-family:system-ui,sans-serif;letter-spacing:.08em}
+.admin-actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-top:17px}
+.admin-btn{border:1px solid #78bddf;background:#5db5e2;border-radius:9px;color:#fff;padding:11px 14px;font:700 12px var(--raj);letter-spacing:.07em;min-height:40px}
+.admin-btn.secondary{background:#fff;color:#4189ac;border-color:#d1e5f1}
+.admin-btn.danger{background:#fff;color:#c46178;border-color:#f1cbda}
+.admin-btn:disabled{opacity:.5;cursor:default}
+.admin-status{margin:13px 0 0;min-height:20px;font:500 12px/1.7 var(--jp);color:#467b9a;white-space:pre-line}
+.admin-list-item{display:flex;align-items:center;gap:11px;margin:10px 0;padding:10px;background:#f2faff;border:1px solid #e4f1f9;border-radius:11px}
+.admin-list-item .admin-thumb{width:55px;aspect-ratio:1;object-fit:cover;border-radius:8px;background:linear-gradient(140deg,#c5eafa,#f3cbe0);flex:none}
+.admin-item-body{flex:1;min-width:0;color:#315e78;font:700 12px/1.6 var(--jp);overflow-wrap:anywhere}
+.admin-item-body small{display:block;color:#85a6bb;font:600 10px var(--raj)}
+.admin-item-tools{display:flex;flex-direction:column;gap:5px;flex:none}
+.admin-item-tools button{border:1px solid #cce4f1;border-radius:7px;background:white;color:#4d92b8;padding:6px;font:700 11px var(--raj)}
 .admin-item-tools .danger{color:#c16f85}
-.admin-image-preview{
-  width:100%;aspect-ratio:1/1;
-  object-fit:cover;border-radius:12px;
-  border:1px solid #d9ebf5;
-  background:linear-gradient(
-    145deg,#eaf9ff,#f7e7f4
-  );
+.admin-move-tools{display:flex;flex-direction:column;gap:5px;flex:none}
+.admin-move-tools button{
+  border:1px solid #cce4f1;border-radius:7px;
+  background:#fff;color:#397fa7;
+  min-width:43px;padding:6px 4px;
+  font:700 11px var(--raj);
 }
-.admin-separator{
-  margin:21px 0 15px;border:0;
-  border-top:1px solid #d9eaf5;
-}
+.admin-move-tools button:disabled{opacity:.3;cursor:default}
+.admin-image-preview{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;border:1px solid #d9ebf5;background:linear-gradient(145deg,#eaf9ff,#f7e7f4)}
+.admin-separator{margin:21px 0 15px;border:0;border-top:1px solid #d9eaf5}
 .admin-hidden{display:none!important}
-.admin-count{
-  font:600 11px var(--raj);color:#82a6bc;
-}
+.admin-count{font:600 11px var(--raj);color:#82a6bc}
 
 /* RESPONSIVE */
 
-@media(max-width:365px){
-  .site-brand{gap:5px}
-  .wave-logo.small{width:39px;height:26px}
-  .site-brand strong{font-size:12px}
-  .live-clock{font-size:11px;letter-spacing:0}
-  .update-panel{width:48%;padding:11px}
-  .plot-grid,.character-grid{gap:10px}
-  .plot-card-info{padding:10px 9px}
-}
-@media(max-height:720px){
-  .loading-main{top:31%}
-  .loader{margin-top:48px}
-  .notice-bar{
-    top:calc(62px + var(--safe-top));height:31px;
-  }
-  .update-panel{
-    top:calc(103px + var(--safe-top));
-    height:min(
-      170px,
-      calc(42dvh - 122px - var(--safe-top))
-    );
-  }
-  .home-mascot{
-    top:15%;
-    width:clamp(160px,48vw,242px);
-  }
-  .directory{top:42%;bottom:10%;gap:9px}
-  .entry{padding:11px;border-radius:11px}
-  .entry .wave-logo{width:50px;height:31px}
-  .entry-title small{margin-top:6px}
-  .site-footer{
-    bottom:calc(12px + var(--safe-bottom));
-  }
-}
-@media(max-height:580px){
-  .notice-bar{
-    top:calc(58px + var(--safe-top));height:28px;
-  }
-  .update-panel{
-    top:calc(86px + var(--safe-top));
-    height:min(
-      112px,
-      calc(37dvh - 102px - var(--safe-top))
-    );
-    padding:9px 11px;
-  }
-  .update-item{padding:4px 0}
-  .update-heading{margin-bottom:3px}
-  .home-mascot{width:39vw;top:13%}
-  .directory{top:37%;bottom:9%}
-  .entry-title small{display:none}
-}
-@media(min-width:700px){
-  .site-header,.site-footer,.update-panel,
-  .directory,.inner-scroll{
-    left:12%;right:12%;
-  }
-  .notice-bar{left:0;right:0}
-  .directory{
-    max-width:820px;margin-inline:auto;gap:18px;
-  }
-  .home-mascot{
-    right:16%;width:min(31vw,310px);
-  }
-  .update-panel{
-    width:300px;max-width:300px;
-  }
-  .inner-scroll{
-    max-width:780px;margin-inline:auto;
-  }
-  .plot-grid,.character-grid{gap:20px}
-}
-@media(prefers-reduced-motion:reduce){
-  .ambient,.mascot-float,
-  .notice-track,.tag-track{
-    animation:none!important;
-  }
-  .screen{transition:none}
-}
+@media(max-width:365px){.site-brand{gap:5px}.wave-logo.small{width:39px;height:26px}.site-brand strong{font-size:12px}.live-clock{font-size:11px;letter-spacing:0}.update-panel{width:48%;padding:11px}.plot-grid,.character-grid{gap:10px}.plot-card-info{padding:10px 9px}}
+@media(max-height:720px){.loading-main{top:31%}.loader{margin-top:48px}.notice-bar{top:calc(62px + var(--safe-top));height:31px}.update-panel{top:calc(103px + var(--safe-top));height:min(170px,calc(42dvh - 122px - var(--safe-top)))}.home-mascot{top:15%;width:clamp(160px,48vw,242px)}.directory{top:42%;bottom:10%;gap:9px}.entry{padding:11px;border-radius:11px}.entry .wave-logo{width:50px;height:31px}.entry-title small{margin-top:6px}.site-footer{bottom:calc(12px + var(--safe-bottom))}}
+@media(max-height:580px){.notice-bar{top:calc(58px + var(--safe-top));height:28px}.update-panel{top:calc(86px + var(--safe-top));height:min(112px,calc(37dvh - 102px - var(--safe-top)));padding:9px 11px}.update-item{padding:4px 0}.update-heading{margin-bottom:3px}.home-mascot{width:39vw;top:13%}.directory{top:37%;bottom:9%}.entry-title small{display:none}}
+@media(min-width:700px){.site-header,.site-footer,.update-panel,.directory,.inner-scroll{left:12%;right:12%}.notice-bar{left:0;right:0}.directory{max-width:820px;margin-inline:auto;gap:18px}.home-mascot{right:16%;width:min(31vw,310px)}.update-panel{width:300px;max-width:300px}.inner-scroll{max-width:780px;margin-inline:auto}.plot-grid,.character-grid{gap:20px}}
+@media(prefers-reduced-motion:reduce){.ambient,.mascot-float,.notice-track,.tag-track{animation:none!important}.screen{transition:none}}
 </style>
 </head>
 
@@ -977,30 +243,14 @@ button:focus-visible{
 
 <section class="screen active" id="loading" aria-hidden="false">
   <div class="ambient"></div>
-
-  <button class="skip-intro" id="skipIntro" type="button">SKIP</button>
-
+  <button class="skip-intro" type="button" id="skipIntro">SKIP</button>
   <div class="loading-main">
-    <div class="wave-logo large" aria-hidden="true">
-      <svg class="wave-svg" viewBox="0 0 150 64">
-        <path class="wave-top"></path>
-        <path class="wave-bottom"></path>
-      </svg>
-    </div>
+    <div class="wave-logo large" aria-hidden="true"><svg class="wave-svg" viewBox="0 0 150 64"><path class="wave-top"></path><path class="wave-bottom"></path></svg></div>
     <h1 class="intro-title">NITU</h1>
     <div class="intro-subtitle">PLOT ARCHIVE</div>
-
-    <div class="loader" id="progressTrack" role="progressbar"
-      aria-label="サイトを読み込み中"
-      aria-valuemin="0" aria-valuemax="100"
-      aria-valuenow="0">
-      <div class="loader-track">
-        <div class="loader-fill" id="loaderFill"></div>
-      </div>
-      <div class="loader-info">
-        <span>LOADING</span>
-        <strong id="loaderNumber">0%</strong>
-      </div>
+    <div class="loader" role="progressbar" id="progressTrack" aria-label="サイトを読み込み中" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+      <div class="loader-info"><span>LOADING</span><strong id="loaderNumber">0%</strong></div>
     </div>
   </div>
 </section>
@@ -1011,7 +261,7 @@ button:focus-visible{
   <div class="ambient"></div>
   <header class="site-header">
     <div class="site-brand">
-      <span class="wave-logo small">
+      <span class="wave-logo small" aria-hidden="true">
         <svg class="wave-svg" viewBox="0 0 150 64">
           <path class="wave-top"></path>
           <path class="wave-bottom"></path>
@@ -1019,39 +269,39 @@ button:focus-visible{
       </span>
       <strong>AERIALIS</strong>
     </div>
-    <time class="live-clock">00:00:00</time>
+    <time class="live-clock" aria-label="日本時間">00:00:00</time>
   </header>
 
-  <div class="notice-bar">
-    <div class="notice-window">
+  <div class="notice-bar" aria-label="お知らせ">
+    <div class="notice-window" aria-hidden="true">
       <div class="notice-track" id="noticeTrack"></div>
     </div>
   </div>
 
-  <section class="update-panel">
+  <section class="update-panel" aria-label="更新履歴">
     <div class="update-heading">UPDATE LOG</div>
     <div class="update-list" id="updateList"></div>
   </section>
 
-  <button class="home-mascot" type="button"
-    id="mascotButton" aria-label="キャラクターを跳ねさせる">
+  <button class="home-mascot" type="button" id="mascotButton" aria-label="キャラクターを跳ねさせる">
     <span class="mascot-float">
       <span class="mascot-bounce">
-        <img class="mascot-img"
+        <img
+          class="mascot-img"
           src="./無題299_20261117135551.png"
-          alt="マスコット"
-          draggable="false">
+          alt="ピンクの髪と白い羽のキャラクター"
+          draggable="false"
+        >
       </span>
     </span>
-    <span class="sparkles" id="sparkleField"></span>
+    <span class="sparkles" id="sparkleField" aria-hidden="true"></span>
   </button>
 
-  <nav class="directory">
-
+  <nav class="directory" aria-label="アーカイブのメニュー">
     <button class="entry" type="button" data-page="0">
       <span class="entry-top">
         <span class="entry-index">01 / PLOTS</span>
-        <span class="wave-logo card-size">
+        <span class="wave-logo card-size" aria-hidden="true">
           <svg class="wave-svg" viewBox="0 0 150 64">
             <path class="wave-top"></path>
             <path class="wave-bottom"></path>
@@ -1072,7 +322,7 @@ button:focus-visible{
     <button class="entry" type="button" data-page="1">
       <span class="entry-top">
         <span class="entry-index">02 / NOVELS</span>
-        <span class="wave-logo card-size">
+        <span class="wave-logo card-size" aria-hidden="true">
           <svg class="wave-svg" viewBox="0 0 150 64">
             <path class="wave-top"></path>
             <path class="wave-bottom"></path>
@@ -1093,7 +343,7 @@ button:focus-visible{
     <button class="entry" type="button" data-page="2">
       <span class="entry-top">
         <span class="entry-index">03 / QUESTIONS</span>
-        <span class="wave-logo card-size">
+        <span class="wave-logo card-size" aria-hidden="true">
           <svg class="wave-svg" viewBox="0 0 150 64">
             <path class="wave-top"></path>
             <path class="wave-bottom"></path>
@@ -1114,7 +364,7 @@ button:focus-visible{
     <button class="entry" type="button" data-page="3">
       <span class="entry-top">
         <span class="entry-index">04 / RULES</span>
-        <span class="wave-logo card-size">
+        <span class="wave-logo card-size" aria-hidden="true">
           <svg class="wave-svg" viewBox="0 0 150 64">
             <path class="wave-top"></path>
             <path class="wave-bottom"></path>
@@ -1135,20 +385,18 @@ button:focus-visible{
 
   <footer class="site-footer">
     <span>AN ARCHIVE OF IMAGINATION</span>
-    <button class="admin-link" type="button" id="openAdmin">
-      ADMIN
-    </button>
+    <button class="admin-link" type="button" id="openAdmin">ADMIN</button>
     <span>© 2026</span>
   </footer>
 </section>
 
-<!-- PLOTS -->
+<!-- PLOTS: TWO-COLUMN LIST -->
 
 <section class="screen" id="plots" aria-hidden="true">
   <div class="ambient"></div>
   <header class="site-header">
     <div class="site-brand">
-      <span class="wave-logo small">
+      <span class="wave-logo small" aria-hidden="true">
         <svg class="wave-svg" viewBox="0 0 150 64">
           <path class="wave-top"></path>
           <path class="wave-bottom"></path>
@@ -1158,7 +406,7 @@ button:focus-visible{
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button class="back-button" data-back="home" type="button">
+      <button class="back-button" type="button" data-back="home">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
@@ -1167,21 +415,19 @@ button:focus-visible{
   <main class="inner-scroll" id="plotsScroll">
     <div class="page-kicker">SECTION 01 / ARCHIVE</div>
     <h2 class="page-title">PLOTS</h2>
-    <p class="page-description">
-      物語と世界観のコレクション。
-    </p>
+    <p class="page-description" id="plotTotal">プロット数：2件</p>
     <div class="section-line"></div>
     <div class="plot-grid" id="plotGrid"></div>
   </main>
 </section>
 
-<!-- PLOT VIEW -->
+<!-- PLOT DETAIL -->
 
 <section class="screen" id="plotView" aria-hidden="true">
   <div class="ambient"></div>
   <header class="site-header">
     <div class="site-brand">
-      <span class="wave-logo small">
+      <span class="wave-logo small" aria-hidden="true">
         <svg class="wave-svg" viewBox="0 0 150 64">
           <path class="wave-top"></path>
           <path class="wave-bottom"></path>
@@ -1191,14 +437,14 @@ button:focus-visible{
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button class="back-button" data-back="plots" type="button">
+      <button class="back-button" type="button" data-back="plots">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
   </header>
 
   <main class="inner-scroll" id="plotViewScroll">
-    <div class="page-kicker" id="selectedPlotCode"></div>
+    <div class="page-kicker" id="selectedPlotCode">PLOT / 01</div>
     <h2 class="page-title" id="selectedPlotTitle"></h2>
     <div class="plot-hero-cover" id="selectedPlotCover"></div>
     <article class="plot-info-panel">
@@ -1208,19 +454,19 @@ button:focus-visible{
     </article>
     <div class="inner-section-heading">
       CHARACTERS
-      <small id="characterCount"></small>
+      <small id="characterCount">00 PEOPLE</small>
     </div>
     <div class="character-grid" id="characterGrid"></div>
   </main>
 </section>
 
-<!-- CHARACTER -->
+<!-- CHARACTER DETAIL -->
 
 <section class="screen" id="character" aria-hidden="true">
   <div class="ambient"></div>
   <header class="site-header">
     <div class="site-brand">
-      <span class="wave-logo small">
+      <span class="wave-logo small" aria-hidden="true">
         <svg class="wave-svg" viewBox="0 0 150 64">
           <path class="wave-top"></path>
           <path class="wave-bottom"></path>
@@ -1230,7 +476,7 @@ button:focus-visible{
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button class="back-button" data-back="plotView" type="button">
+      <button class="back-button" type="button" data-back="plotView">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
@@ -1238,7 +484,7 @@ button:focus-visible{
 
   <main class="inner-scroll" id="characterScroll">
     <div class="page-kicker">
-      CHARACTER FILE / <span id="characterNumber"></span>
+      CHARACTER FILE / <span id="characterNumber">01</span>
     </div>
     <h2 class="page-title" id="characterName"></h2>
     <p class="page-description" id="characterSub"></p>
@@ -1253,13 +499,13 @@ button:focus-visible{
   </main>
 </section>
 
-<!-- OTHER THREE PAGES -->
+<!-- OTHER THREE SECTIONS -->
 
 <section class="screen" id="detail" aria-hidden="true">
   <div class="ambient"></div>
   <header class="site-header">
     <div class="site-brand">
-      <span class="wave-logo small">
+      <span class="wave-logo small" aria-hidden="true">
         <svg class="wave-svg" viewBox="0 0 150 64">
           <path class="wave-top"></path>
           <path class="wave-bottom"></path>
@@ -1269,7 +515,7 @@ button:focus-visible{
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button class="back-button" data-back="home" type="button">
+      <button class="back-button" type="button" data-back="home">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
@@ -1279,8 +525,9 @@ button:focus-visible{
     <div class="page-kicker" id="detailKicker"></div>
     <h2 class="page-title" id="detailTitle"></h2>
     <p class="page-description" id="detailSubtitle"></p>
+
     <article class="detail-paper">
-      <div class="wave-logo small">
+      <div class="wave-logo small" aria-hidden="true">
         <svg class="wave-svg" viewBox="0 0 150 64">
           <path class="wave-top"></path>
           <path class="wave-bottom"></path>
@@ -1291,9 +538,10 @@ button:focus-visible{
         NO ENTRIES YET / COMING SOON
       </div>
     </article>
+
     <div class="detail-bottom">
       <span>AERIALIS / PLOT ARCHIVE</span>
-      <span id="detailPageNumber"></span>
+      <span id="detailPageNumber">02 / 04</span>
     </div>
   </main>
 </section>
@@ -1314,7 +562,7 @@ button:focus-visible{
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button class="back-button" id="leaveAdmin" type="button">
+      <button class="back-button" type="button" id="leaveAdmin">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
@@ -1323,25 +571,28 @@ button:focus-visible{
   <main class="inner-scroll" id="adminScroll">
     <div class="page-kicker">OWNER ACCESS / PRIVATE EDITOR</div>
     <h2 class="page-title">ADMIN</h2>
-    <p class="page-description">
-      プロットと登場人物の編集・公開
-    </p>
+    <p class="page-description">プロットと登場人物の編集・公開</p>
 
     <div class="admin-panel" id="adminLoginPanel">
       <h3>MANAGER LOGIN</h3>
       <p class="admin-note">
-        GitHubの管理用アクセストークンで認証します。
-        トークンは公開HTMLに埋め込まず、
-        このページを開いている間だけ保持します。
+        このサイトはGitHub Pagesで公開されています。
+        安全に公開内容を書き換えるため、
+        サイト独自の簡単な暗証番号ではなく、
+        GitHubが発行する管理用アクセストークンで本人確認します。
+        トークンはHTMLに埋め込まず、この画面を開いている間だけ保持します。
       </p>
-
       <label class="admin-field">
-        管理キー
-        <input id="adminToken" type="password"
-          autocomplete="off" autocapitalize="off"
-          spellcheck="false" placeholder="github_pat_...">
+        管理キー（GitHubのfine-grainedトークン）
+        <input
+          id="adminToken"
+          type="password"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="github_pat_..."
+        >
       </label>
-
       <div class="admin-actions">
         <button class="admin-btn" id="adminLoginBtn" type="button">
           認証して編集
@@ -1354,31 +605,51 @@ button:focus-visible{
       <h3>PLOT MANAGER</h3>
       <p class="admin-note">
         追加・編集・削除した内容は下書きです。
-        サイトへ公開すると、ほかの閲覧者にも反映されます。
+        「サイトへ公開」を押すまで他の人には反映されません。
+        画像も公開時にアップロードします。
       </p>
       <div class="admin-actions">
         <button class="admin-btn" id="newPlotBtn" type="button">
           ＋ プロットを追加
         </button>
-        <button class="admin-btn secondary" id="adminLogoutBtn"
-          type="button">ログアウト</button>
+        <button class="admin-btn secondary" id="adminLogoutBtn" type="button">
+          ログアウト
+        </button>
       </div>
 
       <div id="adminPlotList"></div>
+
+      <hr class="admin-separator">
+      <h3>ANNOUNCEMENTS / お知らせ</h3>
+      <p class="admin-note">
+        ホーム上部の白い帯に流れる文章です。
+        1行につき1件。
+        変更後は「サイトへ公開」で反映されます。
+      </p>
+      <label class="admin-field">
+        流すお知らせ
+        <textarea
+          id="adminNotices"
+          rows="5"
+          placeholder="お知らせを1行ずつ入力"
+        ></textarea>
+      </label>
+
       <hr class="admin-separator">
       <div class="admin-actions">
         <button class="admin-btn" id="publishBtn" type="button">
           サイトへ公開
         </button>
-        <button class="admin-btn secondary" id="resetDraftBtn"
-          type="button">下書きを破棄</button>
+        <button class="admin-btn secondary" id="resetDraftBtn" type="button">
+          下書きを破棄
+        </button>
       </div>
       <p class="admin-status" id="publishStatus" role="status"></p>
     </div>
   </main>
 </section>
 
-<!-- EDIT PLOT -->
+<!-- PLOT EDITOR -->
 
 <section class="screen" id="editPlot" aria-hidden="true">
   <div class="ambient"></div>
@@ -1394,7 +665,7 @@ button:focus-visible{
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button class="back-button" data-back="admin" type="button">
+      <button class="back-button" type="button" data-back="admin">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
@@ -1409,19 +680,34 @@ button:focus-visible{
         プロット名
         <input id="epTitle" type="text" placeholder="作品タイトル">
       </label>
+
       <label class="admin-field">
         一覧カード用の短い紹介
-        <textarea id="epIntro" rows="3"></textarea>
+        <textarea
+          id="epIntro"
+          rows="3"
+          placeholder="短い紹介"
+        ></textarea>
       </label>
+
       <label class="admin-field">
         プロット詳細の紹介文
-        <textarea id="epDescription" rows="6"></textarea>
+        <textarea
+          id="epDescription"
+          rows="6"
+          placeholder="世界観やあらすじなど"
+        ></textarea>
       </label>
+
       <label class="admin-field">
         #タグ（1行に1つ）
-        <textarea id="epTags" rows="4"
-          placeholder="#ファンタジー&#10;#世界観"></textarea>
+        <textarea
+          id="epTags"
+          rows="4"
+          placeholder="#ファンタジー&#10;#世界観"
+        ></textarea>
       </label>
+
       <label class="admin-field">
         画像ファイルの既存パス
         <input id="epImage" type="text" placeholder="./plot01.png">
@@ -1431,13 +717,14 @@ button:focus-visible{
         alt="プロット画像のプレビュー">
 
       <label class="admin-field">
-        新しい画像を選択
+        新しい画像を選択（公開時にアップロード）
         <input id="epFile" type="file" accept="image/*">
       </label>
 
       <div class="admin-actions">
-        <button class="admin-btn secondary"
-          id="epClearImage" type="button">画像を外す</button>
+        <button class="admin-btn secondary" id="epClearImage" type="button">
+          画像を外す
+        </button>
       </div>
 
       <hr class="admin-separator">
@@ -1447,14 +734,15 @@ button:focus-visible{
         <button class="admin-btn" id="epNewCharacter" type="button">
           ＋ キャラを追加
         </button>
-        <button class="admin-btn secondary" data-back="admin"
-          type="button">編集一覧へ戻る</button>
+        <button class="admin-btn secondary" type="button" data-back="admin">
+          編集一覧へ戻る
+        </button>
       </div>
     </div>
   </main>
 </section>
 
-<!-- EDIT CHARACTER -->
+<!-- CHARACTER EDITOR -->
 
 <section class="screen" id="editCharacter" aria-hidden="true">
   <div class="ambient"></div>
@@ -1470,7 +758,7 @@ button:focus-visible{
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
-      <button class="back-button" data-back="editPlot" type="button">
+      <button class="back-button" type="button" data-back="editPlot">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
@@ -1479,7 +767,6 @@ button:focus-visible{
   <main class="inner-scroll" id="editCharacterScroll">
     <div class="page-kicker">PRIVATE EDITOR / CHARACTER</div>
     <h2 class="page-title">EDIT CHARACTER</h2>
-
     <div class="admin-panel">
       <label class="admin-field">
         キャラクター名
@@ -1487,15 +774,15 @@ button:focus-visible{
       </label>
       <label class="admin-field">
         役割・肩書き
-        <input id="ecRole" type="text">
+        <input id="ecRole" type="text" placeholder="MAIN CHARACTER">
       </label>
       <label class="admin-field">
         年齢
-        <input id="ecAge" type="text">
+        <input id="ecAge" type="text" placeholder="未設定">
       </label>
       <label class="admin-field">
         誕生日
-        <input id="ecBirthday" type="text">
+        <input id="ecBirthday" type="text" placeholder="未設定">
       </label>
       <label class="admin-field">
         プロフィール
@@ -1514,15 +801,17 @@ button:focus-visible{
         alt="キャラ画像のプレビュー">
 
       <label class="admin-field">
-        新しい画像を選択
+        新しい画像を選択（公開時にアップロード）
         <input id="ecFile" type="file" accept="image/*">
       </label>
 
       <div class="admin-actions">
-        <button class="admin-btn secondary" id="ecClearImage"
-          type="button">画像を外す</button>
-        <button class="admin-btn" data-back="editPlot"
-          type="button">キャラ一覧へ戻る</button>
+        <button class="admin-btn secondary" id="ecClearImage" type="button">
+          画像を外す
+        </button>
+        <button class="admin-btn" type="button" data-back="editPlot">
+          キャラ一覧へ戻る
+        </button>
       </div>
     </div>
   </main>
@@ -1534,13 +823,13 @@ button:focus-visible{
 <script>
 "use strict";
 
-/* MOBILE SETTINGS */
+/* MOBILE */
 
-for(const eventName of [
+for(const name of [
   "gesturestart","gesturechange","gestureend"
 ]){
   document.addEventListener(
-    eventName,e=>e.preventDefault(),{passive:false}
+    name,e=>e.preventDefault(),{passive:false}
   );
 }
 document.addEventListener("touchmove",e=>{
@@ -1550,68 +839,123 @@ document.addEventListener("dblclick",e=>e.preventDefault());
 
 const $=id=>document.getElementById(id);
 const TAU=Math.PI*2;
-const clamp=(value,min,max)=>Math.min(max,Math.max(min,value));
+const clamp=(value,min,max)=>
+  Math.min(max,Math.max(min,value));
 
 /* CLOCK */
 
 const jstClock=new Intl.DateTimeFormat("ja-JP",{
   timeZone:"Asia/Tokyo",
-  hour:"2-digit",minute:"2-digit",second:"2-digit",
+  hour:"2-digit",
+  minute:"2-digit",
+  second:"2-digit",
   hourCycle:"h23"
 });
 function updateClock(){
   const value=jstClock.format(new Date());
-  document.querySelectorAll(".live-clock")
-    .forEach(el=>el.textContent=value);
+  document.querySelectorAll(".live-clock").forEach(el=>{
+    el.textContent=value;
+  });
 }
 updateClock();
 setInterval(updateClock,1000);
 
-/* ANNOUNCEMENTS */
+/* NEWS AND UPDATE HISTORY */
 
-const NOTICES=[
+let NOTICES=[
   "NITUへようこそ。",
   "お知らせやサイトの更新情報はこちらでご案内します。"
 ];
-const UPDATES=[
-  {date:"2026.11.18",text:"お知らせ欄を追加しました。"},
-  {date:"2026.11.18",text:"サイトの表示を調整しました。"}
+
+/* サイト改修時の更新履歴 */
+
+const SITE_UPDATES=[
+  {
+    date:"2026.11.18",
+    text:"プロット数表示・並び替え・お知らせ編集を追加しました。"
+  },
+  {
+    date:"2026.11.18",
+    text:"お知らせ欄を追加しました。"
+  },
+  {
+    date:"2026.11.18",
+    text:"サイトの表示を調整しました。"
+  }
 ];
+
+/* 管理画面で公開した更新履歴 */
+
+let PUBLISHED_UPDATES=[];
+
+function normalizedUpdates(items){
+  return (Array.isArray(items)?items:[])
+    .slice(0,150)
+    .map(item=>({
+      id:item.id?String(item.id):"",
+      date:String(item.date||""),
+      text:String(item.text||"")
+    }))
+    .filter(item=>item.date&&item.text);
+}
+
 function renderAnnouncements(){
+  const text=NOTICES.join("　 /　 ")+
+    (NOTICES.length?"　 /　 ":"");
+
   const track=$("noticeTrack");
   track.replaceChildren();
-  const message=NOTICES.join("　 /　 ")+"　 /　 ";
+
   for(let i=0;i<2;i++){
-    const span=document.createElement("span");
-    span.className="notice-copy";
-    span.textContent=message;
-    track.appendChild(span);
+    const item=document.createElement("span");
+    item.className="notice-copy";
+    item.textContent=text;
+    track.appendChild(item);
   }
 
   const list=$("updateList");
   list.replaceChildren();
-  for(const item of UPDATES){
-    const row=document.createElement("div");
-    row.className="update-item";
-    const time=document.createElement("time");
-    time.className="update-date";
-    time.textContent=item.date;
-    const text=document.createElement("span");
-    text.className="update-text";
-    text.textContent=item.text;
-    row.append(time,text);
-    list.appendChild(row);
+
+  const used=new Set();
+
+  const records=[
+    ...PUBLISHED_UPDATES,
+    ...SITE_UPDATES
+  ].filter(item=>{
+    const key=item.id||item.date+"|"+item.text;
+    if(used.has(key))return false;
+    used.add(key);
+    return true;
+  }).sort((a,b)=>b.date.localeCompare(a.date));
+
+  for(const record of records){
+    const item=document.createElement("div");
+    item.className="update-item";
+
+    const date=document.createElement("time");
+    date.className="update-date";
+    date.textContent=record.date;
+
+    const title=document.createElement("span");
+    title.className="update-text";
+    title.textContent=record.text;
+
+    item.append(date,title);
+    list.appendChild(item);
   }
 }
 renderAnnouncements();
 
-/* SCREENS */
+/* SCREEN MANAGEMENT */
 
 const screens=Object.fromEntries(
-  ["loading","home","plots","plotView",
-   "character","detail","admin","editPlot",
-   "editCharacter"].map(id=>[id,$(id)])
+  [
+    "loading","home","plots","plotView",
+    "character","detail","admin",
+    "editPlot","editCharacter"
+  ].map(id=>[id,$(id)])
 );
+
 let current="loading";
 let transitioning=false;
 
@@ -1623,76 +967,98 @@ function setScreen(name){
     el.inert=!active;
   }
   current=name;
-  if(name==="admin"&&adminSecret)renderAdminList();
-  if(name==="editPlot"&&adminSecret)renderEditCharacters();
+
+  if(name==="editPlot"&&adminSecret){
+    renderEditCharacters();
+  }
+  if(name==="admin"&&adminSecret){
+    renderAdminList();
+  }
 }
 
 function changeScreen(name){
   if(transitioning||current===name)return;
+
   transitioning=true;
+
   const veil=$("softWipe");
   veil.classList.remove("play");
   void veil.offsetWidth;
   veil.classList.add("play");
+
   setTimeout(()=>setScreen(name),330);
   setTimeout(()=>{
     transitioning=false;
     veil.classList.remove("play");
   },815);
 }
+
 document.querySelectorAll("[data-back]").forEach(button=>{
   button.addEventListener("click",()=>{
     changeScreen(button.dataset.back);
   });
 });
+
 document.addEventListener("keydown",e=>{
   if(e.key!=="Escape"||transitioning)return;
   const back={
-    plots:"home",plotView:"plots",
-    character:"plotView",detail:"home",
-    admin:"home",editPlot:"admin",
+    plots:"home",
+    plotView:"plots",
+    character:"plotView",
+    detail:"home",
+    admin:"home",
+    editPlot:"admin",
     editCharacter:"editPlot"
   };
   if(back[current])changeScreen(back[current]);
 });
 
-/* WAVES */
+/* ANIMATED WAVES */
 
 const waveGraphics=[
   ...document.querySelectorAll(".wave-svg")
 ];
+
 function sinePath(baseY,phase){
-  let d="";
+  let result="";
   const points=46;
+
   for(let i=0;i<=points;i++){
     const x=7+i*136/points;
     const y=baseY+
       6.8*Math.sin(i/points*TAU*2.25+phase);
-    d+=(i===0?"M":" L")+
+
+    result+=(i===0?"M":" L")+
       x.toFixed(2)+" "+y.toFixed(2);
   }
-  return d;
+  return result;
 }
+
 let lastWave=0;
-const reducedMotion=matchMedia(
+
+const reducedMotion=window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
+
 function drawWave(time){
   const phase=reducedMotion?0:time*.0022;
   const top=sinePath(18,phase);
   const bottom=sinePath(45,phase+.33);
+
   for(const svg of waveGraphics){
     if(!svg.closest(".active"))continue;
     svg.querySelector(".wave-top").setAttribute("d",top);
     svg.querySelector(".wave-bottom").setAttribute("d",bottom);
   }
 }
+
 function waveLoop(t){
   requestAnimationFrame(waveLoop);
   if(document.hidden||t-lastWave<30)return;
   lastWave=t;
   drawWave(t);
 }
+
 drawWave(0);
 requestAnimationFrame(waveLoop);
 
@@ -1700,6 +1066,8 @@ requestAnimationFrame(waveLoop);
 
 let loadFinished=false;
 let loadStarted=0;
+const loadDuration=4000;
+
 function endLoading(){
   if(loadFinished)return;
   loadFinished=true;
@@ -1708,27 +1076,33 @@ function endLoading(){
   $("progressTrack").setAttribute("aria-valuenow","100");
   changeScreen("home");
 }
+
 function loadFrame(time){
   if(loadFinished)return;
   if(!loadStarted)loadStarted=time;
-  const percent=Math.round(
-    clamp((time-loadStarted)/4000,0,1)*100
+
+  const progress=clamp(
+    (time-loadStarted)/loadDuration,0,1
   );
+  const percent=Math.round(progress*100);
+
   $("loaderFill").style.width=percent+"%";
   $("loaderNumber").textContent=percent+"%";
   $("progressTrack").setAttribute(
     "aria-valuenow",String(percent)
   );
-  if(percent>=100){
+
+  if(progress===1){
     setTimeout(endLoading,240);
   }else{
     requestAnimationFrame(loadFrame);
   }
 }
+
 requestAnimationFrame(loadFrame);
 $("skipIntro").addEventListener("click",endLoading);
 
-/* SAMPLE PLOTS */
+/* PLOT DATA */
 
 let PLOT_DATA=[
   {
@@ -1736,8 +1110,10 @@ let PLOT_DATA=[
     image:"./plot01.png",
     intro:"ここにプロットの簡単な紹介を入力します。世界観や物語の始まりなどを短く紹介できます。",
     tags:[
-      "#ファンタジー","#オリジナル",
-      "#世界観設定","#キャラクター設定資料"
+      "#ファンタジー",
+      "#オリジナル",
+      "#世界観設定",
+      "#キャラクター設定資料"
     ],
     characters:[
       {
@@ -1781,7 +1157,7 @@ let PLOT_DATA=[
 
 /* IMAGES */
 
-function coverElement(cls,path,label){
+function coverElement(cls,imagePath,label){
   const root=document.createElement("div");
   root.className=cls;
 
@@ -1790,7 +1166,7 @@ function coverElement(cls,path,label){
   placeholder.textContent=label;
   root.appendChild(placeholder);
 
-  if(path){
+  if(imagePath){
     const img=document.createElement("img");
     img.alt="";
     img.loading="lazy";
@@ -1798,16 +1174,18 @@ function coverElement(cls,path,label){
     img.addEventListener("error",()=>{
       img.hidden=true;
     },{once:true});
+
     root.appendChild(img);
-    img.src=path;
+    img.src=imagePath;
   }
   return root;
 }
 
-/* TAG ANIMATION */
+/* HASHTAG ANIMATION */
 
 function tagsViewport(tags){
   const text=tags.join("　");
+
   const viewport=document.createElement("div");
   viewport.className="tag-viewport";
   viewport.setAttribute("aria-label",text);
@@ -1826,44 +1204,52 @@ function tagsViewport(tags){
 
   track.append(one,two);
   viewport.appendChild(track);
+
   return viewport;
 }
+
 function refreshTagMarquees(){
-  document.querySelectorAll(".tag-viewport")
-    .forEach(viewport=>{
-      const copy=viewport.querySelector(".tag-copy");
-      if(!copy)return;
-      const overflow=
-        copy.scrollWidth>viewport.clientWidth+2;
-      viewport.classList.toggle(
-        "scrolling",overflow&&!reducedMotion
-      );
-      viewport.style.setProperty(
-        "--tag-duration",
-        Math.max(9,Math.round(copy.scrollWidth/18))+"s"
-      );
-    });
+  document.querySelectorAll(".tag-viewport").forEach(viewport=>{
+    const copy=viewport.querySelector(".tag-copy");
+    const overflow=copy.scrollWidth>viewport.clientWidth+2;
+
+    viewport.classList.toggle(
+      "scrolling",
+      overflow&&!reducedMotion
+    );
+
+    const seconds=Math.max(
+      9,
+      Math.round(copy.scrollWidth/18)
+    );
+    viewport.style.setProperty(
+      "--tag-duration",
+      seconds+"s"
+    );
+  });
 }
 
-/* PLOT GRID */
-
-const arrowSVG=
-  '<svg viewBox="0 0 24 24" aria-hidden="true">'+
-  '<path d="M6 18 18 6 M8 6h10v10"/></svg>';
+/* TWO-COLUMN PLOTS */
 
 function renderPlotGrid(){
   const grid=$("plotGrid");
   grid.replaceChildren();
 
+  $("plotTotal").textContent=
+    `プロット数：${PLOT_DATA.length}件`;
+
   PLOT_DATA.forEach((plot,index)=>{
     const card=document.createElement("button");
-    card.className="plot-card";
     card.type="button";
+    card.className="plot-card";
 
-    card.appendChild(coverElement(
-      "plot-cover",plot.image,
-      "PLOT\n"+String(index+1).padStart(2,"0")
-    ));
+    card.appendChild(
+      coverElement(
+        "plot-cover",
+        plot.image,
+        "PLOT\n"+String(index+1).padStart(2,"0")
+      )
+    );
 
     const info=document.createElement("div");
     info.className="plot-card-info";
@@ -1878,45 +1264,57 @@ function renderPlotGrid(){
 
     const tags=tagsViewport(plot.tags);
 
-    const footer=document.createElement("div");
-    footer.className="plot-card-footer";
-    footer.innerHTML=
+    const foot=document.createElement("div");
+    foot.className="plot-card-footer";
+    foot.innerHTML=
       '<span>VIEW PLOT</span>'+
-      '<b class="vector-arrow">'+arrowSVG+"</b>";
+      '<b class="vector-arrow">'+
+      '<svg viewBox="0 0 24 24" aria-hidden="true">'+
+      '<path d="M6 18 18 6 M8 6h10v10"/>'+
+      '</svg></b>';
 
-    info.append(title,intro,tags,footer);
+    info.append(title,intro,tags,foot);
     card.appendChild(info);
-    card.addEventListener("click",()=>openPlot(index));
+
+    card.addEventListener("click",()=>{
+      openPlot(index);
+    });
+
     grid.appendChild(card);
   });
 }
 
-/* PLOT VIEW */
-
 let selectedPlot=0;
 let selectedCharacter=0;
+
+/* OPEN PLOT */
 
 function openPlot(index){
   if(current!=="plots"||transitioning||!PLOT_DATA[index]){
     return;
   }
+
   selectedPlot=index;
   const plot=PLOT_DATA[index];
 
   $("selectedPlotCode").textContent=
     "PLOT / "+String(index+1).padStart(2,"0");
+
   $("selectedPlotTitle").textContent=plot.title;
   $("selectedPlotIntro").textContent=
     plot.description||plot.intro;
+
   $("selectedPlotTags").textContent=
     plot.tags.join("　");
 
   $("selectedPlotCover").replaceWith(
     coverElement(
-      "plot-hero-cover",plot.image,
+      "plot-hero-cover",
+      plot.image,
       "PLOT / "+String(index+1).padStart(2,"0")
     )
   );
+
   document.querySelector(".plot-hero-cover")
     .id="selectedPlotCover";
 
@@ -1927,14 +1325,15 @@ function openPlot(index){
   const grid=$("characterGrid");
   grid.replaceChildren();
 
-  plot.characters.forEach((c,i)=>{
+  plot.characters.forEach((character,i)=>{
     const button=document.createElement("button");
-    button.className="character-card";
     button.type="button";
+    button.className="character-card";
 
     button.appendChild(
       coverElement(
-        "character-cover",c.image,
+        "character-cover",
+        character.image,
         "CHARACTER\n"+String(i+1).padStart(2,"0")
       )
     );
@@ -1942,20 +1341,27 @@ function openPlot(index){
     const info=document.createElement("div");
     info.className="character-card-info";
 
-    const name=document.createElement("strong");
-    name.textContent=c.name;
+    const title=document.createElement("strong");
+    title.textContent=character.name;
 
     const role=document.createElement("small");
-    role.textContent=c.role||"CHARACTER";
+    role.textContent=character.role||"CHARACTER";
 
-    const link=document.createElement("span");
-    link.innerHTML=
-      'VIEW PROFILE <span class="vector-arrow">'+
-      arrowSVG+"</span>";
+    const arrow=document.createElement("span");
+    arrow.innerHTML=
+      'VIEW PROFILE '+
+      '<span class="vector-arrow">'+
+      '<svg viewBox="0 0 24 24" aria-hidden="true">'+
+      '<path d="M6 18 18 6 M8 6h10v10"/>'+
+      '</svg></span>';
 
-    info.append(name,role,link);
+    info.append(title,role,arrow);
     button.appendChild(info);
-    button.addEventListener("click",()=>openCharacter(i));
+
+    button.addEventListener("click",()=>{
+      openCharacter(i);
+    });
+
     grid.appendChild(button);
   });
 
@@ -1963,62 +1369,82 @@ function openPlot(index){
   changeScreen("plotView");
 }
 
-/* CHARACTER VIEW */
+/* OPEN CHARACTER */
 
 function openCharacter(index){
   if(current!=="plotView"||transitioning)return;
-  const c=PLOT_DATA[selectedPlot]?.characters[index];
-  if(!c)return;
+
+  const character=
+    PLOT_DATA[selectedPlot]?.characters[index];
+
+  if(!character)return;
 
   selectedCharacter=index;
+
   $("characterNumber").textContent=
     String(index+1).padStart(2,"0");
-  $("characterName").textContent=c.name;
+
+  $("characterName").textContent=character.name;
+
   $("characterSub").textContent=
     PLOT_DATA[selectedPlot].title+
-    " / "+(c.role||"CHARACTER");
+    " / "+
+    (character.role||"CHARACTER");
 
   $("characterPortrait").replaceWith(
     coverElement(
-      "profile-cover",c.image,
+      "profile-cover",
+      character.image,
       "CHARACTER / "+String(index+1).padStart(2,"0")
     )
   );
+
   document.querySelector(".profile-cover")
     .id="characterPortrait";
 
   $("characterBio").textContent=
-    c.profile||"詳細は準備中です。";
+    character.profile||"詳細は準備中です。";
+
   $("characterNotes").textContent=
-    c.personality||"詳細は準備中です。";
+    character.personality||"詳細は準備中です。";
 
   const fields=$("characterFields");
   fields.replaceChildren();
 
   for(const [label,value] of [
-    ["AGE",c.age],["BIRTHDAY",c.birthday]
+    ["AGE",character.age],
+    ["BIRTHDAY",character.birthday]
   ]){
     const block=document.createElement("div");
     block.className="profile-field";
+
     const dt=document.createElement("dt");
     dt.textContent=label;
+
     const dd=document.createElement("dd");
     dd.textContent=value||"未設定";
+
     block.append(dt,dd);
     fields.appendChild(block);
   }
+
   $("characterScroll").scrollTop=0;
   changeScreen("character");
 }
+
 renderPlotGrid();
+
 addEventListener(
-  "resize",refreshTagMarquees,{passive:true}
+  "resize",
+  refreshTagMarquees,
+  {passive:true}
 );
+
 if(document.fonts?.ready){
   document.fonts.ready.then(refreshTagMarquees);
 }
 
-/* OTHER PAGES */
+/* OTHER THREE PAGES */
 
 const pages=[
   {
@@ -2043,8 +1469,10 @@ const pages=[
     empty:true
   }
 ];
+
 function openCategory(index){
   if(current!=="home"||transitioning)return;
+
   if(index===0){
     $("plotsScroll").scrollTop=0;
     refreshTagMarquees();
@@ -2052,71 +1480,86 @@ function openCategory(index){
     setTimeout(refreshTagMarquees,450);
     return;
   }
+
   const page=pages[index-1];
   if(!page)return;
+
   $("detailKicker").textContent=page.kicker;
   $("detailTitle").textContent=page.title;
   $("detailSubtitle").textContent=page.subtitle;
   $("detailText").textContent=page.text;
+
   $("detailPageNumber").textContent=
     String(index+1).padStart(2,"0")+" / 04";
+
   $("detailEmpty").hidden=!page.empty;
   $("detailScroll").scrollTop=0;
   changeScreen("detail");
 }
+
 document.querySelectorAll("[data-page]").forEach(button=>{
   button.addEventListener("click",()=>{
     openCategory(Number(button.dataset.page));
   });
 });
 
-/* MASCOT */
+/* MASCOT SPRING ANIMATION */
 
 const mascot=$("mascotButton");
 const sparkleField=$("sparkleField");
 const bounceLayer=mascot.querySelector(".mascot-bounce");
+
 const spring={
   y:0,vy:0,stretch:0,vs:0,
   running:false,last:0
 };
+
 function bounceFrame(now){
   const dt=spring.last
-    ?Math.min((now-spring.last)/16.667,2):1;
+    ?Math.min((now-spring.last)/16.667,2)
+    :1;
+
   spring.last=now;
   spring.vy+=(-.095*spring.y-.18*spring.vy)*dt;
   spring.y+=spring.vy*dt;
-  spring.vs+=(
-    -.18*spring.stretch-.30*spring.vs
-  )*dt;
+  spring.vs+=(-.18*spring.stretch-.30*spring.vs)*dt;
   spring.stretch+=spring.vs*dt;
+
   bounceLayer.style.transform=
     `translate3d(0,${spring.y.toFixed(2)}px,0) `+
     `scale(${(1+spring.stretch).toFixed(4)},`+
     `${(1-spring.stretch*.8).toFixed(4)}) `+
-    `rotate(${clamp(
-      spring.vy*-.27,-3.5,3.5
-    ).toFixed(2)}deg)`;
+    `rotate(${clamp(spring.vy*-.27,-3.5,3.5).toFixed(2)}deg)`;
 
   const energy=
-    Math.abs(spring.y)+Math.abs(spring.vy)*3+
+    Math.abs(spring.y)+
+    Math.abs(spring.vy)*3+
     Math.abs(spring.stretch)*80+
     Math.abs(spring.vs)*80;
+
   if(energy<.08){
     bounceLayer.style.transform="";
-    spring.y=0;spring.vy=0;
-    spring.stretch=0;spring.vs=0;
-    spring.running=false;spring.last=0;
+    spring.y=0;
+    spring.vy=0;
+    spring.stretch=0;
+    spring.vs=0;
+    spring.running=false;
+    spring.last=0;
     return;
   }
+
   requestAnimationFrame(bounceFrame);
 }
+
 function addSparkles(){
   const colors=[
     "#ffffff","#55c2f1","#f993c0","#b4e5ff"
   ];
+
   for(let i=0;i<12;i++){
     const el=document.createElement("span");
     el.className="spark";
+
     const a=i/12*TAU+(Math.random()-.5)*.35;
     const distance=26+Math.random()*47;
     const set=(key,value)=>
@@ -2132,26 +1575,31 @@ function addSparkles(){
     set("--duration",(.55+Math.random()*.32)+"s");
 
     sparkleField.appendChild(el);
-    el.addEventListener(
-      "animationend",()=>el.remove(),{once:true}
-    );
+    el.addEventListener("animationend",()=>{
+      el.remove();
+    },{once:true});
   }
+
   while(sparkleField.children.length>100){
     sparkleField.firstElementChild.remove();
   }
 }
+
 mascot.addEventListener("click",()=>{
   if(current!=="home"||transitioning)return;
+
   spring.vy=clamp(spring.vy-4.1,-12,12);
   spring.stretch=clamp(
     spring.stretch+.055,-.18,.22
   );
   spring.vs+=.018;
+
   if(!spring.running){
     spring.running=true;
     spring.last=0;
     requestAnimationFrame(bounceFrame);
   }
+
   addSparkles();
 });
 
@@ -2163,6 +1611,7 @@ const GITHUB={
   branch:"main",
   file:"plots.json"
 };
+
 const API_ROOT=
   `https://api.github.com/repos/`+
   `${GITHUB.owner}/${GITHUB.repo}`;
@@ -2170,6 +1619,7 @@ const API_ROOT=
 let adminSecret="";
 let adminUser="";
 let draftPlots=[];
+let draftNotices=[];
 let editPlotIndex=-1;
 let editCharacterIndex=-1;
 let editBaselineSHA=null;
@@ -2177,25 +1627,39 @@ let publishing=false;
 
 const pendingImages=new Map();
 const transientURLs=new Set();
-const makeID=()=>crypto.randomUUID
-  ?crypto.randomUUID()
-  :`${Date.now()}_${Math.random().toString(36).slice(2)}`;
+
+const makeID=()=>
+  crypto.randomUUID
+    ?crypto.randomUUID()
+    :`${Date.now()}_${Math.random().toString(36).slice(2)}`;
+
 const deepCopy=value=>
   JSON.parse(JSON.stringify(value));
 
+/* NORMALIZE DATA */
+
 function normalizedPlots(items){
   if(!Array.isArray(items)){
-    throw new Error("プロットデータの形式が正しくありません。");
+    throw new Error(
+      "プロットデータの形式が正しくありません。"
+    );
   }
+
   return items.map(p=>({
     id:String(p.id||makeID()),
     title:String(p.title||"無題"),
     image:String(p.image||""),
     intro:String(p.intro||""),
     description:String(p.description||p.intro||""),
-    tags:Array.isArray(p.tags)?p.tags.map(String):[],
+
+    tags:Array.isArray(p.tags)
+      ?p.tags.map(String)
+      :[],
+
     characters:(
-      Array.isArray(p.characters)?p.characters:[]
+      Array.isArray(p.characters)
+        ?p.characters
+        :[]
     ).map(c=>({
       id:String(c.id||makeID()),
       name:String(c.name||"名前未設定"),
@@ -2209,7 +1673,7 @@ function normalizedPlots(items){
   }));
 }
 
-/* PUBLIC PLOT DATA */
+/* READ PUBLIC PLOTS */
 
 async function loadPublishedPlots(){
   try{
@@ -2217,13 +1681,29 @@ async function loadPublishedPlots(){
       `./${GITHUB.file}?t=${Date.now()}`,
       {cache:"no-store"}
     );
+
     if(!res.ok)return;
+
     const data=await res.json();
+
     PLOT_DATA=normalizedPlots(
-      Array.isArray(data)?data:data.plots
+      Array.isArray(data)
+        ?data
+        :data.plots
     );
+
+    if(!Array.isArray(data)&&Array.isArray(data.notices)){
+      NOTICES=data.notices.map(String);
+    }
+
+    if(!Array.isArray(data)){
+      PUBLISHED_UPDATES=normalizedUpdates(data.updates);
+    }
+
     renderPlotGrid();
+    renderAnnouncements();
     refreshTagMarquees();
+
   }catch(error){
     console.warn(
       "公開プロットを読み込めません:",
@@ -2232,7 +1712,7 @@ async function loadPublishedPlots(){
   }
 }
 
-/* GITHUB REQUESTS */
+/* GITHUB API */
 
 function githubHeaders(){
   return {
@@ -2241,30 +1721,38 @@ function githubHeaders(){
     "X-GitHub-Api-Version":"2022-11-28"
   };
 }
+
 async function githubRequest(url,options={}){
   const response=await fetch(url,{
     ...options,
     headers:{
-      ...githubHeaders(),...(options.headers||{})
+      ...githubHeaders(),
+      ...(options.headers||{})
     },
     cache:"no-store"
   });
+
   if(response.status===404){
     return {notFound:true};
   }
+
   const data=await response.json().catch(()=>({}));
+
   if(!response.ok){
     throw new Error(
       `${response.status}: `+
       `${data.message||"GitHubへの接続に失敗しました"}`
     );
   }
+
   return data;
 }
+
 function fileAPI(path){
   return `${API_ROOT}/contents/`+
     path.split("/").map(encodeURIComponent).join("/");
 }
+
 async function getGitHubFile(path){
   return githubRequest(
     fileAPI(path)+
@@ -2272,18 +1760,21 @@ async function getGitHubFile(path){
   );
 }
 
-/* TEXT ENCODING */
+/* BASE64 */
 
 function base64UTF8(text){
   const bytes=new TextEncoder().encode(text);
   let binary="";
+
   for(let i=0;i<bytes.length;i+=8192){
     binary+=String.fromCharCode(
       ...bytes.subarray(i,i+8192)
     );
   }
+
   return btoa(binary);
 }
+
 function utf8FromBase64(base64){
   const binary=atob(base64.replace(/\s/g,""));
   const bytes=Uint8Array.from(
@@ -2291,21 +1782,32 @@ function utf8FromBase64(base64){
   );
   return new TextDecoder().decode(bytes);
 }
+
 async function githubPut(path,base64,message,sha){
   const body={
-    message,content:base64,
+    message,
+    content:base64,
     branch:GITHUB.branch
   };
+
   if(sha)body.sha=sha;
-  return githubRequest(fileAPI(path),{
-    method:"PUT",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(body)
-  });
+
+  return githubRequest(
+    fileAPI(path),
+    {
+      method:"PUT",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(body)
+    }
+  );
 }
-function adminMessage(id,message){
-  $(id).textContent=message;
+
+function adminMessage(id,text){
+  $(id).textContent=text;
 }
+
 function setAdminView(logged){
   $("adminLoginPanel").classList.toggle(
     "admin-hidden",logged
@@ -2315,7 +1817,7 @@ function setAdminView(logged){
   );
 }
 
-/* ADMIN LIST */
+/* ADMIN PLOT LIST AND ORDER */
 
 function renderAdminList(){
   const list=$("adminPlotList");
@@ -2328,6 +1830,7 @@ function renderAdminList(){
     const img=document.createElement("img");
     img.className="admin-thumb";
     img.alt="";
+
     img.src=pendingImages.has(`plot:${plot.id}`)
       ?URL.createObjectURL(
         pendingImages.get(`plot:${plot.id}`)
@@ -2337,10 +1840,47 @@ function renderAdminList(){
     const body=document.createElement("div");
     body.className="admin-item-body";
     body.textContent=plot.title||"無題";
+
     const count=document.createElement("small");
     count.textContent=
-      `登場人物 ${plot.characters.length}人`;
+      `${i+1} / ${draftPlots.length}　登場人物 ${plot.characters.length}人`;
+
     body.appendChild(count);
+
+    const move=document.createElement("div");
+    move.className="admin-move-tools";
+
+    for(const [label,offset] of [
+      ["上へ",-1],
+      ["下へ",1]
+    ]){
+      const btn=document.createElement("button");
+      btn.type="button";
+      btn.textContent=label;
+
+      btn.disabled=
+        i+offset<0||
+        i+offset>=draftPlots.length;
+
+      btn.setAttribute(
+        "aria-label",
+        `${plot.title}を${label}移動`
+      );
+
+      btn.addEventListener("click",()=>{
+        const [moved]=draftPlots.splice(i,1);
+        draftPlots.splice(i+offset,0,moved);
+
+        renderAdminList();
+
+        adminMessage(
+          "publishStatus",
+          "順番を変更しました。サイトへ公開すると反映されます。"
+        );
+      });
+
+      move.appendChild(btn);
+    }
 
     const tools=document.createElement("div");
     tools.className="admin-item-tools";
@@ -2348,27 +1888,36 @@ function renderAdminList(){
     const edit=document.createElement("button");
     edit.type="button";
     edit.textContent="編集";
-    edit.addEventListener("click",()=>openPlotEditor(i));
+    edit.addEventListener("click",()=>{
+      openPlotEditor(i);
+    });
 
     const del=document.createElement("button");
     del.type="button";
     del.textContent="削除";
     del.className="danger";
+
     del.addEventListener("click",()=>{
       if(!confirm(
         `「${plot.title}」を下書きから削除しますか？`
-      ))return;
+      )){
+        return;
+      }
+
       draftPlots.splice(i,1);
       renderAdminList();
+
       adminMessage(
-        "publishStatus","未公開の変更があります。"
+        "publishStatus",
+        "未公開の変更があります。"
       );
     });
 
     tools.append(edit,del);
-    row.append(img,body,tools);
+    row.append(img,body,move,tools);
     list.appendChild(row);
   });
+
   if(!draftPlots.length){
     const p=document.createElement("p");
     p.className="admin-note";
@@ -2378,10 +1927,11 @@ function renderAdminList(){
   }
 }
 
-/* LOGIN */
+/* ADMIN LOGIN */
 
 async function loginAdmin(){
   const secret=$("adminToken").value.trim();
+
   if(!secret){
     adminMessage(
       "loginStatus",
@@ -2389,29 +1939,39 @@ async function loginAdmin(){
     );
     return;
   }
+
   const btn=$("adminLoginBtn");
   btn.disabled=true;
+
   adminMessage(
-    "loginStatus","GitHubの認証を確認しています…"
+    "loginStatus",
+    "GitHubの認証を確認しています…"
   );
+
   adminSecret=secret;
+
   try{
     const user=await githubRequest(
       "https://api.github.com/user"
     );
+
     if(user.login?.toLowerCase()!==
-       GITHUB.owner.toLowerCase()){
+      GITHUB.owner.toLowerCase()){
       throw new Error(
         "このリポジトリの所有者アカウントではありません。"
       );
     }
+
     const repo=await githubRequest(API_ROOT);
+
     if(repo.permissions?.push===false){
       throw new Error(
         "このアカウントには書き込み権限がありません。"
       );
     }
+
     GITHUB.branch=repo.default_branch||"main";
+
     const file=await getGitHubFile(GITHUB.file);
     editBaselineSHA=file.notFound?null:file.sha;
 
@@ -2419,29 +1979,52 @@ async function loginAdmin(){
       const data=JSON.parse(
         utf8FromBase64(file.content)
       );
+
       PLOT_DATA=normalizedPlots(
-        Array.isArray(data)?data:data.plots
+        Array.isArray(data)
+          ?data
+          :data.plots
       );
+
+      if(!Array.isArray(data)&&Array.isArray(data.notices)){
+        NOTICES=data.notices.map(String);
+      }
+
+      if(!Array.isArray(data)){
+        PUBLISHED_UPDATES=normalizedUpdates(data.updates);
+      }
+
       renderPlotGrid();
+      renderAnnouncements();
     }
 
-    draftPlots=normalizedPlots(deepCopy(PLOT_DATA));
+    draftPlots=normalizedPlots(
+      deepCopy(PLOT_DATA)
+    );
+
+    draftNotices=[...NOTICES];
+    $("adminNotices").value=draftNotices.join("\n");
+
     pendingImages.clear();
     adminUser=user.login;
 
     $("adminToken").value="";
     setAdminView(true);
     renderAdminList();
+
     adminMessage(
       "publishStatus",
-      `@${adminUser} として認証しました。`
+      `@${adminUser} として認証しました。変更を編集できます。`
     );
-  }catch(error){
+
+  }catch(err){
     adminSecret="";
+
     adminMessage(
       "loginStatus",
-      "認証できませんでした："+error.message
+      "認証できませんでした："+err.message
     );
+
   }finally{
     btn.disabled=false;
   }
@@ -2453,19 +2036,25 @@ function logoutAdmin(){
   adminSecret="";
   adminUser="";
   draftPlots=[];
+  draftNotices=[];
   pendingImages.clear();
+
   $("adminToken").value="";
   setAdminView(false);
+
   adminMessage("loginStatus","");
   adminMessage("publishStatus","");
 }
+
 function leaveAdmin(){
   logoutAdmin();
   changeScreen("home");
 }
+
 function getEditedPlot(){
   return draftPlots[editPlotIndex];
 }
+
 function getEditedCharacter(){
   return getEditedPlot()?.characters[
     editCharacterIndex
@@ -2485,57 +2074,72 @@ function setPreview(id,path){
   img.src=path||"";
   if(!path)img.style.opacity=".25";
 }
+
 function displayFile(file,key,previewID){
   if(!file)return;
+
   if(!file.type.startsWith("image/")){
     alert("画像ファイルを選択してください。");
     return;
   }
+
   pendingImages.set(key,file);
+
   const objectURL=URL.createObjectURL(file);
   transientURLs.add(objectURL);
+
   setPreview(previewID,objectURL);
 }
 
-/* PLOT EDITING */
+/* EDIT PLOT */
 
 function openPlotEditor(index){
   if(!adminSecret||!draftPlots[index])return;
+
   editPlotIndex=index;
   const p=getEditedPlot();
 
   $("epTitle").value=p.title;
   $("epIntro").value=p.intro;
-  $("epDescription").value=
-    p.description||p.intro;
+  $("epDescription").value=p.description||p.intro;
   $("epTags").value=p.tags.join("\n");
   $("epImage").value=p.image;
   $("epFile").value="";
 
-  const file=pendingImages.get(`plot:${p.id}`);
+  const imgFile=pendingImages.get(`plot:${p.id}`);
+
   setPreview(
     "epPreview",
-    file?URL.createObjectURL(file):p.image
+    imgFile?URL.createObjectURL(imgFile):p.image
   );
+
   renderEditCharacters();
   $("editPlotScroll").scrollTop=0;
   changeScreen("editPlot");
 }
+
+/* CHARACTER LIST IN PLOT EDITOR */
+
 function renderEditCharacters(){
   const p=getEditedPlot();
   if(!p)return;
+
   $("epCharCount").textContent=
     `(${p.characters.length})`;
+
   const list=$("epCharacterList");
   list.replaceChildren();
 
   p.characters.forEach((c,i)=>{
     const row=document.createElement("div");
     row.className="admin-list-item";
+
     const img=document.createElement("img");
     img.className="admin-thumb";
     img.alt="";
+
     const pending=pendingImages.get(`char:${c.id}`);
+
     img.src=pending
       ?URL.createObjectURL(pending)
       :c.image||"";
@@ -2546,9 +2150,11 @@ function renderEditCharacters(){
 
     const tools=document.createElement("div");
     tools.className="admin-item-tools";
+
     const edit=document.createElement("button");
     edit.type="button";
     edit.textContent="編集";
+
     edit.addEventListener("click",()=>{
       openCharacterEditor(i);
     });
@@ -2557,23 +2163,28 @@ function renderEditCharacters(){
     del.type="button";
     del.className="danger";
     del.textContent="削除";
+
     del.addEventListener("click",()=>{
-      if(confirm(`「${c.name}」を削除しますか？`)){
+      if(confirm(
+        `「${c.name}」を削除しますか？`
+      )){
         p.characters.splice(i,1);
         renderEditCharacters();
       }
     });
+
     tools.append(edit,del);
     row.append(img,body,tools);
     list.appendChild(row);
   });
 }
 
-/* CHARACTER EDITING */
+/* EDIT CHARACTER */
 
 function openCharacterEditor(index){
   const c=getEditedPlot()?.characters[index];
   if(!c||!adminSecret)return;
+
   editCharacterIndex=index;
 
   for(const [id,key] of [
@@ -2589,23 +2200,27 @@ function openCharacterEditor(index){
   }
 
   $("ecFile").value="";
-  const file=pendingImages.get(`char:${c.id}`);
+
+  const pending=pendingImages.get(`char:${c.id}`);
+
   setPreview(
     "ecPreview",
-    file?URL.createObjectURL(file):c.image
+    pending?URL.createObjectURL(pending):c.image
   );
+
   $("editCharacterScroll").scrollTop=0;
   changeScreen("editCharacter");
 }
 
-/* FIELD UPDATES */
+/* FIELD BINDING */
 
 function bindField(id,getTarget,key){
   $(id).addEventListener("input",()=>{
-    const target=getTarget();
-    if(target)target[key]=$(id).value;
+    const t=getTarget();
+    if(t)t[key]=$(id).value;
   });
 }
+
 for(const [id,key] of [
   ["epTitle","title"],
   ["epIntro","intro"],
@@ -2614,13 +2229,17 @@ for(const [id,key] of [
 ]){
   bindField(id,getEditedPlot,key);
 }
+
 $("epTags").addEventListener("input",()=>{
   const p=getEditedPlot();
-  if(!p)return;
-  p.tags=$("epTags").value
-    .split(/[\n,、]+/)
-    .map(t=>t.trim()).filter(Boolean);
+  if(p){
+    p.tags=$("epTags").value
+      .split(/[\n,、]+/)
+      .map(t=>t.trim())
+      .filter(Boolean);
+  }
 });
+
 for(const [id,key] of [
   ["ecName","name"],
   ["ecRole","role"],
@@ -2633,56 +2252,70 @@ for(const [id,key] of [
   bindField(id,getEditedCharacter,key);
 }
 
-/* IMAGE INPUTS */
+/* IMAGE FILE INPUTS */
 
 $("epFile").addEventListener("change",e=>{
   const p=getEditedPlot();
   if(p){
     displayFile(
       e.target.files[0],
-      `plot:${p.id}`,"epPreview"
+      `plot:${p.id}`,
+      "epPreview"
     );
   }
 });
+
 $("ecFile").addEventListener("change",e=>{
   const c=getEditedCharacter();
   if(c){
     displayFile(
       e.target.files[0],
-      `char:${c.id}`,"ecPreview"
+      `char:${c.id}`,
+      "ecPreview"
     );
   }
 });
+
 $("epImage").addEventListener("input",()=>{
   setPreview("epPreview",$("epImage").value);
 });
+
 $("ecImage").addEventListener("input",()=>{
   setPreview("ecPreview",$("ecImage").value);
 });
+
+/* CLEAR IMAGES */
+
 $("epClearImage").addEventListener("click",()=>{
   const p=getEditedPlot();
   if(!p)return;
+
   p.image="";
   pendingImages.delete(`plot:${p.id}`);
+
   $("epImage").value="";
   $("epFile").value="";
   setPreview("epPreview","");
 });
+
 $("ecClearImage").addEventListener("click",()=>{
   const c=getEditedCharacter();
   if(!c)return;
+
   c.image="";
   pendingImages.delete(`char:${c.id}`);
+
   $("ecImage").value="";
   $("ecFile").value="";
   setPreview("ecPreview","");
 });
 
-/* ADD / REMOVE */
+/* ADD CHARACTER */
 
 $("epNewCharacter").addEventListener("click",()=>{
   const p=getEditedPlot();
   if(!p)return;
+
   p.characters.push({
     id:makeID(),
     name:"新しいキャラクター",
@@ -2693,8 +2326,12 @@ $("epNewCharacter").addEventListener("click",()=>{
     profile:"",
     personality:""
   });
+
   openCharacterEditor(p.characters.length-1);
 });
+
+/* ADD PLOT */
+
 $("newPlotBtn").addEventListener("click",()=>{
   draftPlots.push({
     id:makeID(),
@@ -2705,36 +2342,70 @@ $("newPlotBtn").addEventListener("click",()=>{
     tags:[],
     characters:[]
   });
+
   openPlotEditor(draftPlots.length-1);
 });
+
+/* EDIT ANNOUNCEMENTS */
+
+$("adminNotices").addEventListener("input",()=>{
+  draftNotices=$("adminNotices").value
+    .split(/\r?\n/)
+    .map(t=>t.trim())
+    .filter(Boolean);
+
+  adminMessage(
+    "publishStatus",
+    "お知らせに未公開の変更があります。"
+  );
+});
+
+/* DISCARD DRAFT */
+
 $("resetDraftBtn").addEventListener("click",()=>{
   if(!confirm(
     "未公開の編集内容をすべて破棄しますか？"
-  ))return;
+  )){
+    return;
+  }
+
   draftPlots=normalizedPlots(deepCopy(PLOT_DATA));
+  draftNotices=[...NOTICES];
+
+  $("adminNotices").value=draftNotices.join("\n");
+
   pendingImages.clear();
   renderAdminList();
+
   adminMessage(
-    "publishStatus","下書きを破棄しました。"
+    "publishStatus",
+    "下書きを破棄しました。"
   );
 });
 
 /* ADMIN BUTTONS */
 
 $("adminLoginBtn").addEventListener("click",loginAdmin);
+
 $("adminToken").addEventListener("keydown",e=>{
-  if(e.key==="Enter")loginAdmin();
+  if(e.key==="Enter"){
+    loginAdmin();
+  }
 });
+
 $("adminLogoutBtn").addEventListener(
   "click",logoutAdmin
 );
+
 $("leaveAdmin").addEventListener(
   "click",leaveAdmin
 );
+
 $("openAdmin").addEventListener("click",()=>{
   $("adminScroll").scrollTop=0;
   changeScreen("admin");
 });
+
 document.addEventListener("pagehide",()=>{
   adminSecret="";
 });
@@ -2744,17 +2415,22 @@ document.addEventListener("pagehide",()=>{
 async function blobToBase64(blob){
   const dataURL=await new Promise((resolve,reject)=>{
     const reader=new FileReader();
+
     reader.onload=()=>resolve(reader.result);
+
     reader.onerror=()=>reject(
       new Error("画像ファイルを読み込めませんでした。")
     );
+
     reader.readAsDataURL(blob);
   });
+
   return String(dataURL).split(",")[1];
 }
 
 async function prepareImage(file){
   const MiB=1024*1024;
+
   if(file.size>30*MiB){
     throw new Error(
       "30MB以下の画像を選んでください。"
@@ -2769,7 +2445,8 @@ async function prepareImage(file){
     "image/avif":"avif"
   };
 
-  /* 小さい画像は再圧縮せず保存 */
+  /* 8MB以下は再圧縮しない */
+
   if(supported[file.type]&&file.size<=8*MiB){
     return {
       base64:await blobToBase64(file),
@@ -2784,14 +2461,19 @@ async function prepareImage(file){
   }
 
   if(!file.type.startsWith("image/")){
-    throw new Error("画像ファイルを選んでください。");
+    throw new Error(
+      "画像ファイルを選んでください。"
+    );
   }
 
-  /* 大きい画像だけ高画質で変換 */
+  /* 大きい画像は高画質WebPに変換 */
+
   const src=URL.createObjectURL(file);
+
   try{
     const img=new Image();
     img.src=src;
+
     try{
       await img.decode();
     }catch(_){
@@ -2801,8 +2483,10 @@ async function prepareImage(file){
     }
 
     const maxSide=Math.max(
-      img.naturalWidth,img.naturalHeight
+      img.naturalWidth,
+      img.naturalHeight
     );
+
     if(!maxSide){
       throw new Error(
         "画像のサイズを読み取れませんでした。"
@@ -2810,31 +2494,41 @@ async function prepareImage(file){
     }
 
     const scale=Math.min(1,2560/maxSide);
+
     const canvas=document.createElement("canvas");
     canvas.width=Math.max(
-      1,Math.round(img.naturalWidth*scale)
+      1,
+      Math.round(img.naturalWidth*scale)
     );
     canvas.height=Math.max(
-      1,Math.round(img.naturalHeight*scale)
+      1,
+      Math.round(img.naturalHeight*scale)
     );
 
     const ctx=canvas.getContext("2d");
+
     if(!ctx){
-      throw new Error("画像の変換に対応していません。");
+      throw new Error(
+        "画像の変換に対応していません。"
+      );
     }
+
     ctx.imageSmoothingEnabled=true;
     ctx.imageSmoothingQuality="high";
+
     ctx.drawImage(
       img,0,0,canvas.width,canvas.height
     );
 
     let output=null;
+
     for(const quality of [.97,.94,.90]){
       output=await new Promise(resolve=>{
         canvas.toBlob(
           resolve,"image/webp",quality
         );
       });
+
       if(!output)break;
       if(output.size<=8*MiB)break;
     }
@@ -2844,6 +2538,7 @@ async function prepareImage(file){
         "画像を変換できませんでした。PNGかJPEGでお試しください。"
       );
     }
+
     if(output.size>9*MiB){
       throw new Error(
         "画像データが大きすぎます。少し小さい画像を選んでください。"
@@ -2854,15 +2549,17 @@ async function prepareImage(file){
       base64:await blobToBase64(output),
       extension:"webp"
     };
+
   }finally{
     URL.revokeObjectURL(src);
   }
 }
 
-/* PUBLISH */
+/* PUBLISH TO GITHUB */
 
 async function publishPlots(){
   if(!adminSecret||publishing)return;
+
   publishing=true;
   $("publishBtn").disabled=true;
 
@@ -2877,16 +2574,22 @@ async function publishPlots(){
     }
 
     const jobs=[];
+
     for(const p of draftPlots){
       if(pendingImages.has(`plot:${p.id}`)){
         jobs.push({
-          target:p,key:`plot:${p.id}`,prefix:"plot"
+          target:p,
+          key:`plot:${p.id}`,
+          prefix:"plot"
         });
       }
+
       for(const c of p.characters){
         if(pendingImages.has(`char:${c.id}`)){
           jobs.push({
-            target:c,key:`char:${c.id}`,prefix:"char"
+            target:c,
+            key:`char:${c.id}`,
+            prefix:"char"
           });
         }
       }
@@ -2903,6 +2606,7 @@ async function publishPlots(){
       const prepared=await prepareImage(
         pendingImages.get(job.key)
       );
+
       const safeID=job.target.id
         .replace(/[^a-zA-Z0-9_-]/g,"")
         .slice(0,40);
@@ -2922,27 +2626,66 @@ async function publishPlots(){
     }
 
     adminMessage(
-      "publishStatus","プロット情報をGitHubへ保存中…"
+      "publishStatus",
+      "プロット情報をGitHubへ保存中…"
     );
 
     const clean=normalizedPlots(
       deepCopy(draftPlots)
     );
-    const data={version:1,plots:clean};
+
+    const notices=[...draftNotices];
+
+    const today=new Intl.DateTimeFormat("en-CA",{
+      timeZone:"Asia/Tokyo",
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit"
+    }).format(new Date()).replace(/-/g,".");
+
+    const publishedTime=new Intl.DateTimeFormat("ja-JP",{
+      timeZone:"Asia/Tokyo",
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit",
+      hourCycle:"h23"
+    }).format(new Date());
+
+    const nextUpdates=[
+      {
+        id:makeID(),
+        date:today,
+        text:`サイトの公開情報を更新しました（${publishedTime}）。`
+      },
+      ...PUBLISHED_UPDATES
+    ].slice(0,150);
+
+    const data={
+      version:2,
+      plots:clean,
+      notices,
+      updates:nextUpdates
+    };
 
     const result=await githubPut(
       GITHUB.file,
       base64UTF8(JSON.stringify(data,null,2)),
-      "Update NITU plots and characters",
+      "Update NITU plots and announcements",
       sha
     );
 
     editBaselineSHA=result.content?.sha||null;
+
     PLOT_DATA=normalizedPlots(deepCopy(clean));
     draftPlots=normalizedPlots(deepCopy(clean));
+    NOTICES=[...notices];
+    PUBLISHED_UPDATES=nextUpdates;
+    draftNotices=[...notices];
+
     pendingImages.clear();
 
     renderPlotGrid();
+    renderAnnouncements();
     refreshTagMarquees();
     renderAdminList();
 
@@ -2950,22 +2693,26 @@ async function publishPlots(){
       "publishStatus",
       "公開用データをGitHubに保存しました。サイトへの反映まで少し時間がかかる場合があります。"
     );
+
   }catch(error){
     adminMessage(
       "publishStatus",
       "公開できませんでした："+error.message
     );
+
   }finally{
     publishing=false;
     $("publishBtn").disabled=false;
   }
 }
+
 $("publishBtn").addEventListener("click",publishPlots);
 
-/* START */
+/* INITIALIZE */
 
 loadPublishedPlots();
 setScreen("loading");
+
 </script>
 </body>
 </html>
