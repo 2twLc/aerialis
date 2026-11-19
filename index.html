@@ -1271,6 +1271,51 @@ a:focus-visible{
   letter-spacing:.06em;
 }
 
+.character-ruby{
+  margin:4px 0 0;color:#7fa6ba;
+  font:600 clamp(11px,3vw,13px)/1.6 var(--jp);
+  letter-spacing:.35em;
+}
+.character-ruby[hidden]{display:none}
+.settings-button{
+  flex:none;display:grid;place-items:center;
+  width:36px;height:36px;padding:0;
+  border:1px solid rgba(111,180,216,.55);
+  background:rgba(255,255,255,.78);
+  color:#2f83ad;border-radius:50%;
+  box-shadow:0 4px 10px rgba(90,160,200,.18);
+}
+.settings-button svg{
+  width:19px;height:19px;fill:currentColor;
+}
+.settings-button:active{transform:scale(.94)}
+.site-header{align-items:flex-start}
+.site-brand{min-width:0}
+.site-brand strong{
+  overflow:hidden;text-overflow:ellipsis;
+}
+.header-actions{flex:none}
+.live-clock{white-space:nowrap}
+.settings-row{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:10px;
+  width:100%;margin:9px 0;padding:13px 14px;
+  border:1px solid #e4f1f9;border-radius:11px;
+  background:#f2faff;color:#315e78;
+  font:700 13px var(--jp);text-align:left;
+}
+.settings-row small{
+  display:block;margin-top:2px;color:#85a6bb;
+  font:600 10px var(--raj);letter-spacing:.08em;
+}
+.settings-row .vector-arrow{color:#75b0d2}
+.admin-anchor{scroll-margin-top:14px}
+.link-anchor{text-decoration:none}
+.link-anchor small{
+  display:block;color:#85a6bb;
+  font:600 10px var(--raj);overflow-wrap:anywhere;
+}
+
 /* RESPONSIVE */
 @media(max-width:365px){
   .site-brand{gap:5px}
@@ -1413,8 +1458,15 @@ a:focus-visible{
       </span>
       <strong>AERIALIS</strong>
     </div>
-    <time class="live-clock"
-      aria-label="日本時間">00:00:00</time>
+    <div class="header-actions">
+      <time class="live-clock"
+        aria-label="日本時間">00:00:00</time>
+      <button class="settings-button"
+        type="button" id="openSettings"
+        aria-label="詳細設定">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      </button>
+    </div>
   </header>
 
   <div class="notice-bar" aria-label="お知らせ">
@@ -1649,6 +1701,7 @@ a:focus-visible{
     </div>
 
     <h2 class="page-title" id="characterName"></h2>
+    <p class="character-ruby" id="characterRuby"></p>
     <p class="page-description" id="characterSub"></p>
     <div class="profile-cover" id="characterPortrait"></div>
 
@@ -1864,7 +1917,7 @@ a:focus-visible{
     <div class="admin-panel admin-hidden"
       id="adminDashboard">
 
-      <h3>PLOT MANAGER</h3>
+      <h3 class="admin-anchor" id="anchorPlots">PLOT MANAGER</h3>
       <p class="admin-note">
         プロットの追加・編集・削除は下書きです。
         「サイトへ公開」を押すと反映されます。
@@ -1889,7 +1942,7 @@ a:focus-visible{
 
       <hr class="admin-separator">
 
-      <h3>ANNOUNCEMENTS / お知らせ</h3>
+      <h3 class="admin-anchor" id="anchorNotices">ANNOUNCEMENTS / お知らせ</h3>
       <p class="admin-note">
         ホーム上部の白い帯に流れる文章です。
         1行につき1件。「サイトへ公開」で反映されます。
@@ -1920,7 +1973,7 @@ a:focus-visible{
 
       <hr class="admin-separator">
 
-      <h3>WAVEBOX SETTINGS</h3>
+      <h3 class="admin-anchor" id="anchorWavebox">WAVEBOX SETTINGS</h3>
 
       <p class="admin-note">
         質問受付に使用するWaveboxのURLを設定します。
@@ -1959,7 +2012,7 @@ a:focus-visible{
 
       <hr class="admin-separator">
 
-      <h3>Q&amp;A MANAGER</h3>
+      <h3 class="admin-anchor" id="anchorQA">Q&amp;A MANAGER</h3>
 
       <p class="admin-note">
         Waveboxで受け取った質問を手動で登録し、
@@ -2113,7 +2166,7 @@ a:focus-visible{
         alt="プロット画像のプレビュー">
 
       <label class="admin-field">
-        新しい画像を選択（公開時にアップロード）
+        新しい画像を選択（公開・保存時にアップロード）
         <input id="epFile"
           type="file"
           accept="image/png,image/jpeg,image/webp,image/gif,image/avif">
@@ -2147,6 +2200,18 @@ a:focus-visible{
           編集一覧へ戻る
         </button>
       </div>
+
+      <hr class="admin-separator">
+
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="epSavePlot" type="button">
+          このプロットを保存（サイトに反映）
+        </button>
+      </div>
+
+      <p class="admin-status"
+        id="epSaveStatus" role="status"></p>
     </div>
   </main>
 </section>
@@ -2186,6 +2251,12 @@ a:focus-visible{
       <label class="admin-field">
         キャラクター名
         <input id="ecName" type="text">
+      </label>
+
+      <label class="admin-field">
+        フリガナ（詳細で名前の下に小さく表示）
+        <input id="ecRuby" type="text"
+          placeholder="よみがな">
       </label>
 
       <label class="admin-field">
@@ -2229,7 +2300,7 @@ a:focus-visible{
         alt="キャラ画像のプレビュー">
 
       <label class="admin-field">
-        新しい画像を選択（公開時にアップロード）
+        新しい画像を選択（公開・保存時にアップロード）
         <input id="ecFile"
           type="file"
           accept="image/png,image/jpeg,image/webp,image/gif,image/avif">
@@ -2246,6 +2317,130 @@ a:focus-visible{
           data-back="editPlot">
           キャラ一覧へ戻る
         </button>
+      </div>
+    </div>
+  </main>
+</section>
+
+
+<!-- SETTINGS -->
+<section class="screen" id="settings" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>AERIALIS</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button"
+        type="button" data-back="home">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="settingsScroll">
+    <div class="page-kicker">SETTINGS</div>
+    <h2 class="page-title">詳細設定</h2>
+    <p class="page-description">
+      各ページと管理画面への入口です。
+    </p>
+    <div class="section-line"></div>
+
+    <div class="admin-panel">
+      <h3>PAGES / ページを開く</h3>
+
+      <button class="settings-row" type="button" data-goto="plots">
+        <span>PLOTS<small>PLOT COLLECTION</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-goto="novels">
+        <span>NOVELS<small>NOVEL COLLECTION</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-goto="qa">
+        <span>Q&amp;A<small>QUESTIONS &amp; ANSWERS</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-goto="guidelines">
+        <span>GUIDELINES<small>SITE GUIDELINES</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+    </div>
+
+    <div class="admin-panel">
+      <h3>ADMIN / 管理する</h3>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorPlots">
+        <span>プロット管理<small>PLOT MANAGER</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorNotices">
+        <span>お知らせ<small>ANNOUNCEMENTS</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorWavebox">
+        <span>Wavebox設定<small>WAVEBOX SETTINGS</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorQA">
+        <span>Q&amp;A管理<small>Q&amp;A MANAGER</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <p class="admin-note">
+        管理の編集は、ADMINでログインしたあとに使えます。
+      </p>
+    </div>
+
+    <div class="admin-panel">
+      <h3>LINKS / リンク集</h3>
+
+      <div id="linkList"></div>
+
+      <div id="linkEditor" class="admin-hidden">
+        <label class="admin-field">
+          リンク名
+          <input id="linkTitleInput"
+            type="text" placeholder="サイト名など">
+        </label>
+
+        <label class="admin-field">
+          URL
+          <input id="linkUrlInput"
+            type="url" inputmode="url"
+            autocapitalize="off" autocomplete="off"
+            spellcheck="false"
+            placeholder="https://...">
+        </label>
+
+        <div class="admin-actions">
+          <button class="admin-btn secondary"
+            id="linkAddBtn" type="button">
+            ＋ リンクを追加
+          </button>
+
+          <button class="admin-btn"
+            id="linkSaveBtn" type="button">
+            リンク集を保存
+          </button>
+        </div>
+
+        <p class="admin-status"
+          id="linkStatus" role="status"></p>
       </div>
     </div>
   </main>
@@ -2596,7 +2791,8 @@ function normalizedPlots(items){
       age:String(c.age||"未設定"),
       birthday:String(c.birthday||"未設定"),
       profile:String(c.profile||""),
-      personality:String(c.personality||"")
+      personality:String(c.personality||""),
+      ruby:String(c.ruby||"")
     }))
   }));
 }
@@ -2730,7 +2926,8 @@ const screens=Object.fromEntries(
     "detail",
     "admin",
     "editPlot",
-    "editCharacter"
+    "editCharacter",
+    "settings"
   ].map(id=>[id,$(id)])
 );
 
@@ -2799,6 +2996,7 @@ document.addEventListener("keydown",e=>{
     character:"plotView",
     qa:"home",
     detail:"home",
+    settings:"home",
     admin:"home",
     editPlot:"admin",
     editCharacter:"editPlot"
@@ -3221,6 +3419,10 @@ function renderCharacterDetail(index){
 
   $("characterName").textContent=
     character.name;
+
+  const rubyEl=$("characterRuby");
+  rubyEl.textContent=character.ruby||"";
+  rubyEl.hidden=!character.ruby;
 
   $("characterSub").textContent=
     PLOT_DATA[selectedPlot].title+
@@ -3738,6 +3940,7 @@ async function loadPublishedPlots(force=false){
 
   publicLoadPromise=(async()=>{
     const rows=await readRemote();
+    await refreshCharacterRuby();
     const signature=remoteSignature(rows);
 
     latestRemoteRows=rows;
@@ -3793,6 +3996,8 @@ async function loadPublishedPlots(force=false){
         newUpdates=[];
       }
     }
+
+    applyRubyToPlots(newPlots);
 
     const plotSig=JSON.stringify(newPlots);
     const noticeSig=JSON.stringify(newNotices);
@@ -4287,6 +4492,560 @@ $("clearWaveboxBtn").addEventListener(
 
     saveWaveboxSetting("");
   }
+);
+
+
+/* FURIGANA (RUBY) VIA SITE SETTINGS */
+let characterRubyMap={};
+let rubyLoadPromise=null;
+
+async function loadCharacterRuby(){
+  checkDB();
+
+  const {data,error}=await db
+    .from(SETTINGS_TABLE)
+    .select("value")
+    .eq("key","character_ruby")
+    .maybeSingle();
+
+  if(error)throw error;
+
+  let parsed={};
+
+  try{
+    parsed=JSON.parse(data?.value||"{}")||{};
+  }catch(_){
+    parsed={};
+  }
+
+  if(
+    typeof parsed!=="object"||
+    Array.isArray(parsed)
+  ){
+    parsed={};
+  }
+
+  characterRubyMap=parsed;
+  return characterRubyMap;
+}
+
+function refreshCharacterRuby(){
+  if(rubyLoadPromise){
+    return rubyLoadPromise;
+  }
+
+  rubyLoadPromise=loadCharacterRuby()
+    .catch(error=>{
+      console.warn(
+        "フリガナ取得エラー:",
+        error.message
+      );
+    })
+    .finally(()=>{
+      rubyLoadPromise=null;
+    });
+
+  return rubyLoadPromise;
+}
+
+function applyRubyToPlots(plots){
+  for(const p of plots){
+    for(const c of p.characters){
+      c.ruby=
+        characterRubyMap[c.id]||c.ruby||"";
+    }
+  }
+}
+
+async function saveCharacterRuby(plots){
+  const map={};
+
+  for(const p of plots){
+    for(const c of p.characters){
+      const r=String(c.ruby||"").trim();
+
+      if(r)map[c.id]=r;
+    }
+  }
+
+  const result=await db
+    .from(SETTINGS_TABLE)
+    .upsert(
+      {
+        key:"character_ruby",
+        value:JSON.stringify(map)
+      },
+      {onConflict:"key"}
+    );
+
+  if(result.error){
+    throw result.error;
+  }
+
+  characterRubyMap=map;
+}
+
+/* LINK COLLECTION VIA SITE SETTINGS */
+let siteLinks=[];
+let linksLoadPromise=null;
+
+function normalizeSiteLinks(value){
+  let arr;
+
+  try{
+    arr=JSON.parse(value||"[]");
+  }catch(_){
+    return [];
+  }
+
+  if(!Array.isArray(arr))return [];
+
+  return arr
+    .filter(l=>l&&l.title&&l.url)
+    .map(l=>({
+      title:String(l.title),
+      url:String(l.url)
+    }));
+}
+
+async function loadSiteLinks(){
+  checkDB();
+
+  const {data,error}=await db
+    .from(SETTINGS_TABLE)
+    .select("value")
+    .eq("key","links")
+    .maybeSingle();
+
+  if(error)throw error;
+
+  siteLinks=normalizeSiteLinks(data?.value);
+  renderSiteLinks();
+  return siteLinks;
+}
+
+function refreshSiteLinks(){
+  if(linksLoadPromise){
+    return linksLoadPromise;
+  }
+
+  linksLoadPromise=loadSiteLinks()
+    .catch(error=>{
+      console.warn(
+        "リンク集取得エラー:",
+        error.message
+      );
+    })
+    .finally(()=>{
+      linksLoadPromise=null;
+    });
+
+  return linksLoadPromise;
+}
+
+function renderSiteLinks(){
+  const list=$("linkList");
+  if(!list)return;
+
+  list.replaceChildren();
+
+  if(!siteLinks.length){
+    const empty=document.createElement("p");
+    empty.className="admin-note";
+    empty.textContent=
+      "リンクはまだ登録されていません。";
+    list.appendChild(empty);
+  }
+
+  siteLinks.forEach((link,i)=>{
+    const row=document.createElement("div");
+    row.className="admin-list-item";
+
+    const a=document.createElement("a");
+    a.className="admin-item-body link-anchor";
+    a.href=link.url;
+    a.target="_blank";
+    a.rel="noopener noreferrer";
+    a.textContent=link.title;
+
+    const small=document.createElement("small");
+    small.textContent=link.url;
+    a.appendChild(small);
+
+    row.appendChild(a);
+
+    if(adminUser){
+      const tools=document.createElement("div");
+      tools.className="admin-item-tools";
+
+      const del=document.createElement("button");
+      del.type="button";
+      del.className="danger";
+      del.textContent="削除";
+
+      del.addEventListener("click",()=>{
+        siteLinks.splice(i,1);
+        renderSiteLinks();
+
+        adminMessage(
+          "linkStatus",
+          "削除しました。「リンク集を保存」を押すと確定します。"
+        );
+      });
+
+      tools.appendChild(del);
+      row.appendChild(tools);
+    }
+
+    list.appendChild(row);
+  });
+
+  const editor=$("linkEditor");
+
+  if(editor){
+    editor.classList.toggle(
+      "admin-hidden",
+      !adminUser
+    );
+  }
+}
+
+async function saveSiteLinks(){
+  const btn=$("linkSaveBtn");
+  btn.disabled=true;
+
+  adminMessage(
+    "linkStatus",
+    "保存しています…"
+  );
+
+  try{
+    await checkAdminAuth();
+
+    const result=await db
+      .from(SETTINGS_TABLE)
+      .upsert(
+        {
+          key:"links",
+          value:JSON.stringify(siteLinks)
+        },
+        {onConflict:"key"}
+      );
+
+    if(result.error){
+      throw result.error;
+    }
+
+    adminMessage(
+      "linkStatus",
+      "リンク集を保存しました。"
+    );
+
+  }catch(error){
+    adminMessage(
+      "linkStatus",
+      "保存できませんでした："+error.message
+    );
+
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+$("linkAddBtn").addEventListener("click",()=>{
+  const title=$("linkTitleInput").value.trim();
+  const raw=$("linkUrlInput").value.trim();
+
+  if(!title||!raw){
+    adminMessage(
+      "linkStatus",
+      "リンク名とURLを入力してください。"
+    );
+    return;
+  }
+
+  let url;
+
+  try{
+    url=new URL(raw);
+
+    if(!["http:","https:"].includes(url.protocol)){
+      throw new Error("protocol");
+    }
+  }catch(_){
+    adminMessage(
+      "linkStatus",
+      "有効なURL（https://…）を入力してください。"
+    );
+    return;
+  }
+
+  siteLinks.push({
+    title,
+    url:url.toString()
+  });
+
+  $("linkTitleInput").value="";
+  $("linkUrlInput").value="";
+
+  renderSiteLinks();
+
+  adminMessage(
+    "linkStatus",
+    "追加しました。「リンク集を保存」を押すと確定します。"
+  );
+});
+
+$("linkSaveBtn").addEventListener(
+  "click",
+  saveSiteLinks
+);
+
+/* SETTINGS NAVIGATION */
+$("openSettings").addEventListener("click",()=>{
+  $("settingsScroll").scrollTop=0;
+  changeScreen("settings");
+  refreshSiteLinks();
+  renderSiteLinks();
+});
+
+document.querySelectorAll("[data-goto]")
+  .forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const target=btn.dataset.goto;
+
+      if(target==="plots"){
+        $("plotsScroll").scrollTop=0;
+        changeScreen("plots");
+        setTimeout(refreshTagMarquees,300);
+        return;
+      }
+
+      if(target==="qa"){
+        $("qaScroll").scrollTop=0;
+        changeScreen("qa");
+        refreshPublicQA();
+        refreshWaveboxSetting();
+        return;
+      }
+
+      const page=target==="novels"
+        ?pages[0]
+        :target==="guidelines"
+          ?pages[1]
+          :null;
+
+      if(!page)return;
+
+      $("detailKicker").textContent=page.kicker;
+      $("detailTitle").textContent=page.title;
+      $("detailSubtitle").textContent=page.subtitle;
+      $("detailText").textContent=page.text;
+
+      $("detailPageNumber").textContent=
+        target==="novels"?"02 / 04":"04 / 04";
+
+      $("detailEmpty").hidden=!page.empty;
+      $("detailScroll").scrollTop=0;
+
+      changeScreen("detail");
+    });
+  });
+
+document.querySelectorAll("[data-admin-goto]")
+  .forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const anchor=btn.dataset.adminGoto;
+
+      $("adminScroll").scrollTop=0;
+      changeScreen("admin");
+
+      if(adminUser){
+        refreshAdminQA();
+        refreshWaveboxSetting();
+
+        setTimeout(()=>{
+          const el=$(anchor);
+
+          if(el){
+            el.scrollIntoView({block:"start"});
+          }
+        },600);
+      }
+    });
+  });
+
+refreshSiteLinks();
+
+/* SAVE SINGLE PLOT */
+let savingPlot=false;
+
+async function saveCurrentPlot(){
+  if(!adminUser||savingPlot)return;
+
+  const p=getEditedPlot();
+  if(!p)return;
+
+  savingPlot=true;
+  $("epSavePlot").disabled=true;
+
+  try{
+    checkDB();
+
+    adminMessage(
+      "epSaveStatus",
+      "管理者権限を確認しています…"
+    );
+
+    await checkAdminAuth();
+
+    const remote=await readRemote();
+
+    if(
+      contentSignature(remote)!==
+      editBaselineSignature
+    ){
+      throw new Error(
+        "別の場所でデータが更新されています。ページを開き直してから保存してください。"
+      );
+    }
+
+    const jobs=[];
+
+    if(pendingImages.has(`plot:${p.id}`)){
+      jobs.push({
+        target:p,
+        key:`plot:${p.id}`,
+        prefix:"plot"
+      });
+    }
+
+    for(const c of p.characters){
+      if(pendingImages.has(`char:${c.id}`)){
+        jobs.push({
+          target:c,
+          key:`char:${c.id}`,
+          prefix:"character"
+        });
+      }
+    }
+
+    for(let i=0;i<jobs.length;i++){
+      adminMessage(
+        "epSaveStatus",
+        `画像をアップロード中 ${i+1}/${jobs.length}…`
+      );
+
+      jobs[i].target.image=await uploadImage(
+        pendingImages.get(jobs[i].key),
+        jobs[i].prefix,
+        jobs[i].target.id
+      );
+
+      pendingImages.delete(jobs[i].key);
+    }
+
+    const clean=normalizedPlots(
+      deepCopy([p])
+    )[0];
+
+    const plotRow={
+      id:clean.id,
+      sort_order:editPlotIndex,
+      title:clean.title||"無題",
+      intro:clean.intro||"",
+      description:clean.description||"",
+      tags:clean.tags,
+      image_url:clean.image||""
+    };
+
+    const characterRows=clean.characters
+      .map((c,i)=>({
+        id:c.id,
+        plot_id:clean.id,
+        sort_order:i,
+        name:c.name||"名前未設定",
+        role:c.role||"CHARACTER",
+        age:c.age||"",
+        birthday:c.birthday||"",
+        profile:c.profile||"",
+        personality:c.personality||"",
+        image_url:c.image||""
+      }));
+
+    adminMessage(
+      "epSaveStatus",
+      "保存しています…"
+    );
+
+    await writeRows(
+      "plots",[plotRow],"プロットの保存"
+    );
+
+    await writeRows(
+      "characters",
+      characterRows,
+      "キャラクターの保存"
+    );
+
+    const keepIDs=new Set(
+      characterRows.map(r=>r.id)
+    );
+
+    const removedIDs=remote.characters
+      .filter(c=>
+        c.plot_id===clean.id&&
+        !keepIDs.has(c.id)
+      )
+      .map(c=>c.id);
+
+    await deleteRows(
+      "characters",
+      removedIDs,
+      "キャラクターの削除"
+    );
+
+    try{
+      await saveCharacterRuby(draftPlots);
+    }catch(error){
+      console.warn(
+        "フリガナ保存エラー:",
+        error.message
+      );
+    }
+
+    await loadPublishedPlots(true);
+
+    draftPlots=normalizedPlots(
+      deepCopy(PLOT_DATA)
+    );
+
+    editBaselineSignature=
+      contentSignature(latestRemoteRows);
+
+    renderAdminList();
+    openPlotEditor(editPlotIndex);
+
+    adminMessage(
+      "epSaveStatus",
+      "保存しました。サイトに反映されています。"
+    );
+
+  }catch(error){
+    adminMessage(
+      "epSaveStatus",
+      "保存できませんでした："+error.message
+    );
+
+  }finally{
+    savingPlot=false;
+    $("epSavePlot").disabled=false;
+  }
+}
+
+$("epSavePlot").addEventListener(
+  "click",
+  saveCurrentPlot
 );
 
 /* AUTO REFRESH */
@@ -4859,6 +5618,7 @@ function openCharacterEditor(index){
 
   for(const [id,key] of [
     ["ecName","name"],
+    ["ecRuby","ruby"],
     ["ecRole","role"],
     ["ecAge","age"],
     ["ecBirthday","birthday"],
@@ -4914,6 +5674,7 @@ $("epTags").addEventListener("input",()=>{
 
 for(const [id,key] of [
   ["ecName","name"],
+  ["ecRuby","ruby"],
   ["ecRole","role"],
   ["ecAge","age"],
   ["ecBirthday","birthday"],
@@ -5294,7 +6055,10 @@ async function uploadImage(file,prefix,id){
 
   if(result.error){
     throw new Error(
-      "画像アップロード失敗："+result.error.message
+      "画像アップロード失敗："+result.error.message+
+      (/bucket/i.test(result.error.message)
+        ?"\n※SupabaseのStorageに「aerialis-images」という名前のバケット（Public）を作成してください。"
+        :"")
     );
   }
 
@@ -5805,6 +6569,15 @@ async function publishPlots(){
       deletedNoticeIDs,
       "お知らせの削除"
     );
+
+    try{
+      await saveCharacterRuby(clean);
+    }catch(error){
+      console.warn(
+        "フリガナ保存エラー:",
+        error.message
+      );
+    }
 
     adminMessage(
       "publishStatus",
