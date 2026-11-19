@@ -1660,7 +1660,7 @@ a:focus-visible{
 
     <div class="plot-grid" id="plotGrid"></div>
     <div class="character-grid"
-      id="allCharacterGrid" hidden></div>
+      id="allCharacterGrid" style="display:none"></div>
   </main>
 </section>
 
@@ -3355,8 +3355,10 @@ let plotsViewMode="plots";
 function applyPlotsViewMode(){
   const charMode=plotsViewMode==="characters";
 
-  $("plotGrid").hidden=charMode;
-  $("allCharacterGrid").hidden=!charMode;
+  $("plotGrid").style.display=
+    charMode?"none":"";
+  $("allCharacterGrid").style.display=
+    charMode?"":"none";
 
   $("togglePlots").classList.toggle(
     "active",!charMode
