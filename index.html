@@ -1316,6 +1316,23 @@ a:focus-visible{
 .settings-row .vector-arrow{color:#75b0d2}
 .admin-anchor{scroll-margin-top:14px}
 .link-anchor{text-decoration:none}
+.plots-head{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  gap:10px 14px;flex-wrap:wrap;
+}
+.plots-head .page-description{margin:0}
+.plots-tabs{flex:none}
+.plots-tab{
+  margin-left:16px;padding:5px 1px;
+  border:0;border-bottom:2px solid transparent;
+  background:none;color:#9db9cc;
+  font:700 11px var(--raj);letter-spacing:.16em;
+}
+.plots-tab:first-child{margin-left:0}
+.plots-tab.active{
+  color:#315e78;border-bottom-color:#f49ac1;
+}
 .link-anchor small{
   display:block;color:#85a6bb;
   font:600 10px var(--raj);overflow-wrap:anywhere;
@@ -1624,10 +1641,26 @@ a:focus-visible{
   <main class="inner-scroll" id="plotsScroll">
     <div class="page-kicker">SECTION 01 / ARCHIVE</div>
     <h2 class="page-title">PLOTS</h2>
-    <p class="page-description"
-      id="plotTotal">プロット数：2件</p>
+    <div class="plots-head">
+      <p class="page-description"
+        id="plotTotal">プロット数：2件</p>
+
+      <div class="plots-tabs">
+        <button class="plots-tab active"
+          type="button" id="togglePlots">
+          PLOTS
+        </button>
+        <button class="plots-tab"
+          type="button" id="toggleCharacters">
+          CHARACTER
+        </button>
+      </div>
+    </div>
     <div class="section-line"></div>
+
     <div class="plot-grid" id="plotGrid"></div>
+    <div class="character-grid"
+      id="allCharacterGrid" hidden></div>
   </main>
 </section>
 
@@ -2444,9 +2477,6 @@ a:focus-visible{
         <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
       </button>
 
-      <p class="admin-note">
-        管理の編集は、ADMINでログインしたあとに使えます。
-      </p>
     </div>
 
   </main>
@@ -2527,7 +2557,7 @@ const deepCopy=value=>
   JSON.parse(JSON.stringify(value));
 
 const UUID_RE=
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function validID(value){
   return typeof value==="string"&&
@@ -3313,7 +3343,110 @@ function renderPlotGrid(){
     grid.appendChild(card);
   });
 
+  renderAllCharacters();
+  applyPlotsViewMode();
+
   requestAnimationFrame(refreshTagMarquees);
+}
+
+/* PLOTS / CHARACTER VIEW TOGGLE */
+let plotsViewMode="plots";
+
+function applyPlotsViewMode(){
+  const charMode=plotsViewMode==="characters";
+
+  $("plotGrid").hidden=charMode;
+  $("allCharacterGrid").hidden=!charMode;
+
+  $("togglePlots").classList.toggle(
+    "active",!charMode
+  );
+
+  $("toggleCharacters").classList.toggle(
+    "active",charMode
+  );
+
+  if(charMode){
+    const total=PLOT_DATA.reduce(
+      (sum,p)=>sum+p.characters.length,0
+    );
+
+    $("plotTotal").textContent=
+      `キャラクター数：${total}人`;
+  }else{
+    $("plotTotal").textContent=
+      `プロット数：${PLOT_DATA.length}件`;
+  }
+}
+
+function setPlotsViewMode(mode){
+  plotsViewMode=mode;
+  applyPlotsViewMode();
+}
+
+$("togglePlots").addEventListener(
+  "click",
+  ()=>setPlotsViewMode("plots")
+);
+
+$("toggleCharacters").addEventListener(
+  "click",
+  ()=>setPlotsViewMode("characters")
+);
+
+function renderAllCharacters(){
+  const grid=$("allCharacterGrid");
+  if(!grid)return;
+
+  grid.replaceChildren();
+
+  PLOT_DATA.forEach((plot,pi)=>{
+    plot.characters.forEach((character,ci)=>{
+      const button=document.createElement("button");
+      button.type="button";
+      button.className="character-card";
+
+      button.appendChild(
+        coverElement(
+          "character-cover",
+          character.image,
+          "CHARACTER\n"+
+          String(ci+1).padStart(2,"0")
+        )
+      );
+
+      const info=document.createElement("div");
+      info.className="character-card-info";
+
+      const title=document.createElement("strong");
+      title.textContent=character.name;
+
+      const from=document.createElement("small");
+      from.textContent=plot.title;
+
+      info.append(title,from);
+      button.appendChild(info);
+
+      button.addEventListener("click",()=>{
+        selectedPlot=pi;
+        selectedCharacter=ci;
+        renderPlotDetail(pi);
+        renderCharacterDetail(ci);
+        $("characterScroll").scrollTop=0;
+        changeScreen("character");
+      });
+
+      grid.appendChild(button);
+    });
+  });
+
+  if(!grid.children.length){
+    const empty=document.createElement("p");
+    empty.className="admin-note";
+    empty.textContent=
+      "キャラクターはまだ登録されていません。";
+    grid.appendChild(empty);
+  }
 }
 
 /* PLOT DETAILS */
