@@ -1289,7 +1289,12 @@ a:focus-visible{
   width:19px;height:19px;fill:currentColor;
 }
 .settings-button:active{transform:scale(.94)}
-.site-header{align-items:flex-start}
+.header-actions.home-actions{
+  flex-direction:row;
+  align-items:center;
+  gap:9px;
+}
+.site-header{align-items:center}
 .site-brand{min-width:0}
 .site-brand strong{
   overflow:hidden;text-overflow:ellipsis;
@@ -1458,7 +1463,7 @@ a:focus-visible{
       </span>
       <strong>AERIALIS</strong>
     </div>
-    <div class="header-actions">
+    <div class="header-actions home-actions">
       <time class="live-clock"
         aria-label="日本時間">00:00:00</time>
       <button class="settings-button"
@@ -2347,67 +2352,15 @@ a:focus-visible{
   </header>
 
   <main class="inner-scroll" id="settingsScroll">
-    <div class="page-kicker">SETTINGS</div>
-    <h2 class="page-title">詳細設定</h2>
+    <div class="page-kicker">SYSTEM / MENU</div>
+    <h2 class="page-title">SETTINGS</h2>
     <p class="page-description">
       各ページと管理画面への入口です。
     </p>
     <div class="section-line"></div>
 
     <div class="admin-panel">
-      <h3>PAGES / ページを開く</h3>
-
-      <button class="settings-row" type="button" data-goto="plots">
-        <span>PLOTS<small>PLOT COLLECTION</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-
-      <button class="settings-row" type="button" data-goto="novels">
-        <span>NOVELS<small>NOVEL COLLECTION</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-
-      <button class="settings-row" type="button" data-goto="qa">
-        <span>Q&amp;A<small>QUESTIONS &amp; ANSWERS</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-
-      <button class="settings-row" type="button" data-goto="guidelines">
-        <span>GUIDELINES<small>SITE GUIDELINES</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-    </div>
-
-    <div class="admin-panel">
-      <h3>ADMIN / 管理する</h3>
-
-      <button class="settings-row" type="button" data-admin-goto="anchorPlots">
-        <span>プロット管理<small>PLOT MANAGER</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-
-      <button class="settings-row" type="button" data-admin-goto="anchorNotices">
-        <span>お知らせ<small>ANNOUNCEMENTS</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-
-      <button class="settings-row" type="button" data-admin-goto="anchorWavebox">
-        <span>Wavebox設定<small>WAVEBOX SETTINGS</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-
-      <button class="settings-row" type="button" data-admin-goto="anchorQA">
-        <span>Q&amp;A管理<small>Q&amp;A MANAGER</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-
-      <p class="admin-note">
-        管理の編集は、ADMINでログインしたあとに使えます。
-      </p>
-    </div>
-
-    <div class="admin-panel">
-      <h3>LINKS / リンク集</h3>
+      <h3>LINKS</h3>
 
       <div id="linkList"></div>
 
@@ -2443,6 +2396,59 @@ a:focus-visible{
           id="linkStatus" role="status"></p>
       </div>
     </div>
+
+    <div class="admin-panel">
+      <h3>PAGES</h3>
+
+      <button class="settings-row" type="button" data-goto="plots">
+        <span>PLOTS<small>PLOT COLLECTION</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-goto="novels">
+        <span>NOVELS<small>NOVEL COLLECTION</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-goto="qa">
+        <span>Q&amp;A<small>QUESTIONS &amp; ANSWERS</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-goto="guidelines">
+        <span>GUIDELINES<small>SITE GUIDELINES</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+    </div>
+
+    <div class="admin-panel">
+      <h3>ADMIN</h3>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorPlots">
+        <span>プロット管理<small>PLOT MANAGER</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorNotices">
+        <span>お知らせ<small>ANNOUNCEMENTS</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorWavebox">
+        <span>Wavebox設定<small>WAVEBOX SETTINGS</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorQA">
+        <span>Q&amp;A管理<small>Q&amp;A MANAGER</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <p class="admin-note">
+        管理の編集は、ADMINでログインしたあとに使えます。
+      </p>
+    </div>
+
   </main>
 </section>
 
