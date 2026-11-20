@@ -1495,6 +1495,12 @@ img{
   font-weight:700;
   letter-spacing:.02em;
 }
+#character .profile-panel p{
+  font-weight:500;
+}
+#character .profile-field dd{
+  font-weight:700;
+}
 </style>
 </head>
 <body>
@@ -2554,6 +2560,12 @@ img{
       </label>
 
       <label class="admin-field">
+        性別
+        <input id="ecGender"
+          type="text" placeholder="未設定">
+      </label>
+
+      <label class="admin-field">
         プロフィール
         <textarea id="ecProfile" rows="6"></textarea>
       </label>
@@ -2881,6 +2893,30 @@ let NOTICES=[...INITIAL_NOTICES];
 
 const SITE_UPDATES=[
   {
+    date:"2026.11.21",
+    text:"小説の本文表示を、読みやすい明朝体と全面の白い紙面に変更しました。"
+  },
+  {
+    date:"2026.11.21",
+    text:"小説（NOVELS）欄を追加し、小説の保存・閲覧ができるようにしました。"
+  },
+  {
+    date:"2026.11.21",
+    text:"サイト上部のブランド表記を「TIDELINE」に変更しました。"
+  },
+  {
+    date:"2026.11.21",
+    text:"画像を長押し・右クリックで保存できないよう保護を追加しました。"
+  },
+  {
+    date:"2026.11.20",
+    text:"詳細設定（SETTINGS）画面とリンク集を追加しました。"
+  },
+  {
+    date:"2026.11.20",
+    text:"キャラクター詳細で、名前の上にフリガナを表示できるようにしました。"
+  },
+  {
     date:"2026.11.19",
     text:"Q&Aの質問文と回答文の文字の太さを統一しました。"
   },
@@ -3070,7 +3106,8 @@ function normalizedPlots(items){
       birthday:String(c.birthday||"未設定"),
       profile:String(c.profile||""),
       personality:String(c.personality||""),
-      ruby:String(c.ruby||"")
+      ruby:String(c.ruby||""),
+      gender:String(c.gender||"")
     }))
   }));
 }
@@ -3850,7 +3887,8 @@ function renderCharacterDetail(index){
 
   for(const [label,value] of [
     ["AGE",character.age],
-    ["BIRTHDAY",character.birthday]
+    ["BIRTHDAY",character.birthday],
+    ["GENDER",character.gender]
   ]){
     const block=document.createElement("div");
     block.className="profile-field";
@@ -4344,6 +4382,7 @@ async function loadPublishedPlots(force=false){
   publicLoadPromise=(async()=>{
     const rows=await readRemote();
     await refreshCharacterRuby();
+    await refreshCharacterGender();
     const signature=remoteSignature(rows);
 
     latestRemoteRows=rows;
@@ -4401,6 +4440,7 @@ async function loadPublishedPlots(force=false){
     }
 
     applyRubyToPlots(newPlots);
+    applyGenderToPlots(newPlots);
 
     const plotSig=JSON.stringify(newPlots);
     const noticeSig=JSON.stringify(newNotices);
@@ -4960,6 +5000,95 @@ function applyRubyToPlots(plots){
   }
 }
 
+let characterGenderMap={};
+let genderLoadPromise=null;
+
+async function loadCharacterGender(){
+  checkDB();
+
+  const {data,error}=await db
+    .from(SETTINGS_TABLE)
+    .select("value")
+    .eq("key","character_gender")
+    .maybeSingle();
+
+  if(error)throw error;
+
+  let parsed={};
+
+  try{
+    parsed=JSON.parse(data?.value||"{}")||{};
+  }catch(_){
+    parsed={};
+  }
+
+  if(
+    typeof parsed!=="object"||
+    Array.isArray(parsed)
+  ){
+    parsed={};
+  }
+
+  characterGenderMap=parsed;
+  return characterGenderMap;
+}
+
+function refreshCharacterGender(){
+  if(genderLoadPromise){
+    return genderLoadPromise;
+  }
+
+  genderLoadPromise=loadCharacterGender()
+    .catch(error=>{
+      console.warn(
+        "性別取得エラー:",
+        error.message
+      );
+    })
+    .finally(()=>{
+      genderLoadPromise=null;
+    });
+
+  return genderLoadPromise;
+}
+
+function applyGenderToPlots(plots){
+  for(const p of plots){
+    for(const c of p.characters){
+      c.gender=
+        characterGenderMap[c.id]||c.gender||"";
+    }
+  }
+}
+
+async function saveCharacterGender(plots){
+  const map={};
+
+  for(const p of plots){
+    for(const c of p.characters){
+      const g=String(c.gender||"").trim();
+
+      if(g)map[c.id]=g;
+    }
+  }
+
+  const result=await db
+    .from(SETTINGS_TABLE)
+    .upsert(
+      {
+        key:"character_gender",
+        value:JSON.stringify(map)
+      },
+      {onConflict:"key"}
+    );
+
+  if(result.error){
+    throw result.error;
+  }
+
+  characterGenderMap=map;
+}
+
 async function saveCharacterRuby(plots){
   const map={};
 
@@ -5335,6 +5464,12 @@ $("enSaveNovel").addEventListener(
       return;
     }
 
+    const wasNew=
+      !(editNovelIndex>=0&&siteNovels[editNovelIndex]);
+    const oldTitle=wasNew
+      ?""
+      :(siteNovels[editNovelIndex].title||"");
+
     const btn=$("enSaveNovel");
     btn.disabled=true;
 
@@ -5365,6 +5500,25 @@ $("enSaveNovel").addEventListener(
 
       renderNovels();
       renderAdminNovels();
+
+      try{
+        if(wasNew){
+          await addUpdateLog(
+            `新しい小説「${shortName(title||"無題")}」を追加しました。`
+          );
+          await loadPublishedPlots(true);
+        }else if(oldTitle!==title){
+          await addUpdateLog(
+            `小説「${shortName(oldTitle||"無題")}」のタイトルを「${shortName(title||"無題")}」に変更しました。`
+          );
+          await loadPublishedPlots(true);
+        }
+      }catch(logError){
+        console.warn(
+          "小説の更新履歴記録エラー:",
+          logError.message
+        );
+      }
 
       adminMessage(
         "enSaveStatus",
@@ -5400,6 +5554,18 @@ $("enDeleteNovel").addEventListener(
 
       siteNovels.splice(editNovelIndex,1);
       editNovelIndex=-1;
+
+      try{
+        await addUpdateLog(
+          `小説「${shortName(target.title||"無題")}」の掲載を終了しました。`
+        );
+        await loadPublishedPlots(true);
+      }catch(logError){
+        console.warn(
+          "小説削除の更新履歴記録エラー:",
+          logError.message
+        );
+      }
 
       renderNovels();
       renderAdminNovels();
@@ -5807,6 +5973,7 @@ async function saveCurrentPlot(){
 
     try{
       await saveCharacterRuby(draftPlots);
+      await saveCharacterGender(draftPlots);
     }catch(error){
       console.warn(
         "フリガナ保存エラー:",
@@ -6422,6 +6589,7 @@ function openCharacterEditor(index){
     ["ecRole","role"],
     ["ecAge","age"],
     ["ecBirthday","birthday"],
+    ["ecGender","gender"],
     ["ecProfile","profile"],
     ["ecPersonality","personality"],
     ["ecImage","image"]
@@ -6478,6 +6646,7 @@ for(const [id,key] of [
   ["ecRole","role"],
   ["ecAge","age"],
   ["ecBirthday","birthday"],
+  ["ecGender","gender"],
   ["ecProfile","profile"],
   ["ecPersonality","personality"],
   ["ecImage","image"]
@@ -6576,6 +6745,7 @@ $("epNewCharacter").addEventListener(
       role:"CHARACTER",
       age:"未設定",
       birthday:"未設定",
+      gender:"",
       profile:"",
       personality:""
     });
@@ -7372,6 +7542,7 @@ async function publishPlots(){
 
     try{
       await saveCharacterRuby(clean);
+      await saveCharacterGender(clean);
     }catch(error){
       console.warn(
         "フリガナ保存エラー:",
