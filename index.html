@@ -1474,14 +1474,19 @@ img{
   line-break:strict;
 }
 .novel-sheet{
-  width:100vw;
-  margin-left:calc(50% - 50vw);
   background:#fff;
   min-height:calc(100dvh - 230px);
   padding:24px 5vw 70px;
   box-sizing:border-box;
 }
-#novelViewScroll{overflow-x:hidden}
+#novelViewScroll{left:0;right:0}
+#novelView .page-kicker,
+#novelView .section-line{
+  margin-left:7%;margin-right:7%;
+}
+#novelView .page-title{
+  margin-left:7%;margin-right:7%;
+}
 #novelView .page-title{
   font-family:"Noto Serif JP",serif;
   font-weight:700;
