@@ -1439,6 +1439,30 @@ a:focus-visible{
   }
   .screen{transition:none}
 }
+img{
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.novel-row{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:12px;
+  width:100%;margin:9px 0;padding:16px 18px;
+  text-align:left;cursor:pointer;
+  border:1px solid #e4f1f9;border-radius:18px;
+  background:rgba(255,255,255,.85);
+  color:#315e78;font:700 15px var(--jp);
+}
+.novel-row small{
+  display:block;margin-top:5px;
+  color:#85a6bb;font:600 11px var(--jp);
+  letter-spacing:.04em;
+}
+.novel-body{
+  white-space:pre-wrap;line-height:2;
+  font-size:14.5px;color:#3d6076;
+}
 </style>
 </head>
 <body>
@@ -1494,7 +1518,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
     <div class="header-actions home-actions">
       <time class="live-clock"
@@ -1643,7 +1667,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
@@ -1680,6 +1704,77 @@ a:focus-visible{
   </main>
 </section>
 
+<!-- NOVELS -->
+<section class="screen" id="novels" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button"
+        type="button" data-back="home">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="novelsScroll">
+    <div class="page-kicker">SECTION 02 / NOVELS</div>
+    <h2 class="page-title">NOVELS</h2>
+    <p class="page-description"
+      id="novelTotal">小説数：0件</p>
+    <div class="section-line"></div>
+
+    <div id="novelList"></div>
+  </main>
+</section>
+
+<!-- NOVEL DETAIL -->
+<section class="screen" id="novelView" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button"
+        type="button" data-back="novels">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="novelViewScroll">
+    <div class="page-kicker" id="novelViewPlot">
+      NOVEL
+    </div>
+
+    <h2 class="page-title" id="novelViewTitle"></h2>
+    <div class="section-line"></div>
+
+    <article class="plot-info-panel">
+      <p class="novel-body" id="novelViewBody"></p>
+    </article>
+  </main>
+</section>
+
 <!-- PLOT DETAIL -->
 <section class="screen" id="plotView" aria-hidden="true">
   <div class="ambient"></div>
@@ -1692,7 +1787,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
@@ -1738,7 +1833,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
@@ -1781,7 +1876,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
@@ -1804,7 +1899,7 @@ a:focus-visible{
 
     <article class="qa-intro-card">
       <span class="qa-intro-index">
-        AERIALIS / QUESTIONS
+        TIDELINE / QUESTIONS
       </span>
 
       <h3>質問と回答</h3>
@@ -1865,7 +1960,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
@@ -1898,7 +1993,7 @@ a:focus-visible{
     </article>
 
     <div class="detail-bottom">
-      <span>AERIALIS / PLOT ARCHIVE</span>
+      <span>TIDELINE / PLOT ARCHIVE</span>
       <span id="detailPageNumber">02 / 04</span>
     </div>
   </main>
@@ -1916,7 +2011,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
@@ -1993,6 +2088,27 @@ a:focus-visible{
       </div>
 
       <div id="adminPlotList"></div>
+
+      <hr class="admin-separator">
+
+      <h3 class="admin-anchor" id="anchorNovels">NOVEL MANAGER</h3>
+      <p class="admin-note">
+        小説の追加・編集です。
+        保存するとすぐサイトに反映されます。
+      </p>
+
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="newNovelBtn" type="button">
+          ＋ 小説を追加
+        </button>
+      </div>
+
+      <p class="admin-status"
+        id="novelAdminStatus"
+        role="status"></p>
+
+      <div id="adminNovelList"></div>
 
       <hr class="admin-separator">
 
@@ -2164,7 +2280,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
 
     <div class="header-actions">
@@ -2270,6 +2386,79 @@ a:focus-visible{
   </main>
 </section>
 
+<!-- EDIT NOVEL -->
+<section class="screen" id="editNovel" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button"
+        type="button" data-back="admin">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="editNovelScroll">
+    <div class="page-kicker">PRIVATE EDITOR / NOVEL</div>
+    <h2 class="page-title">EDIT NOVEL</h2>
+
+    <div class="admin-panel">
+      <label class="admin-field">
+        題名
+        <input id="enTitle"
+          type="text"
+          placeholder="小説の題名">
+      </label>
+
+      <label class="admin-field">
+        該当プロット
+        <select id="enPlot"></select>
+      </label>
+
+      <label class="admin-field">
+        本文
+        <textarea id="enBody"
+          rows="16"
+          placeholder="小説の本文"></textarea>
+      </label>
+
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="enSaveNovel" type="button">
+          この小説を保存（サイトに反映）
+        </button>
+
+        <button class="admin-btn secondary"
+          type="button"
+          data-back="admin">
+          編集一覧へ戻る
+        </button>
+      </div>
+
+      <div class="admin-actions">
+        <button class="admin-btn secondary"
+          id="enDeleteNovel" type="button">
+          この小説を削除
+        </button>
+      </div>
+
+      <p class="admin-status"
+        id="enSaveStatus" role="status"></p>
+    </div>
+  </main>
+</section>
+
 <!-- EDIT CHARACTER -->
 <section class="screen" id="editCharacter" aria-hidden="true">
   <div class="ambient"></div>
@@ -2282,7 +2471,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
 
     <div class="header-actions">
@@ -2389,7 +2578,7 @@ a:focus-visible{
           <path class="wave-bottom"></path>
         </svg>
       </span>
-      <strong>AERIALIS</strong>
+      <strong>TIDELINE</strong>
     </div>
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
@@ -2475,6 +2664,11 @@ a:focus-visible{
 
       <button class="settings-row" type="button" data-admin-goto="anchorPlots">
         <span>プロット管理<small>PLOT MANAGER</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorNovels">
+        <span>小説管理<small>NOVEL MANAGER</small></span>
         <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
       </button>
 
@@ -2979,6 +3173,9 @@ const screens=Object.fromEntries(
     "admin",
     "editPlot",
     "editCharacter",
+    "novels",
+    "novelView",
+    "editNovel",
     "settings"
   ].map(id=>[id,$(id)])
 );
@@ -3009,6 +3206,7 @@ function setScreen(name){
 
   if(name==="admin"&&adminUser){
     renderAdminList();
+    renderAdminNovels();
   }
 }
 
@@ -3039,6 +3237,14 @@ document.querySelectorAll("[data-back]")
     });
   });
 
+document.addEventListener("contextmenu",e=>{
+  if(e.target.closest("img"))e.preventDefault();
+});
+
+document.addEventListener("dragstart",e=>{
+  if(e.target.closest("img"))e.preventDefault();
+});
+
 document.addEventListener("keydown",e=>{
   if(e.key!=="Escape"||transitioning)return;
 
@@ -3051,7 +3257,10 @@ document.addEventListener("keydown",e=>{
     settings:"home",
     admin:"home",
     editPlot:"admin",
-    editCharacter:"editPlot"
+    editCharacter:"editPlot",
+    novels:"home",
+    novelView:"novels",
+    editNovel:"admin"
   };
 
   if(back[current]){
@@ -3768,11 +3977,16 @@ function openCategory(index){
     return;
   }
 
-  const page=index===1
-    ?pages[0]
-    :index===3
-      ?pages[1]
-      :null;
+  if(index===1){
+    $("novelsScroll").scrollTop=0;
+    renderNovels();
+    changeScreen("novels");
+    return;
+  }
+
+  const page=index===3
+    ?pages[1]
+    :null;
 
   if(!page)return;
 
@@ -4800,6 +5014,368 @@ function refreshSiteLinks(){
   return linksLoadPromise;
 }
 
+/* NOVELS (site_settings key: novels) */
+let siteNovels=[];
+let novelsLoadPromise=null;
+let editNovelIndex=-1;
+
+async function loadSiteNovels(){
+  const {data,error}=await db
+    .from("site_settings")
+    .select("value")
+    .eq("key","novels")
+    .maybeSingle();
+
+  if(error)throw error;
+
+  let parsed=[];
+
+  if(data?.value){
+    try{
+      parsed=JSON.parse(data.value);
+    }catch(_){
+      parsed=[];
+    }
+  }
+
+  if(!Array.isArray(parsed))parsed=[];
+
+  siteNovels=parsed
+    .filter(item=>
+      item&&
+      (String(item.title||"").trim()||
+       String(item.body||"").trim())
+    )
+    .map(item=>({
+      id:String(item.id||"")||makeID(),
+      title:String(item.title||""),
+      plotId:String(item.plotId||""),
+      body:String(item.body||"")
+    }));
+
+  renderNovels();
+  renderAdminNovels();
+  return siteNovels;
+}
+
+function refreshSiteNovels(){
+  if(novelsLoadPromise){
+    return novelsLoadPromise;
+  }
+
+  novelsLoadPromise=loadSiteNovels()
+    .catch(error=>{
+      console.warn(
+        "小説取得エラー:",
+        error.message
+      );
+    })
+    .finally(()=>{
+      novelsLoadPromise=null;
+    });
+
+  return novelsLoadPromise;
+}
+
+function novelPlotTitle(novel){
+  const fromPublic=PLOT_DATA.find(
+    p=>p.id===novel.plotId
+  );
+
+  if(fromPublic)return fromPublic.title;
+
+  const fromDraft=draftPlots.find(
+    p=>p.id===novel.plotId
+  );
+
+  return fromDraft?fromDraft.title:"";
+}
+
+function renderNovels(){
+  const list=$("novelList");
+  if(!list)return;
+
+  $("novelTotal").textContent=
+    `小説数：${siteNovels.length}件`;
+
+  list.replaceChildren();
+
+  if(!siteNovels.length){
+    const empty=document.createElement("p");
+    empty.className="admin-note";
+    empty.textContent=
+      "小説はまだ登録されていません。";
+    list.appendChild(empty);
+    return;
+  }
+
+  siteNovels.forEach((novel,i)=>{
+    const row=document.createElement("button");
+    row.type="button";
+    row.className="novel-row";
+
+    const left=document.createElement("span");
+    left.textContent=novel.title||"（無題）";
+
+    const plotTitle=novelPlotTitle(novel);
+
+    if(plotTitle){
+      const small=document.createElement("small");
+      small.textContent="PLOT："+plotTitle;
+      left.appendChild(small);
+    }
+
+    const arrow=document.createElement("span");
+    arrow.className="vector-arrow";
+    arrow.innerHTML=
+      '<svg viewBox="0 0 24 24" aria-hidden="true">'+
+      '<path d="M6 18 18 6 M8 6h10v10"/>'+
+      '</svg>';
+
+    row.append(left,arrow);
+
+    row.addEventListener("click",()=>{
+      openNovel(i);
+    });
+
+    list.appendChild(row);
+  });
+}
+
+function openNovel(i){
+  const novel=siteNovels[i];
+  if(!novel)return;
+
+  $("novelViewTitle").textContent=
+    novel.title||"（無題）";
+
+  const plotTitle=novelPlotTitle(novel);
+
+  $("novelViewPlot").textContent=
+    plotTitle?("PLOT："+plotTitle):"NOVEL";
+
+  $("novelViewBody").textContent=novel.body||"";
+  $("novelViewScroll").scrollTop=0;
+
+  changeScreen("novelView");
+}
+
+function renderAdminNovels(){
+  const list=$("adminNovelList");
+  if(!list)return;
+
+  list.replaceChildren();
+
+  if(!adminUser)return;
+
+  if(!siteNovels.length){
+    const empty=document.createElement("p");
+    empty.className="admin-note";
+    empty.textContent=
+      "小説はまだ登録されていません。";
+    list.appendChild(empty);
+    return;
+  }
+
+  siteNovels.forEach((novel,i)=>{
+    const row=document.createElement("div");
+    row.className="admin-list-item";
+
+    const body=document.createElement("div");
+    body.className="admin-item-body";
+    body.textContent=novel.title||"無題";
+
+    const small=document.createElement("small");
+    const plotTitle=novelPlotTitle(novel);
+
+    small.textContent=
+      `${i+1} / ${siteNovels.length}`+
+      (plotTitle?`　PLOT：${plotTitle}`:"");
+
+    body.appendChild(small);
+
+    const tools=document.createElement("div");
+    tools.className="admin-item-tools";
+
+    const edit=document.createElement("button");
+    edit.type="button";
+    edit.textContent="編集";
+
+    edit.addEventListener("click",()=>{
+      openEditNovel(i);
+    });
+
+    tools.appendChild(edit);
+    row.append(body,tools);
+    list.appendChild(row);
+  });
+}
+
+function buildNovelPlotOptions(selectedId){
+  const select=$("enPlot");
+  select.replaceChildren();
+
+  const none=document.createElement("option");
+  none.value="";
+  none.textContent="（プロットなし）";
+  select.appendChild(none);
+
+  const seen=new Map();
+
+  PLOT_DATA.forEach(p=>{
+    seen.set(p.id,p.title);
+  });
+
+  draftPlots.forEach(p=>{
+    seen.set(p.id,p.title);
+  });
+
+  seen.forEach((title,id)=>{
+    if(!id)return;
+
+    const opt=document.createElement("option");
+    opt.value=id;
+    opt.textContent=title||"無題";
+    select.appendChild(opt);
+  });
+
+  select.value=selectedId||"";
+}
+
+function openEditNovel(i){
+  editNovelIndex=i;
+
+  const novel=i>=0?siteNovels[i]:null;
+
+  $("enTitle").value=novel?novel.title:"";
+  $("enBody").value=novel?novel.body:"";
+
+  buildNovelPlotOptions(novel?novel.plotId:"");
+
+  $("enDeleteNovel").style.display=
+    novel?"":"none";
+
+  adminMessage("enSaveStatus","");
+
+  $("editNovelScroll").scrollTop=0;
+  changeScreen("editNovel");
+}
+
+async function saveSiteNovels(){
+  await checkAdminAuth();
+
+  const {error}=await db
+    .from("site_settings")
+    .upsert(
+      {
+        key:"novels",
+        value:JSON.stringify(siteNovels)
+      },
+      {onConflict:"key"}
+    );
+
+  if(error)throw error;
+}
+
+$("newNovelBtn").addEventListener("click",()=>{
+  openEditNovel(-1);
+});
+
+$("enSaveNovel").addEventListener(
+  "click",
+  async()=>{
+    const title=$("enTitle").value.trim();
+    const body=$("enBody").value;
+    const plotId=$("enPlot").value;
+
+    if(!title&&!body.trim()){
+      adminMessage(
+        "enSaveStatus",
+        "題名か本文を入力してください。"
+      );
+      return;
+    }
+
+    const btn=$("enSaveNovel");
+    btn.disabled=true;
+
+    adminMessage(
+      "enSaveStatus",
+      "保存しています…"
+    );
+
+    try{
+      if(editNovelIndex>=0&&siteNovels[editNovelIndex]){
+        siteNovels[editNovelIndex]={
+          ...siteNovels[editNovelIndex],
+          title,plotId,body
+        };
+      }else{
+        siteNovels.push({
+          id:makeID(),
+          title,plotId,body
+        });
+
+        editNovelIndex=siteNovels.length-1;
+      }
+
+      await saveSiteNovels();
+
+      renderNovels();
+      renderAdminNovels();
+
+      adminMessage(
+        "enSaveStatus",
+        "保存しました。サイトに反映されています。"
+      );
+    }catch(error){
+      adminMessage(
+        "enSaveStatus",
+        "保存できませんでした："+error.message
+      );
+    }finally{
+      btn.disabled=false;
+    }
+  }
+);
+
+$("enDeleteNovel").addEventListener(
+  "click",
+  async()=>{
+    if(editNovelIndex<0)return;
+
+    if(!confirm("この小説を削除しますか？")){
+      return;
+    }
+
+    const btn=$("enDeleteNovel");
+    btn.disabled=true;
+
+    try{
+      siteNovels.splice(editNovelIndex,1);
+      editNovelIndex=-1;
+
+      await saveSiteNovels();
+
+      renderNovels();
+      renderAdminNovels();
+      changeScreen("admin");
+
+      adminMessage(
+        "novelAdminStatus",
+        "小説を削除しました。"
+      );
+    }catch(error){
+      adminMessage(
+        "enSaveStatus",
+        "削除できませんでした："+error.message
+      );
+    }finally{
+      btn.disabled=false;
+    }
+  }
+);
+
 function renderSiteLinks(){
   const list=$("linkList");
   if(!list)return;
@@ -5003,11 +5579,16 @@ document.querySelectorAll("[data-goto]")
         return;
       }
 
-      const page=target==="novels"
-        ?pages[0]
-        :target==="guidelines"
-          ?pages[1]
-          :null;
+      if(target==="novels"){
+        $("novelsScroll").scrollTop=0;
+        renderNovels();
+        changeScreen("novels");
+        return;
+      }
+
+      const page=target==="guidelines"
+        ?pages[1]
+        :null;
 
       if(!page)return;
 
@@ -5017,7 +5598,7 @@ document.querySelectorAll("[data-goto]")
       $("detailText").textContent=page.text;
 
       $("detailPageNumber").textContent=
-        target==="novels"?"02 / 04":"04 / 04";
+        "04 / 04";
 
       $("detailEmpty").hidden=!page.empty;
       $("detailScroll").scrollTop=0;
@@ -5050,6 +5631,7 @@ document.querySelectorAll("[data-admin-goto]")
   });
 
 refreshSiteLinks();
+refreshSiteNovels();
 
 /* SAVE SINGLE PLOT */
 let savingPlot=false;
