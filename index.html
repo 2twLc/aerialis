@@ -1467,11 +1467,21 @@ img{
 #novelViewBody{
   font-family:"Noto Serif JP",serif;
   font-weight:600;
-  font-size:16px;
+  font-size:17px;
   line-height:2.15;
   letter-spacing:.03em;
   color:#2e4d5f;
+  line-break:strict;
 }
+.novel-sheet{
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  background:#fff;
+  min-height:calc(100dvh - 230px);
+  padding:24px 5vw 70px;
+  box-sizing:border-box;
+}
+#novelViewScroll{overflow-x:hidden}
 #novelView .page-title{
   font-family:"Noto Serif JP",serif;
   font-weight:700;
@@ -1783,9 +1793,9 @@ img{
     <h2 class="page-title" id="novelViewTitle"></h2>
     <div class="section-line"></div>
 
-    <article class="plot-info-panel">
+    <div class="novel-sheet">
       <p class="novel-body" id="novelViewBody"></p>
-    </article>
+    </div>
   </main>
 </section>
 
@@ -5140,6 +5150,14 @@ function renderNovels(){
   });
 }
 
+function formatNovelBody(body){
+  return String(body||"")
+    .replace(/\r\n?/g,"\n")
+    .split(/\n{2,}/)
+    .map(p=>p.replace(/\n/g,""))
+    .join("\n\n");
+}
+
 function openNovel(i){
   const novel=siteNovels[i];
   if(!novel)return;
@@ -5152,7 +5170,8 @@ function openNovel(i){
   $("novelViewPlot").textContent=
     plotTitle?("PLOT："+plotTitle):"NOVEL";
 
-  $("novelViewBody").textContent=novel.body||"";
+  $("novelViewBody").textContent=
+    formatNovelBody(novel.body);
   $("novelViewScroll").scrollTop=0;
 
   changeScreen("novelView");
