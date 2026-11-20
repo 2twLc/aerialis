@@ -8,7 +8,7 @@
 <title>NITU | Plot Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700&family=Michroma&family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700&family=Michroma&family=Noto+Serif+JP:wght@500;600;700&family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root{
@@ -1272,10 +1272,11 @@ a:focus-visible{
 }
 
 .character-ruby{
-  margin:4px 0 0;color:#7fa6ba;
-  font:600 clamp(11px,3vw,13px)/1.6 var(--jp);
-  letter-spacing:.35em;
+  margin:14px 0 0;color:#7fa6ba;
+  font:600 12px/1.5 var(--jp);
+  letter-spacing:.22em;
 }
+#character .page-title{margin-top:3px}
 .character-ruby[hidden]{display:none}
 .settings-button{
   flex:none;display:grid;place-items:center;
@@ -1462,6 +1463,19 @@ img{
 .novel-body{
   white-space:pre-wrap;line-height:2;
   font-size:14.5px;color:#3d6076;
+}
+#novelViewBody{
+  font-family:"Noto Serif JP",serif;
+  font-weight:600;
+  font-size:16px;
+  line-height:2.15;
+  letter-spacing:.03em;
+  color:#2e4d5f;
+}
+#novelView .page-title{
+  font-family:"Noto Serif JP",serif;
+  font-weight:700;
+  letter-spacing:.02em;
 }
 </style>
 </head>
@@ -1849,8 +1863,8 @@ img{
       CHARACTER FILE / <span id="characterNumber">01</span>
     </div>
 
-    <h2 class="page-title" id="characterName"></h2>
     <p class="character-ruby" id="characterRuby"></p>
+    <h2 class="page-title" id="characterName"></h2>
     <p class="page-description" id="characterSub"></p>
     <div class="profile-cover" id="characterPortrait"></div>
 
