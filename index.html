@@ -5020,38 +5020,22 @@ let novelsLoadPromise=null;
 let editNovelIndex=-1;
 
 async function loadSiteNovels(){
+  checkDB();
+
   const {data,error}=await db
-    .from("site_settings")
-    .select("value")
-    .eq("key","novels")
-    .maybeSingle();
+    .from("novels")
+    .select("id,title,plot_id,body,sort_order")
+    .order("sort_order",{ascending:true})
+    .order("created_at",{ascending:true});
 
   if(error)throw error;
 
-  let parsed=[];
-
-  if(data?.value){
-    try{
-      parsed=JSON.parse(data.value);
-    }catch(_){
-      parsed=[];
-    }
-  }
-
-  if(!Array.isArray(parsed))parsed=[];
-
-  siteNovels=parsed
-    .filter(item=>
-      item&&
-      (String(item.title||"").trim()||
-       String(item.body||"").trim())
-    )
-    .map(item=>({
-      id:String(item.id||"")||makeID(),
-      title:String(item.title||""),
-      plotId:String(item.plotId||""),
-      body:String(item.body||"")
-    }));
+  siteNovels=(data||[]).map(item=>({
+    id:String(item.id||"")||makeID(),
+    title:String(item.title||""),
+    plotId:String(item.plot_id||""),
+    body:String(item.body||"")
+  }));
 
   renderNovels();
   renderAdminNovels();
@@ -5261,18 +5245,32 @@ function openEditNovel(i){
   changeScreen("editNovel");
 }
 
-async function saveSiteNovels(){
+async function saveOneNovel(novel,index){
   await checkAdminAuth();
 
   const {error}=await db
-    .from("site_settings")
+    .from("novels")
     .upsert(
       {
-        key:"novels",
-        value:JSON.stringify(siteNovels)
+        id:novel.id,
+        title:novel.title,
+        plot_id:novel.plotId,
+        body:novel.body,
+        sort_order:index
       },
-      {onConflict:"key"}
+      {onConflict:"id"}
     );
+
+  if(error)throw error;
+}
+
+async function deleteOneNovel(novel){
+  await checkAdminAuth();
+
+  const {error}=await db
+    .from("novels")
+    .delete()
+    .eq("id",novel.id);
 
   if(error)throw error;
 }
@@ -5319,7 +5317,10 @@ $("enSaveNovel").addEventListener(
         editNovelIndex=siteNovels.length-1;
       }
 
-      await saveSiteNovels();
+      await saveOneNovel(
+        siteNovels[editNovelIndex],
+        editNovelIndex
+      );
 
       renderNovels();
       renderAdminNovels();
@@ -5352,10 +5353,12 @@ $("enDeleteNovel").addEventListener(
     btn.disabled=true;
 
     try{
+      const target=siteNovels[editNovelIndex];
+
+      await deleteOneNovel(target);
+
       siteNovels.splice(editNovelIndex,1);
       editNovelIndex=-1;
-
-      await saveSiteNovels();
 
       renderNovels();
       renderAdminNovels();
