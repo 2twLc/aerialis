@@ -1524,6 +1524,11 @@ img{
   font:400 13px/2.1 var(--jp);
   color:#355c71;
 }
+.guide-edit{
+  margin-top:16px;padding:16px;
+  border:1px solid #b9d9e8;border-radius:14px;
+  background:rgba(255,255,255,.55);
+}
 </style>
 </head>
 <body>
@@ -2318,17 +2323,19 @@ img{
 
       <p class="admin-note">
         ガイドラインページに表示する文章です。
+        項目ごとに、見出しと本文を分けて書けます。
         保存するとサイトに反映されます。
       </p>
 
-      <label class="admin-field">
-        ガイドライン本文
-        <textarea id="adminGuidelines"
-          rows="12"
-          placeholder="ガイドラインの本文"></textarea>
-      </label>
+      <div id="guidelinesEditor"></div>
 
       <div class="admin-actions">
+        <button class="admin-btn"
+          id="addGuideSectionBtn"
+          type="button">
+          項目を追加
+        </button>
+
         <button class="admin-btn"
           id="saveGuidelinesBtn"
           type="button">
@@ -5175,7 +5182,57 @@ TIDELINEは、個人が趣味で運営する創作アーカイブです。掲載
 ・掲載内容は予告なく変更・削除する場合があります。
 ・外部リンク先の内容については責任を負いかねます。`;
 
-let guidelinesText="";
+function parseGuidelineText(text){
+  return String(text||"")
+    .split(/\n{2,}/)
+    .map(b=>b.trim())
+    .filter(Boolean)
+    .map(block=>{
+      const lines=block.split("\n");
+
+      if(lines.length>1){
+        return{
+          title:lines[0],
+          body:lines.slice(1).join("\n")
+        };
+      }
+
+      return{title:"",body:lines[0]};
+    });
+}
+
+function parseGuidelineValue(value){
+  const raw=String(value||"").trim();
+
+  if(!raw){
+    return parseGuidelineText(DEFAULT_GUIDELINES);
+  }
+
+  try{
+    const parsed=JSON.parse(raw);
+
+    if(Array.isArray(parsed)){
+      const sections=parsed
+        .map(x=>({
+          title:String(x?.title||""),
+          body:String(x?.body||"")
+        }))
+        .filter(x=>x.title||x.body);
+
+      if(sections.length){
+        return sections;
+      }
+    }
+  }catch(parseError){
+    /* 旧形式（文章そのまま）の場合は下で変換する */
+  }
+
+  return parseGuidelineText(raw);
+}
+
+let guidelineSections=
+  parseGuidelineText(DEFAULT_GUIDELINES);
+let guidelinesSavedJson="";
 let guidelinesLoadPromise=null;
 
 async function loadGuidelines(){
@@ -5189,17 +5246,22 @@ async function loadGuidelines(){
 
   if(error)throw error;
 
-  guidelinesText=String(data?.value||"");
+  const raw=String(data?.value||"");
+  guidelinesSavedJson=raw;
+  guidelineSections=parseGuidelineValue(raw);
 
-  if(
-    adminUser&&
-    document.activeElement!==$("adminGuidelines")
-  ){
-    $("adminGuidelines").value=
-      guidelinesText||DEFAULT_GUIDELINES;
+  if(adminUser){
+    const editor=$("guidelinesEditor");
+
+    if(
+      editor&&
+      !editor.contains(document.activeElement)
+    ){
+      buildGuidelinesEditor();
+    }
   }
 
-  return guidelinesText;
+  return guidelineSections;
 }
 
 function refreshGuidelines(){
@@ -5227,19 +5289,11 @@ function renderGuidelineBody(){
 
   body.replaceChildren();
 
-  const text=guidelinesText||DEFAULT_GUIDELINES;
-
-  const blocks=text
-    .split(/\n{2,}/)
-    .map(b=>b.trim())
-    .filter(Boolean);
-
-  blocks.forEach((block,i)=>{
-    const lines=block.split("\n");
+  guidelineSections.forEach((sec,i)=>{
     const section=document.createElement("section");
     section.className="guide-section";
 
-    if(lines.length>1){
+    if(sec.title){
       const h=document.createElement("h3");
       h.className="guide-heading";
 
@@ -5248,22 +5302,94 @@ function renderGuidelineBody(){
       num.textContent=
         String(i+1).padStart(2,"0");
 
-      h.append(num,document.createTextNode(lines[0]));
+      h.append(num,document.createTextNode(sec.title));
       section.appendChild(h);
+    }
 
+    if(sec.body){
       const p=document.createElement("p");
       p.className="guide-body";
-      p.textContent=lines.slice(1).join("\n");
-      section.appendChild(p);
-    }else{
-      const p=document.createElement("p");
-      p.className="guide-body";
-      p.textContent=lines[0];
+      p.textContent=sec.body;
       section.appendChild(p);
     }
 
     body.appendChild(section);
   });
+}
+
+function guideSectionFields(sec){
+  const box=document.createElement("div");
+  box.className="guide-edit";
+
+  const titleLabel=document.createElement("label");
+  titleLabel.className="admin-field";
+  titleLabel.appendChild(
+    document.createTextNode("見出し")
+  );
+
+  const titleInput=document.createElement("input");
+  titleInput.type="text";
+  titleInput.className="guide-title";
+  titleInput.placeholder="例：作品の取り扱いについて";
+  titleInput.value=sec.title||"";
+  titleLabel.appendChild(titleInput);
+  box.appendChild(titleLabel);
+
+  const bodyLabel=document.createElement("label");
+  bodyLabel.className="admin-field";
+  bodyLabel.appendChild(
+    document.createTextNode("本文")
+  );
+
+  const bodyInput=document.createElement("textarea");
+  bodyInput.className="guide-body-input";
+  bodyInput.rows=5;
+  bodyInput.placeholder="この項目の本文";
+  bodyInput.value=sec.body||"";
+  bodyLabel.appendChild(bodyInput);
+  box.appendChild(bodyLabel);
+
+  const actions=document.createElement("div");
+  actions.className="admin-actions";
+
+  const del=document.createElement("button");
+  del.type="button";
+  del.className="admin-btn";
+  del.textContent="この項目を削除";
+  del.addEventListener("click",()=>{
+    box.remove();
+  });
+
+  actions.appendChild(del);
+  box.appendChild(actions);
+
+  return box;
+}
+
+function buildGuidelinesEditor(){
+  const wrap=$("guidelinesEditor");
+  if(!wrap)return;
+
+  wrap.replaceChildren();
+
+  guidelineSections.forEach(sec=>{
+    wrap.appendChild(guideSectionFields(sec));
+  });
+}
+
+function collectGuidelineSections(){
+  return[
+    ...document.querySelectorAll(
+      "#guidelinesEditor .guide-edit"
+    )
+  ].map(box=>({
+    title:box
+      .querySelector(".guide-title")
+      .value.trim(),
+    body:box
+      .querySelector(".guide-body-input")
+      .value.trim()
+  })).filter(x=>x.title||x.body);
 }
 
 async function saveGuidelines(){
@@ -5278,7 +5404,8 @@ async function saveGuidelines(){
   try{
     await checkAdminAuth();
 
-    const value=$("adminGuidelines").value;
+    const sections=collectGuidelineSections();
+    const value=JSON.stringify(sections);
 
     const result=await db
       .from(SETTINGS_TABLE)
@@ -5294,8 +5421,9 @@ async function saveGuidelines(){
       throw result.error;
     }
 
-    const changed=guidelinesText!==value;
-    guidelinesText=value;
+    const changed=guidelinesSavedJson!==value;
+    guidelinesSavedJson=value;
+    guidelineSections=sections;
 
     if(changed){
       try{
@@ -5330,6 +5458,23 @@ async function saveGuidelines(){
 $("saveGuidelinesBtn").addEventListener(
   "click",
   saveGuidelines
+);
+
+$("addGuideSectionBtn").addEventListener(
+  "click",
+  ()=>{
+    const wrap=$("guidelinesEditor");
+    if(!wrap)return;
+
+    const fields=guideSectionFields(
+      {title:"",body:""}
+    );
+
+    wrap.appendChild(fields);
+    fields
+      .querySelector(".guide-title")
+      .focus();
+  }
 );
 
 /* LINK COLLECTION VIA SITE SETTINGS */
