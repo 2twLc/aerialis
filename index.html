@@ -1505,6 +1505,25 @@ img{
   grid-template-columns:repeat(3,1fr);
   gap:10px;
 }
+.guide-section{margin-top:28px}
+.guide-section:first-child{margin-top:8px}
+.guide-heading{
+  margin:0;padding-bottom:8px;
+  display:flex;align-items:baseline;gap:10px;
+  border-bottom:2px solid #f58db6;
+  color:#183b50;
+  font:700 16px/1.5 var(--jp);
+}
+.guide-num{
+  color:#f58db6;
+  font:800 13px var(--orbit);
+  letter-spacing:.06em;
+}
+.guide-body{
+  margin:13px 0 0;white-space:pre-line;
+  font:400 13px/2.1 var(--jp);
+  color:#355c71;
+}
 </style>
 </head>
 <body>
@@ -2018,21 +2037,7 @@ img{
     <h2 class="page-title" id="detailTitle"></h2>
     <p class="page-description" id="detailSubtitle"></p>
 
-    <article class="detail-paper">
-      <div class="wave-logo small" aria-hidden="true">
-        <svg class="wave-svg" viewBox="0 0 150 64">
-          <path class="wave-top"></path>
-          <path class="wave-bottom"></path>
-        </svg>
-      </div>
-
-      <p id="detailText"></p>
-
-      <div class="archive-empty"
-        id="detailEmpty" hidden>
-        NO ENTRIES YET / COMING SOON
-      </div>
-    </article>
+    <div id="detailBody"></div>
 
     <div class="detail-bottom">
       <span>TIDELINE / PLOT ARCHIVE</span>
@@ -2306,6 +2311,34 @@ img{
           id="qaEditStatus"
           role="status"></p>
       </section>
+
+      <hr class="admin-separator">
+
+      <h3 class="admin-anchor" id="anchorGuidelines">GUIDELINES</h3>
+
+      <p class="admin-note">
+        ガイドラインページに表示する文章です。
+        保存するとサイトに反映されます。
+      </p>
+
+      <label class="admin-field">
+        ガイドライン本文
+        <textarea id="adminGuidelines"
+          rows="12"
+          placeholder="ガイドラインの本文"></textarea>
+      </label>
+
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="saveGuidelinesBtn"
+          type="button">
+          ガイドラインを保存
+        </button>
+      </div>
+
+      <p class="admin-status"
+        id="guidelinesAdminStatus"
+        role="status"></p>
     </div>
   </main>
 </section>
@@ -2727,6 +2760,11 @@ img{
 
       <button class="settings-row" type="button" data-admin-goto="anchorWavebox">
         <span>Wavebox設定<small>WAVEBOX SETTINGS</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorGuidelines">
+        <span>ガイドライン<small>GUIDELINES</small></span>
         <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
       </button>
 
@@ -4067,13 +4105,11 @@ function openCategory(index){
   $("detailKicker").textContent=page.kicker;
   $("detailTitle").textContent=page.title;
   $("detailSubtitle").textContent=page.subtitle;
-  $("detailText").textContent=page.text;
+  renderGuidelineBody();
 
   $("detailPageNumber").textContent=
     String(index+1).padStart(2,"0")+
     " / 04";
-
-  $("detailEmpty").hidden=!page.empty;
   $("detailScroll").scrollTop=0;
 
   changeScreen("detail");
@@ -5121,6 +5157,181 @@ async function saveCharacterRuby(plots){
   characterRubyMap=map;
 }
 
+/* GUIDELINES VIA SITE SETTINGS */
+const DEFAULT_GUIDELINES=
+`このサイトについて
+TIDELINEは、個人が趣味で運営する創作アーカイブです。掲載しているプロット・キャラクター・小説は、すべて管理人のオリジナル作品です。
+
+作品の取り扱いについて
+・掲載作品の無断転載・再配布は禁止しています。
+・画像や文章を、AI学習に利用することは禁止しています。
+・スクリーンショットや画像の保存は、私的利用の範囲でお願いします。SNSなどへの転載はしないでください。
+
+感想・質問について
+・質問はQ&Aページのリンク（Wavebox）から送れます。すべての質問に回答できない場合があります。
+・感想は歓迎しますが、誹謗中傷や荒らし行為はお控えください。
+
+その他
+・掲載内容は予告なく変更・削除する場合があります。
+・外部リンク先の内容については責任を負いかねます。`;
+
+let guidelinesText="";
+let guidelinesLoadPromise=null;
+
+async function loadGuidelines(){
+  checkDB();
+
+  const {data,error}=await db
+    .from(SETTINGS_TABLE)
+    .select("value")
+    .eq("key","guidelines")
+    .maybeSingle();
+
+  if(error)throw error;
+
+  guidelinesText=String(data?.value||"");
+
+  if(
+    adminUser&&
+    document.activeElement!==$("adminGuidelines")
+  ){
+    $("adminGuidelines").value=
+      guidelinesText||DEFAULT_GUIDELINES;
+  }
+
+  return guidelinesText;
+}
+
+function refreshGuidelines(){
+  if(guidelinesLoadPromise){
+    return guidelinesLoadPromise;
+  }
+
+  guidelinesLoadPromise=loadGuidelines()
+    .catch(error=>{
+      console.warn(
+        "ガイドライン取得エラー:",
+        error.message
+      );
+    })
+    .finally(()=>{
+      guidelinesLoadPromise=null;
+    });
+
+  return guidelinesLoadPromise;
+}
+
+function renderGuidelineBody(){
+  const body=$("detailBody");
+  if(!body)return;
+
+  body.replaceChildren();
+
+  const text=guidelinesText||DEFAULT_GUIDELINES;
+
+  const blocks=text
+    .split(/\n{2,}/)
+    .map(b=>b.trim())
+    .filter(Boolean);
+
+  blocks.forEach((block,i)=>{
+    const lines=block.split("\n");
+    const section=document.createElement("section");
+    section.className="guide-section";
+
+    if(lines.length>1){
+      const h=document.createElement("h3");
+      h.className="guide-heading";
+
+      const num=document.createElement("span");
+      num.className="guide-num";
+      num.textContent=
+        String(i+1).padStart(2,"0");
+
+      h.append(num,document.createTextNode(lines[0]));
+      section.appendChild(h);
+
+      const p=document.createElement("p");
+      p.className="guide-body";
+      p.textContent=lines.slice(1).join("\n");
+      section.appendChild(p);
+    }else{
+      const p=document.createElement("p");
+      p.className="guide-body";
+      p.textContent=lines[0];
+      section.appendChild(p);
+    }
+
+    body.appendChild(section);
+  });
+}
+
+async function saveGuidelines(){
+  const btn=$("saveGuidelinesBtn");
+  btn.disabled=true;
+
+  adminMessage(
+    "guidelinesAdminStatus",
+    "保存しています…"
+  );
+
+  try{
+    await checkAdminAuth();
+
+    const value=$("adminGuidelines").value;
+
+    const result=await db
+      .from(SETTINGS_TABLE)
+      .upsert(
+        {
+          key:"guidelines",
+          value
+        },
+        {onConflict:"key"}
+      );
+
+    if(result.error){
+      throw result.error;
+    }
+
+    const changed=guidelinesText!==value;
+    guidelinesText=value;
+
+    if(changed){
+      try{
+        await addUpdateLog(
+          "ガイドラインを更新しました。"
+        );
+        await loadPublishedPlots(true);
+      }catch(logError){
+        console.warn(
+          "ガイドライン更新履歴エラー:",
+          logError.message
+        );
+      }
+    }
+
+    adminMessage(
+      "guidelinesAdminStatus",
+      "ガイドラインを保存しました。"
+    );
+
+  }catch(error){
+    adminMessage(
+      "guidelinesAdminStatus",
+      "保存できませんでした："+error.message
+    );
+
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+$("saveGuidelinesBtn").addEventListener(
+  "click",
+  saveGuidelines
+);
+
 /* LINK COLLECTION VIA SITE SETTINGS */
 let siteLinks=[];
 let linksLoadPromise=null;
@@ -5809,12 +6020,10 @@ document.querySelectorAll("[data-goto]")
       $("detailKicker").textContent=page.kicker;
       $("detailTitle").textContent=page.title;
       $("detailSubtitle").textContent=page.subtitle;
-      $("detailText").textContent=page.text;
+      renderGuidelineBody();
 
       $("detailPageNumber").textContent=
         "04 / 04";
-
-      $("detailEmpty").hidden=!page.empty;
       $("detailScroll").scrollTop=0;
 
       changeScreen("detail");
@@ -5846,6 +6055,7 @@ document.querySelectorAll("[data-admin-goto]")
 
 refreshSiteLinks();
 refreshSiteNovels();
+refreshGuidelines();
 
 /* SAVE SINGLE PLOT */
 let savingPlot=false;
@@ -6862,6 +7072,7 @@ $("openAdmin").addEventListener("click",()=>{
   if(adminUser){
     refreshAdminQA();
     refreshWaveboxSetting();
+    refreshGuidelines();
   }
 });
 
