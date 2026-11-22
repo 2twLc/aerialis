@@ -2703,7 +2703,7 @@ img{
             type="url" inputmode="url"
             autocapitalize="off" autocomplete="off"
             spellcheck="false"
-            placeholder="https://...">
+            placeholder="www.tiktok.com/@… でもOK">
         </label>
 
         <div class="admin-actions">
@@ -5481,6 +5481,51 @@ $("addGuideSectionBtn").addEventListener(
 let siteLinks=[];
 let linksLoadPromise=null;
 
+function fixLinkUrl(raw){
+  let text=String(raw||"").trim();
+
+  if(!text)return null;
+
+  if(!/^[a-z][a-z0-9+.-]*:/i.test(text)){
+    text="https://"+text;
+  }
+
+  try{
+    const url=new URL(text);
+
+    if(!["http:","https:"].includes(url.protocol)){
+      return null;
+    }
+
+    return url;
+  }catch(_){
+    return null;
+  }
+}
+
+function linkTitleFromUrl(url){
+  const host=(url.hostname||"")
+    .replace(/^www\./,"")
+    .toLowerCase();
+
+  const names={
+    "tiktok.com":"TikTok",
+    "instagram.com":"Instagram",
+    "x.com":"X",
+    "twitter.com":"X",
+    "youtube.com":"YouTube",
+    "youtu.be":"YouTube"
+  };
+
+  for(const domain of Object.keys(names)){
+    if(host===domain||host.endsWith("."+domain)){
+      return names[domain];
+    }
+  }
+
+  return host;
+}
+
 function normalizeSiteLinks(value){
   let arr;
 
@@ -5494,10 +5539,14 @@ function normalizeSiteLinks(value){
 
   return arr
     .filter(l=>l&&l.title&&l.url)
-    .map(l=>({
-      title:String(l.title),
-      url:String(l.url)
-    }));
+    .map(l=>{
+      const url=fixLinkUrl(l.url);
+
+      return{
+        title:String(l.title),
+        url:url?url.toString():String(l.url)
+      };
+    });
 }
 
 async function loadSiteLinks(){
@@ -6073,31 +6122,29 @@ async function saveSiteLinks(){
 }
 
 $("linkAddBtn").addEventListener("click",()=>{
-  const title=$("linkTitleInput").value.trim();
   const raw=$("linkUrlInput").value.trim();
+  let title=$("linkTitleInput").value.trim();
 
-  if(!title||!raw){
+  if(!raw){
     adminMessage(
       "linkStatus",
-      "リンク名とURLを入力してください。"
+      "URLを入力してください。"
     );
     return;
   }
 
-  let url;
+  const url=fixLinkUrl(raw);
 
-  try{
-    url=new URL(raw);
-
-    if(!["http:","https:"].includes(url.protocol)){
-      throw new Error("protocol");
-    }
-  }catch(_){
+  if(!url){
     adminMessage(
       "linkStatus",
-      "有効なURL（https://…）を入力してください。"
+      "有効なURLを入力してください。"
     );
     return;
+  }
+
+  if(!title){
+    title=linkTitleFromUrl(url);
   }
 
   siteLinks.push({
