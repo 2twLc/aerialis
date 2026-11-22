@@ -1042,6 +1042,10 @@ a:focus-visible{
   font:700 10px var(--raj);
   letter-spacing:.13em;padding:7px 4px;
 }
+.footer-links{
+  display:flex;gap:14px;align-items:center;
+}
+.links-link{color:#e678a5}
 .admin-panel{
   margin-top:20px;padding:18px 15px 20px;
   background:rgba(255,255,255,.85);
@@ -1521,7 +1525,7 @@ img{
 }
 .guide-body{
   margin:13px 0 0;white-space:pre-line;
-  font:400 13px/2.1 var(--jp);
+  font:700 13px/2.1 var(--jp);
   color:#355c71;
 }
 .guide-edit{
@@ -1715,8 +1719,12 @@ img{
 
   <footer class="site-footer">
     <span>AN ARCHIVE OF IMAGINATION</span>
-    <button class="admin-link"
-      type="button" id="openAdmin">ADMIN</button>
+    <span class="footer-links">
+      <button class="admin-link"
+        type="button" id="openAdmin">ADMIN</button>
+      <button class="admin-link links-link"
+        type="button" id="openLinks">LINKS</button>
+    </span>
     <span>© 2026</span>
   </footer>
 </section>
@@ -2655,6 +2663,43 @@ img{
 
 
 <!-- SETTINGS -->
+<!-- LINKS -->
+<section class="screen" id="links" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button"
+        type="button" data-back="home">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll">
+    <div class="page-kicker">05 / LINKS</div>
+    <h2 class="page-title">LINKS</h2>
+    <p class="page-description">LINK COLLECTION</p>
+
+    <div id="linkListHome"></div>
+
+    <div class="detail-bottom">
+      <span>TIDELINE / PLOT ARCHIVE</span>
+      <span>05 / 05</span>
+    </div>
+  </main>
+</section>
+
 <section class="screen" id="settings" aria-hidden="true">
   <div class="ambient"></div>
 
@@ -3294,7 +3339,8 @@ const screens=Object.fromEntries(
     "novels",
     "novelView",
     "editNovel",
-    "settings"
+    "settings",
+    "links"
   ].map(id=>[id,$(id)])
 );
 
@@ -6077,6 +6123,56 @@ function renderSiteLinks(){
       !adminUser
     );
   }
+
+  const homeList=$("linkListHome");
+
+  if(homeList){
+    homeList.replaceChildren();
+
+    if(!siteLinks.length){
+      const empty=document.createElement("p");
+      empty.className="admin-note";
+      empty.textContent=
+        "リンクはまだ登録されていません。";
+      homeList.appendChild(empty);
+    }
+
+    siteLinks.forEach(link=>{
+      const a=document.createElement("a");
+      a.className="settings-row link-row";
+      a.href=link.url;
+      a.target="_blank";
+      a.rel="noopener noreferrer";
+
+      const left=document.createElement("span");
+      left.className="link-title";
+      left.textContent=link.title;
+
+      let host="";
+
+      try{
+        host=new URL(link.url).hostname;
+      }catch(_){
+        host="";
+      }
+
+      if(host){
+        const small=document.createElement("small");
+        small.textContent=host;
+        left.appendChild(small);
+      }
+
+      const arrow=document.createElement("span");
+      arrow.className="vector-arrow";
+      arrow.innerHTML=
+        '<svg viewBox="0 0 24 24" aria-hidden="true">'+
+        '<path d="M6 18 18 6 M8 6h10v10"/>'+
+        '</svg>';
+
+      a.append(left,arrow);
+      homeList.appendChild(a);
+    });
+  }
 }
 
 async function saveSiteLinks(){
@@ -6161,6 +6257,11 @@ $("linkAddBtn").addEventListener("click",()=>{
     "linkStatus",
     "追加しました。「リンク集を保存」を押すと確定します。"
   );
+});
+
+$("openLinks").addEventListener("click",()=>{
+  refreshSiteLinks();
+  changeScreen("links");
 });
 
 $("linkSaveBtn").addEventListener(
