@@ -1753,29 +1753,6 @@ img{
   </header>
 
   <main class="inner-scroll" id="plotsScroll">
-    <div class="page-kicker">SECTION 01 / ARCHIVE</div>
-    <h2 class="page-title">PLOTS</h2>
-    <div class="plots-head">
-      <p class="page-description"
-        id="plotTotal">プロット数：2件</p>
-
-      <div class="plots-tabs">
-        <button class="plots-tab active"
-          type="button" id="togglePlots">
-          PLOTS
-        </button>
-        <button class="plots-tab"
-          type="button" id="toggleCharacters">
-          CHARACTER
-        </button>
-      </div>
-    </div>
-    <div class="section-line"></div>
-
-    <div class="plot-grid" id="plotGrid"></div>
-    <div class="character-grid"
-      id="allCharacterGrid" style="display:none"></div>
-  
     <div class="admin-panel admin-hidden" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorPlots">PLOT MANAGER</h3>
@@ -1804,7 +1781,30 @@ img{
         お知らせの編集は、設定（歯車）の画面にあります。
       </p>
     </div>
-  </main>
+
+    <div class="page-kicker">SECTION 01 / ARCHIVE</div>
+    <h2 class="page-title">PLOTS</h2>
+    <div class="plots-head">
+      <p class="page-description"
+        id="plotTotal">プロット数：2件</p>
+
+      <div class="plots-tabs">
+        <button class="plots-tab active"
+          type="button" id="togglePlots">
+          PLOTS
+        </button>
+        <button class="plots-tab"
+          type="button" id="toggleCharacters">
+          CHARACTER
+        </button>
+      </div>
+    </div>
+    <div class="section-line"></div>
+
+    <div class="plot-grid" id="plotGrid"></div>
+    <div class="character-grid"
+      id="allCharacterGrid" style="display:none"></div>
+</main>
 </section>
 
 <!-- NOVELS -->
@@ -1831,14 +1831,6 @@ img{
   </header>
 
   <main class="inner-scroll" id="novelsScroll">
-    <div class="page-kicker">SECTION 02 / NOVELS</div>
-    <h2 class="page-title">NOVELS</h2>
-    <p class="page-description"
-      id="novelTotal">小説数：0件</p>
-    <div class="section-line"></div>
-
-    <div id="novelList"></div>
-  
     <div class="admin-panel admin-hidden" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorNovels">NOVEL MANAGER</h3>
@@ -1860,7 +1852,15 @@ img{
 
       <div id="adminNovelList"></div>
     </div>
-  </main>
+
+    <div class="page-kicker">SECTION 02 / NOVELS</div>
+    <h2 class="page-title">NOVELS</h2>
+    <p class="page-description"
+      id="novelTotal">小説数：0件</p>
+    <div class="section-line"></div>
+
+    <div id="novelList"></div>
+</main>
 </section>
 
 <!-- NOVEL DETAIL -->
@@ -2013,64 +2013,6 @@ img{
   </header>
 
   <main class="inner-scroll" id="qaScroll">
-    <div class="page-kicker">
-      SECTION 03 / QUESTIONS
-    </div>
-
-    <h2 class="page-title">Q&amp;A</h2>
-    <p class="page-description">
-      QUESTIONS &amp; ANSWERS
-    </p>
-
-    <article class="qa-intro-card">
-      <span class="qa-intro-index">
-        TIDELINE / QUESTIONS
-      </span>
-
-      <h3>質問と回答</h3>
-      <p>FAタグ#22stans</p>
-
-      <input class="qa-search"
-        id="qaSearch"
-        type="search"
-        placeholder="質問や回答を検索"
-        aria-label="公開Q&Aを検索">
-
-      <a class="qa-wavebox-link"
-        id="waveboxLink"
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-        hidden>
-        <span>
-          <strong>質問を送る</strong>
-          <small>GO TO WAVEBOX</small>
-        </span>
-        <span class="qa-wavebox-arrow"
-          aria-hidden="true">
-          <svg viewBox="0 0 24 24">
-            <path d="M6 18 18 6 M8 6h10v10"/>
-          </svg>
-        </span>
-      </a>
-
-      <p class="qa-wavebox-unset"
-        id="waveboxUnset">
-        質問受付は準備中です。
-      </p>
-    </article>
-
-    <div class="qa-section-heading">
-      <strong>ANSWERED QUESTIONS</strong>
-      <small id="qaCount">00 ENTRIES</small>
-    </div>
-
-    <div class="qa-list" id="qaPublishedList">
-      <div class="qa-empty">
-        Q&amp;Aを読み込んでいます。
-      </div>
-    </div>
-  
     <div class="admin-panel admin-hidden" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorWavebox">WAVEBOX SETTINGS</h3>
@@ -2196,7 +2138,65 @@ img{
           role="status"></p>
       </section>
     </div>
-  </main>
+
+    <div class="page-kicker">
+      SECTION 03 / QUESTIONS
+    </div>
+
+    <h2 class="page-title">Q&amp;A</h2>
+    <p class="page-description">
+      QUESTIONS &amp; ANSWERS
+    </p>
+
+    <article class="qa-intro-card">
+      <span class="qa-intro-index">
+        TIDELINE / QUESTIONS
+      </span>
+
+      <h3>質問と回答</h3>
+      <p>FAタグ#22stans</p>
+
+      <input class="qa-search"
+        id="qaSearch"
+        type="search"
+        placeholder="質問や回答を検索"
+        aria-label="公開Q&Aを検索">
+
+      <a class="qa-wavebox-link"
+        id="waveboxLink"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        hidden>
+        <span>
+          <strong>質問を送る</strong>
+          <small>GO TO WAVEBOX</small>
+        </span>
+        <span class="qa-wavebox-arrow"
+          aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 18 18 6 M8 6h10v10"/>
+          </svg>
+        </span>
+      </a>
+
+      <p class="qa-wavebox-unset"
+        id="waveboxUnset">
+        質問受付は準備中です。
+      </p>
+    </article>
+
+    <div class="qa-section-heading">
+      <strong>ANSWERED QUESTIONS</strong>
+      <small id="qaCount">00 ENTRIES</small>
+    </div>
+
+    <div class="qa-list" id="qaPublishedList">
+      <div class="qa-empty">
+        Q&amp;Aを読み込んでいます。
+      </div>
+    </div>
+</main>
 </section>
 
 <!-- NOVELS / GUIDELINES -->
@@ -2223,17 +2223,6 @@ img{
   </header>
 
   <main class="inner-scroll" id="detailScroll">
-    <div class="page-kicker" id="detailKicker"></div>
-    <h2 class="page-title" id="detailTitle"></h2>
-    <p class="page-description" id="detailSubtitle"></p>
-
-    <div id="detailBody"></div>
-
-    <div class="detail-bottom">
-      <span>TIDELINE / PLOT ARCHIVE</span>
-      <span id="detailPageNumber">02 / 04</span>
-    </div>
-  
     <div class="admin-panel admin-hidden" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorGuidelines">GUIDELINES</h3>
@@ -2264,7 +2253,18 @@ img{
         id="guidelinesAdminStatus"
         role="status"></p>
     </div>
-  </main>
+
+    <div class="page-kicker" id="detailKicker"></div>
+    <h2 class="page-title" id="detailTitle"></h2>
+    <p class="page-description" id="detailSubtitle"></p>
+
+    <div id="detailBody"></div>
+
+    <div class="detail-bottom">
+      <span>TIDELINE / PLOT ARCHIVE</span>
+      <span id="detailPageNumber">02 / 04</span>
+    </div>
+</main>
 </section>
 
 <!-- ADMIN -->
@@ -2719,6 +2719,38 @@ img{
   </header>
 
   <main class="inner-scroll" id="settingsScroll">
+    <div class="admin-panel admin-hidden" data-admin-only="1">
+
+      <h3 class="admin-anchor" id="anchorNotices">ANNOUNCEMENTS / お知らせ</h3>
+      <p class="admin-note">
+        ホーム上部の白い帯に流れる文章です。
+        1行につき1件。「サイトへ公開」で反映されます。
+      </p>
+
+      <label class="admin-field">
+        流すお知らせ
+        <textarea id="adminNotices"
+          rows="5"
+          placeholder="お知らせを1行ずつ入力"></textarea>
+      </label>
+
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="publishBtn" type="button">
+          サイトへ公開
+        </button>
+
+        <button class="admin-btn secondary"
+          id="resetDraftBtn" type="button">
+          下書きを破棄
+        </button>
+      </div>
+
+      <p class="admin-status"
+        id="publishStatus"
+        role="status"></p>
+    </div>
+
     <div class="page-kicker">SYSTEM / MENU</div>
     <h2 class="page-title">SETTINGS</h2>
     <p class="page-description">
@@ -2787,40 +2819,7 @@ img{
         <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
       </button>
     </div>
-
-    <div class="admin-panel admin-hidden" data-admin-only="1">
-
-      <h3 class="admin-anchor" id="anchorNotices">ANNOUNCEMENTS / お知らせ</h3>
-      <p class="admin-note">
-        ホーム上部の白い帯に流れる文章です。
-        1行につき1件。「サイトへ公開」で反映されます。
-      </p>
-
-      <label class="admin-field">
-        流すお知らせ
-        <textarea id="adminNotices"
-          rows="5"
-          placeholder="お知らせを1行ずつ入力"></textarea>
-      </label>
-
-      <div class="admin-actions">
-        <button class="admin-btn"
-          id="publishBtn" type="button">
-          サイトへ公開
-        </button>
-
-        <button class="admin-btn secondary"
-          id="resetDraftBtn" type="button">
-          下書きを破棄
-        </button>
-      </div>
-
-      <p class="admin-status"
-        id="publishStatus"
-        role="status"></p>
-    </div>
-
-  </main>
+</main>
 </section>
 
 <div id="softWipe"></div>
