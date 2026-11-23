@@ -1775,6 +1775,35 @@ img{
     <div class="plot-grid" id="plotGrid"></div>
     <div class="character-grid"
       id="allCharacterGrid" style="display:none"></div>
+  
+    <div class="admin-panel admin-hidden" data-admin-only="1">
+
+      <h3 class="admin-anchor" id="anchorPlots">PLOT MANAGER</h3>
+      <p class="admin-note">
+        プロットの追加・編集・削除は下書きです。
+        「サイトへ公開」を押すと反映されます。
+      </p>
+
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="newPlotBtn" type="button">
+          ＋ プロットを追加
+        </button>
+      </div>
+
+      <div id="adminPlotList"></div>
+
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="publishBtnPlots" type="button">
+          サイトへ公開
+        </button>
+      </div>
+
+      <p class="admin-note">
+        お知らせの編集は、設定（歯車）の画面にあります。
+      </p>
+    </div>
   </main>
 </section>
 
@@ -1809,6 +1838,28 @@ img{
     <div class="section-line"></div>
 
     <div id="novelList"></div>
+  
+    <div class="admin-panel admin-hidden" data-admin-only="1">
+
+      <h3 class="admin-anchor" id="anchorNovels">NOVEL MANAGER</h3>
+      <p class="admin-note">
+        小説の追加・編集です。
+        保存するとすぐサイトに反映されます。
+      </p>
+
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="newNovelBtn" type="button">
+          ＋ 小説を追加
+        </button>
+      </div>
+
+      <p class="admin-status"
+        id="novelAdminStatus"
+        role="status"></p>
+
+      <div id="adminNovelList"></div>
+    </div>
   </main>
 </section>
 
@@ -2019,189 +2070,8 @@ img{
         Q&amp;Aを読み込んでいます。
       </div>
     </div>
-  </main>
-</section>
-
-<!-- NOVELS / GUIDELINES -->
-<section class="screen" id="detail" aria-hidden="true">
-  <div class="ambient"></div>
-
-  <header class="site-header">
-    <div class="site-brand">
-      <span class="wave-logo small" aria-hidden="true">
-        <svg class="wave-svg" viewBox="0 0 150 64">
-          <path class="wave-top"></path>
-          <path class="wave-bottom"></path>
-        </svg>
-      </span>
-      <strong>TIDELINE</strong>
-    </div>
-    <div class="header-actions">
-      <time class="live-clock">00:00:00</time>
-      <button class="back-button"
-        type="button" data-back="home">
-        <span class="back-arrow">←</span>BACK
-      </button>
-    </div>
-  </header>
-
-  <main class="inner-scroll" id="detailScroll">
-    <div class="page-kicker" id="detailKicker"></div>
-    <h2 class="page-title" id="detailTitle"></h2>
-    <p class="page-description" id="detailSubtitle"></p>
-
-    <div id="detailBody"></div>
-
-    <div class="detail-bottom">
-      <span>TIDELINE / PLOT ARCHIVE</span>
-      <span id="detailPageNumber">02 / 04</span>
-    </div>
-  </main>
-</section>
-
-<!-- ADMIN -->
-<section class="screen" id="admin" aria-hidden="true">
-  <div class="ambient"></div>
-
-  <header class="site-header">
-    <div class="site-brand">
-      <span class="wave-logo small" aria-hidden="true">
-        <svg class="wave-svg" viewBox="0 0 150 64">
-          <path class="wave-top"></path>
-          <path class="wave-bottom"></path>
-        </svg>
-      </span>
-      <strong>TIDELINE</strong>
-    </div>
-    <div class="header-actions">
-      <time class="live-clock">00:00:00</time>
-      <button class="back-button admin-home-top"
-        type="button" id="leaveAdmin">
-        <span class="back-arrow">←</span>HOME
-      </button>
-    </div>
-  </header>
-
-  <main class="inner-scroll" id="adminScroll">
-    <div class="page-kicker">PRIVATE ACCESS</div>
-    <h2 class="page-title">ADMIN</h2>
-
-    <div class="admin-panel" id="adminLoginPanel">
-      <h3>LOGIN</h3>
-
-      <label class="admin-field">
-        EMAIL
-        <input id="adminEmail"
-          type="email"
-          autocomplete="username"
-          autocapitalize="off"
-          spellcheck="false"
-          placeholder="メールアドレス">
-      </label>
-
-      <label class="admin-field">
-        PASSWORD
-        <input id="adminPassword"
-          type="password"
-          autocomplete="current-password"
-          placeholder="パスワード">
-      </label>
-
-      <div class="admin-actions">
-        <button class="admin-btn"
-          id="adminLoginBtn" type="button">
-          認証して編集
-        </button>
-        <button class="admin-btn secondary admin-return-home"
-          id="loginHomeBtn" type="button">
-          ホームに戻る
-        </button>
-      </div>
-
-      <p class="admin-status"
-        id="loginStatus"
-        role="status"></p>
-    </div>
-
-    <div class="admin-panel admin-hidden"
-      id="adminDashboard">
-
-      <h3 class="admin-anchor" id="anchorPlots">PLOT MANAGER</h3>
-      <p class="admin-note">
-        プロットの追加・編集・削除は下書きです。
-        「サイトへ公開」を押すと反映されます。
-      </p>
-
-      <div class="admin-actions">
-        <button class="admin-btn"
-          id="newPlotBtn" type="button">
-          ＋ プロットを追加
-        </button>
-        <button class="admin-btn secondary"
-          id="adminLogoutBtn" type="button">
-          ログアウト
-        </button>
-        <button class="admin-btn secondary admin-return-home"
-          id="adminHomeBtn" type="button">
-          ホームに戻る
-        </button>
-      </div>
-
-      <div id="adminPlotList"></div>
-
-      <hr class="admin-separator">
-
-      <h3 class="admin-anchor" id="anchorNovels">NOVEL MANAGER</h3>
-      <p class="admin-note">
-        小説の追加・編集です。
-        保存するとすぐサイトに反映されます。
-      </p>
-
-      <div class="admin-actions">
-        <button class="admin-btn"
-          id="newNovelBtn" type="button">
-          ＋ 小説を追加
-        </button>
-      </div>
-
-      <p class="admin-status"
-        id="novelAdminStatus"
-        role="status"></p>
-
-      <div id="adminNovelList"></div>
-
-      <hr class="admin-separator">
-
-      <h3 class="admin-anchor" id="anchorNotices">ANNOUNCEMENTS / お知らせ</h3>
-      <p class="admin-note">
-        ホーム上部の白い帯に流れる文章です。
-        1行につき1件。「サイトへ公開」で反映されます。
-      </p>
-
-      <label class="admin-field">
-        流すお知らせ
-        <textarea id="adminNotices"
-          rows="5"
-          placeholder="お知らせを1行ずつ入力"></textarea>
-      </label>
-
-      <div class="admin-actions">
-        <button class="admin-btn"
-          id="publishBtn" type="button">
-          サイトへ公開
-        </button>
-
-        <button class="admin-btn secondary"
-          id="resetDraftBtn" type="button">
-          下書きを破棄
-        </button>
-      </div>
-
-      <p class="admin-status"
-        id="publishStatus"
-        role="status"></p>
-
-      <hr class="admin-separator">
+  
+    <div class="admin-panel admin-hidden" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorWavebox">WAVEBOX SETTINGS</h3>
 
@@ -2240,6 +2110,7 @@ img{
         id="waveboxAdminStatus"
         role="status"></p>
 
+      
       <hr class="admin-separator">
 
       <h3 class="admin-anchor" id="anchorQA">Q&amp;A MANAGER</h3>
@@ -2324,8 +2195,46 @@ img{
           id="qaEditStatus"
           role="status"></p>
       </section>
+    </div>
+  </main>
+</section>
 
-      <hr class="admin-separator">
+<!-- NOVELS / GUIDELINES -->
+<section class="screen" id="detail" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button"
+        type="button" data-back="home">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="detailScroll">
+    <div class="page-kicker" id="detailKicker"></div>
+    <h2 class="page-title" id="detailTitle"></h2>
+    <p class="page-description" id="detailSubtitle"></p>
+
+    <div id="detailBody"></div>
+
+    <div class="detail-bottom">
+      <span>TIDELINE / PLOT ARCHIVE</span>
+      <span id="detailPageNumber">02 / 04</span>
+    </div>
+  
+    <div class="admin-panel admin-hidden" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorGuidelines">GUIDELINES</h3>
 
@@ -2354,6 +2263,93 @@ img{
       <p class="admin-status"
         id="guidelinesAdminStatus"
         role="status"></p>
+    </div>
+  </main>
+</section>
+
+<!-- ADMIN -->
+<section class="screen" id="admin" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button admin-home-top"
+        type="button" id="leaveAdmin">
+        <span class="back-arrow">←</span>HOME
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="adminScroll">
+    <div class="page-kicker">PRIVATE ACCESS</div>
+    <h2 class="page-title">ADMIN</h2>
+
+    <div class="admin-panel" id="adminLoginPanel">
+      <h3>LOGIN</h3>
+
+      <label class="admin-field">
+        EMAIL
+        <input id="adminEmail"
+          type="email"
+          autocomplete="username"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="メールアドレス">
+      </label>
+
+      <label class="admin-field">
+        PASSWORD
+        <input id="adminPassword"
+          type="password"
+          autocomplete="current-password"
+          placeholder="パスワード">
+      </label>
+
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="adminLoginBtn" type="button">
+          認証して編集
+        </button>
+        <button class="admin-btn secondary admin-return-home"
+          id="loginHomeBtn" type="button">
+          ホームに戻る
+        </button>
+      </div>
+
+      <p class="admin-status"
+        id="loginStatus"
+        role="status"></p>
+    </div>
+
+    <div class="admin-panel admin-hidden"
+      id="adminHomePanel">
+
+      <h3 class="admin-anchor">ADMIN</h3>
+      <p class="admin-note">
+        ログイン中です。
+        編集は各ページ（PLOTS / NOVELS / Q&amp;A / GUIDELINES）と、設定のお知らせ欄でできます。
+      </p>
+
+      <div class="admin-actions">
+        <button class="admin-btn secondary"
+          id="adminLogoutBtn" type="button">
+          ログアウト
+        </button>
+        <button class="admin-btn secondary admin-return-home"
+          id="adminHomeBtn" type="button">
+          ホームに戻る
+        </button>
+      </div>
     </div>
   </main>
 </section>
@@ -2792,39 +2788,36 @@ img{
       </button>
     </div>
 
-    <div class="admin-panel">
-      <h3>ADMIN</h3>
+    <div class="admin-panel admin-hidden" data-admin-only="1">
 
-      <button class="settings-row" type="button" data-admin-goto="anchorPlots">
-        <span>プロット管理<small>PLOT MANAGER</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
+      <h3 class="admin-anchor" id="anchorNotices">ANNOUNCEMENTS / お知らせ</h3>
+      <p class="admin-note">
+        ホーム上部の白い帯に流れる文章です。
+        1行につき1件。「サイトへ公開」で反映されます。
+      </p>
 
-      <button class="settings-row" type="button" data-admin-goto="anchorNovels">
-        <span>小説管理<small>NOVEL MANAGER</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
+      <label class="admin-field">
+        流すお知らせ
+        <textarea id="adminNotices"
+          rows="5"
+          placeholder="お知らせを1行ずつ入力"></textarea>
+      </label>
 
-      <button class="settings-row" type="button" data-admin-goto="anchorNotices">
-        <span>お知らせ<small>ANNOUNCEMENTS</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
+      <div class="admin-actions">
+        <button class="admin-btn"
+          id="publishBtn" type="button">
+          サイトへ公開
+        </button>
 
-      <button class="settings-row" type="button" data-admin-goto="anchorWavebox">
-        <span>Wavebox設定<small>WAVEBOX SETTINGS</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
+        <button class="admin-btn secondary"
+          id="resetDraftBtn" type="button">
+          下書きを破棄
+        </button>
+      </div>
 
-      <button class="settings-row" type="button" data-admin-goto="anchorGuidelines">
-        <span>ガイドライン<small>GUIDELINES</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-
-      <button class="settings-row" type="button" data-admin-goto="anchorQA">
-        <span>Q&amp;A管理<small>Q&amp;A MANAGER</small></span>
-        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
-      </button>
-
+      <p class="admin-status"
+        id="publishStatus"
+        role="status"></p>
     </div>
 
   </main>
@@ -3368,9 +3361,21 @@ function setScreen(name){
     renderEditCharacters();
   }
 
-  if(name==="admin"&&adminUser){
+  if(name==="plots"&&adminUser){
     renderAdminList();
+  }
+
+  if(name==="novels"&&adminUser){
     renderAdminNovels();
+  }
+
+  if(name==="qa"&&adminUser){
+    refreshAdminQA();
+    refreshWaveboxSetting();
+  }
+
+  if(name==="detail"&&adminUser){
+    refreshGuidelines();
   }
 }
 
@@ -3420,11 +3425,11 @@ document.addEventListener("keydown",e=>{
     detail:"home",
     settings:"home",
     admin:"home",
-    editPlot:"admin",
+    editPlot:"plots",
     editCharacter:"editPlot",
     novels:"home",
     novelView:"novels",
-    editNovel:"admin"
+    editNovel:"novels"
   };
 
   if(back[current]){
@@ -5250,7 +5255,7 @@ function parseGuidelineText(text){
 function parseGuidelineValue(value){
   const raw=String(value||"").trim();
 
-  if(!raw){
+  if(!raw||raw==="[]"){
     return parseGuidelineText(DEFAULT_GUIDELINES);
   }
 
@@ -5268,6 +5273,8 @@ function parseGuidelineValue(value){
       if(sections.length){
         return sections;
       }
+
+      return parseGuidelineText(DEFAULT_GUIDELINES);
     }
   }catch(parseError){
     /* 旧形式（文章そのまま）の場合は下で変換する */
@@ -5451,7 +5458,27 @@ async function saveGuidelines(){
     await checkAdminAuth();
 
     const sections=collectGuidelineSections();
+    if(!sections.length){
+      adminMessage(
+        "guidelinesAdminStatus",
+        "項目が空のため、保存しませんでした。"
+      );
+      return;
+    }
+
     const value=JSON.stringify(sections);
+
+    try{
+      if(
+        guidelinesSavedJson&&
+        guidelinesSavedJson!=="[]"
+      ){
+        localStorage.setItem(
+          "guidelines_backup",
+          guidelinesSavedJson
+        );
+      }
+    }catch(_){}
 
     const result=await db
       .from(SETTINGS_TABLE)
@@ -6024,7 +6051,7 @@ $("enDeleteNovel").addEventListener(
 
       renderNovels();
       renderAdminNovels();
-      changeScreen("admin");
+      changeScreen("novels");
 
       adminMessage(
         "novelAdminStatus",
@@ -6323,13 +6350,25 @@ document.querySelectorAll("[data-goto]")
     });
   });
 
-document.querySelectorAll("[data-admin-goto]")
+const GOTO_SCREEN={
+    anchorPlots:"plots",
+    anchorNotices:"plots",
+    anchorNovels:"novels",
+    anchorQA:"qa",
+    anchorWavebox:"qa",
+    anchorGuidelines:"detail"
+  };
+
+  document.querySelectorAll("[data-admin-goto]")
   .forEach(btn=>{
     btn.addEventListener("click",()=>{
       const anchor=btn.dataset.adminGoto;
 
-      $("adminScroll").scrollTop=0;
-      changeScreen("admin");
+      changeScreen(
+        adminUser
+          ?(GOTO_SCREEN[anchor]||"admin")
+          :"admin"
+      );
 
       if(adminUser){
         refreshAdminQA();
@@ -6598,10 +6637,14 @@ function setAdminView(logged){
     logged
   );
 
-  $("adminDashboard").classList.toggle(
-    "admin-hidden",
-    !logged
-  );
+  document.querySelectorAll(
+    "#adminHomePanel,[data-admin-only]"
+  ).forEach(el=>{
+    el.classList.toggle(
+      "admin-hidden",
+      !logged
+    );
+  });
 }
 
 /* ADMIN PLOT LIST */
@@ -7849,6 +7892,8 @@ async function publishPlots(){
 
   publishing=true;
   $("publishBtn").disabled=true;
+  const pbp=$("publishBtnPlots");
+  if(pbp)pbp.disabled=true;
 
   let startedWriting=false;
 
@@ -8140,10 +8185,17 @@ async function publishPlots(){
   }finally{
     publishing=false;
     $("publishBtn").disabled=false;
+    const pbp2=$("publishBtnPlots");
+    if(pbp2)pbp2.disabled=false;
   }
 }
 
 $("publishBtn").addEventListener(
+  "click",
+  publishPlots
+);
+
+$("publishBtnPlots").addEventListener(
   "click",
   publishPlots
 );
