@@ -1533,6 +1533,19 @@ img{
   border:1px solid #b9d9e8;border-radius:14px;
   background:rgba(255,255,255,.55);
 }
+
+.inner-scroll{display:block}
+.inner-scroll>*{flex-shrink:0}
+.panel-toggle{
+  width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;
+  background:transparent;border:0;border-bottom:1px dashed rgba(91,155,193,.35);
+  padding:8px 2px 12px;margin-bottom:6px;cursor:pointer;text-align:left;
+  font:700 12px var(--raj);letter-spacing:.12em;color:#2f83ad;
+}
+.panel-toggle .pt-arrow{color:#e678a5;font-size:13px}
+.admin-panel.panel-closed{padding-top:10px;padding-bottom:10px}
+.admin-panel.panel-closed>*:not(.panel-toggle){display:none!important}
+.admin-panel.panel-closed .panel-toggle{border-bottom:0;margin-bottom:0;padding-bottom:8px}
 </style>
 </head>
 <body>
@@ -1753,7 +1766,7 @@ img{
   </header>
 
   <main class="inner-scroll" id="plotsScroll">
-    <div class="admin-panel admin-hidden" data-admin-only="1">
+    <div class="admin-panel admin-hidden panel-closed" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorPlots">PLOT MANAGER</h3>
       <p class="admin-note">
@@ -1831,7 +1844,7 @@ img{
   </header>
 
   <main class="inner-scroll" id="novelsScroll">
-    <div class="admin-panel admin-hidden" data-admin-only="1">
+    <div class="admin-panel admin-hidden panel-closed" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorNovels">NOVEL MANAGER</h3>
       <p class="admin-note">
@@ -2013,7 +2026,7 @@ img{
   </header>
 
   <main class="inner-scroll" id="qaScroll">
-    <div class="admin-panel admin-hidden" data-admin-only="1">
+    <div class="admin-panel admin-hidden panel-closed" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorWavebox">WAVEBOX SETTINGS</h3>
 
@@ -2223,7 +2236,7 @@ img{
   </header>
 
   <main class="inner-scroll" id="detailScroll">
-    <div class="admin-panel admin-hidden" data-admin-only="1">
+    <div class="admin-panel admin-hidden panel-closed" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorGuidelines">GUIDELINES</h3>
 
@@ -2719,7 +2732,36 @@ img{
   </header>
 
   <main class="inner-scroll" id="settingsScroll">
-    <div class="admin-panel admin-hidden" data-admin-only="1">
+    <div class="admin-panel admin-hidden" data-admin-only="1" data-no-toggle="1">
+
+      <h3 class="admin-anchor">MANAGE</h3>
+      <p class="admin-note">
+        各ページの編集欄へ直接移動します。
+      </p>
+
+      <button class="settings-row" type="button" data-admin-goto="anchorPlots">
+        <span>プロット管理<small>PLOT MANAGER</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+      <button class="settings-row" type="button" data-admin-goto="anchorNovels">
+        <span>小説管理<small>NOVEL MANAGER</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+      <button class="settings-row" type="button" data-admin-goto="anchorQA">
+        <span>Q&A管理<small>Q&A MANAGER</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+      <button class="settings-row" type="button" data-admin-goto="anchorGuidelines">
+        <span>ガイドライン編集<small>GUIDELINES</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+      <button class="settings-row" type="button" data-admin-goto="anchorNotices">
+        <span>お知らせ編集<small>ANNOUNCEMENTS</small></span>
+        <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+      </button>
+    </div>
+
+    <div class="admin-panel admin-hidden panel-closed" data-admin-only="1">
 
       <h3 class="admin-anchor" id="anchorNotices">ANNOUNCEMENTS / お知らせ</h3>
       <p class="admin-note">
@@ -6351,7 +6393,7 @@ document.querySelectorAll("[data-goto]")
 
 const GOTO_SCREEN={
     anchorPlots:"plots",
-    anchorNotices:"plots",
+    anchorNotices:"settings",
     anchorNovels:"novels",
     anchorQA:"qa",
     anchorWavebox:"qa",
@@ -6377,11 +6419,69 @@ const GOTO_SCREEN={
           const el=$(anchor);
 
           if(el){
-            el.scrollIntoView({block:"start"});
+            const panel=el.closest("[data-admin-only]");
+          if(panel&&panel.classList.contains("panel-closed")){
+            const tg=panel.querySelector(".panel-toggle");
+            if(tg)tg.click();
+          }
+
+          el.scrollIntoView({block:"start"});
           }
         },600);
       }
     });
+  });
+
+
+  /* COLLAPSIBLE EDIT PANELS */
+  document.querySelectorAll(
+    "[data-admin-only]:not([data-no-toggle])"
+  ).forEach(panel=>{
+    const h3=panel.querySelector("h3");
+    const name=h3?h3.textContent.trim():"編集";
+
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="panel-toggle";
+
+    const label=document.createElement("span");
+    label.className="panel-toggle-label";
+    label.textContent=name+"｜編集を開く";
+
+    const arrow=document.createElement("span");
+    arrow.className="pt-arrow";
+    arrow.textContent="▽";
+
+    btn.append(label,arrow);
+    btn.addEventListener("click",()=>{
+      const closed=panel.classList.toggle("panel-closed");
+      label.textContent=
+        name+(closed?"｜編集を開く":"｜編集を閉じる");
+      arrow.textContent=closed?"▽":"△";
+    });
+
+    panel.prepend(btn);
+  });
+
+  /* KEEP SCROLL POSITION ACROSS RE-RENDERS */
+  [
+    ["renderAdminQA","qaScroll"],
+    ["renderPublicQA","qaScroll"],
+    ["renderAdminList","plotsScroll"],
+    ["renderAdminNovels","novelsScroll"],
+    ["renderGuidelineBody","detailScroll"]
+  ].forEach(([fn,sc])=>{
+    const orig=window[fn];
+
+    if(typeof orig==="function"){
+      window[fn]=function(...args){
+        const el=$(sc);
+        const st=el?el.scrollTop:0;
+        const result=orig.apply(this,args);
+        if(el)el.scrollTop=st;
+        return result;
+      };
+    }
   });
 
 refreshSiteLinks();
