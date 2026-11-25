@@ -2028,23 +2028,23 @@ img{
   <main class="inner-scroll" id="qaScroll">
     <div class="admin-panel admin-hidden panel-closed" data-admin-only="1">
 
-      <h3 class="admin-anchor" id="anchorWavebox">WAVEBOX SETTINGS</h3>
+      <h3 class="admin-anchor" id="anchorWavebox">MOND SETTINGS</h3>
 
       <p class="admin-note">
-        質問受付に使用するWaveboxのURLを設定します。
+        質問受付に使用するmondのURLを設定します。
         保存すると、Q&amp;Aページの質問ボタンから
-        Waveboxへ移動できるようになります。
+        mondへ移動できるようになります。
       </p>
 
       <label class="admin-field">
-        WAVEBOX URL
+        MOND URL
         <input id="waveboxUrlInput"
           type="url"
           inputmode="url"
           autocapitalize="off"
           autocomplete="off"
           spellcheck="false"
-          placeholder="https://wavebox.me/wave/">
+          placeholder="https://mond.how/">
       </label>
 
       <div class="admin-actions">
@@ -2071,7 +2071,7 @@ img{
       <h3 class="admin-anchor" id="anchorQA">Q&amp;A MANAGER</h3>
 
       <p class="admin-note">
-        Waveboxで受け取った質問を手動で登録し、
+        mondで受け取った質問を手動で登録し、
         回答を付けて公開できます。
         公開済みのQ&amp;Aは最上部に固定することもできます。
       </p>
@@ -2108,7 +2108,7 @@ img{
           <textarea id="qaEditQuestion"
             rows="4"
             maxlength="800"
-            placeholder="Waveboxで届いた質問など"></textarea>
+            placeholder="mondで届いた質問など"></textarea>
         </label>
 
         <label class="admin-field">
@@ -2183,7 +2183,7 @@ img{
         hidden>
         <span>
           <strong>質問を送る</strong>
-          <small>GO TO WAVEBOX</small>
+          <small>GO TO MOND</small>
         </span>
         <span class="qa-wavebox-arrow"
           aria-hidden="true">
@@ -4849,20 +4849,19 @@ function normalizeWaveboxURL(value){
   if(
     url.protocol!=="https:"||
     ![
-      "wavebox.me",
-      "www.wavebox.me"
+      "mond.how"
     ].includes(hostname)
   ){
     throw new Error(
-      "https://wavebox.me/ から始まるWaveboxのURLを入力してください。"
+      "https://mond.how/ から始まるmondのURLを入力してください。"
     );
   }
 
   if(
-    !/^\/wave\/[^/]+\/?$/.test(url.pathname)
+    !/^\/[^/]+\/?$/.test(url.pathname)
   ){
     throw new Error(
-      "Waveboxの質問受付ページのURLを入力してください。"
+      "mondの質問受付ページのURLを入力してください。"
     );
   }
 
@@ -4917,7 +4916,7 @@ async function loadWaveboxSetting(){
       url=normalizeWaveboxURL(raw);
     }catch(error){
       console.warn(
-        "保存されたWavebox URLが無効:",
+        "保存されたmond URLが無効:",
         error.message
       );
     }
@@ -4945,7 +4944,7 @@ function refreshWaveboxSetting(){
   return waveboxLoadPromise
     .catch(error=>{
       console.warn(
-        "Wavebox設定取得エラー:",
+        "mond設定取得エラー:",
         error.message
       );
     })
@@ -5016,15 +5015,15 @@ async function saveWaveboxSetting(value){
     $("waveboxUrlInput").value=url;
 
     let message=url
-      ?"WaveboxのURLを保存しました。"
-      :"Waveboxのリンクを非表示にしました。";
+      ?"mondのURLを保存しました。"
+      :"mondのリンクを非表示にしました。";
 
     if(previous!==url){
       try{
         await addUpdateLog(
           url
-            ?"質問受付先のWaveboxリンクを更新しました。"
-            :"Waveboxの質問受付リンクを非表示にしました。"
+            ?"質問受付先のmondリンクを更新しました。"
+            :"mondの質問受付リンクを非表示にしました。"
         );
 
         await loadPublishedPlots(true);
@@ -5069,7 +5068,7 @@ $("clearWaveboxBtn").addEventListener(
   "click",
   ()=>{
     if(!confirm(
-      "Waveboxへのリンクを非表示にしますか？"
+      "mondへのリンクを非表示にしますか？"
     ))return;
 
     saveWaveboxSetting("");
@@ -5267,7 +5266,7 @@ TIDELINEは、個人が趣味で運営する創作アーカイブです。掲載
 ・スクリーンショットや画像の保存は、私的利用の範囲でお願いします。SNSなどへの転載はしないでください。
 
 感想・質問について
-・質問はQ&Aページのリンク（Wavebox）から送れます。すべての質問に回答できない場合があります。
+・質問はQ&Aページのリンク（mond）から送れます。すべての質問に回答できない場合があります。
 ・感想は歓迎しますが、誹謗中傷や荒らし行為はお控えください。
 
 その他
