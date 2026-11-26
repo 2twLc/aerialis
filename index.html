@@ -10268,6 +10268,7 @@ restoreAdminSession();
     gcNote.textContent='読み込み中…';
     try{
       var res=await gdb.from('game_comments').select('name,body,created_at,is_admin').order('created_at',{ascending:false}).limit(50);
+      if(res.error) res=await gdb.from('game_comments').select('name,body,created_at').order('created_at',{ascending:false}).limit(50);
       if(res.error) throw res.error;
       var rows=res.data||[];
       gcList.innerHTML=rows.length
@@ -10290,7 +10291,9 @@ restoreAdminSession();
         var sess=await gdb.auth.getSession();
         isAdmin=!!(sess && sess.data && sess.data.session);
       }catch(e){}
-      var res=await gdb.from('game_comments').insert({name:(gcName.value||'').trim().slice(0,12)||null, body:body, is_admin:isAdmin});
+      var nm=(gcName.value||'').trim().slice(0,12)||null;
+      var res=await gdb.from('game_comments').insert({name:nm, body:body, is_admin:isAdmin});
+      if(res.error) res=await gdb.from('game_comments').insert({name:nm, body:body});
       if(res.error) throw res.error;
       gcBody.value='';
       gcNote.textContent='投稿したよ！';
