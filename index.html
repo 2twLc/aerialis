@@ -2073,6 +2073,9 @@ img{filter:none}
 #plotGrid .character-grid{margin:10px 0 18px}
 #adminPlotList .admin-thumb{display:none}
 
+/* ===== v126 ===== */
+#characterBio[hidden],#characterNotes[hidden],#characterProfileTitle[hidden],#characterNotesTitle[hidden],#characterFields[hidden]{display:none!important}
+
 /* ===== v125 ===== */
 #plots .plots-tabs{display:none!important}
 #plotGrid{display:none!important}
@@ -2519,10 +2522,10 @@ img{filter:none}
     <div class="profile-cover" id="characterPortrait"></div>
 
     <article class="profile-panel">
-      <h3>PROFILE</h3>
+      <h3 id="characterProfileTitle">PROFILE</h3>
       <dl class="profile-fields" id="characterFields"></dl>
       <p id="characterBio"></p>
-      <h3>PERSONALITY / NOTES</h3>
+      <h3 id="characterNotesTitle">PERSONALITY / NOTES</h3>
       <p id="characterNotes"></p>
       <div id="characterPromptSection" hidden>
         <h3>PROMPT</h3>
@@ -3973,8 +3976,8 @@ const INITIAL_PLOTS=[
         name:"登場人物 01",
         image:"./character01.png",
         role:"MAIN CHARACTER",
-        age:"未設定",
-        birthday:"未設定",
+        age:"",
+        birthday:"",
         profile:"ここにキャラクターの紹介文を入力します。",
         personality:"性格や特徴、ほかのキャラクターとの関係性などを記載できます。"
       },
@@ -3982,8 +3985,8 @@ const INITIAL_PLOTS=[
         name:"登場人物 02",
         image:"./character02.png",
         role:"CHARACTER",
-        age:"未設定",
-        birthday:"未設定",
+        age:"",
+        birthday:"",
         profile:"ここにキャラクターの紹介文を入力します。",
         personality:"ここに性格や追加設定を入力します。"
       }
@@ -3999,8 +4002,8 @@ const INITIAL_PLOTS=[
         name:"登場人物 03",
         image:"./character03.png",
         role:"MAIN CHARACTER",
-        age:"未設定",
-        birthday:"未設定",
+        age:"",
+        birthday:"",
         profile:"このキャラクターの詳細情報を記載できます。",
         personality:"性格や人物関係などを記載できます。"
       }
@@ -4038,9 +4041,9 @@ function normalizedPlots(items){
       image:String(
         c.image||c.image_url||""
       ),
-      role:String(c.role||"CHARACTER"),
-      age:String(c.age||"未設定"),
-      birthday:String(c.birthday||"未設定"),
+      role:String(c.role||""),
+      age:String(c.age||"").trim()==="未設定"?"":String(c.age||""),
+      birthday:String(c.birthday||"").trim()==="未設定"?"":String(c.birthday||""),
       profile:String(c.profile||""),
       personality:String(c.personality||""),
       ruby:String(c.ruby||""),
@@ -4547,10 +4550,11 @@ function renderPlotGrid(){
       const from=document.createElement("small");
       from.textContent=
         [character.gender,character.age]
-          .filter(v=>String(v||"").trim())
-          .join(" / ")||"未設定";
+          .filter(v=>String(v||"").trim()&&String(v).trim()!=="未設定")
+          .join(" / ");
 
-      info.append(no,title,from);
+      if(from.textContent)info.append(no,title,from);
+      else info.append(no,title);
       button.appendChild(info);
 
       button.addEventListener("click",()=>{
@@ -4659,10 +4663,11 @@ function renderAllCharacters(){
     const from=document.createElement("small");
     from.textContent=
       [character.gender,character.age]
-        .filter(v=>String(v||"").trim())
-        .join(" / ")||"未設定";
+        .filter(v=>String(v||"").trim()&&String(v).trim()!=="未設定")
+        .join(" / ");
 
-    info.append(no,title,from);
+    if(from.textContent)info.append(no,title,from);
+    else info.append(no,title);
     button.appendChild(info);
 
     button.addEventListener("click",()=>{
@@ -4696,8 +4701,9 @@ function openOCDetail(index){
   rubyEl.hidden=!character.ruby;
 
   $("characterSub").textContent=
-    "OC / "+
-    (character.role||"CHARACTER");
+    character.role&&character.role!=="CHARACTER"
+      ?"OC / "+character.role
+      :"OC";
 
   const cover=coverElement(
     "profile-cover",
@@ -4709,17 +4715,20 @@ function openOCDetail(index){
   cover.id="characterPortrait";
   $("characterPortrait").replaceWith(cover);
 
-  $("characterBio").textContent=
-    character.profile||
-    "詳細は準備中です。";
+  const bioText=String(character.profile||"").trim();
+  $("characterBio").textContent=bioText;
+  $("characterBio").hidden=!bioText;
 
-  $("characterNotes").textContent=
-    character.personality||
-    "詳細は準備中です。";
+  const notesText=String(character.personality||"").trim();
+  $("characterNotes").textContent=notesText;
+  $("characterNotes").hidden=!notesText;
+  const notesTitleEl=$("characterNotesTitle");
+  if(notesTitleEl)notesTitleEl.hidden=!notesText;
 
   const fields=$("characterFields");
   fields.replaceChildren();
 
+  let fieldCount=0;
   for(const [label,value] of [
     ["ROLE",character.role],
     ["GENDER",character.gender],
@@ -4727,6 +4736,10 @@ function openOCDetail(index){
     ["HEIGHT",character.height],
     ["BIRTHDAY",character.birthday]
   ]){
+    const v=String(value||"").trim();
+    if(!v||v==="未設定")continue;
+    if(label==="ROLE"&&v==="CHARACTER")continue;
+    fieldCount++;
     const block=document.createElement("div");
     block.className="profile-field";
 
@@ -4734,11 +4747,17 @@ function openOCDetail(index){
     dt.textContent=label;
 
     const dd=document.createElement("dd");
-    dd.textContent=value||"未設定";
+    dd.textContent=v;
 
     block.append(dt,dd);
     fields.appendChild(block);
   }
+  fields.hidden=fieldCount===0;
+  fields.style.gridTemplateColumns=
+    fieldCount?`repeat(${fieldCount},minmax(0,1fr))`:"";
+  const profileTitleEl=$("characterProfileTitle");
+  if(profileTitleEl)profileTitleEl.hidden=
+    fieldCount===0&&!String(character.profile||"").trim();
 
   const promptText=character.prompt||"";
   $("characterPrompt").textContent=promptText;
@@ -4799,7 +4818,9 @@ function renderPlotDetail(index){
 
     const role=document.createElement("small");
     role.textContent=
-      character.role||"CHARACTER";
+      character.role&&character.role!=="CHARACTER"
+        ?character.role:"";
+    role.hidden=!role.textContent;
 
     const arrow=document.createElement("span");
 
@@ -4853,9 +4874,9 @@ function renderCharacterDetail(index){
   rubyEl.hidden=!character.ruby;
 
   $("characterSub").textContent=
-    PLOT_DATA[selectedPlot].title+
-    " / "+
-    (character.role||"CHARACTER");
+    character.role&&character.role!=="CHARACTER"
+      ?PLOT_DATA[selectedPlot].title+" / "+character.role
+      :PLOT_DATA[selectedPlot].title;
 
   const cover=coverElement(
     "profile-cover",
@@ -4867,17 +4888,20 @@ function renderCharacterDetail(index){
   cover.id="characterPortrait";
   $("characterPortrait").replaceWith(cover);
 
-  $("characterBio").textContent=
-    character.profile||
-    "詳細は準備中です。";
+  const bioText=String(character.profile||"").trim();
+  $("characterBio").textContent=bioText;
+  $("characterBio").hidden=!bioText;
 
-  $("characterNotes").textContent=
-    character.personality||
-    "詳細は準備中です。";
+  const notesText=String(character.personality||"").trim();
+  $("characterNotes").textContent=notesText;
+  $("characterNotes").hidden=!notesText;
+  const notesTitleEl=$("characterNotesTitle");
+  if(notesTitleEl)notesTitleEl.hidden=!notesText;
 
   const fields=$("characterFields");
   fields.replaceChildren();
 
+  let fieldCount=0;
   for(const [label,value] of [
     ["ROLE",character.role],
     ["GENDER",character.gender],
@@ -4885,6 +4909,10 @@ function renderCharacterDetail(index){
     ["HEIGHT",character.height],
     ["BIRTHDAY",character.birthday]
   ]){
+    const v=String(value||"").trim();
+    if(!v||v==="未設定")continue;
+    if(label==="ROLE"&&v==="CHARACTER")continue;
+    fieldCount++;
     const block=document.createElement("div");
     block.className="profile-field";
 
@@ -4892,11 +4920,17 @@ function renderCharacterDetail(index){
     dt.textContent=label;
 
     const dd=document.createElement("dd");
-    dd.textContent=value||"未設定";
+    dd.textContent=v;
 
     block.append(dt,dd);
     fields.appendChild(block);
   }
+  fields.hidden=fieldCount===0;
+  fields.style.gridTemplateColumns=
+    fieldCount?`repeat(${fieldCount},minmax(0,1fr))`:"";
+  const profileTitleEl=$("characterProfileTitle");
+  if(profileTitleEl)profileTitleEl.hidden=
+    fieldCount===0&&!String(character.profile||"").trim();
 
   const promptText=character.prompt||"";
   $("characterPrompt").textContent=promptText;
@@ -8722,8 +8756,8 @@ $("epNewCharacter").addEventListener(
       name:"新しいキャラクター",
       image:"",
       role:"CHARACTER",
-      age:"未設定",
-      birthday:"未設定",
+      age:"",
+      birthday:"",
       gender:"",
       profile:"",
       personality:""
