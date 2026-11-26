@@ -2036,6 +2036,13 @@ img{filter:none}
 
 /* ===== v113 ===== */
 .gc-admin-name{text-shadow:1px 0 0 #38bdf8,-1px 0 0 #38bdf8,0 1px 0 #38bdf8,0 -1px 0 #38bdf8,1px 1px 0 #38bdf8,-1px 1px 0 #38bdf8,1px -1px 0 #38bdf8,-1px -1px 0 #38bdf8}
+
+/* ===== v115 ===== */
+#gmRank{font-family:"VT323","DotGothic16","Noto Sans JP",sans-serif}
+.game-rank-title{font-family:"VT323","DotGothic16","Noto Sans JP",sans-serif}
+
+/* ===== v116 ===== */
+.gc-admin-name{text-shadow:.7px 0 0 #38bdf8,-.7px 0 0 #38bdf8,0 .7px 0 #38bdf8,0 -.7px 0 #38bdf8,.5px .5px 0 #38bdf8,-.5px .5px 0 #38bdf8,.5px -.5px 0 #38bdf8,-.5px -.5px 0 #38bdf8}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -10344,12 +10351,13 @@ restoreAdminSession();
     if(!gdb){ rankNote.textContent='ランキングに接続できませんでした'; return; }
     rankNote.textContent='読み込み中…';
     try{
-      var res=await gdb.from('game_scores').select('name,score,dist').order('score',{ascending:false}).order('dist',{ascending:false}).limit(10);
+      var res=await gdb.from('game_scores').select('name,score,dist,is_admin').order('score',{ascending:false}).order('dist',{ascending:false}).limit(10);
+      if(res.error) res=await gdb.from('game_scores').select('name,score,dist').order('score',{ascending:false}).order('dist',{ascending:false}).limit(10);
       if(res.error) throw res.error;
       var rows=res.data||[];
       if(!rows.length){ rankEl.innerHTML='<li class="gm-empty">まだ記録なし。最初の記録を作ろう</li>'; }
       else{
-        rankEl.innerHTML=rows.map(function(e,i){return '<li><b>'+esc(e.name||'???')+'</b> — '+e.score+' PTS / '+e.dist+'m</li>'}).join('');
+        rankEl.innerHTML=rows.map(function(e,i){return '<li><b'+(e.is_admin?' class="gc-admin-name"':'')+'>'+esc(e.name||'???')+'</b> — '+e.score+' PTS / '+e.dist+'m</li>'}).join('');
       }
       rankNote.textContent='';
       try{
@@ -10366,11 +10374,18 @@ restoreAdminSession();
   async function submitScore(sc,d){
     if(!gdb||!myName||sc<=0) return;
     try{
-      var r=await gdb.from('game_scores').select('id,score,dist,author_token').eq('name',myName).order('score',{ascending:false}).order('dist',{ascending:false}).limit(1);
+      var isAdmin=false;
+      try{
+        var ss2=await gdb.auth.getSession();
+        isAdmin=!!(ss2&&ss2.data&&ss2.data.session);
+      }catch(e){}
+      var r=await gdb.from('game_scores').select('id,score,dist,author_token,is_admin').eq('name',myName).order('score',{ascending:false}).order('dist',{ascending:false}).limit(1);
+      if(r.error) r=await gdb.from('game_scores').select('id,score,dist,author_token').eq('name',myName).order('score',{ascending:false}).order('dist',{ascending:false}).limit(1);
       if(r.error) r=await gdb.from('game_scores').select('id,score,dist').eq('name',myName).order('score',{ascending:false}).order('dist',{ascending:false}).limit(1);
       var row=r.data&&r.data[0];
       if(!row){
-        var ins=await gdb.from('game_scores').insert({name:myName,score:sc,dist:d,author_token:myToken||null});
+        var ins=await gdb.from('game_scores').insert({name:myName,score:sc,dist:d,author_token:myToken||null,is_admin:isAdmin});
+        if(ins.error) ins=await gdb.from('game_scores').insert({name:myName,score:sc,dist:d,author_token:myToken||null});
         if(ins.error) await gdb.from('game_scores').insert({name:myName,score:sc,dist:d});
         rankNote.textContent='ランキングに登録したよ！';
         loadRanking();
@@ -10381,9 +10396,13 @@ restoreAdminSession();
         return;
       }
       var better=sc>row.score||(sc===row.score&&d>row.dist);
-      if(better||!row.author_token){
-        var upd={score:better?sc:row.score, dist:better?d:row.dist, author_token:myToken||null};
+      if(better||!row.author_token||isAdmin!==!!row.is_admin){
+        var upd={score:better?sc:row.score, dist:better?d:row.dist, author_token:myToken||null, is_admin:isAdmin};
         var u=await gdb.from('game_scores').update(upd).eq('id',row.id);
+        if(u.error){
+          upd={score:upd.score, dist:upd.dist, author_token:myToken||null};
+          u=await gdb.from('game_scores').update(upd).eq('id',row.id);
+        }
         if(u.error) await gdb.from('game_scores').update({score:upd.score, dist:upd.dist}).eq('id',row.id);
         if(better) rankNote.textContent='ランキングを更新したよ！';
       }
