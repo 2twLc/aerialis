@@ -2061,6 +2061,24 @@ img{filter:none}
 .gc-list li b{font-family:"DotGothic16","VT323","Noto Sans JP","Hiragino Kaku Gothic ProN","Apple Symbols","Noto Sans Symbols 2",sans-serif}
 #gmRank{font-family:"DotGothic16","VT323","Noto Sans JP","Hiragino Kaku Gothic ProN","Apple Symbols","Noto Sans Symbols 2",sans-serif}
 .game-rank-title{font-family:"DotGothic16","VT323","Noto Sans JP","Hiragino Kaku Gothic ProN","Apple Symbols","Noto Sans Symbols 2",sans-serif}
+
+/* ===== v123 ===== */
+.view-edit-btn{display:block;width:100%;margin:0 0 14px;padding:11px;border:2px solid #111;background:#111;color:#fff;font:700 13px "Noto Sans JP",sans-serif;letter-spacing:.12em;cursor:pointer;box-shadow:4px 4px 0 rgba(0,0,0,.25)}
+
+/* ===== v124 ===== */
+.plot-group-title{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;-webkit-user-select:none;background:#fff;border:2px solid #111;border-left:5px solid #111;box-shadow:4px 4px 0 #000;padding:14px 12px;margin:16px 0 6px}
+.plot-group-title::after{content:"\25B8";margin-left:auto;font-size:16px;color:#111}
+.plot-group-title.open::after{content:"\25BE"}
+.plot-group-count{font:13px "VT323",monospace;color:#8a8a8a;letter-spacing:.08em}
+#plotGrid .character-grid{margin:10px 0 18px}
+#adminPlotList .admin-thumb{display:none}
+
+/* ===== v125 ===== */
+#plots .plots-tabs{display:none!important}
+#plotGrid{display:none!important}
+.admin-panel:has(#anchorPlots){display:none!important}
+#character #characterFields{grid-template-columns:repeat(5,minmax(0,1fr))}
+#character #characterFields .profile-field dd{font-size:11.5px}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -2407,6 +2425,7 @@ img{filter:none}
   </header>
 
   <main class="inner-scroll" id="novelViewScroll">
+    <button type="button" class="view-edit-btn admin-hidden" id="novelViewEditBtn" data-admin-only>編集</button>
     <div class="page-kicker" id="novelViewPlot">
       NOVEL
     </div>
@@ -2444,13 +2463,12 @@ img{filter:none}
   </header>
 
   <main class="inner-scroll" id="plotViewScroll">
+    <button type="button" class="view-edit-btn admin-hidden" id="plotViewEditBtn" data-admin-only>編集</button>
     <div class="page-kicker" id="selectedPlotCode">
       PLOT / 01
     </div>
 
     <h2 class="page-title" id="selectedPlotTitle"></h2>
-    <div class="plot-hero-cover" id="selectedPlotCover"></div>
-
     <article class="plot-info-panel">
       <h3>STORY / INTRODUCTION</h3>
       <p id="selectedPlotIntro"></p>
@@ -2490,6 +2508,7 @@ img{filter:none}
   </header>
 
   <main class="inner-scroll" id="characterScroll">
+    <button type="button" class="view-edit-btn admin-hidden" id="characterEditBtn" data-admin-only>編集</button>
     <div class="page-kicker">
       CHARACTER FILE / <span id="characterNumber">01</span>
     </div>
@@ -3095,31 +3114,6 @@ img{filter:none}
           rows="4"
           placeholder="#ファンタジー&#10;#世界観"></textarea>
       </label>
-
-      <label class="admin-field">
-        画像ファイルの既存パス・URL
-        <input id="epImage"
-          type="text"
-          placeholder="./plot01.png">
-      </label>
-
-      <img class="admin-image-preview"
-        id="epPreview"
-        alt="プロット画像のプレビュー">
-
-      <label class="admin-field">
-        新しい画像を選択（公開・保存時にアップロード）
-        <input id="epFile"
-          type="file"
-          accept="image/png,image/jpeg,image/webp,image/gif,image/avif">
-      </label>
-
-      <div class="admin-actions">
-        <button class="admin-btn secondary"
-          id="epClearImage" type="button">
-          画像を外す
-        </button>
-      </div>
 
       <hr class="admin-separator">
 
@@ -4227,6 +4221,7 @@ function setScreen(name){
 
   if(name==="plots"&&adminUser){
     renderAdminList();
+    renderAdminOCs();
   }
 
   if(name==="home"){
@@ -4507,10 +4502,22 @@ function renderPlotGrid(){
     const head=document.createElement("h3");
     head.className="plot-group-title";
     head.textContent=plot.title;
+
+    const cnt=document.createElement("span");
+    cnt.className="plot-group-count";
+    cnt.textContent=plot.characters.length+"人";
+    head.appendChild(cnt);
     grid.appendChild(head);
 
     const g=document.createElement("div");
     g.className="character-grid";
+    g.style.display="none";
+
+    head.addEventListener("click",()=>{
+      const open=g.style.display!=="none";
+      g.style.display=open?"none":"";
+      head.classList.toggle("open",!open);
+    });
 
     plot.characters.forEach((character,ci)=>{
       charNo++;
@@ -4714,6 +4721,7 @@ function openOCDetail(index){
   fields.replaceChildren();
 
   for(const [label,value] of [
+    ["ROLE",character.role],
     ["GENDER",character.gender],
     ["AGE",character.age],
     ["HEIGHT",character.height],
@@ -4760,16 +4768,6 @@ function renderPlotDetail(index){
 
   $("selectedPlotTags").textContent=
     plot.tags.join("　");
-
-  const cover=coverElement(
-    "plot-hero-cover",
-    plot.image,
-    "PLOT / "+
-    String(index+1).padStart(2,"0")
-  );
-
-  cover.id="selectedPlotCover";
-  $("selectedPlotCover").replaceWith(cover);
 
   $("characterCount").textContent=
     String(plot.characters.length)
@@ -4881,6 +4879,7 @@ function renderCharacterDetail(index){
   fields.replaceChildren();
 
   for(const [label,value] of [
+    ["ROLE",character.role],
     ["GENDER",character.gender],
     ["AGE",character.age],
     ["HEIGHT",character.height],
@@ -8479,14 +8478,8 @@ function openPlotEditor(index){
     p.description||p.intro;
 
   $("epTags").value=p.tags.join("\n");
-  $("epImage").value=p.image;
-  $("epFile").value="";
-
-  setPreview(
-    "epPreview",
-    pendingURL(`plot:${p.id}`)||
-    p.image
-  );
+  p.image="";
+  pendingImages.delete(`plot:${p.id}`);
 
   renderEditCharacters();
 
@@ -8647,8 +8640,7 @@ function bindField(id,getTarget,key){
 for(const [id,key] of [
   ["epTitle","title"],
   ["epIntro","intro"],
-  ["epDescription","description"],
-  ["epImage","image"]
+  ["epDescription","description"]
 ]){
   bindField(id,getEditedPlot,key);
 }
@@ -8680,18 +8672,6 @@ for(const [id,key] of [
   bindField(id,getEditedCharacter,key);
 }
 
-$("epFile").addEventListener("change",e=>{
-  const p=getEditedPlot();
-
-  if(p){
-    displayFile(
-      e.target.files[0],
-      `plot:${p.id}`,
-      "epPreview"
-    );
-  }
-});
-
 $("ecFile").addEventListener("change",e=>{
   const c=getEditedCharacter();
 
@@ -8702,18 +8682,6 @@ $("ecFile").addEventListener("change",e=>{
       "ecPreview"
     );
   }
-});
-
-$("epImage").addEventListener("input",()=>{
-  const p=getEditedPlot();
-  if(!p)return;
-
-  pendingImages.delete(`plot:${p.id}`);
-
-  setPreview(
-    "epPreview",
-    $("epImage").value
-  );
 });
 
 $("ecImage").addEventListener("input",()=>{
@@ -8727,21 +8695,6 @@ $("ecImage").addEventListener("input",()=>{
     $("ecImage").value
   );
 });
-
-$("epClearImage").addEventListener(
-  "click",
-  ()=>{
-    const p=getEditedPlot();
-    if(!p)return;
-
-    p.image="";
-    pendingImages.delete(`plot:${p.id}`);
-
-    $("epImage").value="";
-    $("epFile").value="";
-    setPreview("epPreview","");
-  }
-);
 
 $("ecClearImage").addEventListener(
   "click",
@@ -10791,6 +10744,50 @@ restoreAdminSession();
   ch.on('presence',{event:'leave'},upd);
   ch.subscribe(function(status){
     if(status==='SUBSCRIBED'){ ch.track({at:Date.now()}); }
+  });
+})();
+</script>
+<script>
+/* v123: edit-from-detail buttons (admin only) */
+(function(){
+  var ocIndex=-1, novelIndex=-1, kind='plot';
+  if(typeof openOCDetail==='function'){
+    var _oc=openOCDetail;
+    openOCDetail=function(i){ kind='oc'; ocIndex=i; return _oc(i); };
+  }
+  if(typeof renderCharacterDetail==='function'){
+    var _rc=renderCharacterDetail;
+    renderCharacterDetail=function(i){ kind='plot'; return _rc(i); };
+  }
+  if(typeof openNovel==='function'){
+    var _nv=openNovel;
+    openNovel=function(i){ novelIndex=i; return _nv(i); };
+  }
+  function draftIndexOf(plot){
+    if(!plot||typeof draftPlots==='undefined') return -1;
+    for(var i=0;i<draftPlots.length;i++) if(draftPlots[i].id===plot.id) return i;
+    return -1;
+  }
+  var cb=document.getElementById('characterEditBtn');
+  if(cb) cb.addEventListener('click',function(){
+    if(!adminUser) return;
+    if(kind==='oc'){ if(ocIndex>=0) openOCEditor(ocIndex); return; }
+    var di=draftIndexOf(PLOT_DATA[selectedPlot]);
+    if(di<0) return;
+    openPlotEditor(di);
+    openCharacterEditor(selectedCharacter);
+  });
+  var pb=document.getElementById('plotViewEditBtn');
+  if(pb) pb.addEventListener('click',function(){
+    if(!adminUser) return;
+    var di=draftIndexOf(PLOT_DATA[selectedPlot]);
+    if(di<0) return;
+    openPlotEditor(di);
+  });
+  var nb=document.getElementById('novelViewEditBtn');
+  if(nb) nb.addEventListener('click',function(){
+    if(!adminUser) return;
+    if(novelIndex>=0) openEditNovel(novelIndex);
   });
 })();
 </script>
