@@ -4,8 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#e0f5ff">
-<title>NITU | Plot Archive</title>
+<meta name="theme-color" content="#f4f4f2">
+<title>TIDELINE | Plot Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700&family=Michroma&family=Noto+Serif+JP:wght@500;600;700&family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1546,51 +1546,403 @@ img{
 .admin-panel.panel-closed{padding-top:10px;padding-bottom:10px}
 .admin-panel.panel-closed>*:not(.panel-toggle){display:none!important}
 .admin-panel.panel-closed .panel-toggle{border-bottom:0;margin-bottom:0;padding-bottom:8px}
+
+/* ===== v43 MONOCHROME THEME ===== */
+:root{
+  --bg:#050505; --ink:#f2f2f2; --muted:#9a9a9a;
+  --cyan:#e8e8e8; --pink:#ffffff;
+  --orbit:"DotGothic16",sans-serif; --mich:"DotGothic16",sans-serif;
+  --raj:"VT323",monospace; --jp:"Noto Sans JP",sans-serif;
+}
+.screen{
+  background-color:#050505;
+  background-image:radial-gradient(circle,rgba(255,255,255,.14) 1px,transparent 1.5px);
+  background-size:26px 26px;
+}
+.ambient{display:none!important}
+.wave-svg path{fill:#fff}
+.site-brand strong{color:#fff;font-family:"DotGothic16",sans-serif;letter-spacing:.14em}
+.live-clock{color:#fff;font-size:15px}
+.back-button{color:#fff}
+.settings-button{color:#fff;border:1px solid #fff;background:transparent;border-radius:4px}
+.skip-intro{color:#fff;border:1px solid #fff;background:transparent;border-radius:4px}
+/* loading */
+.loading-main{background:#000;border:1px solid #fff;padding:26px 22px 30px;align-items:flex-start;text-align:left}
+.loading-main .wave-logo{display:none}
+.intro-title{color:#fff;font-family:"DotGothic16",sans-serif;letter-spacing:.12em;margin-top:4px}
+.intro-title::after{content:"_";animation:tblink 1s steps(1) infinite}
+@keyframes tblink{50%{opacity:0}}
+.intro-subtitle{color:#8b8b8b;font-family:"VT323",monospace;letter-spacing:.42em}
+.term-lines{display:flex;flex-direction:column;gap:3px;margin-top:16px;font:16px/1.3 "VT323",monospace;color:#bdbdbd;letter-spacing:.06em}
+.loader-track{background:#111;border:1px solid #fff;border-radius:0}
+.loader-fill{background:#fff}
+.loader-info{color:#fff;font-family:"VT323",monospace;font-size:16px}
+/* home layout: flow column */
+#home{display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;gap:16px;padding-bottom:calc(20px + var(--safe-bottom))}
+#home>*{position:static!important;flex:none}
+#home .site-header{order:1;margin:calc(18px + var(--safe-top)) 7% 0}
+#home .notice-bar{order:2;width:100%;background:#000;border-top:1px solid #fff;border-bottom:1px solid #fff;color:#fff}
+#home .home-title-block{order:3;margin:2px 7% 0}
+#home .game-panel{order:4;margin:0 7%}
+#home .directory{order:5;margin:0 7%;display:flex;flex-direction:column;gap:10px;width:auto}
+#home .home-mascot{order:6;width:104px;margin:0 auto}
+#home .update-panel{order:7;margin:0 7%;width:auto;max-width:none;height:auto;background:transparent;border:1px solid #333;color:#d8d8d8}
+#home .site-footer{order:8;margin:0 7%;border-top:1px solid #2c2c2c;padding-top:12px;color:#8b8b8b}
+.admin-link{color:#fff}
+.home-title-sub{margin:0;font:16px "VT323",monospace;color:#8b8b8b;letter-spacing:.14em}
+.home-title-main{margin:6px 0 0;font:64px/1.05 "DotGothic16",sans-serif;color:#fff;letter-spacing:.04em}
+.home-title-outline{font:30px/1.2 "DotGothic16",sans-serif;color:transparent;-webkit-text-stroke:1.3px #fff;letter-spacing:.3em}
+.home-title-desc{margin:10px 0 0;font:500 12px/1.8 "Noto Sans JP",sans-serif;color:#a8a8a8}
+/* entries as data rows */
+#home .entry{background:#050505;border:1.5px solid #fff;border-radius:4px;color:#fff;flex-direction:row;align-items:center;gap:12px;padding:13px 14px;min-height:0;box-shadow:none}
+#home .entry::before{background:#fff}
+#home .entry .wave-logo{display:none}
+#home .entry-top{order:1}
+#home .entry-title{order:2;flex:1;text-align:left}
+#home .entry-arrow{order:3;color:#fff}
+.entry-index{color:#8b8b8b;font-family:"VT323",monospace;font-size:15px}
+.entry-title strong{color:#fff;font-family:"DotGothic16",sans-serif}
+.entry-title small{color:#9a9a9a}
+.update-heading{color:#fff}
+.update-item{border-top-color:#333}
+.update-date{color:#8b8b8b}
+.update-text{color:#d8d8d8}
+/* content cards stay white files on black */
+.admin-panel,.plot-card,.character-card,.detail-paper,.profile-panel,.qa-intro-card,.qa-item,.novel-row{color:#191919}
+.plot-card-name{color:#191919}
+.plot-card-intro{color:#555}
+.admin-field{color:#6f6f6f}
+.admin-field input,.admin-field textarea,.admin-field select{background:#fafafa;border-color:#cfcfcf;color:#191919}
+.admin-note{color:#7a7a7a}
+.admin-status{color:#555}
+.admin-btn{background:#111;border-color:#111;color:#fff}
+.admin-btn.secondary{background:#fff;color:#111;border-color:#111}
+.panel-toggle{color:#111;border-bottom-color:#d5d5d5}
+.panel-toggle .pt-arrow{color:#111}
+.qa-wavebox-link{border-color:#111;color:#111}
+.qa-section-heading strong{color:#fff}
+.page-description{color:#a8a8a8}
+.section-line{background:#333}
+.profile-cover,.plot-cover::before,.character-cover::before,.plot-hero-cover::before{background:linear-gradient(146deg,#f4f4f4,#d9d9d9 55%,#bcbcbc)}
+.settings-row{background:#fff;color:#191919;border-color:#ddd}
+.link-row{color:#191919}
+.tag-viewport{color:#555}
+/* game */
+.game-panel{border:1.5px solid #fff;background:#000;padding:12px;color:#fff}
+.game-head{display:flex;justify-content:space-between;align-items:baseline;font:16px "VT323",monospace;letter-spacing:.1em;margin-bottom:8px}
+.game-title{font-family:"DotGothic16",sans-serif;font-size:14px;letter-spacing:.16em}
+.game-hud b{color:#fff}
+#gmCv{display:block;width:100%;background:#f5f5f2;touch-action:none}
+.game-start{width:100%;margin-top:10px;background:#fff;color:#000;border:0;padding:10px 0;font:17px "VT323",monospace;letter-spacing:.2em;cursor:pointer}
+.game-note{margin:9px 0 0;font:500 11px/1.7 "Noto Sans JP",sans-serif;color:#9a9a9a}
+.game-rank{margin-top:12px;border-top:1px solid #333;padding-top:9px}
+.game-rank-title{font:15px "VT323",monospace;color:#8b8b8b;letter-spacing:.12em}
+#gmRank{margin:6px 0 0;padding-left:20px;font:15px/1.7 "VT323",monospace;color:#d8d8d8}
+#gmRank .gm-empty{color:#777;list-style:none;margin-left:-20px}
+
+
+/* ===== v44 NEW DESIGN PASS ===== */
+#home .directory{order:4}
+#home .home-mascot{order:5}
+#home .update-panel{order:6}
+#home .site-footer{order:7}
+#home .entry:active{background:#fff;color:#000}
+#home .entry:active .entry-title strong{color:#000}
+#home .entry:active .entry-index,#home .entry:active .entry-title small{color:#555}
+#home .entry:active .entry-arrow{color:#000}
+.page-kicker{font-family:"VT323",monospace;color:#8b8b8b;letter-spacing:.22em;font-size:15px}
+.admin-panel,.plot-card,.character-card,.detail-paper,.qa-intro-card,.novel-row,.profile-panel{
+  border:1.5px solid #111;border-radius:6px;
+  box-shadow:6px 6px 0 rgba(255,255,255,.22);
+}
+.admin-btn{border-radius:4px}
+.admin-field input,.admin-field textarea,.admin-field select{border-radius:4px}
+.panel-toggle{border-radius:0}
+/* game screen */
+.game-name-label{display:block;font:16px "VT323",monospace;color:#8b8b8b;letter-spacing:.18em;margin-top:4px}
+.game-name-row{display:flex;gap:9px;margin-top:7px}
+.game-name-row input{flex:1;min-width:0;background:#000;border:1.5px solid #fff;border-radius:4px;color:#fff;padding:11px 12px;font:600 14px "Noto Sans JP",sans-serif}
+.game-name-row .admin-btn{background:#fff;color:#000;border-color:#fff;flex:none}
+.game-name-note{margin:8px 0 16px;font:500 11px/1.7 "Noto Sans JP",sans-serif;color:#9a9a9a}
+.game-rank-note{margin:7px 0 0;font:14px "VT323",monospace;color:#8b8b8b;letter-spacing:.06em}
+#gmRank li b{color:#fff}
+
+
+/* ===== v45 WHITE BASE / FULL MONOCHROME ===== */
+:root{--bg:#f4f4f2;--ink:#111111;--muted:#6f6f6f;--cyan:#111111;--pink:#111111}
+.screen{background-color:#f4f4f2;background-image:radial-gradient(circle,rgba(0,0,0,.10) 1px,transparent 1.5px)}
+#softWipe{background:#f4f4f2}
+.wave-svg path{fill:#000}
+.site-brand strong{color:#000}
+.live-clock{color:#000}
+.back-button{color:#000;font-size:14px}
+.settings-button{color:#000;border-color:#000;background:#fff}
+.admin-link{color:#000}
+img{filter:grayscale(1)}
+#home .notice-bar{background:#fff;border-top:1.5px solid #000;border-bottom:1.5px solid #000;color:#000}
+.notice-copy{color:#333}
+#home .entry{background:#fff;border:1.5px solid #000;color:#000;box-shadow:5px 5px 0 #000}
+#home .entry::before{background:#000}
+.entry-index{color:#777}
+.entry-title strong{color:#000}
+.entry-title small{color:#666}
+#home .entry-arrow{color:#000}
+#home .entry:active{background:#000;color:#fff}
+#home .entry:active .entry-title strong{color:#fff}
+#home .entry:active .entry-index,#home .entry:active .entry-title small{color:#bbb}
+#home .entry:active .entry-arrow{color:#fff}
+#home .update-panel{background:#fff;border:1.5px solid #000;color:#111;box-shadow:5px 5px 0 #000}
+.update-heading{color:#000}
+.update-item{border-top-color:#ddd}
+.update-date{color:#777;font-size:14px}
+.update-text{color:#111}
+#home .site-footer{color:#555;border-top-color:#000}
+.site-footer{color:#555}
+.page-kicker{color:#777}
+.page-title{color:#000}
+.page-description{color:#4d4d4d}
+.section-line{background:#111}
+.inner-section-heading{color:#000}
+.inner-section-heading small{color:#777}
+.admin-panel,.plot-card,.character-card,.detail-paper,.qa-intro-card,.qa-item,.novel-row,.profile-panel,.plot-info-panel{background:#fff;border:1.5px solid #111;border-radius:6px;box-shadow:6px 6px 0 #000;color:#111}
+.plot-card-name,.character-card-info strong{color:#000}
+.plot-card-intro,.character-card-info small{color:#555}
+.character-card-info span{color:#333}
+.plot-info-panel h3,.profile-panel h3{color:#000}
+.plot-info-panel p,.profile-panel p{color:#333}
+.profile-field dt{color:#777}
+.profile-field dd{color:#000}
+.profile-fields{border-color:#ddd}
+.detail-paper p{color:#222}
+.plot-card-footer{background:#f0f0f0;color:#555;border-color:#ddd}
+.plot-card-footer b{color:#000}
+.tag-viewport{color:#333}
+.plot-tags{color:#111}
+.cover-placeholder{color:#666}
+.archive-empty{color:#777;border-color:#bbb;background:#fff}
+.detail-bottom{color:#777;font-size:14px}
+.qa-intro-index{color:#777}
+.qa-intro-card h3{color:#000}
+.qa-intro-card p{color:#555}
+.qa-search{border-color:#999;color:#000;background:#fff}
+.qa-search:focus{border-color:#000;box-shadow:0 0 0 3px rgba(0,0,0,.08)}
+.qa-wavebox-link{border-color:#111;color:#111;background:#fff}
+.qa-intro-card .qa-wavebox-unset{color:#999}
+.qa-section-heading strong{color:#000}
+.qa-section-heading small{color:#777}
+.qa-item summary{color:#000}
+.qa-item.is-pinned{border-color:#000;background:#f4f4f2}
+.admin-field{color:#4d4d4d;font-size:14px}
+.admin-field input,.admin-field textarea,.admin-field select{background:#fff;border-color:#999;color:#000;border-radius:4px}
+.admin-note{color:#5a5a5a}
+.admin-status{color:#333}
+.admin-home-top{color:#000}
+.panel-toggle{color:#000;border-bottom-color:#ccc}
+.panel-toggle .pt-arrow{color:#000}
+.settings-row{background:#fff;color:#111;border-color:#bbb}
+.link-row{color:#111}
+.game-name-label{color:#777}
+.game-name-row input{background:#fff;border-color:#000;color:#000}
+.game-name-row .admin-btn{background:#000;color:#fff;border-color:#000}
+.game-name-note{color:#666}
+.game-panel{background:#fff;border:1.5px solid #000;color:#000;box-shadow:6px 6px 0 #000}
+.game-hud b{color:#000}
+.game-start{background:#000;color:#fff}
+.game-note{color:#666}
+.game-rank{border-top-color:#ddd}
+.game-rank-title{color:#777}
+#gmRank{color:#111}
+#gmRank li b{color:#000}
+.game-rank-note{color:#777}
+
+
+/* ===== v47 FIXES ===== */
+#home,#plots,#plotView,#character,#detail,#admin,#editPlot,#editCharacter,#qa,#novels,#novelView,#editNovel,#settings,#links,#game{background-color:#f4f4f2}
+#home .home-mascot{display:none}
+
+/* ===== v50 ===== */
+#novelViewBody{color:#161616}
+.admin-btn.secondary{color:#4a4a4a}
+.admin-count{color:#8a8a8a}
+.admin-field{color:#4a4a4a}
+.admin-field input{color:#161616}
+.admin-field textarea{color:#161616}
+.admin-home-top{color:#4a4a4a}
+.admin-item-body{color:#161616}
+.admin-item-body small{color:#8a8a8a}
+.admin-item-tools button{color:#4a4a4a}
+.admin-move-tools button{color:#4a4a4a}
+.admin-note{color:#4a4a4a}
+.admin-panel h3{color:#4a4a4a}
+.admin-status{color:#4a4a4a}
+.archive-empty{color:#4a4a4a}
+.back-button{color:#4a4a4a}
+.character-card-info small{color:#8a8a8a}
+.character-card-info span{color:#4a4a4a}
+.character-card-info strong{color:#161616}
+.character-ruby{color:#8a8a8a}
+.detail-bottom{color:#8a8a8a}
+.detail-paper p{color:#161616}
+.entry{color:#161616}
+.entry-arrow{color:#4a4a4a}
+.entry-index{color:#4a4a4a}
+.entry-title small{color:#8a8a8a}
+.guide-body{color:#161616}
+.guide-heading{color:#161616}
+.inner-section-heading{color:#4a4a4a}
+.inner-section-heading small{color:#8a8a8a}
+.intro-subtitle{color:#4a4a4a}
+.intro-title{color:#161616}
+.link-anchor small{color:#8a8a8a}
+.loader-info{color:#4a4a4a}
+.notice-copy{color:#4a4a4a}
+.novel-body{color:#161616}
+.novel-row{color:#161616}
+.novel-row small{color:#8a8a8a}
+.page-description{color:#4a4a4a}
+.page-kicker{color:#4a4a4a}
+.panel-toggle{color:#4a4a4a}
+.plot-card-footer{color:#8a8a8a}
+.plot-card-footer b{color:#8a8a8a}
+.plot-card-intro{color:#4a4a4a}
+.plot-card-name{color:#161616}
+.plot-info-panel h3{color:#4a4a4a}
+.plot-info-panel p{color:#161616}
+.plot-tags{color:#4a4a4a}
+.plots-tab{color:#8a8a8a}
+.plots-tab.active{color:#161616}
+.profile-field dd{color:#161616}
+.profile-field dt{color:#8a8a8a}
+.profile-panel h3{color:#4a4a4a}
+.profile-panel p{color:#161616}
+.qa-admin-answer-preview{color:#4a4a4a}
+.qa-admin-badge{color:#4a4a4a}
+.qa-admin-badge.pinned{color:#4a4a4a}
+.qa-admin-editor h4{color:#4a4a4a}
+.qa-admin-empty{color:#8a8a8a}
+.qa-admin-group-title span{color:#8a8a8a}
+.qa-admin-question{color:#161616}
+.qa-admin-type{color:#4a4a4a}
+.qa-editor-source{color:#8a8a8a}
+.qa-empty{color:#4a4a4a}
+.qa-intro-card .qa-wavebox-unset{color:#8a8a8a}
+.qa-intro-card h3{color:#161616}
+.qa-intro-card p{color:#4a4a4a}
+.qa-intro-index{color:#4a4a4a}
+.qa-item summary{color:#161616}
+.qa-pinned-flag{color:#4a4a4a}
+.qa-q-symbol{color:#4a4a4a}
+.qa-search{color:#161616}
+.qa-section-heading small{color:#8a8a8a}
+.qa-section-heading strong{color:#4a4a4a}
+.settings-button{color:#4a4a4a}
+.settings-row{color:#161616}
+.settings-row .vector-arrow{color:#8a8a8a}
+.settings-row small{color:#8a8a8a}
+.site-footer{color:#4a4a4a}
+.tag-viewport{color:#4a4a4a}
+.update-date{color:#4a4a4a}
+.update-heading{color:#4a4a4a}
+.update-text{color:#161616}
+
+.admin-link:not(.links-link){color:#ff6ec7}
+.site-footer>span:last-child{margin-left:16px}
+.plots-tabs{display:none!important}
+#characterFields{grid-template-columns:repeat(4,minmax(0,1fr))}
+#characterFields .profile-field dd{font-size:12px}
+.character-card-info .char-no{display:block;font:13px "VT323",monospace;color:#8a8a8a;letter-spacing:.12em;margin-bottom:2px}
+.prompt-box{border:1.5px solid #111;background:#fff;padding:13px 14px;box-shadow:5px 5px 0 #000}
+.prompt-box p{margin:0;white-space:pre-wrap;font:500 12px/1.9 "Noto Sans JP",sans-serif;color:#222;overflow-wrap:anywhere}
+.prompt-copy{margin-top:11px;background:#000;color:#fff;border:0;border-radius:4px;padding:9px 16px;font:700 12px "Noto Sans JP",sans-serif;cursor:pointer}
+
+
+/* ===== v51 ===== */
+#home .site-footer{margin-top:auto}
+
+/* ===== v54 ===== */
+.site-brand{display:none!important}
+#home{padding-bottom:calc(64px + var(--safe-bottom))}
+
+/* ===== v56 ===== */
+.inner-scroll{top:calc(86px + var(--safe-top))}
+
+/* ===== v57 ===== */
+.site-header{justify-content:flex-end}
+.live-clock{letter-spacing:-.03em}
+.site-footer{padding-top:13px;padding-bottom:1px}
+#home{padding-bottom:calc(15px + var(--safe-bottom))}
+
+/* ===== v58 ===== */
+#home .site-footer{bottom:calc(42px + var(--safe-bottom))}
+
+/* ===== v62 ===== */
+*{-webkit-tap-highlight-color:transparent}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+canvas{touch-action:none}
+
+/* ===== v68 ===== */
+
+
+/* ===== v76 ===== */
+.gm-score{display:inline}
+
+/* ===== v77 ===== */
+.game-head{flex-wrap:nowrap;font-size:15px;letter-spacing:.04em}
+.game-title{white-space:nowrap;letter-spacing:.08em}
+.game-hud{white-space:nowrap}
+
+/* ===== v80 ===== */
+#game .inner-scroll{left:4%;right:4%}
+.game-links{display:flex;gap:10px;margin-top:12px}
+.game-link-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 0 10px;background:#fff;border:2px solid #111;color:#111;font:13px "VT323",monospace;letter-spacing:.14em;cursor:pointer}
+.game-link-btn svg{width:24px;height:24px}
+.game-first-note{margin-top:10px;font-size:13px;font-weight:700;color:#111}
+#gcBody{width:100%;box-sizing:border-box;background:#fff;border:1.5px solid #111;padding:9px;font:inherit;margin:2px 0 10px}
+.gc-list{margin:10px 0 0;padding-left:20px;font:15px/1.7 "VT323",monospace;color:#222}
+.gc-list .gm-empty{color:#777;list-style:none;margin-left:-20px}
+#gcPost{margin-top:2px}
+
+/* ===== v81 ===== */
+#game .inner-scroll{top:calc(56px + var(--safe-top))}
+
+/* ===== v82 ===== */
+.site-header .back-button{position:absolute;left:0;top:50%;transform:translateY(-50%)}
+
+/* ===== v83 ===== */
+.page-kicker{display:none}
+.page-description{display:none}
+.section-line{display:none}
+#novelView .section-line{display:block}
+#plots .page-title,#novels .page-title,#gameRank .page-title,#gameComment .page-title,#admin .page-title,#editPlot .page-title,#editNovel .page-title,#editCharacter .page-title,#links .page-title{display:none}
+.inner-scroll{top:calc(58px + var(--safe-top))}
+.gm-modal{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(15,15,15,.45)}
+.gm-modal[hidden]{display:none}
+.gm-modal-card{background:#fff;border:2px solid #111;padding:22px 20px;width:min(78%,300px);text-align:center;box-shadow:8px 8px 0 rgba(0,0,0,.35)}
+.gm-modal-text{font-size:14px;font-weight:700;line-height:1.8;margin:0 0 16px}
+.gm-modal-write{width:100%}
+.gm-modal-close{margin-top:10px;background:none;border:none;color:#555;font:inherit;font-size:13px;text-decoration:underline;cursor:pointer}
+
+/* ===== v84 ===== */
+.plots-tabs{display:block!important}
+#plotTotal{display:block}
+#novelTotal{display:block}
+.plots-tab{color:#8a8a8a}
+.plots-tab.active{color:#111;border-bottom-color:#111}
+
+/* ===== v85 ===== */
+#plotGrid{display:block}
+.plot-group-title{font:700 15px "DotGothic16",sans-serif;color:#111;letter-spacing:.05em;margin:20px 0 10px;padding-left:9px;border-left:5px solid #111}
+.plot-group-title:first-child{margin-top:4px}
+.character-card{box-shadow:4px 4px 0 #000}
+.plots-head{margin-bottom:14px}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div id="app">
 
-<!-- LOADING -->
-<section class="screen active" id="loading" aria-hidden="false">
-  <div class="ambient"></div>
-
-  <button class="skip-intro"
-    type="button" id="skipIntro">SKIP</button>
-
-  <div class="loading-main">
-    <div class="wave-logo large" aria-hidden="true">
-      <svg class="wave-svg" viewBox="0 0 150 64">
-        <path class="wave-top"></path>
-        <path class="wave-bottom"></path>
-      </svg>
-    </div>
-
-    <h1 class="intro-title">NITU</h1>
-    <div class="intro-subtitle">PLOT ARCHIVE</div>
-
-    <div class="loader"
-      role="progressbar"
-      id="progressTrack"
-      aria-label="サイトを読み込み中"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      aria-valuenow="0">
-
-      <div class="loader-track">
-        <div class="loader-fill" id="loaderFill"></div>
-      </div>
-
-      <div class="loader-info">
-        <span>LOADING</span>
-        <strong id="loaderNumber">0%</strong>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HOME -->
-<section class="screen" id="home" aria-hidden="true">
+<section class="screen active" id="home" aria-hidden="false">
   <div class="ambient"></div>
 
   <header class="site-header">
@@ -1620,11 +1972,6 @@ img{
     </div>
   </div>
 
-  <section class="update-panel" aria-label="更新履歴">
-    <div class="update-heading">UPDATE LOG</div>
-    <div class="update-list" id="updateList"></div>
-  </section>
-
   <button class="home-mascot"
     type="button"
     id="mascotButton"
@@ -1647,7 +1994,7 @@ img{
   <nav class="directory" aria-label="アーカイブのメニュー">
     <button class="entry" type="button" data-page="0">
       <span class="entry-top">
-        <span class="entry-index">01 / PLOTS</span>
+        <span class="entry-index">01 / CHARACTER</span>
         <span class="wave-logo card-size" aria-hidden="true">
           <svg class="wave-svg" viewBox="0 0 150 64">
             <path class="wave-top"></path>
@@ -1656,8 +2003,8 @@ img{
         </span>
       </span>
       <span class="entry-title">
-        <strong>PLOTS</strong>
-        <small>PLOT COLLECTION</small>
+        <strong>CHARACTER</strong>
+        <small>CHARACTER COLLECTION</small>
       </span>
       <span class="entry-arrow">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1721,6 +2068,20 @@ img{
       <span class="entry-title">
         <strong>GUIDELINES</strong>
         <small>SITE GUIDELINES</small>
+      </span>
+      <span class="entry-arrow">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 18 18 6 M8 6h10v10"/>
+        </svg>
+      </span>
+    </button>
+    <button class="entry" type="button" id="gameEntry">
+      <span class="entry-top">
+        <span class="entry-index">05 / GAME</span>
+      </span>
+      <span class="entry-title">
+        <strong>GAME</strong>
+        <small>MINI GAME</small>
       </span>
       <span class="entry-arrow">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1795,28 +2156,28 @@ img{
       </p>
     </div>
 
-    <div class="page-kicker">SECTION 01 / ARCHIVE</div>
-    <h2 class="page-title">PLOTS</h2>
+    <div class="page-kicker">SECTION 01 / CHARACTER</div>
+    <h2 class="page-title">CHARACTER</h2>
     <div class="plots-head">
       <p class="page-description"
         id="plotTotal">プロット数：2件</p>
 
       <div class="plots-tabs">
         <button class="plots-tab active"
-          type="button" id="togglePlots">
-          PLOTS
+          type="button" id="toggleCharacters">
+          OC
         </button>
         <button class="plots-tab"
-          type="button" id="toggleCharacters">
-          CHARACTER
+          type="button" id="togglePlots">
+          PLOT
         </button>
       </div>
     </div>
     <div class="section-line"></div>
 
-    <div class="plot-grid" id="plotGrid"></div>
+    <div class="plot-grid" id="plotGrid" style="display:none"></div>
     <div class="character-grid"
-      id="allCharacterGrid" style="display:none"></div>
+      id="allCharacterGrid"></div>
 </main>
 </section>
 
@@ -1976,7 +2337,7 @@ img{
     <div class="header-actions">
       <time class="live-clock">00:00:00</time>
       <button class="back-button"
-        type="button" data-back="plotView">
+        type="button" data-back="plots">
         <span class="back-arrow">←</span>BACK
       </button>
     </div>
@@ -1994,10 +2355,17 @@ img{
 
     <article class="profile-panel">
       <h3>PROFILE</h3>
-      <p id="characterBio"></p>
       <dl class="profile-fields" id="characterFields"></dl>
+      <p id="characterBio"></p>
       <h3>PERSONALITY / NOTES</h3>
       <p id="characterNotes"></p>
+      <div id="characterPromptSection" hidden>
+        <h3>PROMPT</h3>
+        <div class="prompt-box">
+          <p id="characterPrompt"></p>
+          <button class="prompt-copy" id="copyPromptBtn" type="button">⧉ コピー</button>
+        </div>
+      </div>
     </article>
   </main>
 </section>
@@ -2281,6 +2649,156 @@ img{
 </section>
 
 <!-- ADMIN -->
+<!-- GAME -->
+<section class="screen" id="game" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button"
+        type="button" data-back="home">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll">
+    <div class="game-panel" id="gamePanel">
+      <div class="game-head">
+        <span class="game-title">SQUARE RUN</span>
+        <span class="game-hud">DIST <b id="gmDist">0</b>m<span class="gm-score">&nbsp;&nbsp;SCORE <b id="gmScore">0</b></span></span>
+      </div>
+      <canvas id="gmCv" width="344" height="300"></canvas>
+      <button class="game-start" id="gmStart" type="button">TAP TO START</button>
+      <p class="game-note">紫に当たったらダメ。</p>
+    </div>
+
+    <div class="game-links">
+      <button class="game-link-btn" id="gmRankBtn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v6a5 5 0 0 1-10 0V4z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 5H4a3 3 0 0 0 3.5 3.6M17 5h3a3 3 0 0 1-3.5 3.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 15v2.5M8.5 20.5h7M10 17.5h4v3h-4z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span>RANKING</span>
+      </button>
+      <button class="game-link-btn" id="gmCommentBtn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v10h-8l-5 4v-4H4V5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <span>COMMENT</span>
+      </button>
+    </div>
+    <div class="detail-bottom">
+      <span>TIDELINE / GAME</span>
+      <span>05</span>
+    </div>
+  </main>
+
+  <div class="gm-modal" id="gmModal" hidden>
+    <div class="gm-modal-card">
+      <p class="gm-modal-text">初めてのプレイありがとう！<br>よかったらコメントで感想をください</p>
+      <button class="admin-btn gm-modal-write" id="gmModalWrite" type="button">コメントを書く</button>
+      <button class="gm-modal-close" id="gmModalClose" type="button">閉じる</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="gameRank" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button" type="button" data-back="game">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll">
+    <div class="page-kicker">GAME / RANKING</div>
+    <h2 class="page-title">RANKING</h2>
+    <p class="page-description">SCORE RANKING</p>
+    <div class="section-line"></div>
+
+<label class="game-name-label" for="gmName">PLAYER NAME</label>
+    <div class="game-name-row">
+      <input id="gmName" type="text" maxlength="12" placeholder="なまえ" autocomplete="off">
+      <button id="gmNameSave" class="admin-btn" type="button">保存</button>
+    </div>
+    <p class="game-name-note" id="gmNameNote">名前を保存すると、ゲームオーバーでランキングに登録されるよ</p>
+
+      <div class="game-rank">
+        <div class="game-rank-title">RANKING（みんなの記録）</div>
+        <ol id="gmRank"></ol>
+        <p class="game-rank-note" id="gmRankNote"></p>
+      </div>
+
+    <div class="detail-bottom">
+      <span>TIDELINE / GAME / RANKING</span>
+      <span>05</span>
+    </div>
+  </main>
+</section>
+
+<section class="screen" id="gameComment" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button" type="button" data-back="game">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll">
+    <div class="page-kicker">GAME / COMMENT</div>
+    <h2 class="page-title">COMMENT</h2>
+    <p class="page-description">FREE COMMENTS</p>
+    <div class="section-line"></div>
+
+    <label class="game-name-label" for="gcName">NAME</label>
+    <div class="game-name-row">
+      <input id="gcName" type="text" maxlength="12" placeholder="なまえ（なくてもOK）" autocomplete="off">
+    </div>
+    <label class="game-name-label" for="gcBody">COMMENT</label>
+    <textarea id="gcBody" rows="3" maxlength="200" placeholder="感想を書いてね"></textarea>
+    <button id="gcPost" class="admin-btn" type="button">投稿する</button>
+    <p class="game-name-note" id="gcNote"></p>
+    <ol id="gcList" class="gc-list"></ol>
+
+    <div class="detail-bottom">
+      <span>TIDELINE / GAME / COMMENT</span>
+      <span>05</span>
+    </div>
+  </main>
+</section>
+
 <section class="screen" id="admin" aria-hidden="true">
   <div class="ambient"></div>
 
@@ -2362,6 +2880,7 @@ img{
           id="adminHomeBtn" type="button">
           ホームに戻る
         </button>
+
       </div>
     </div>
   </main>
@@ -2615,6 +3134,12 @@ img{
       </label>
 
       <label class="admin-field">
+        身長
+        <input id="ecHeight"
+          type="text" placeholder="未設定">
+      </label>
+
+      <label class="admin-field">
         誕生日
         <input id="ecBirthday"
           type="text" placeholder="未設定">
@@ -2634,6 +3159,10 @@ img{
       <label class="admin-field">
         性格・設定・関係性
         <textarea id="ecPersonality" rows="6"></textarea>
+      </label>
+      <label class="admin-field">
+        プロンプト（コピー用）
+        <textarea id="ecPrompt" rows="4" placeholder="詳細画面に表示される、コピーできるプロンプト"></textarea>
       </label>
 
       <label class="admin-field">
@@ -3013,7 +3542,7 @@ function jstDate(date){
 
 /* DATA */
 const INITIAL_NOTICES=[
-  "NITUへようこそ。",
+  "TIDELINEへようこそ。",
   "お知らせやサイトの更新情報はこちらでご案内します。"
 ];
 
@@ -3319,6 +3848,7 @@ function renderAnnouncements(){
 
 function renderUpdateLog(){
   const list=$("updateList");
+  if(!list)return;
   list.replaceChildren();
 
   const used=new Set();
@@ -3337,7 +3867,7 @@ function renderUpdateLog(){
     b.date.localeCompare(a.date)
   );
 
-  for(const record of records){
+  for(const record of records.slice(0,3)){
     const item=document.createElement("div");
     item.className="update-item";
 
@@ -3360,7 +3890,6 @@ renderUpdateLog();
 /* SCREEN MANAGEMENT */
 const screens=Object.fromEntries(
   [
-    "loading",
     "home",
     "plots",
     "plotView",
@@ -3374,11 +3903,14 @@ const screens=Object.fromEntries(
     "novelView",
     "editNovel",
     "settings",
-    "links"
+    "links",
+    "game",
+    "gameRank",
+    "gameComment"
   ].map(id=>[id,$(id)])
 );
 
-let current="loading";
+let current="home";
 let transitioning=false;
 let adminUser="";
 
@@ -3463,6 +3995,7 @@ document.addEventListener("keydown",e=>{
     plotView:"plots",
     character:"plotView",
     qa:"home",
+    game:"home",
     detail:"home",
     settings:"home",
     admin:"home",
@@ -3540,63 +4073,6 @@ drawWave(0);
 requestAnimationFrame(waveLoop);
 
 /* LOADING */
-let loadFinished=false;
-let loadStarted=0;
-const loadDuration=4000;
-
-function endLoading(){
-  if(loadFinished)return;
-
-  loadFinished=true;
-  $("loaderFill").style.width="100%";
-  $("loaderNumber").textContent="100%";
-
-  $("progressTrack").setAttribute(
-    "aria-valuenow","100"
-  );
-
-  changeScreen("home");
-}
-
-function loadFrame(time){
-  if(loadFinished)return;
-
-  if(!loadStarted){
-    loadStarted=time;
-  }
-
-  const progress=clamp(
-    (time-loadStarted)/loadDuration,
-    0,1
-  );
-
-  const percent=Math.round(progress*100);
-
-  $("loaderFill").style.width=
-    percent+"%";
-
-  $("loaderNumber").textContent=
-    percent+"%";
-
-  $("progressTrack").setAttribute(
-    "aria-valuenow",
-    String(percent)
-  );
-
-  if(progress===1){
-    setTimeout(endLoading,240);
-  }else{
-    requestAnimationFrame(loadFrame);
-  }
-}
-
-requestAnimationFrame(loadFrame);
-
-$("skipIntro").addEventListener(
-  "click",
-  endLoading
-);
-
 /* IMAGE DISPLAY */
 function coverElement(cls,imagePath,label){
   const root=document.createElement("div");
@@ -3731,51 +4207,71 @@ function renderPlotGrid(){
   $("plotTotal").textContent=
     `プロット数：${PLOT_DATA.length}件`;
 
-  PLOT_DATA.forEach((plot,index)=>{
-    const card=document.createElement("button");
-    card.type="button";
-    card.className="plot-card";
+  let charNo=0;
+  PLOT_DATA.forEach((plot,pi)=>{
+    const head=document.createElement("h3");
+    head.className="plot-group-title";
+    head.textContent=plot.title;
+    grid.appendChild(head);
 
-    card.appendChild(
-      coverElement(
-        "plot-cover",
-        plot.image,
-        "PLOT\n"+
-        String(index+1).padStart(2,"0")
-      )
-    );
+    const g=document.createElement("div");
+    g.className="character-grid";
 
-    const info=document.createElement("div");
-    info.className="plot-card-info";
+    plot.characters.forEach((character,ci)=>{
+      charNo++;
+      const button=document.createElement("button");
+      button.type="button";
+      button.className="character-card";
 
-    const title=document.createElement("strong");
-    title.className="plot-card-name";
-    title.textContent=plot.title;
+      button.appendChild(
+        coverElement(
+          "character-cover",
+          character.image,
+          "CHARACTER\n"+
+          String(charNo).padStart(2,"0")
+        )
+      );
 
-    const intro=document.createElement("p");
-    intro.className="plot-card-intro";
-    intro.textContent=plot.intro;
+      const info=document.createElement("div");
+      info.className="character-card-info";
 
-    const tags=tagsViewport(plot.tags);
+      const title=document.createElement("strong");
+      title.textContent=character.name;
 
-    const foot=document.createElement("div");
-    foot.className="plot-card-footer";
+      const no=document.createElement("span");
+      no.className="char-no";
+      no.textContent="No."+String(charNo).padStart(2,"0");
 
-    foot.innerHTML=
-      '<span>VIEW PLOT</span>'+
-      '<b class="vector-arrow">'+
-      '<svg viewBox="0 0 24 24" aria-hidden="true">'+
-      '<path d="M6 18 18 6 M8 6h10v10"/>'+
-      '</svg></b>';
+      const from=document.createElement("small");
+      from.textContent=
+        [character.gender,character.age]
+          .filter(v=>String(v||"").trim())
+          .join(" / ")||"未設定";
 
-    info.append(title,intro,tags,foot);
-    card.appendChild(info);
+      info.append(no,title,from);
+      button.appendChild(info);
 
-    card.addEventListener("click",()=>{
-      openPlot(index);
+      button.addEventListener("click",()=>{
+        selectedPlot=pi;
+        selectedCharacter=ci;
+        renderPlotDetail(pi);
+        renderCharacterDetail(ci);
+        $("characterScroll").scrollTop=0;
+        changeScreen("character");
+      });
+
+      g.appendChild(button);
     });
 
-    grid.appendChild(card);
+    if(!plot.characters.length){
+      const empty=document.createElement("p");
+      empty.className="admin-note";
+      empty.textContent=
+        "キャラクターはまだ登録されていません。";
+      g.appendChild(empty);
+    }
+
+    grid.appendChild(g);
   });
 
   renderAllCharacters();
@@ -3785,7 +4281,7 @@ function renderPlotGrid(){
 }
 
 /* PLOTS / CHARACTER VIEW TOGGLE */
-let plotsViewMode="plots";
+let plotsViewMode="characters";
 
 function applyPlotsViewMode(){
   const charMode=plotsViewMode==="characters";
@@ -3837,8 +4333,10 @@ function renderAllCharacters(){
 
   grid.replaceChildren();
 
+  let charNo=0;
   PLOT_DATA.forEach((plot,pi)=>{
     plot.characters.forEach((character,ci)=>{
+      charNo++;
       const button=document.createElement("button");
       button.type="button";
       button.className="character-card";
@@ -3848,7 +4346,7 @@ function renderAllCharacters(){
           "character-cover",
           character.image,
           "CHARACTER\n"+
-          String(ci+1).padStart(2,"0")
+          String(charNo).padStart(2,"0")
         )
       );
 
@@ -3858,10 +4356,17 @@ function renderAllCharacters(){
       const title=document.createElement("strong");
       title.textContent=character.name;
 
-      const from=document.createElement("small");
-      from.textContent=plot.title;
+      const no=document.createElement("span");
+      no.className="char-no";
+      no.textContent="No."+String(charNo).padStart(2,"0");
 
-      info.append(title,from);
+      const from=document.createElement("small");
+      from.textContent=
+        [character.gender,character.age]
+          .filter(v=>String(v||"").trim())
+          .join(" / ")||"未設定";
+
+      info.append(no,title,from);
       button.appendChild(info);
 
       button.addEventListener("click",()=>{
@@ -4027,9 +4532,10 @@ function renderCharacterDetail(index){
   fields.replaceChildren();
 
   for(const [label,value] of [
+    ["GENDER",character.gender],
     ["AGE",character.age],
-    ["BIRTHDAY",character.birthday],
-    ["GENDER",character.gender]
+    ["HEIGHT",character.height],
+    ["BIRTHDAY",character.birthday]
   ]){
     const block=document.createElement("div");
     block.className="profile-field";
@@ -4043,6 +4549,10 @@ function renderCharacterDetail(index){
     block.append(dt,dd);
     fields.appendChild(block);
   }
+
+  const promptText=character.prompt||"";
+  $("characterPrompt").textContent=promptText;
+  $("characterPromptSection").hidden=!promptText;
 }
 
 function openCharacter(index){
@@ -7236,11 +7746,13 @@ function openCharacterEditor(index){
     ["ecRuby","ruby"],
     ["ecRole","role"],
     ["ecAge","age"],
+     ["ecHeight","height"],
     ["ecBirthday","birthday"],
     ["ecGender","gender"],
     ["ecProfile","profile"],
     ["ecPersonality","personality"],
-    ["ecImage","image"]
+     ["ecPrompt","prompt"],
+     ["ecImage","image"]
   ]){
     $(id).value=c[key]||"";
   }
@@ -7293,11 +7805,13 @@ for(const [id,key] of [
   ["ecRuby","ruby"],
   ["ecRole","role"],
   ["ecAge","age"],
+     ["ecHeight","height"],
   ["ecBirthday","birthday"],
   ["ecGender","gender"],
   ["ecProfile","profile"],
   ["ecPersonality","personality"],
-  ["ecImage","image"]
+     ["ecPrompt","prompt"],
+     ["ecImage","image"]
 ]){
   bindField(id,getEditedCharacter,key);
 }
@@ -8911,12 +9425,314 @@ $("qaCancelEdit").addEventListener(
 );
 
 /* INITIALIZATION */
-setScreen("loading");
+setScreen("home");
 refreshPublicSilently();
 refreshPublicQA();
 refreshWaveboxSetting();
 restoreAdminSession();
 
+</script>
+
+<script>
+/* ===== MINI GAME v44: name + global ranking ===== */
+(function(){
+  var cv=document.getElementById('gmCv'); if(!cv) return;
+  var ctx=cv.getContext('2d');
+  var W=cv.width,H=cv.height;
+  var distEl=document.getElementById('gmDist'),scoreEl=document.getElementById('gmScore');
+  var startBtn=document.getElementById('gmStart'),rankEl=document.getElementById('gmRank');
+  var rankNote=document.getElementById('gmRankNote');
+  var nameInput=document.getElementById('gmName'),nameSave=document.getElementById('gmNameSave'),nameNote=document.getElementById('gmNameNote');
+  var gameScreen=document.getElementById('game');
+  var gdb=null;
+  try{ gdb=(typeof db!=='undefined'&&db)||window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); }catch(e){ gdb=null; }
+
+  var NAME_KEY='nituPlayerName';
+  var myName='';
+  try{ myName=localStorage.getItem(NAME_KEY)||''; }catch(e){}
+  if(myName){ nameInput.value=myName; nameNote.textContent='「'+myName+'」で登録されるよ'; }
+  nameSave.addEventListener('click',function(){
+    myName=nameInput.value.trim().slice(0,12);
+    try{ localStorage.setItem(NAME_KEY,myName); }catch(e){}
+    nameNote.textContent=myName?('「'+myName+'」で登録されるよ'):'名前を保存すると、ゲームオーバーでランキングに登録されるよ';
+  });
+
+  function esc(t){return String(t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  async function loadRanking(){
+    if(!gdb){ rankNote.textContent='ランキングに接続できませんでした'; return; }
+    rankNote.textContent='読み込み中…';
+    try{
+      var res=await gdb.from('game_scores').select('name,score,dist').order('score',{ascending:false}).order('dist',{ascending:false}).limit(10);
+      if(res.error) throw res.error;
+      var rows=res.data||[];
+      if(!rows.length){ rankEl.innerHTML='<li class="gm-empty">まだ記録なし。最初の記録を作ろう</li>'; }
+      else{
+        rankEl.innerHTML=rows.map(function(e,i){return '<li><b>'+esc(e.name||'???')+'</b> — '+e.score+' PTS / '+e.dist+'m</li>'}).join('');
+      }
+      rankNote.textContent='';
+    }catch(e){
+      rankEl.innerHTML='';
+      rankNote.textContent='ランキングは準備中です';
+    }
+  }
+  async function submitScore(sc,d){
+    if(!gdb||!myName||sc<=0) return;
+    try{
+      await gdb.from('game_scores').insert({name:myName,score:sc,dist:d});
+      rankNote.textContent='ランキングに登録したよ！';
+      loadRanking();
+    }catch(e){ /* table not ready yet */ }
+  }
+  var rankBtn=document.getElementById('gmRankBtn'), commentBtn=document.getElementById('gmCommentBtn');
+  var gmModal=document.getElementById('gmModal');
+  var gmModalClose=document.getElementById('gmModalClose'), gmModalWrite=document.getElementById('gmModalWrite');
+  if(gmModalClose) gmModalClose.addEventListener('click',function(){ if(gmModal) gmModal.hidden=true; });
+  if(gmModalWrite) gmModalWrite.addEventListener('click',function(){ if(gmModal) gmModal.hidden=true; loadComments(); changeScreen('gameComment'); });
+  if(rankBtn) rankBtn.addEventListener('click',function(){ loadRanking(); changeScreen('gameRank'); });
+  if(commentBtn) commentBtn.addEventListener('click',function(){ loadComments(); changeScreen('gameComment'); });
+  var gcName=document.getElementById('gcName'), gcBody=document.getElementById('gcBody'),
+      gcPost=document.getElementById('gcPost'), gcList=document.getElementById('gcList'),
+      gcNote=document.getElementById('gcNote');
+  async function loadComments(){
+    if(!gcList) return;
+    if(!gdb){ gcNote.textContent='コメントに接続できませんでした'; return; }
+    gcNote.textContent='読み込み中…';
+    try{
+      var res=await gdb.from('game_comments').select('name,body,created_at').order('created_at',{ascending:false}).limit(50);
+      if(res.error) throw res.error;
+      var rows=res.data||[];
+      gcList.innerHTML=rows.length
+        ? rows.map(function(e){ return '<li><b>'+esc(e.name||'ななし')+'</b> — '+esc(e.body||'')+'</li>'; }).join('')
+        : '<li class="gm-empty">まだコメントなし。最初のコメントを書いてね</li>';
+      gcNote.textContent='';
+    }catch(e){
+      gcList.innerHTML='';
+      gcNote.textContent='コメントは準備中です';
+    }
+  }
+  if(gcPost) gcPost.addEventListener('click', async function(){
+    var body=(gcBody.value||'').trim().slice(0,200);
+    if(!body){ gcNote.textContent='コメントを書いてね'; return; }
+    if(!gdb){ gcNote.textContent='コメントに接続できませんでした'; return; }
+    gcPost.disabled=true;
+    try{
+      var res=await gdb.from('game_comments').insert({name:(gcName.value||'').trim().slice(0,12)||null, body:body});
+      if(res.error) throw res.error;
+      gcBody.value='';
+      gcNote.textContent='投稿したよ！';
+      loadComments();
+    }catch(e){
+      gcNote.textContent='まだ投稿できないみたい（準備中）';
+    }
+    gcPost.disabled=false;
+  });
+  var wasActive=false;
+  setInterval(function(){
+    var act=gameScreen.classList.contains('active');
+    if(act&&!wasActive) loadRanking();
+    wasActive=act;
+  },700);
+
+  var entry=document.getElementById('gameEntry');
+  if(entry) entry.addEventListener('click',function(){ changeScreen('game'); });
+
+  var GY=H-22;
+  var sq,obs,items,frame,dist,score,speed,run,over,lastObs,lastItem;
+  function reset(){
+    sq={x:52,y:GY-8,vy:0,air:false,rot:0,jumps:0}; obs=[]; items=[]; plats=[]; zones=[]; frame=0; dist=0; score=0;
+    speed=1.5; over=false; lastObs=0; lastItem=0; nextItemAt=70; zoneNext=300;
+    distEl.textContent='0'; scoreEl.textContent='0';
+  }
+  function drawGround(){
+    ctx.fillStyle='#000'; ctx.fillRect(0,GY,W,H-GY);
+  }
+  function drawIdle(){
+    ctx.fillStyle='#f5f5f2'; ctx.fillRect(0,0,W,H);
+    drawGround();
+    ctx.fillStyle='#111'; ctx.fillRect(sq.x-8,GY-16,16,16);
+    ctx.fillStyle='#111'; ctx.font='17px VT323, monospace'; ctx.textAlign='center';
+    ctx.fillText('TAP TO JUMP', W/2, 52);
+  }
+  function spawnObs(){
+    var tallP=dist<60?0:0.3;
+    var tall=Math.random()<tallP;
+    var wdt=12+Math.random()*4;
+    var hgt=tall?34+Math.random()*4:12+Math.random()*5;
+    var fr=true;
+    obs.push({x:W+12,w:wdt,h:hgt,tall:tall,fr:fr});
+  }
+  function spawnZone(){
+    var w=200+Math.random()*70;
+    var z={x:W+20,w:w};
+    zones.push(z);
+    var tops=[GY-34,GY-42,GY-30,GY-38], px=z.x+14, i=0;
+    while(px<z.x+w-40){
+      plats.push({x:px,w:48,top:tops[i%4]});
+      items.push(mkItem(px+24,tops[i%4]-14));
+      px+=94; i++;
+    }
+    var last=plats[plats.length-1];
+    if(!last||last.x+last.w<z.x+w-56){
+      plats.push({x:z.x+w-64,w:48,top:GY-36});
+      items.push(mkItem(z.x+w-40,GY-50));
+    }
+  }
+  function spawnCeil(){
+    var wdt=14+Math.random()*8;
+    var bottom=GY-26-Math.random()*14;
+    obs.push({x:W+12,w:wdt,h:0,ceil:true,bottom:bottom,tall:false,fr:false});
+    var n=2+(Math.random()*2|0);
+    for(var i=0;i<n;i++) items.push(mkItem(W+16+i*24,GY-18));
+  }
+  function mkItem(x,y){
+    var hi=Math.random()<0.08;
+    return {x:x,y:y,s:hi?12:11,hi:hi,ph:Math.random()*6.28};
+  }
+  function spawnItems(){
+    var blocked=obs.some(function(o){ return !o.ceil&&o.x>W-44; })||zones.some(function(z){ return z.x+z.w>W+30; });
+    var r=Math.random(),i;
+    if(blocked||r<0.34){
+      items.push(mkItem(W+16,GY-47));
+      if(Math.random()<0.4) items.push(mkItem(W+40,GY-47));
+    } else if(r<0.58){
+      for(i=0;i<3;i++) items.push(mkItem(W+16+i*26,GY-18));
+    } else if(r<0.82){
+      for(i=0;i<3;i++) items.push(mkItem(W+16+i*22,GY-47));
+    } else {
+      var ys=[GY-33,GY-47,GY-33];
+      for(i=0;i<3;i++) items.push(mkItem(W+16+i*24,ys[i]));
+    }
+  }
+  function step(){
+    if(!run) return;
+    if(!gameScreen.classList.contains('active')){ run=false; startBtn.textContent='TAP TO START'; return; }
+    frame++;
+    speed=1.5+Math.min(1.5,dist/900);
+    dist+=speed*0.05;
+    /* player physics: slide on ground, tap = jump */
+    sq.vy+=0.30; sq.y+=sq.vy;
+    var supported=false;
+    if(sq.vy>=0){
+      for(var pi=0;pi<plats.length;pi++){
+        var pl=plats[pi];
+        if(sq.x+6>pl.x&&sq.x-6<pl.x+pl.w&&sq.y+8>=pl.top&&sq.y+8<=pl.top+16){ sq.y=pl.top-8; sq.vy=0; supported=true; break; }
+      }
+    }
+    if(!supported&&sq.y>=GY-8){
+      if(zones.some(function(z){ return sq.x+6>z.x&&sq.x-6<z.x+z.w; })){ gameOver(); return; }
+      sq.y=GY-8; sq.vy=0; supported=true;
+    }
+    if(supported){ sq.air=false; sq.rot=0; sq.jumps=0; }
+    else { sq.air=true; sq.rot+=0.16; }
+    if(frame-lastObs>Math.max(46,92-dist/30)&&!items.some(function(t){return t.x>W-56;})&&!zones.some(function(z){return z.x+z.w>W-10;})){ if(dist>zoneNext&&zones.length===0&&Math.random()<0.3){ spawnZone(); zoneNext=dist+280+Math.random()*220; } else if(dist>250&&Math.random()<0.22&&obs.every(function(o){return o.x<W-84;})){ spawnCeil(); } else { spawnObs(); } lastObs=frame; }
+    if(frame>=nextItemAt){ spawnItems(); nextItemAt=frame+85+(Math.random()*120|0); }
+    ctx.fillStyle='#f5f5f2'; ctx.fillRect(0,0,W,H);
+    drawGround();
+    for(var zi=zones.length-1;zi>=0;zi--){
+      var z=zones[zi]; z.x-=speed;
+      ctx.fillStyle='#e879ff'; ctx.fillRect(z.x,GY,z.w,6);
+      if(z.x+z.w<-10) zones.splice(zi,1);
+    }
+    for(var pj=plats.length-1;pj>=0;pj--){
+      var p2=plats[pj]; p2.x-=speed;
+      ctx.fillStyle='#111'; ctx.fillRect(p2.x,p2.top,p2.w,8);
+      ctx.fillStyle='#000'; ctx.fillRect(p2.x,p2.top+6,p2.w,2);
+      if(p2.x+p2.w<-10) plats.splice(pj,1);
+    }
+    for(var i=items.length-1;i>=0;i--){
+      var it=items[i]; it.x-=speed; it.ph+=0.15;
+      var pu=it.s+Math.sin(it.ph)*1.4;
+      ctx.fillStyle=it.hi?'#ff7ab0':'#57c8f0';
+      ctx.fillRect(it.x-pu/2,it.y-pu/2,pu,pu);
+      if(Math.abs(it.x-sq.x)<15&&Math.abs(it.y-sq.y)<15){ score+=it.hi?50:10; scoreEl.textContent=score; items.splice(i,1); continue; }
+      if(it.x<-16) items.splice(i,1);
+    }
+    for(var j=obs.length-1;j>=0;j--){
+      var o=obs[j]; o.x-=speed;
+      if(o.ceil){
+        ctx.fillStyle='#111';
+        ctx.fillRect(o.x,0,o.w,o.bottom);
+        ctx.fillStyle='#e879ff';
+        ctx.fillRect(o.x-1,o.bottom-1,o.w+2,3);
+        ctx.fillRect(o.x-2,0,3,o.bottom+1);
+        ctx.fillRect(o.x+o.w-1,0,3,o.bottom+1);
+        if(sq.x+6>o.x&&sq.x-6<o.x+o.w&&sq.y-8<o.bottom){ gameOver(); return; }
+        if(o.x<-32) obs.splice(j,1);
+        continue;
+      }
+      ctx.fillStyle='#111';
+      ctx.fillRect(o.x,GY-o.h,o.w,o.h);
+      ctx.fillStyle='#e879ff';
+      ctx.fillRect(o.x-1,GY-o.h-2,o.w+2,3);
+      ctx.fillRect(o.x-2,GY-o.h-2,3,o.h+2);
+      ctx.fillRect(o.x+o.w-1,GY-o.h-2,3,o.h+2);
+      if(o.tall){
+        ctx.fillStyle='rgba(245,245,242,0.5)';
+        ctx.fillRect(o.x,GY-o.h/2-1,o.w,2);
+      }
+      if(sq.x+6>o.x&&sq.x-6<o.x+o.w&&sq.y+7>GY-o.h){ gameOver(); return; }
+      if(o.x<-32) obs.splice(j,1);
+    }
+    ctx.save(); ctx.translate(sq.x,sq.y); ctx.rotate(sq.rot);
+    ctx.fillStyle='#000'; ctx.fillRect(-8,-8,16,16);
+    ctx.restore();
+    distEl.textContent=Math.floor(dist);
+    requestAnimationFrame(step);
+  }
+  var playedOnce=false;
+  try{ playedOnce=!!localStorage.getItem('nituPlayedOnce'); }catch(e){}
+  function gameOver(){
+    run=false; over=true;
+    var d=Math.floor(dist);
+    ctx.fillStyle='rgba(245,245,242,.88)'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#111'; ctx.textAlign='center';
+    ctx.font='24px VT323, monospace'; ctx.fillText('GAME OVER',W/2,H/2-26);
+    ctx.font='18px VT323, monospace';
+    ctx.fillText('SCORE '+score+' / '+d+'m',W/2,H/2+2);
+    if(myName){ ctx.font='15px VT323, monospace'; ctx.fillText('REGISTERING…',W/2,H/2+26); }
+    startBtn.textContent='RETRY';
+    if(!playedOnce){
+      playedOnce=true;
+      try{ localStorage.setItem('nituPlayedOnce','1'); }catch(e){}
+      var md=document.getElementById('gmModal');
+      if(md) md.hidden=false;
+    }
+    submitScore(score,d);
+  }
+  function start(){ reset(); run=true; startBtn.textContent='PLAYING…'; requestAnimationFrame(step); }
+  function jump(){
+    if(run){
+      if(!sq.air){ sq.vy=-5.2; sq.air=true; sq.jumps=1; }
+      else if(sq.jumps<2){ sq.vy=-6.2; sq.jumps=2; }
+    } else if(!over){ start(); sq.vy=-5.2; sq.air=true; sq.jumps=1; }
+  }
+  cv.addEventListener('pointerdown',function(e){ e.preventDefault(); jump(); });
+  startBtn.addEventListener('click',function(){ start(); });
+  reset(); drawIdle();
+})();
+</script>
+
+<script>
+/* v50: prompt copy + settings from admin */
+(function(){
+  var btn=document.getElementById('copyPromptBtn');
+  if(btn){
+    btn.addEventListener('click',function(){
+      var text=document.getElementById('characterPrompt').textContent||'';
+      function done(){ btn.textContent='コピーした！'; setTimeout(function(){btn.textContent='⧉ コピー';},1400); }
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(); });
+      } else { fallback(); }
+      function fallback(){
+        var ta=document.createElement('textarea');
+        ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); done(); }catch(e){}
+        document.body.removeChild(ta);
+      }
+    });
+  }
+})();
 </script>
 </body>
 </html>
