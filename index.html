@@ -1936,6 +1936,28 @@ canvas{touch-action:none}
 .plot-group-title:first-child{margin-top:4px}
 .character-card{box-shadow:4px 4px 0 #000}
 .plots-head{margin-bottom:14px}
+
+/* ===== v86 ===== */
+img{filter:none}
+.gc-badge{display:inline-block;background:#111;color:#fff;font-size:10px;padding:1px 6px;border-radius:3px;letter-spacing:.08em}
+
+/* ===== v89 ===== */
+.live-clock{font-size:19px}
+
+/* ===== v90 ===== */
+.site-header{top:calc(19px + var(--safe-top))}
+#home .site-header{margin-top:calc(12px + var(--safe-top))}
+.notice-bar{top:calc(52px + var(--safe-top))}
+#homeFrames{order:5;margin:2px 7% 0;display:flex;flex-direction:column;gap:14px}
+.home-frame{border:2px solid #111;background:#fff;box-shadow:6px 6px 0 #000;overflow:hidden}
+.home-frame img{width:100%;height:100%;display:block}
+.hf-item{border:1.5px solid #111;padding:12px;margin-bottom:12px;background:#fff}
+.hf-thumb{width:100%;height:90px;object-fit:cover;display:block;margin-bottom:8px;background:#eee}
+.hf-row{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.hf-row select{flex:1;padding:7px;border:1.5px solid #111;background:#fff;font:inherit;min-width:130px}
+.hf-row input[type="range"]{flex:2;min-width:120px}
+.hf-tools{display:flex;gap:8px;margin-top:10px}
+.hf-tools button{flex:1}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -2091,6 +2113,8 @@ canvas{touch-action:none}
     </button>
   </nav>
 
+  <div id="homeFrames" aria-label="ホーム画像"></div>
+
   <footer class="site-footer">
     <span>AN ARCHIVE OF IMAGINATION</span>
     <span class="footer-links">
@@ -2154,6 +2178,21 @@ canvas{touch-action:none}
       <p class="admin-note">
         お知らせの編集は、設定（歯車）の画面にあります。
       </p>
+    </div>
+
+    <div class="admin-panel admin-hidden panel-closed" data-admin-only="1">
+      <h3 class="admin-anchor" id="anchorOCs">OC MANAGER</h3>
+      <p class="admin-note">
+        OC（プロットに属さないキャラ）の追加・編集です。
+        保存するとすぐサイトに反映されます。
+      </p>
+      <div class="admin-actions">
+        <button class="admin-btn" id="newOCBtn" type="button">
+          ＋ OCを追加
+        </button>
+      </div>
+      <p class="admin-status" id="ocAdminStatus" role="status"></p>
+      <div id="adminOCList"></div>
     </div>
 
     <div class="page-kicker">SECTION 01 / CHARACTER</div>
@@ -3200,6 +3239,138 @@ canvas{touch-action:none}
 </section>
 
 
+<!-- EDIT OC -->
+<section class="screen" id="editOC" aria-hidden="true">
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="wave-logo small" aria-hidden="true">
+        <svg class="wave-svg" viewBox="0 0 150 64">
+          <path class="wave-top"></path>
+          <path class="wave-bottom"></path>
+        </svg>
+      </span>
+      <strong>TIDELINE</strong>
+    </div>
+
+    <div class="header-actions">
+      <time class="live-clock">00:00:00</time>
+      <button class="back-button"
+        type="button" data-back="plots">
+        <span class="back-arrow">←</span>BACK
+      </button>
+    </div>
+  </header>
+
+  <main class="inner-scroll" id="editOCScroll">
+    <div class="page-kicker">
+      PRIVATE EDITOR / OC
+    </div>
+
+    <h2 class="page-title">EDIT OC</h2>
+
+    <div class="admin-panel">
+      <label class="admin-field">
+        キャラクター名
+        <input id="eoName" type="text">
+      </label>
+
+      <label class="admin-field">
+        フリガナ（詳細で名前の下に小さく表示）
+        <input id="eoRuby" type="text"
+          placeholder="よみがな">
+      </label>
+
+      <label class="admin-field">
+        役割・肩書き
+        <input id="eoRole"
+          type="text"
+          placeholder="MAIN CHARACTER">
+      </label>
+
+      <label class="admin-field">
+        年齢
+        <input id="eoAge"
+          type="text" placeholder="未設定">
+      </label>
+
+      <label class="admin-field">
+        身長
+        <input id="eoHeight"
+          type="text" placeholder="未設定">
+      </label>
+
+      <label class="admin-field">
+        誕生日
+        <input id="eoBirthday"
+          type="text" placeholder="未設定">
+      </label>
+
+      <label class="admin-field">
+        性別
+        <input id="eoGender"
+          type="text" placeholder="未設定">
+      </label>
+
+      <label class="admin-field">
+        プロフィール
+        <textarea id="eoProfile" rows="6"></textarea>
+      </label>
+
+      <label class="admin-field">
+        性格・設定・関係性
+        <textarea id="eoPersonality" rows="6"></textarea>
+      </label>
+      <label class="admin-field">
+        プロンプト（コピー用）
+        <textarea id="eoPrompt" rows="4" placeholder="詳細画面に表示される、コピーできるプロンプト"></textarea>
+      </label>
+
+      <label class="admin-field">
+        画像ファイルの既存パス・URL
+        <input id="eoImage"
+          type="text"
+          placeholder="./character01.png">
+      </label>
+
+      <img class="admin-image-preview"
+        id="eoPreview"
+        alt="キャラ画像のプレビュー">
+
+      <label class="admin-field">
+        新しい画像を選択（保存時にアップロード）
+        <input id="eoFile"
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif,image/avif">
+      </label>
+
+      <div class="admin-actions">
+        <button class="admin-btn secondary"
+          id="eoClearImage" type="button">
+          画像を外す
+        </button>
+
+        <button class="admin-btn"
+          type="button"
+          data-back="plots">
+          OC一覧へ戻る
+        </button>
+      </div>
+
+      <div class="admin-actions">
+        <button class="admin-btn" id="eoSaveOC" type="button">
+          このOCを保存（サイトに反映）
+        </button>
+        <button class="admin-btn secondary" id="eoDeleteOC" type="button">
+          このOCを削除
+        </button>
+      </div>
+      <p class="admin-status" id="eoSaveStatus" role="status"></p>
+    </div>
+  </main>
+</section>
+
 <!-- SETTINGS -->
 <!-- LINKS -->
 <section class="screen" id="links" aria-hidden="true">
@@ -3288,6 +3459,24 @@ canvas{touch-action:none}
         <span>お知らせ編集<small>ANNOUNCEMENTS</small></span>
         <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
       </button>
+        <button class="settings-row" type="button" data-admin-goto="anchorHomeFrames">
+          <span>ホーム画像枠<small>HOME FRAME</small></span>
+          <span class="vector-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6 M8 6h10v10"/></svg></span>
+        </button>
+    </div>
+
+    <div class="admin-panel admin-hidden panel-closed" data-admin-only="1">
+      <h3 class="admin-anchor" id="anchorHomeFrames">HOME FRAME / ホーム画像枠</h3>
+      <p class="admin-note">
+        ホームのメニューの下に出る画像枠です。
+        画像ごとに「枠への収め方」と「高さ」を変えられます。
+      </p>
+      <div id="homeFrameEditor"></div>
+      <div class="admin-actions">
+        <button class="admin-btn" id="addHomeFrameBtn" type="button">＋ 枠を追加</button>
+        <button class="admin-btn" id="saveHomeFramesBtn" type="button">サイトへ公開</button>
+      </div>
+      <p class="admin-status" id="homeFrameStatus" role="status"></p>
     </div>
 
     <div class="admin-panel admin-hidden panel-closed" data-admin-only="1">
@@ -3781,6 +3970,10 @@ function normalizedUpdates(items){
 }
 
 let PLOT_DATA=normalizedPlots(INITIAL_PLOTS);
+let OC_DATA=[];
+let HOME_FRAMES=[];
+let ocLoadPromise=null;
+let editOCIndex=-1;
 
 /* ANNOUNCEMENTS */
 let lastNoticeWindowWidth=0;
@@ -3899,6 +4092,7 @@ const screens=Object.fromEntries(
     "admin",
     "editPlot",
     "editCharacter",
+    "editOC",
     "novels",
     "novelView",
     "editNovel",
@@ -4300,12 +4494,8 @@ function applyPlotsViewMode(){
   );
 
   if(charMode){
-    const total=PLOT_DATA.reduce(
-      (sum,p)=>sum+p.characters.length,0
-    );
-
     $("plotTotal").textContent=
-      `キャラクター数：${total}人`;
+    `OC数：${OC_DATA.length}人`;
   }else{
     $("plotTotal").textContent=
       `プロット数：${PLOT_DATA.length}件`;
@@ -4333,62 +4523,120 @@ function renderAllCharacters(){
 
   grid.replaceChildren();
 
-  let charNo=0;
-  PLOT_DATA.forEach((plot,pi)=>{
-    plot.characters.forEach((character,ci)=>{
-      charNo++;
-      const button=document.createElement("button");
-      button.type="button";
-      button.className="character-card";
+  OC_DATA.forEach((character,ci)=>{
+    const charNo=ci+1;
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="character-card";
 
-      button.appendChild(
-        coverElement(
-          "character-cover",
-          character.image,
-          "CHARACTER\n"+
-          String(charNo).padStart(2,"0")
-        )
-      );
+    button.appendChild(
+      coverElement(
+        "character-cover",
+        character.image,
+        "OC\n"+
+        String(charNo).padStart(2,"0")
+      )
+    );
 
-      const info=document.createElement("div");
-      info.className="character-card-info";
+    const info=document.createElement("div");
+    info.className="character-card-info";
 
-      const title=document.createElement("strong");
-      title.textContent=character.name;
+    const title=document.createElement("strong");
+    title.textContent=character.name;
 
-      const no=document.createElement("span");
-      no.className="char-no";
-      no.textContent="No."+String(charNo).padStart(2,"0");
+    const no=document.createElement("span");
+    no.className="char-no";
+    no.textContent="No."+String(charNo).padStart(2,"0");
 
-      const from=document.createElement("small");
-      from.textContent=
-        [character.gender,character.age]
-          .filter(v=>String(v||"").trim())
-          .join(" / ")||"未設定";
+    const from=document.createElement("small");
+    from.textContent=
+      [character.gender,character.age]
+        .filter(v=>String(v||"").trim())
+        .join(" / ")||"未設定";
 
-      info.append(no,title,from);
-      button.appendChild(info);
+    info.append(no,title,from);
+    button.appendChild(info);
 
-      button.addEventListener("click",()=>{
-        selectedPlot=pi;
-        selectedCharacter=ci;
-        renderPlotDetail(pi);
-        renderCharacterDetail(ci);
-        $("characterScroll").scrollTop=0;
-        changeScreen("character");
-      });
-
-      grid.appendChild(button);
+    button.addEventListener("click",()=>{
+      openOCDetail(ci);
     });
+
+    grid.appendChild(button);
   });
 
   if(!grid.children.length){
     const empty=document.createElement("p");
     empty.className="admin-note";
     empty.textContent=
-      "キャラクターはまだ登録されていません。";
+      "OCはまだ登録されていません。";
     grid.appendChild(empty);
   }
+}
+
+function openOCDetail(index){
+  const character=OC_DATA[index];
+  if(!character)return;
+
+  $("characterNumber").textContent=
+    String(index+1).padStart(2,"0");
+
+  $("characterName").textContent=
+    character.name;
+
+  const rubyEl=$("characterRuby");
+  rubyEl.textContent=character.ruby||"";
+  rubyEl.hidden=!character.ruby;
+
+  $("characterSub").textContent=
+    "OC / "+
+    (character.role||"CHARACTER");
+
+  const cover=coverElement(
+    "profile-cover",
+    character.image,
+    "OC / "+
+    String(index+1).padStart(2,"0")
+  );
+
+  cover.id="characterPortrait";
+  $("characterPortrait").replaceWith(cover);
+
+  $("characterBio").textContent=
+    character.profile||
+    "詳細は準備中です。";
+
+  $("characterNotes").textContent=
+    character.personality||
+    "詳細は準備中です。";
+
+  const fields=$("characterFields");
+  fields.replaceChildren();
+
+  for(const [label,value] of [
+    ["GENDER",character.gender],
+    ["AGE",character.age],
+    ["HEIGHT",character.height],
+    ["BIRTHDAY",character.birthday]
+  ]){
+    const block=document.createElement("div");
+    block.className="profile-field";
+
+    const dt=document.createElement("dt");
+    dt.textContent=label;
+
+    const dd=document.createElement("dd");
+    dd.textContent=value||"未設定";
+
+    block.append(dt,dd);
+    fields.appendChild(block);
+  }
+
+  const promptText=character.prompt||"";
+  $("characterPrompt").textContent=promptText;
+  $("characterPromptSection").hidden=!promptText;
+
+  $("characterScroll").scrollTop=0;
+  changeScreen("character");
 }
 
 /* PLOT DETAILS */
@@ -6254,6 +6502,542 @@ function refreshSiteNovels(){
   return novelsLoadPromise;
 }
 
+/* OC CHARACTERS (table: oc_characters) */
+
+async function loadOCCharacters(){
+  checkDB();
+  const {data,error}=await db
+    .from("oc_characters")
+    .select("id,name,ruby,role,age,height,birthday,gender,profile,personality,prompt,image,sort_order")
+    .order("sort_order",{ascending:true})
+    .order("created_at",{ascending:true});
+
+  if(error)throw error;
+
+  OC_DATA=(data||[]).map(item=>({
+    id:String(item.id||"")||makeID(),
+    name:String(item.name||""),
+    ruby:String(item.ruby||""),
+    role:String(item.role||""),
+    age:String(item.age||""),
+    height:String(item.height||""),
+    birthday:String(item.birthday||""),
+    gender:String(item.gender||""),
+    profile:String(item.profile||""),
+    personality:String(item.personality||""),
+    prompt:String(item.prompt||""),
+    image:String(item.image||"")
+  }));
+
+  renderAllCharacters();
+  renderAdminOCs();
+  applyPlotsViewMode();
+  return OC_DATA;
+}
+
+function refreshOCCharacters(){
+  if(ocLoadPromise){
+    return ocLoadPromise;
+  }
+
+  ocLoadPromise=loadOCCharacters()
+    .catch(error=>{
+      console.warn(
+        "OC取得エラー:",
+        error.message
+      );
+    })
+    .finally(()=>{
+      ocLoadPromise=null;
+    });
+
+  return ocLoadPromise;
+}
+
+function renderAdminOCs(){
+  const list=$("adminOCList");
+  if(!list)return;
+
+  list.replaceChildren();
+  if(!adminUser)return;
+
+  if(!OC_DATA.length){
+    const empty=document.createElement("p");
+    empty.className="admin-note";
+    empty.textContent=
+      "OCはまだ登録されていません。";
+    list.appendChild(empty);
+    return;
+  }
+
+  OC_DATA.forEach((oc,i)=>{
+    const row=document.createElement("div");
+    row.className="admin-list-item";
+
+    const body=document.createElement("div");
+    body.className="admin-item-body";
+    body.textContent=oc.name||"無題";
+
+    const small=document.createElement("small");
+    small.textContent=
+      `${i+1} / ${OC_DATA.length}`;
+    body.appendChild(small);
+
+    const tools=document.createElement("div");
+    tools.className="admin-item-tools";
+
+    const edit=document.createElement("button");
+    edit.type="button";
+    edit.textContent="編集";
+    edit.addEventListener("click",()=>{
+      openOCEditor(i);
+    });
+    tools.appendChild(edit);
+
+    row.append(body,tools);
+    list.appendChild(row);
+  });
+}
+
+function openOCEditor(index){
+  if(!adminUser)return;
+
+  editOCIndex=index;
+  const c=index>=0?OC_DATA[index]:null;
+
+  for(const [id,key] of [
+    ["eoName","name"],
+    ["eoRuby","ruby"],
+    ["eoRole","role"],
+    ["eoAge","age"],
+    ["eoHeight","height"],
+    ["eoBirthday","birthday"],
+    ["eoGender","gender"],
+    ["eoProfile","profile"],
+    ["eoPersonality","personality"],
+    ["eoPrompt","prompt"],
+    ["eoImage","image"]
+  ]){
+    $(id).value=c?(c[key]||""):"";
+  }
+
+  $("eoFile").value="";
+  setPreview("eoPreview",c?c.image:"");
+  $("eoDeleteOC").style.display=c?"":"none";
+  adminMessage("eoSaveStatus","");
+
+  $("editOCScroll").scrollTop=0;
+  changeScreen("editOC");
+}
+
+$("newOCBtn").addEventListener(
+  "click",
+  ()=>{ openOCEditor(-1); }
+);
+
+$("eoClearImage").addEventListener(
+  "click",
+  ()=>{
+    $("eoImage").value="";
+    $("eoFile").value="";
+    setPreview("eoPreview","");
+  }
+);
+
+$("eoFile").addEventListener(
+  "change",
+  ()=>{
+    const file=$("eoFile").files&&$("eoFile").files[0];
+    if(file){
+      setPreview(
+        "eoPreview",
+        URL.createObjectURL(file)
+      );
+    }
+  }
+);
+
+$("eoSaveOC").addEventListener(
+  "click",
+  async()=>{
+    const name=$("eoName").value.trim();
+
+    if(!name){
+      adminMessage(
+        "eoSaveStatus",
+        "名前を入力してください。"
+      );
+      return;
+    }
+
+    const btn=$("eoSaveOC");
+    btn.disabled=true;
+    adminMessage("eoSaveStatus","保存しています…");
+
+    try{
+      await checkAdminAuth();
+
+      const existing=
+        editOCIndex>=0?OC_DATA[editOCIndex]:null;
+      const id=existing?existing.id:makeID();
+
+      let image=$("eoImage").value.trim();
+      const file=$("eoFile").files&&$("eoFile").files[0];
+      if(file){
+        image=await uploadImage(file,"oc",id);
+      }
+
+      const oc={
+        id,
+        name,
+        ruby:$("eoRuby").value.trim(),
+        role:$("eoRole").value.trim(),
+        age:$("eoAge").value.trim(),
+        height:$("eoHeight").value.trim(),
+        birthday:$("eoBirthday").value.trim(),
+        gender:$("eoGender").value.trim(),
+        profile:$("eoProfile").value,
+        personality:$("eoPersonality").value,
+        prompt:$("eoPrompt").value,
+        image
+      };
+
+      const {error}=await db
+        .from("oc_characters")
+        .upsert(
+          {
+            id:oc.id,
+            name:oc.name,
+            ruby:oc.ruby,
+            role:oc.role,
+            age:oc.age,
+            height:oc.height,
+            birthday:oc.birthday,
+            gender:oc.gender,
+            profile:oc.profile,
+            personality:oc.personality,
+            prompt:oc.prompt,
+            image:oc.image,
+            sort_order:existing?editOCIndex:OC_DATA.length
+          },
+          {onConflict:"id"}
+        );
+
+      if(error)throw error;
+
+      if(existing){
+        OC_DATA[editOCIndex]=oc;
+      }else{
+        OC_DATA.push(oc);
+        editOCIndex=OC_DATA.length-1;
+        $("eoDeleteOC").style.display="";
+      }
+
+      $("eoImage").value=oc.image;
+      renderAllCharacters();
+      renderAdminOCs();
+      applyPlotsViewMode();
+
+      adminMessage(
+        "eoSaveStatus",
+        "保存しました。サイトに反映されています。"
+      );
+    }catch(error){
+      adminMessage(
+        "eoSaveStatus",
+        "保存できませんでした："+error.message
+      );
+    }finally{
+      btn.disabled=false;
+    }
+  }
+);
+
+$("eoDeleteOC").addEventListener(
+  "click",
+  async()=>{
+    if(editOCIndex<0||!OC_DATA[editOCIndex])return;
+    if(!confirm("このOCを削除しますか？"))return;
+
+    const btn=$("eoDeleteOC");
+    btn.disabled=true;
+
+    try{
+      await checkAdminAuth();
+
+      const target=OC_DATA[editOCIndex];
+      const {error}=await db
+        .from("oc_characters")
+        .delete()
+        .eq("id",target.id);
+
+      if(error)throw error;
+
+      OC_DATA.splice(editOCIndex,1);
+      editOCIndex=-1;
+
+      renderAllCharacters();
+      renderAdminOCs();
+      applyPlotsViewMode();
+      changeScreen("plots");
+    }catch(error){
+      adminMessage(
+        "eoSaveStatus",
+        "削除できませんでした："+error.message
+      );
+    }finally{
+      btn.disabled=false;
+    }
+  }
+);
+
+/* HOME IMAGE FRAMES (site_settings key: home_frames) */
+async function loadHomeFrames(){
+  checkDB();
+  const {data,error}=await db
+    .from(SETTINGS_TABLE)
+    .select("value")
+    .eq("key","home_frames")
+    .maybeSingle();
+
+  if(error)throw error;
+
+  let frames=[];
+  try{
+    frames=JSON.parse(
+      data&&data.value?data.value:"[]"
+    );
+  }catch(_){
+    frames=[];
+  }
+
+  HOME_FRAMES=(Array.isArray(frames)?frames:[])
+    .filter(f=>f&&typeof f==="object")
+    .map(f=>({
+      image:String(f.image||""),
+      fit:["cover","contain","fill"].includes(f.fit)?f.fit:"cover",
+      height:Math.min(480,Math.max(80,parseInt(f.height,10)||240))
+    }));
+
+  renderHomeFrames();
+  renderHomeFrameEditor();
+  return HOME_FRAMES;
+}
+
+function refreshHomeFrames(){
+  loadHomeFrames().catch(error=>{
+    console.warn(
+      "ホーム枠取得エラー:",
+      error.message
+    );
+  });
+}
+
+function renderHomeFrames(){
+  const wrap=$("homeFrames");
+  if(!wrap)return;
+
+  wrap.replaceChildren();
+
+  HOME_FRAMES.filter(f=>f.image).forEach(f=>{
+    const d=document.createElement("div");
+    d.className="home-frame";
+    d.style.height=f.height+"px";
+
+    const img=document.createElement("img");
+    img.src=f.image;
+    img.alt="";
+    img.style.objectFit=f.fit;
+
+    d.appendChild(img);
+    wrap.appendChild(d);
+  });
+}
+
+function renderHomeFrameEditor(){
+  const wrap=$("homeFrameEditor");
+  if(!wrap)return;
+
+  wrap.replaceChildren();
+
+  if(!HOME_FRAMES.length){
+    const empty=document.createElement("p");
+    empty.className="admin-note";
+    empty.textContent=
+      "枠はまだありません。「＋ 枠を追加」から作れます。";
+    wrap.appendChild(empty);
+    return;
+  }
+
+  HOME_FRAMES.forEach((f,i)=>{
+    const item=document.createElement("div");
+    item.className="hf-item";
+
+    const thumb=document.createElement("img");
+    thumb.className="hf-thumb";
+    thumb.alt="";
+    thumb.src=f.image||"";
+    item.appendChild(thumb);
+
+    const imgLabel=document.createElement("label");
+    imgLabel.className="admin-field";
+    imgLabel.textContent="画像のパス・URL";
+    const imgInput=document.createElement("input");
+    imgInput.type="text";
+    imgInput.value=f.image;
+    imgInput.placeholder="./image.png";
+    imgInput.addEventListener("input",()=>{
+      HOME_FRAMES[i].image=imgInput.value.trim();
+      thumb.src=HOME_FRAMES[i].image;
+    });
+    imgLabel.appendChild(imgInput);
+    item.appendChild(imgLabel);
+
+    const fileLabel=document.createElement("label");
+    fileLabel.className="admin-field";
+    fileLabel.textContent="画像ファイルを選ぶ（すぐアップロード）";
+    const fileInput=document.createElement("input");
+    fileInput.type="file";
+    fileInput.accept="image/png,image/jpeg,image/webp,image/gif,image/avif";
+    fileInput.addEventListener("change",async()=>{
+      const file=fileInput.files&&fileInput.files[0];
+      if(!file)return;
+      adminMessage("homeFrameStatus","画像をアップロードしています…");
+      try{
+        const url=await uploadImage(file,"home","frame"+i+"_"+Date.now());
+        HOME_FRAMES[i].image=url;
+        renderHomeFrameEditor();
+        adminMessage("homeFrameStatus","画像をセットしました。「サイトへ公開」で反映されます。");
+      }catch(e){
+        adminMessage("homeFrameStatus","アップロード失敗："+e.message);
+      }
+    });
+    fileLabel.appendChild(fileInput);
+    item.appendChild(fileLabel);
+
+    const row=document.createElement("div");
+    row.className="hf-row";
+
+    const fit=document.createElement("select");
+    for(const [v,t] of [
+      ["cover","枠いっぱい（切り取り）"],
+      ["contain","全体を表示（余白あり）"],
+      ["fill","枠に引き伸ばし"]
+    ]){
+      const opt=document.createElement("option");
+      opt.value=v;
+      opt.textContent=t;
+      fit.appendChild(opt);
+    }
+    fit.value=f.fit;
+    fit.addEventListener("change",()=>{
+      HOME_FRAMES[i].fit=fit.value;
+    });
+    row.appendChild(fit);
+
+    const range=document.createElement("input");
+    range.type="range";
+    range.min="80";
+    range.max="480";
+    range.step="10";
+    range.value=f.height;
+
+    const hLabel=document.createElement("span");
+    hLabel.textContent="高さ "+f.height+"px";
+    range.addEventListener("input",()=>{
+      HOME_FRAMES[i].height=parseInt(range.value,10)||240;
+      hLabel.textContent="高さ "+HOME_FRAMES[i].height+"px";
+    });
+    row.appendChild(range);
+    row.appendChild(hLabel);
+    item.appendChild(row);
+
+    const tools=document.createElement("div");
+    tools.className="hf-tools";
+
+    const up=document.createElement("button");
+    up.type="button";
+    up.className="admin-btn secondary";
+    up.textContent="上へ";
+    up.addEventListener("click",()=>{
+      if(i<=0)return;
+      const t=HOME_FRAMES[i-1];
+      HOME_FRAMES[i-1]=HOME_FRAMES[i];
+      HOME_FRAMES[i]=t;
+      renderHomeFrameEditor();
+    });
+
+    const down=document.createElement("button");
+    down.type="button";
+    down.className="admin-btn secondary";
+    down.textContent="下へ";
+    down.addEventListener("click",()=>{
+      if(i>=HOME_FRAMES.length-1)return;
+      const t=HOME_FRAMES[i+1];
+      HOME_FRAMES[i+1]=HOME_FRAMES[i];
+      HOME_FRAMES[i]=t;
+      renderHomeFrameEditor();
+    });
+
+    const del=document.createElement("button");
+    del.type="button";
+    del.className="admin-btn secondary";
+    del.textContent="削除";
+    del.addEventListener("click",()=>{
+      HOME_FRAMES.splice(i,1);
+      renderHomeFrameEditor();
+    });
+
+    tools.append(up,down,del);
+    item.appendChild(tools);
+
+    wrap.appendChild(item);
+  });
+}
+
+$("addHomeFrameBtn").addEventListener(
+  "click",
+  ()=>{
+    HOME_FRAMES.push({image:"",fit:"cover",height:240});
+    renderHomeFrameEditor();
+  }
+);
+
+$("saveHomeFramesBtn").addEventListener(
+  "click",
+  async()=>{
+    const btn=$("saveHomeFramesBtn");
+    btn.disabled=true;
+    adminMessage("homeFrameStatus","保存しています…");
+
+    try{
+      await checkAdminAuth();
+
+      const result=await db
+        .from(SETTINGS_TABLE)
+        .upsert(
+          {key:"home_frames",value:JSON.stringify(HOME_FRAMES)},
+          {onConflict:"key"}
+        );
+
+      if(result.error)throw result.error;
+
+      renderHomeFrames();
+      adminMessage(
+        "homeFrameStatus",
+        "保存しました。サイトに反映されています。"
+      );
+    }catch(error){
+      adminMessage(
+        "homeFrameStatus",
+        "保存できませんでした："+error.message
+      );
+    }finally{
+      btn.disabled=false;
+    }
+  }
+);
+
 function novelPlotTitle(novel){
   const fromPublic=PLOT_DATA.find(
     p=>p.id===novel.plotId
@@ -6996,6 +7780,8 @@ const GOTO_SCREEN={
 refreshSiteLinks();
 refreshSiteNovels();
 refreshGuidelines();
+refreshOCCharacters();
+refreshHomeFrames();
 
 /* SAVE SINGLE PLOT */
 let savingPlot=false;
@@ -9498,11 +10284,11 @@ restoreAdminSession();
     if(!gdb){ gcNote.textContent='コメントに接続できませんでした'; return; }
     gcNote.textContent='読み込み中…';
     try{
-      var res=await gdb.from('game_comments').select('name,body,created_at').order('created_at',{ascending:false}).limit(50);
+      var res=await gdb.from('game_comments').select('name,body,created_at,is_admin').order('created_at',{ascending:false}).limit(50);
       if(res.error) throw res.error;
       var rows=res.data||[];
       gcList.innerHTML=rows.length
-        ? rows.map(function(e){ return '<li><b>'+esc(e.name||'ななし')+'</b> — '+esc(e.body||'')+'</li>'; }).join('')
+        ? rows.map(function(e){ return '<li><b>'+esc(e.name||'ななし')+'</b>'+(e.is_admin?' <span class="gc-badge">製作者</span>':'')+' — '+esc(e.body||'')+'</li>'; }).join('')
         : '<li class="gm-empty">まだコメントなし。最初のコメントを書いてね</li>';
       gcNote.textContent='';
     }catch(e){
@@ -9516,7 +10302,12 @@ restoreAdminSession();
     if(!gdb){ gcNote.textContent='コメントに接続できませんでした'; return; }
     gcPost.disabled=true;
     try{
-      var res=await gdb.from('game_comments').insert({name:(gcName.value||'').trim().slice(0,12)||null, body:body});
+      var isAdmin=false;
+      try{
+        var sess=await gdb.auth.getSession();
+        isAdmin=!!(sess && sess.data && sess.data.session);
+      }catch(e){}
+      var res=await gdb.from('game_comments').insert({name:(gcName.value||'').trim().slice(0,12)||null, body:body, is_admin:isAdmin});
       if(res.error) throw res.error;
       gcBody.value='';
       gcNote.textContent='投稿したよ！';
