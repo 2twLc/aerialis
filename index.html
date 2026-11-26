@@ -2021,6 +2021,11 @@ img{filter:none}
 #gmRank .gm-empty{margin-left:-36px}
 .gc-list{padding-left:30px}
 .gc-list .gm-empty{margin-left:-30px}
+
+/* ===== v109 ===== */
+#home .site-header{position:relative}
+.gc-admin-name{border:2px solid #2563eb;padding:0 6px;color:#2563eb}
+.gc-admin-tag{color:#2563eb;font-size:12px;font-weight:700;letter-spacing:.08em;vertical-align:middle}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -10408,7 +10413,7 @@ restoreAdminSession();
         ? rows.map(function(e){
             var btns='';
             if(adminView) btns=' <button type="button" class="gc-icon-btn" data-act="del" data-id="'+e.id+'" aria-label="削除">'+TRASH_SVG+'</button>';
-            return '<li><b>'+esc(e.name||'ななし')+'</b>'+(e.is_admin?' <span class="gc-badge">製作者</span>':'')+' — <span class="gc-text">'+esc(e.body||'')+'</span>'+btns+'</li>';
+            return '<li><b'+(e.is_admin?' class="gc-admin-name"':'')+'>'+esc(e.name||'ななし')+'</b>'+' — <span class="gc-text">'+esc(e.body||'')+'</span>'+btns+'</li>';
           }).join('')
         : '<li class="gm-empty">まだコメントなし。最初のコメントを書いてね</li>';
       gcNote.textContent='';
@@ -10428,7 +10433,7 @@ restoreAdminSession();
       var rows=(res.data||[]).filter(function(e){ return e.author_token&&myToken&&e.author_token===myToken; });
       gcMineList.innerHTML=rows.length
         ? rows.map(function(e){
-            return '<li><b>'+esc(e.name||'ななし')+'</b>'+(e.is_admin?' <span class="gc-badge">製作者</span>':'')+' — <span class="gc-text">'+esc(e.body||'')+'</span>'
+            return '<li><b'+(e.is_admin?' class="gc-admin-name"':'')+'>'+esc(e.name||'ななし')+'</b>'+' — <span class="gc-text">'+esc(e.body||'')+'</span>'
               +' <button type="button" class="gc-icon-btn" data-act="edit" data-id="'+e.id+'" aria-label="編集">'+PENCIL_SVG+'</button>'
               +'<button type="button" class="gc-icon-btn" data-act="del" data-id="'+e.id+'" aria-label="削除">'+TRASH_SVG+'</button></li>';
           }).join('')
