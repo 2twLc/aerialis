@@ -1984,6 +1984,36 @@ img{filter:none}
 #home.hf-open #homeFrames{flex:0 0 auto}
 #home.hf-open .home-frame{flex:0 0 auto;height:200px}
 .hf-editor{position:relative;z-index:1}
+
+/* ===== v99 ===== */
+#home.hf-open .home-frame{height:auto}
+.home-frame.hf-editing{outline:3px dashed #111;outline-offset:3px}
+
+/* ===== v100 ===== */
+#gmRank{font-size:20px;line-height:1.8}
+.gc-list{font:17px/1.85 "VT323","Noto Sans JP",sans-serif}
+.game-note{font-size:12.5px}
+.game-rank-note{font-size:12.5px}
+.gc-badge{font-size:11px;padding:2px 7px}
+.game-rank-title{font-size:15px}
+
+/* ===== v101 ===== */
+.gc-act{font:600 12px "Noto Sans JP",sans-serif;background:#fff;color:#111;border:2px solid #111;padding:2px 9px;margin-left:6px;cursor:pointer;vertical-align:middle}
+.gc-edit-box{width:72%;font:15px "Noto Sans JP",sans-serif;padding:6px;border:2px solid #111;background:#fff;color:#111}
+
+/* ===== v102 ===== */
+.view-count{position:absolute;left:0;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;font:19px "VT323",monospace;color:#111;opacity:0;transition:opacity .4s;z-index:5}
+.view-count.on{opacity:1}
+.view-count svg{width:21px;height:21px}
+#gmRank{font-size:21px}
+#gmRank li b{font-size:24px}
+.gc-list li>b{font-size:19px}
+
+/* ===== v103 ===== */
+.gc-btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.gc-icon-btn{background:#fff;border:2px solid #111;width:31px;height:31px;display:inline-flex;align-items:center;justify-content:center;margin-left:7px;vertical-align:middle;cursor:pointer;padding:0}
+.gc-icon-btn svg{width:16px;height:16px;fill:#111}
+#gcMinePanel{margin:14px 0 4px;border:2px solid #111;background:#fff;padding:12px 14px;box-shadow:4px 4px 0 #111}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -1994,6 +2024,10 @@ img{filter:none}
   <div class="ambient"></div>
 
   <header class="site-header">
+    <div class="view-count" id="viewCount" aria-label="今見ている人の数">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      <span id="viewCountNum">-</span>
+    </div>
     <div class="site-brand">
       <span class="wave-logo small" aria-hidden="true">
         <svg class="wave-svg" viewBox="0 0 150 64">
@@ -2802,7 +2836,7 @@ img{filter:none}
 
 <label class="game-name-label" for="gmName">PLAYER NAME</label>
     <div class="game-name-row">
-      <input id="gmName" type="text" maxlength="12" placeholder="なまえ" autocomplete="off">
+      <input id="gmName" type="text" maxlength="10" placeholder="なまえ" autocomplete="off">
       <button id="gmNameSave" class="admin-btn" type="button">保存</button>
     </div>
     <p class="game-name-note" id="gmNameNote">名前を保存すると、ゲームオーバーでランキングに登録されるよ</p>
@@ -2849,12 +2883,20 @@ img{filter:none}
 
     <label class="game-name-label" for="gcName">NAME</label>
     <div class="game-name-row">
-      <input id="gcName" type="text" maxlength="12" placeholder="なまえ（なくてもOK）" autocomplete="off">
+      <input id="gcName" type="text" maxlength="10" placeholder="なまえ（なくてもOK）" autocomplete="off">
     </div>
     <label class="game-name-label" for="gcBody">COMMENT</label>
     <textarea id="gcBody" rows="3" maxlength="200" placeholder="感想を書いてね"></textarea>
-    <button id="gcPost" class="admin-btn" type="button">投稿する</button>
+    <div class="gc-btn-row">
+      <button id="gcPost" class="admin-btn" type="button">投稿する</button>
+      <button id="gcMineBtn" class="admin-btn secondary" type="button">自分のコメントを管理</button>
+    </div>
     <p class="game-name-note" id="gcNote"></p>
+    <div id="gcMinePanel" hidden>
+      <div class="game-rank-title">自分のコメント</div>
+      <ol id="gcMineList" class="gc-list"></ol>
+      <p class="game-name-note" id="gcMineNote"></p>
+    </div>
     <ol id="gcList" class="gc-list"></ol>
 
     <div class="detail-bottom">
@@ -6805,6 +6847,7 @@ $("eoDeleteOC").addEventListener(
 
 /* HOME IMAGE FRAMES (site_settings key: home_frames) */
 let hfEdit=-1;
+let hfRealH=0;
 
 async function loadHomeFrames(){
   checkDB();
@@ -6892,6 +6935,10 @@ function renderHomeFrames(){
     eb.className="hf-edit-btn";
     eb.textContent=hfEdit===0?"閉じる":"編集";
     eb.addEventListener("click",()=>{
+      if(hfEdit!==0){
+        const fr=wrap.querySelector(".home-frame");
+        if(fr&&fr.offsetHeight>40)hfRealH=fr.offsetHeight;
+      }
       hfEdit=hfEdit===0?-1:0;
       renderHomeFrames();
     });
@@ -6902,6 +6949,7 @@ function renderHomeFrames(){
 
   if(adminUser&&hfEdit===0){
     d.classList.add("hf-editing");
+    if(hfRealH>40)d.style.height=hfRealH+"px";
 
     let drag=null;
     d.addEventListener("pointerdown",e=>{
@@ -10217,11 +10265,20 @@ restoreAdminSession();
   try{ gdb=(typeof db!=='undefined'&&db)||window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); }catch(e){ gdb=null; }
 
   var NAME_KEY='nituPlayerName';
+  var VIS_KEY='nituVisitorId';
+  var myToken='';
+  try{
+    myToken=localStorage.getItem(VIS_KEY)||'';
+    if(!myToken){
+      myToken='v'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);
+      localStorage.setItem(VIS_KEY,myToken);
+    }
+  }catch(e){}
   var myName='';
   try{ myName=localStorage.getItem(NAME_KEY)||''; }catch(e){}
   if(myName){ nameInput.value=myName; nameNote.textContent='「'+myName+'」で登録されるよ'; }
   nameSave.addEventListener('click',function(){
-    myName=nameInput.value.trim().slice(0,12);
+    myName=nameInput.value.trim().slice(0,10);
     try{ localStorage.setItem(NAME_KEY,myName); }catch(e){}
     nameNote.textContent=myName?('「'+myName+'」で登録されるよ'):'名前を保存すると、ゲームオーバーでランキングに登録されるよ';
   });
@@ -10262,17 +10319,31 @@ restoreAdminSession();
   var gcName=document.getElementById('gcName'), gcBody=document.getElementById('gcBody'),
       gcPost=document.getElementById('gcPost'), gcList=document.getElementById('gcList'),
       gcNote=document.getElementById('gcNote');
+  var gcMineBtn=document.getElementById('gcMineBtn'), gcMinePanel=document.getElementById('gcMinePanel'),
+      gcMineList=document.getElementById('gcMineList'), gcMineNote=document.getElementById('gcMineNote');
+  var TRASH_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
+  var PENCIL_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
   async function loadComments(){
     if(!gcList) return;
     if(!gdb){ gcNote.textContent='コメントに接続できませんでした'; return; }
     gcNote.textContent='読み込み中…';
     try{
-      var res=await gdb.from('game_comments').select('name,body,created_at,is_admin').order('created_at',{ascending:false}).limit(50);
-      if(res.error) res=await gdb.from('game_comments').select('name,body,created_at').order('created_at',{ascending:false}).limit(50);
+      var adminView=false;
+      try{
+        var ss=await gdb.auth.getSession();
+        adminView=!!(ss&&ss.data&&ss.data.session);
+      }catch(e){}
+      var res=await gdb.from('game_comments').select('id,name,body,created_at,is_admin,author_token').order('created_at',{ascending:false}).limit(50);
+      if(res.error) res=await gdb.from('game_comments').select('id,name,body,created_at,is_admin').order('created_at',{ascending:false}).limit(50);
+      if(res.error) res=await gdb.from('game_comments').select('id,name,body,created_at').order('created_at',{ascending:false}).limit(50);
       if(res.error) throw res.error;
       var rows=res.data||[];
       gcList.innerHTML=rows.length
-        ? rows.map(function(e){ return '<li><b>'+esc(e.name||'ななし')+'</b>'+(e.is_admin?' <span class="gc-badge">製作者</span>':'')+' — '+esc(e.body||'')+'</li>'; }).join('')
+        ? rows.map(function(e){
+            var btns='';
+            if(adminView) btns=' <button type="button" class="gc-icon-btn" data-act="del" data-id="'+e.id+'" aria-label="削除">'+TRASH_SVG+'</button>';
+            return '<li><b>'+esc(e.name||'ななし')+'</b>'+(e.is_admin?' <span class="gc-badge">製作者</span>':'')+' — <span class="gc-text">'+esc(e.body||'')+'</span>'+btns+'</li>';
+          }).join('')
         : '<li class="gm-empty">まだコメントなし。最初のコメントを書いてね</li>';
       gcNote.textContent='';
     }catch(e){
@@ -10280,6 +10351,34 @@ restoreAdminSession();
       gcNote.textContent='コメントは準備中です';
     }
   }
+  async function loadMine(){
+    if(!gcMineList) return;
+    if(!gdb){ gcMineNote.textContent='コメントに接続できませんでした'; return; }
+    gcMineNote.textContent='読み込み中…';
+    try{
+      var res=await gdb.from('game_comments').select('id,name,body,created_at,is_admin,author_token').order('created_at',{ascending:false}).limit(50);
+      if(res.error) res=await gdb.from('game_comments').select('id,name,body,created_at').order('created_at',{ascending:false}).limit(50);
+      if(res.error) throw res.error;
+      var rows=(res.data||[]).filter(function(e){ return e.author_token&&myToken&&e.author_token===myToken; });
+      gcMineList.innerHTML=rows.length
+        ? rows.map(function(e){
+            return '<li><b>'+esc(e.name||'ななし')+'</b>'+(e.is_admin?' <span class="gc-badge">製作者</span>':'')+' — <span class="gc-text">'+esc(e.body||'')+'</span>'
+              +' <button type="button" class="gc-icon-btn" data-act="edit" data-id="'+e.id+'" aria-label="編集">'+PENCIL_SVG+'</button>'
+              +'<button type="button" class="gc-icon-btn" data-act="del" data-id="'+e.id+'" aria-label="削除">'+TRASH_SVG+'</button></li>';
+          }).join('')
+        : '<li class="gm-empty">まだ自分のコメントがないよ</li>';
+      gcMineNote.textContent='';
+    }catch(e){
+      gcMineList.innerHTML='';
+      gcMineNote.textContent='読み込めなかった…';
+    }
+  }
+  if(gcMineBtn) gcMineBtn.addEventListener('click', function(){
+    if(!gcMinePanel) return;
+    gcMinePanel.hidden=!gcMinePanel.hidden;
+    if(!gcMinePanel.hidden) loadMine();
+  });
+
   if(gcPost) gcPost.addEventListener('click', async function(){
     var body=(gcBody.value||'').trim().slice(0,200);
     if(!body){ gcNote.textContent='コメントを書いてね'; return; }
@@ -10291,18 +10390,48 @@ restoreAdminSession();
         var sess=await gdb.auth.getSession();
         isAdmin=!!(sess && sess.data && sess.data.session);
       }catch(e){}
-      var nm=(gcName.value||'').trim().slice(0,12)||null;
-      var res=await gdb.from('game_comments').insert({name:nm, body:body, is_admin:isAdmin});
+      var nm=(gcName.value||'').trim().slice(0,10)||null;
+      var res=await gdb.from('game_comments').insert({name:nm, body:body, is_admin:isAdmin, author_token:myToken||null});
+      if(res.error) res=await gdb.from('game_comments').insert({name:nm, body:body, is_admin:isAdmin});
       if(res.error) res=await gdb.from('game_comments').insert({name:nm, body:body});
       if(res.error) throw res.error;
       gcBody.value='';
       gcNote.textContent='投稿したよ！';
-      loadComments();
+      refreshGc();
     }catch(e){
       gcNote.textContent='まだ投稿できないみたい（準備中）';
     }
     gcPost.disabled=false;
   });
+  function refreshGc(){ loadComments(); if(gcMinePanel&&!gcMinePanel.hidden) loadMine(); }
+  async function onGcAction(ev){
+    var btn=ev.target.closest('.gc-act,.gc-icon-btn');
+    if(!btn||!gdb) return;
+    var id=btn.getAttribute('data-id'), act=btn.getAttribute('data-act');
+    var li=btn.closest('li');
+    if(act==='del'){
+      if(!confirm('このコメントを削除しますか？')) return;
+      var r=await gdb.from('game_comments').delete().eq('id',id);
+      if(r.error){ gcNote.textContent='削除できなかった…'; return; }
+      refreshGc();
+    }else if(act==='edit'&&li){
+      var span=li.querySelector('.gc-text');
+      var cur=span?span.textContent:'';
+      li.innerHTML='<textarea class="gc-edit-box" rows="2" maxlength="200">'+esc(cur)+'</textarea><br><button type="button" class="gc-act" data-act="save" data-id="'+id+'">保存</button> <button type="button" class="gc-act" data-act="cancel">やめる</button>';
+    }else if(act==='save'&&li){
+      var ta=li.querySelector('.gc-edit-box');
+      var nb=ta?(ta.value||'').trim().slice(0,200):'';
+      if(!nb){ gcNote.textContent='コメントを書いてね'; return; }
+      var r2=await gdb.from('game_comments').update({body:nb}).eq('id',id);
+      if(r2.error){ gcNote.textContent='編集できなかった…'; return; }
+      refreshGc();
+    }else if(act==='cancel'){
+      refreshGc();
+    }
+  }
+  if(gcList) gcList.addEventListener('click', onGcAction);
+  if(gcMineList) gcMineList.addEventListener('click', onGcAction);
+
   var wasActive=false;
   setInterval(function(){
     var act=gameScreen.classList.contains('active');
@@ -10512,6 +10641,39 @@ restoreAdminSession();
       }
     });
   }
+})();
+</script>
+<script>
+/* v102: realtime viewer count (Supabase presence) */
+(function(){
+  var el=document.getElementById('viewCount');
+  var num=document.getElementById('viewCountNum');
+  if(!el||!num) return;
+  var client=null;
+  try{ client=(typeof db!=='undefined'&&db)||null; }catch(e){}
+  if(!client||!client.channel) return;
+  var pid='';
+  try{
+    pid=localStorage.getItem('nituPresenceId')||'';
+    if(!pid){
+      pid='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,9);
+      localStorage.setItem('nituPresenceId',pid);
+    }
+  }catch(e){ pid='p'+Math.random().toString(36).slice(2,10); }
+  var ch=client.channel('site-online',{config:{presence:{key:pid}}});
+  function upd(){
+    try{
+      var st=ch.presenceState();
+      num.textContent=String(Object.keys(st).length);
+      el.classList.add('on');
+    }catch(e){}
+  }
+  ch.on('presence',{event:'sync'},upd);
+  ch.on('presence',{event:'join'},upd);
+  ch.on('presence',{event:'leave'},upd);
+  ch.subscribe(function(status){
+    if(status==='SUBSCRIBED'){ ch.track({at:Date.now()}); }
+  });
 })();
 </script>
 </body>
