@@ -2014,6 +2014,13 @@ img{filter:none}
 .gc-icon-btn{background:#fff;border:2px solid #111;width:31px;height:31px;display:inline-flex;align-items:center;justify-content:center;margin-left:7px;vertical-align:middle;cursor:pointer;padding:0}
 .gc-icon-btn svg{width:16px;height:16px;fill:#111}
 #gcMinePanel{margin:14px 0 4px;border:2px solid #111;background:#fff;padding:12px 14px;box-shadow:4px 4px 0 #111}
+
+/* ===== v105 ===== */
+.gc-badge{display:inline-block;background:#fff;color:#111;border:2px solid #111;border-radius:0;font-size:11px;font-weight:700;padding:1px 6px;letter-spacing:.1em;line-height:1.4;vertical-align:middle;transform:translateY(-2px)}
+#gmRank{padding-left:36px}
+#gmRank .gm-empty{margin-left:-36px}
+.gc-list{padding-left:30px}
+.gc-list .gm-empty{margin-left:-30px}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -10277,10 +10284,44 @@ restoreAdminSession();
   var myName='';
   try{ myName=localStorage.getItem(NAME_KEY)||''; }catch(e){}
   if(myName){ nameInput.value=myName; nameNote.textContent='「'+myName+'」で登録されるよ'; }
-  nameSave.addEventListener('click',function(){
-    myName=nameInput.value.trim().slice(0,10);
+  nameSave.addEventListener('click', async function(){
+    var candidate=nameInput.value.trim().slice(0,10);
+    if(!candidate){
+      myName='';
+      try{ localStorage.removeItem(NAME_KEY); }catch(e){}
+      nameNote.textContent='名前を保存すると、ゲームオーバーでランキングに登録されるよ';
+      return;
+    }
+    if(candidate===myName){
+      nameNote.textContent='「'+myName+'」で登録されるよ';
+      return;
+    }
+    if(gdb){
+      nameNote.textContent='名前を確認中…';
+      try{
+        var used=false;
+        var r1=await gdb.from('game_scores').select('name,author_token').eq('name',candidate).limit(1);
+        if(r1.error) r1=await gdb.from('game_scores').select('name').eq('name',candidate).limit(1);
+        if(r1.data&&r1.data.length){
+          var sr=r1.data[0];
+          used=!!(sr.author_token&&sr.author_token!==myToken);
+        }
+        if(!used){
+          var r2=await gdb.from('game_comments').select('name,author_token').eq('name',candidate).limit(20);
+          if(r2.error) r2=await gdb.from('game_comments').select('name').eq('name',candidate).limit(1);
+          if(r2.data&&r2.data.length){
+            used=r2.data.some(function(row){ return !row.author_token||!myToken||row.author_token!==myToken; });
+          }
+        }
+        if(used){
+          nameNote.textContent='その名前は使用済みです。使用済みの名前のためランキングに載りません';
+          return;
+        }
+      }catch(e){}
+    }
+    myName=candidate;
     try{ localStorage.setItem(NAME_KEY,myName); }catch(e){}
-    nameNote.textContent=myName?('「'+myName+'」で登録されるよ'):'名前を保存すると、ゲームオーバーでランキングに登録されるよ';
+    nameNote.textContent='「'+myName+'」で登録されるよ';
   });
 
   function esc(t){return String(t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -10296,6 +10337,12 @@ restoreAdminSession();
         rankEl.innerHTML=rows.map(function(e,i){return '<li><b>'+esc(e.name||'???')+'</b> — '+e.score+' PTS / '+e.dist+'m</li>'}).join('');
       }
       rankNote.textContent='';
+      try{
+        if(localStorage.getItem('nituRankBlocked')){
+          localStorage.removeItem('nituRankBlocked');
+          rankNote.textContent='使用済みの名前のためランキングに載りませんでした';
+        }
+      }catch(e){}
     }catch(e){
       rankEl.innerHTML='';
       rankNote.textContent='ランキングは準備中です';
@@ -10304,8 +10351,27 @@ restoreAdminSession();
   async function submitScore(sc,d){
     if(!gdb||!myName||sc<=0) return;
     try{
-      await gdb.from('game_scores').insert({name:myName,score:sc,dist:d});
-      rankNote.textContent='ランキングに登録したよ！';
+      var r=await gdb.from('game_scores').select('id,score,dist,author_token').eq('name',myName).order('score',{ascending:false}).order('dist',{ascending:false}).limit(1);
+      if(r.error) r=await gdb.from('game_scores').select('id,score,dist').eq('name',myName).order('score',{ascending:false}).order('dist',{ascending:false}).limit(1);
+      var row=r.data&&r.data[0];
+      if(!row){
+        var ins=await gdb.from('game_scores').insert({name:myName,score:sc,dist:d,author_token:myToken||null});
+        if(ins.error) await gdb.from('game_scores').insert({name:myName,score:sc,dist:d});
+        rankNote.textContent='ランキングに登録したよ！';
+        loadRanking();
+        return;
+      }
+      if(row.author_token&&row.author_token!==myToken){
+        try{ localStorage.setItem('nituRankBlocked','1'); }catch(e){}
+        return;
+      }
+      var better=sc>row.score||(sc===row.score&&d>row.dist);
+      if(better||!row.author_token){
+        var upd={score:better?sc:row.score, dist:better?d:row.dist, author_token:myToken||null};
+        var u=await gdb.from('game_scores').update(upd).eq('id',row.id);
+        if(u.error) await gdb.from('game_scores').update({score:upd.score, dist:upd.dist}).eq('id',row.id);
+        if(better) rankNote.textContent='ランキングを更新したよ！';
+      }
       loadRanking();
     }catch(e){ /* table not ready yet */ }
   }
