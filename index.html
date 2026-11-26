@@ -1972,6 +1972,18 @@ img{filter:none}
 /* ===== v94 ===== */
 #homeFrames{flex:1 1 auto;min-height:120px;margin-bottom:76px}
 .home-frame{flex:1}
+
+/* ===== v95 ===== */
+#home{height:100dvh;max-height:100dvh;overflow:hidden}
+#home .site-footer{position:static}
+#homeFrames{flex:1 1 0;min-height:0;margin-bottom:0}
+.home-frame{height:100%}
+
+/* ===== v96 ===== */
+#home.hf-open{overflow-y:auto}
+#home.hf-open #homeFrames{flex:0 0 auto}
+#home.hf-open .home-frame{flex:0 0 auto;height:200px}
+.hf-editor{position:relative;z-index:1}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -6853,6 +6865,9 @@ function renderHomeFrames(){
   const wrap=$("homeFrames");
   if(!wrap)return;
 
+  const homeEl=$("home");
+  if(homeEl)homeEl.classList.toggle("hf-open",!!(adminUser&&hfEdit===0));
+
   wrap.replaceChildren();
 
   const f=HOME_FRAMES[0]||{image:"",fit:"cover",height:240,posX:50,posY:50};
@@ -10444,7 +10459,7 @@ restoreAdminSession();
   try{ playedOnce=!!localStorage.getItem('nituPlayedOnce'); }catch(e){}
   function gameOver(){
     loopSeq++;
-    run=false; over=true;
+    run=false; over=true; startBtn.disabled=false;
     var d=Math.floor(dist);
     ctx.fillStyle='rgba(245,245,242,.88)'; ctx.fillRect(0,0,W,H);
     ctx.fillStyle='#111'; ctx.textAlign='center';
@@ -10461,7 +10476,7 @@ restoreAdminSession();
     }
     submitScore(score,d);
   }
-  function start(){ reset(); loopSeq++; run=true; startBtn.textContent='PLAYING…'; var lt=loopSeq; requestAnimationFrame(function(){ if(lt===loopSeq) step(); }); }
+  function start(){ if(run)return; reset(); loopSeq++; run=true; startBtn.disabled=true; startBtn.textContent='PLAYING…'; var lt=loopSeq; requestAnimationFrame(function(){ if(lt===loopSeq) step(); }); }
   function jump(){
     if(run){
       if(!sq.air){ sq.vy=-5.2; sq.air=true; sq.jumps=1; }
